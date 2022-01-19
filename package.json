@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "dotenv": "^14.2.0",
     "eslint": "^8.7.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
