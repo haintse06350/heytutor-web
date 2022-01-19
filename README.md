@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## How to make a PR (pull request)
+ - from branch dev do: `git checkout -b "<branch name>"` (ex: `git checkout -b feat/implement-header-component`)
+ - `git add "<your file path>"` or `git add .` to add all files changes
+ - `git commit -m "<your message>"` (ex: `git commit -m"feat: implement header component"`)
+ - `git push origin "<your branch>"` (ex: `git push origin feat/implement-header-component`)
+
+
 ## Available Scripts
 
 In the project directory, you can run:
