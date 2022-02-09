@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { useStyles } from "./Header.style";
-// import { FaBell, FaSistrix } from "react-icons/fa";
 import { Filter } from "./Filter/Filter";
+
+import SearchIcon from "@mui/icons-material/Search";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import Avatar from "@mui/material/Avatar";
 
 export const Header = () => {
   const classes = useStyles();
@@ -14,13 +17,12 @@ export const Header = () => {
         <div className={classes.logo}>Hey-tutor</div>
         <div className={classes.eventHome}>Sự kiện</div>
         <input type="text" placeholder="Tìm kiếm" className={classes.findInput} />
-        {/* <FaSistrix className={classes.iconSearch} /> */}
+        <SearchIcon className={classes.iconSearch} />
         <div className={classes.profile}>
-          {/* <div className={classes.notificationProfile}>
-            <FaBell />
-          </div> */}
+          <CircleNotificationsIcon fontSize="large" className={classes.iconNotification} />
+
           <div className={classes.usernameProfile}>
-            <img className={classes.avatarProfile}></img>
+            <Avatar className={classes.avatarProfile}>N</Avatar>
             Username
           </div>
         </div>

@@ -14,13 +14,13 @@ export const Filter = () => {
   useEffect(() => {});
 
   return (
-    <>
+    <div className={classes.filterBar}>
       {listFilters.map((filter) => (
         <span key={filter.toString()} className={classes.filterDisplay}>
           <Chip label={filter.toString()} onClick={() => handleClick(filter)}></Chip>
         </span>
       ))}
-    </>
+    </div>
   );
 };
 

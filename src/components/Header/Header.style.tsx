@@ -40,7 +40,7 @@ export const useStyles: any = makeStyles(() => ({
     backgroundColor: "white",
     marginTop: 10,
     marginRight: 30,
-    padding: 4.5,
+    padding: 5,
     border: "1px grey solid",
     borderLeft: 0,
     borderRadius: "2px",
@@ -58,17 +58,17 @@ export const useStyles: any = makeStyles(() => ({
     alignContent: "center",
     justifyContent: "center",
   },
-  notificationProfile: {
-    cursor: "pointer",
-  },
+
+  iconNotification: { cursor: "pointer" },
+
   usernameProfile: {
     cursor: "pointer",
+    display: "flex",
   },
   avatarProfile: {
-    width: 28,
-    height: 28,
+    width: 25,
+    height: 25,
     overflow: "hidden",
-    borderRadius: 14,
-    margin: "0 14px",
+    margin: "0 10px",
   },
 }));
