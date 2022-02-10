@@ -16,7 +16,8 @@ export const Message = () => {
   }, [input]);
 
   const handleClickClose = () => {};
-
+  // test commit
+  const test = 1;
   return (
     <div className={classes.messageWrapContext}>
       {/* bao quanh noi dung chat */}
