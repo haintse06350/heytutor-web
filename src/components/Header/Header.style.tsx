@@ -7,6 +7,7 @@ export const useStyles: any = makeStyles(() => ({
     textAlign: "center",
     justifyContent: "center",
     marginBottom: 10,
+    marginTop: 5,
   },
   logo: {
     width: "25%",
