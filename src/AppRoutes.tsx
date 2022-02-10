@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Example from "./components/Example/Example";
+// import Example from "./components/Example/Example";
 import Header from "./components/Header/Header";
+import Message from "./components/Message/Message";
 
 export default function AppRoutes() {
   return (
@@ -9,7 +10,7 @@ export default function AppRoutes() {
       <Fragment>
         <Routes>
           <Route path={"/"} element={<Header />} />
-          <Route path={"/example-page"} element={<Example />} />
+          <Route path={"/example-page"} element={<Message />} />
         </Routes>
       </Fragment>
     </Router>
