@@ -18,6 +18,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -34,6 +35,7 @@ import { Students } from "../../models/student";
 import { keys, map, filter, pick } from "lodash";
 import { TERMS } from "../../constants/terms";
 import { useStyles } from "./Dashboard.style";
+import { Admin } from "../../models/admin";
 
 const drawerWidth = 240;
 
@@ -96,9 +98,11 @@ const Dashboard = () => {
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [cookie, setCookie] = useState("");
+  const [progress, setProgress] = useState(0);
 
-  const onClickFetchData = () => {
+  const onClickFetchData = async () => {
     setLoading(true);
+    await Admin.fetchFapData("", { cookie, termId: term });
   };
 
   const onChangeTab = (tab: string) => {
@@ -177,8 +181,30 @@ const Dashboard = () => {
     setDataStudent({ columns: formatColumns, rows });
   };
 
+  const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%", mr: 1 }}>
+          <LinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box sx={{ minWidth: 35 }}>
+          <Typography variant="body2" color="text.secondary">{`${props.value.toFixed(1)}%`}</Typography>
+        </Box>
+      </Box>
+    );
+  };
+
   useEffect(() => {
     getStudentData();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 0.1));
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
   // useEffect(() => {
@@ -241,6 +267,11 @@ const Dashboard = () => {
           variant="outlined">
           Fetch data
         </LoadingButton>
+        {loading && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgressWithLabel value={progress} />
+          </Box>
+        )}
       </div>
     );
   };
