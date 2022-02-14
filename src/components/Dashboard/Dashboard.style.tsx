@@ -10,6 +10,7 @@ export const useStyles: any = makeStyles(
     },
     selectTerm: {
       marginTop: "20px !important",
+      width: 200,
     },
     buttonFetch: {
       marginTop: "20px !important",

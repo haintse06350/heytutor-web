@@ -15,7 +15,7 @@ import {
   InputLabel,
   InputAdornment,
   Input,
-  TextField,
+  Select,
   MenuItem,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -93,8 +93,9 @@ const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [dataStudent, setDataStudent]: any = useState(null);
-  const [term, setTerm] = useState(TERMS[3]);
+  const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cookie, setCookie] = useState("");
 
   const onClickFetchData = () => {
     setLoading(true);
@@ -206,6 +207,7 @@ const Dashboard = () => {
           <InputLabel htmlFor="input-with-icon-adornment">Paste FAP cookie here</InputLabel>
           <Input
             id="input-with-icon-adornment"
+            onChange={(e) => setCookie(e.target.value)}
             startAdornment={
               <InputAdornment position="start">
                 <CookieIcon />
@@ -213,23 +215,26 @@ const Dashboard = () => {
             }
           />
         </FormControl>
-        <TextField
-          classes={{ root: classes.selectTerm }}
-          id="outlined-select-currency"
-          select
-          label="Select"
-          value={term}
-          onChange={onChangeTerm}
-          helperText="Please select term">
-          {TERMS.map((option) => (
-            <MenuItem key={option.termId} value={option.termId}>
-              {option.termName}
-            </MenuItem>
-          ))}
-        </TextField>
+        <FormControl className={classes.selectTerm}>
+          <InputLabel id="select-term">Term</InputLabel>
+          <Select
+            labelId="select-term"
+            id="simple-select-autowidth"
+            value={term}
+            onChange={onChangeTerm}
+            autoWidth
+            label="Term">
+            {TERMS.map((option) => (
+              <MenuItem key={option.termId} value={option.termId}>
+                {option.termName}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <LoadingButton
           classes={{ root: classes.buttonFetch }}
           fullWidth
+          disabled={!term && !cookie}
           onClick={onClickFetchData}
           loading={loading}
           loadingIndicator="Loading..."
