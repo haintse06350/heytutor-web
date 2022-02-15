@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import { useStyles } from "./Post.style";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import Button from "@mui/material/Button";
 export const Post = () => {
   const classes = useStyles();
-  const [toggleAttachFile, setToggleAttachFile] = useState(false);
-  const handleAttachFilePostS = () => {
-    setToggleAttachFile(!toggleAttachFile);
+  // const [toggleAttachFile, setToggleAttachFile] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
+  // const handleAttachFilePostS = () => {
+  //   setToggleAttachFile(!toggleAttachFile);
+  // };
   const handleDiscard = () => {
     console.log("discard clicked");
   };
@@ -24,33 +35,33 @@ export const Post = () => {
   const handlePost = () => {
     console.log("Post clicked");
   };
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <div className={classes.post}>
       <div className={classes.headerPost}>
         {/* header post */}
         <button className={classes.buttonDiscardMobile} onClick={handleDiscard}>
-          Discard
-        </button>{" "}
+          <ArrowBackIosIcon />
+        </button>
+
         {/* discard */}
         <h2 className={classes.titleHeader}>Create Post</h2>
-        <div className={classes.addOptionPostS} onClick={handleAttachFilePostS}>
-          <AttachFileIcon fontSize="large" />
+        <div id="menu" className={classes.addOptionPostS} onClick={handleClick}>
+          <MenuIcon />
         </div>
-        {toggleAttachFile && (
-          <div className={classes.addOptionDetailPostS}>
-            <div className={classes.attachFilePost} onClick={handleAttachFilePostL}>
-              <AttachFileIcon fontSize="large" />
-              <p className={classes.textIcon}>Thêm file</p>
-            </div>
-            <div className={classes.insertPhotoPost} onClick={handleInsertPhoto}>
-              <InsertPhotoIcon fontSize="large" /> <p className={classes.textIcon}>Thêm ảnh</p>
-            </div>
-            <div className={classes.priceChangePost} onClick={handleChangePrice}>
-              <PriceChangeIcon fontSize="large" /> <p className={classes.textIcon}>Chọn giá</p>
-            </div>
-          </div>
-        )}
+        <Menu id="menu" open={open} anchorEl={anchorEl} onClose={handleClose}>
+          <MenuItem onClick={handleClose}>
+            <AddPhotoAlternateIcon />
+            Thêm ảnh
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <PriceChangeIcon />
+            Thêm khoảng giá
+          </MenuItem>
+        </Menu>
       </div>
       <div className={classes.contentPost}>
         {/* content post */}
@@ -67,27 +78,25 @@ export const Post = () => {
           <div>
             <div className={classes.addOptionPostL}>
               <div className={classes.attachFilePost} onClick={handleAttachFilePostL}>
-                <AttachFileIcon fontSize="large" />
+                <AttachFileIcon />
               </div>
               <div className={classes.insertPhotoPost} onClick={handleInsertPhoto}>
-                <InsertPhotoIcon fontSize="large" />
+                <InsertPhotoIcon />
               </div>
               <div className={classes.priceChangePost} onClick={handleChangePrice}>
-                <PriceChangeIcon fontSize="large" />
+                <PriceChangeIcon />
               </div>
             </div>
             <textarea className={classes.contentDetailPost} placeholder="Nội dung ..."></textarea>
           </div>
         </div>
         <div className={classes.button}>
-          <button className={classes.buttonPost} onClick={handlePost}>
-            {/* button post*/}
-            Post
-          </button>
-          <button className={classes.buttonDiscardScreen} onClick={handleDiscard}>
-            {/* button post*/}
-            Discard
-          </button>
+          <div className={classes.buttonPost} onClick={handlePost}>
+            <Button variant="contained">Post</Button>
+          </div>
+          <div className={classes.buttonDiscardScreen} onClick={handleDiscard}>
+            <Button variant="contained">Discard</Button>
+          </div>
         </div>
       </div>
     </div>

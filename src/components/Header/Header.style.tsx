@@ -7,20 +7,23 @@ export const useStyles: any = makeStyles(() => ({
   },
   header: {
     display: "flex",
-    fontSize: 24,
     textAlign: "center",
     justifyContent: "center",
     marginBottom: 10,
     marginTop: 5,
+    "@media(max-width: 811px)": { fontSize: 18 },
+    "@media(min-width: 812px)": { fontSize: 24 },
   },
   logo: {
     width: "25%",
     color: "black",
-    fontSize: 32,
+
     fontWeight: "bold",
     display: "block",
     margin: "0 16px",
     cursor: "pointer",
+    "@media(max-width: 811px)": { fontSize: "3vw " },
+    "@media(min-width: 812px)": { fontSize: 32 },
   },
   eventHome: {
     width: "25%",
