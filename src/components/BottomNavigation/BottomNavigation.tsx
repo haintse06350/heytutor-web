@@ -7,23 +7,31 @@ import CelebrationIcon from "@mui/icons-material/Celebration";
 import AddIcon from "@mui/icons-material/Add";
 import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-export const BtNavigation = () => {
+import { useNavigate } from "react-router-dom";
+
+const BottomNav = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState("home");
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const navigate = useNavigate();
+
+  const onChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+    navigate(`/${newValue}`);
   };
+
   return (
-    <div className={classes.bottomNavigation}>
-      <BottomNavigation sx={{ width: 500 }} value={value} onChange={handleChange}>
-        <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
-        <BottomNavigationAction label="Event" value="event" icon={<CelebrationIcon />} />
-        <BottomNavigationAction label="Post" value="post" icon={<AddIcon />} />
-        <BottomNavigationAction label="Notification" value="notification" icon={<NotificationsNoneRoundedIcon />} />
-        <BottomNavigationAction label="Profile" value="profile" icon={<PermIdentityIcon />} />
-      </BottomNavigation>
-    </div>
+    <>
+      <div id="bottom-nav" className={classes.bottomNavigation}>
+        <BottomNavigation sx={{ width: 500 }} value={value} onChange={onChange}>
+          <BottomNavigationAction value="home" icon={<HomeIcon />} />
+          <BottomNavigationAction value="event" icon={<CelebrationIcon />} />
+          <BottomNavigationAction value="post" icon={<AddIcon />} />
+          <BottomNavigationAction value="notification" icon={<NotificationsNoneRoundedIcon />} />
+          <BottomNavigationAction value="profile" icon={<PermIdentityIcon />} />
+        </BottomNavigation>
+      </div>
+    </>
   );
 };
 
-export default BottomNavigation;
+export default BottomNav;

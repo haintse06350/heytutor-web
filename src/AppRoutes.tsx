@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { BtNavigation } from "./components/BottomNavigation/BottomNavigation";
+import BottomNav from "./components/BottomNavigation/BottomNavigation";
 import Dashboard from "./components/Dashboard/Dashboard";
 // import Example from "./components/Example/Example";
 import Header from "./components/Header/Header";
@@ -13,10 +13,10 @@ export default function AppRoutes() {
       <Fragment>
         <Routes>
           <Route path={"/"} element={<Header />} />
-          <Route path={"/example-page"} element={<BtNavigation />} />
-          <Route path={"/create-post"} element={<Post />} />
+          <Route path={"/post"} element={<Post />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
         </Routes>
+        <BottomNav />
       </Fragment>
     </Router>
   );

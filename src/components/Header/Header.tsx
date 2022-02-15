@@ -12,7 +12,7 @@ export const Header = () => {
   useEffect(() => {});
 
   return (
-    <>
+    <div className={classes.root}>
       <div className={classes.header}>
         <div className={classes.logo}>Hey-tutor</div>
         <div className={classes.eventHome}>Sự kiện</div>
@@ -29,7 +29,7 @@ export const Header = () => {
         <div className={classes.filterDisplay}></div>
       </div>
       <Filter />
-    </>
+    </div>
   );
 };
 
