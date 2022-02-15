@@ -4,14 +4,15 @@ export const useStyles: any = makeStyles(() => ({
   post: {
     fontFamily: "sans-serif",
     // position: "relative",
-    "@media(max-width: 811px)": {},
-    "@media(min-width: 812px)": {},
+    background: "#f6f6f7",
+    width: "100vw",
+    height: "100vh",
   },
   headerPost: {
     display: "flex",
     width: "100%",
     textAlign: "center",
-    background: "#f6f6f7",
+
     "@media(min-width: 812px)": {
       height: 48,
     },
@@ -28,7 +29,6 @@ export const useStyles: any = makeStyles(() => ({
       display: "none",
     },
     "@media(max-width: 811px)": {
-      fontSize: 24,
       border: "none",
     },
   },
@@ -43,7 +43,7 @@ export const useStyles: any = makeStyles(() => ({
     "@media(max-width: 811px)": {
       width: "25%",
       height: 24,
-      margin: "5px auto",
+      margin: "9px auto",
       position: "relative",
     },
   },
@@ -106,8 +106,8 @@ export const useStyles: any = makeStyles(() => ({
     "@media(min-width: 812px)": { marginLeft: -20 },
     "@media(max-width: 811px)": {
       display: "flex",
-      marginLeft: "1vw",
-      marginTop: "1vh",
+      justifyContent: "center",
+      textAlign: "center",
     },
   },
   insertPhotoPost: {
@@ -117,47 +117,32 @@ export const useStyles: any = makeStyles(() => ({
     },
     "@media(max-width: 811px)": {
       display: "flex",
-      marginTop: "1vh",
-      marginLeft: "1vw",
+      justifyContent: "center",
+      textAlign: "center",
     },
   },
   priceChangePost: {
     "@media(min-width: 812px)": {},
     "@media(max-width: 811px)": {
-      marginTop: "1vh",
-      marginLeft: "1vw",
       display: "flex",
+      justifyContent: "center",
+      textAlign: "center",
     },
   },
   contentDetailPost: {
     width: "100%",
     minHeight: 300,
-    height: "65vh",
+    height: "30vh",
     margin: "10px 0",
     paddingLeft: 15,
     paddingTop: 15,
     marginLeft: -15,
   },
-  buttonPost: {
-    "@media(min-width: 812px)": {
-      width: 200,
-      height: 50,
-      marginRight: "10vw",
-      marginBottom: "1.7vh",
-    },
-    "@media(max-width: 811px)": {
-      display: "block",
-      width: "20vw",
-      height: "5vh",
-      marginTop: "2vh",
-      marginBottom: "4vh",
-      marginLeft: "40%",
-    },
-  },
+  button: { display: "flex", justifyContent: "center" },
+
   buttonDiscardScreen: {
     "@media(min-width: 812px)": {
-      width: 200,
-      height: 50,
+      marginLeft: 20,
     },
     "@media(max-width: 811px)": {
       display: "none",
