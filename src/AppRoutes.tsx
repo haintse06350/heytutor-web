@@ -13,6 +13,7 @@ export default function AppRoutes() {
       <Fragment>
         <Routes>
           <Route path={"/"} element={<Header />} />
+          <Route path={"/home"} element={<Header />} />
           <Route path={"/post"} element={<Post />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
         </Routes>
