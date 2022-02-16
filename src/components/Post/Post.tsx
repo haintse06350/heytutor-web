@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import { useStyles } from "./Post.style";
+import { styled } from "@mui/material/styles";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import PriceChangeIcon from "@mui/icons-material/PriceChange";
-import MenuIcon from "@mui/icons-material/Menu";
-import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SendIcon from "@mui/icons-material/Send";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
 
 export const Post = () => {
   const classes = useStyles();
   // const [toggleAttachFile, setToggleAttachFile] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [title, setTitle] = useState("");
   const [hashTag, setHashTag] = useState("");
   const [content, setContent] = useState("");
-  const open = Boolean(anchorEl);
+
+  const [openSelect, setOpenSelect] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const handleClose = () => {
-    setAnchorEl(null);
+    setOpenSelect(false);
   };
   // const handleAttachFilePostS = () => {
   //   setToggleAttachFile(!toggleAttachFile);
@@ -37,42 +43,49 @@ export const Post = () => {
     console.log("change price clicked");
   };
   const handlePost = () => {
+    setLoading(true);
+
     console.log("Post clicked");
     console.log(title, hashTag, content);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const Input = styled("input")({
+    display: "none",
+  });
+
+  const [age, setAge] = React.useState<string | number>("");
+
+  const handleChange = (event: SelectChangeEvent<typeof age>) => {
+    setAge(event.target.value);
   };
 
+  const handleOpen = () => {
+    setOpenSelect(true);
+  };
   return (
     <div className={classes.post}>
+      {/* header post */}
       <div className={classes.headerPost}>
-        {/* header post */}
+        {/* discard */}
         <Button variant="text" size="large">
           <div className={classes.buttonDiscardMobile} onClick={handleDiscard}>
             <ArrowBackIosIcon fontSize="small" sx={{ color: "white" }} />
           </div>
         </Button>
 
-        {/* discard */}
         <h2 className={classes.titleHeader}>Tạo bài viết</h2>
-        <Button variant="text" size="large" onClick={handleClick}>
-          <div id="menu" className={classes.addOptionPostS}>
-            <MenuIcon sx={{ color: "white" }} />
+        {/* post */}
+        <Button variant="text" size="large">
+          <div className={classes.buttonPostdMobile} onClick={handlePost}>
+            <SendIcon fontSize="small" sx={{ color: "white" }} />
           </div>
         </Button>
-        <Menu id="menu" open={open} anchorEl={anchorEl} onClose={handleClose}>
-          <MenuItem onClick={handleClose}>
-            <AddPhotoAlternateIcon />
-            <p className={classes.textOptionPost}>Thêm ảnh</p>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <PriceChangeIcon />
-            <p className={classes.textOptionPost}>Thêm khoảng giá</p>
-          </MenuItem>
-        </Menu>
       </div>
+      {loading && (
+        <div className={classes.loading}>
+          <CircularProgress />
+        </div>
+      )}
       <div className={classes.contentPost}>
         {/* content post */}
         <div className={classes.contentDetail}>
@@ -96,13 +109,41 @@ export const Post = () => {
           <div>
             <div className={classes.addOptionPostL}>
               <div className={classes.attachFilePost} onClick={handleAttachFilePostL}>
-                <AttachFileIcon />
+                <label htmlFor="icon-button-file">
+                  <Input accept="file/*" id="icon-button-file" type="file" />
+                  <IconButton aria-label="upload picture" component="span">
+                    <AttachFileIcon sx={{ color: "black" }} fontSize="large" />
+                  </IconButton>
+                </label>
               </div>
               <div className={classes.insertPhotoPost} onClick={handleInsertPhoto}>
-                <AddPhotoAlternateIcon />
+                <label htmlFor="icon-button-file">
+                  <Input accept="image/*" id="icon-button-file" type="file" />
+                  <IconButton aria-label="upload picture" component="span">
+                    <AddPhotoAlternateIcon sx={{ color: "black" }} fontSize="large" />
+                  </IconButton>
+                </label>
               </div>
               <div className={classes.priceChangePost} onClick={handleChangePrice}>
-                <PriceChangeIcon />
+                <FormControl sx={{ m: 0.5, minWidth: 120 }}>
+                  <InputLabel id="demo-controlled-open-select-label">Giá</InputLabel>
+                  <Select
+                    labelId="demo-controlled-open-select-label"
+                    id="demo-controlled-open-select"
+                    open={openSelect}
+                    onClose={handleClose}
+                    onOpen={handleOpen}
+                    value={age}
+                    label="Giá"
+                    onChange={handleChange}>
+                    <MenuItem value="">
+                      <em>Không</em>
+                    </MenuItem>
+                    <MenuItem value={1}>100k-200k</MenuItem>
+                    <MenuItem value={2}>200k-500k</MenuItem>
+                    <MenuItem value={3}>500k-1000k</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
             </div>
             <textarea
@@ -115,11 +156,20 @@ export const Post = () => {
           </div>
         </div>
         <div className={classes.button}>
-          <div className={classes.buttonPost} onClick={handlePost}>
-            <Button variant="contained">Đăng bài</Button>
+          <div className={classes.buttonPostScreen}>
+            <LoadingButton
+              onClick={handlePost}
+              endIcon={<SendIcon />}
+              loading={loading}
+              loadingPosition="end"
+              variant="contained">
+              Đăng bài
+            </LoadingButton>
           </div>
           <div className={classes.buttonDiscardScreen} onClick={handleDiscard}>
-            <Button variant="contained">Hủy đăng bài</Button>
+            <Button variant="contained" endIcon={<CloseIcon />}>
+              Hủy đăng bài
+            </Button>
           </div>
         </div>
       </div>
