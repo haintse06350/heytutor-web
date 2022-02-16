@@ -38,8 +38,8 @@ export const Post = () => {
     };
   };
 
-  const onRemoveImage = (image: string) => {
-    const newImages = images.filter((img: string) => img !== image);
+  const onRemoveImage = (image: string, index: number) => {
+    const newImages = images.filter((img: string, idx: number) => img !== image && idx !== index);
     setImages(newImages);
   };
 
@@ -177,8 +177,8 @@ export const Post = () => {
           <Grid container spacing={1} className={classes.listImg}>
             {images.map((img: string, index: number) => (
               <Grid item xs={4} className={classes.imagePost} key={index}>
-                <img className={classes.image} onClick={() => onRemoveImage(img)} key={index} src={img} alt="img" />
-                <div className={classes.deleteButton}>
+                <img className={classes.image} key={index} src={img} alt="img" />
+                <div className={classes.deleteButton} onClick={() => onRemoveImage(img, index)}>
                   <CloseIcon />
                 </div>
               </Grid>
