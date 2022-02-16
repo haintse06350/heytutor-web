@@ -14,6 +14,7 @@ export const useStyles: any = makeStyles(() => ({
     width: "100%",
     textAlign: "center",
     background: "#1976d2",
+    alignItems: "center",
     "@media(min-width: 812px)": {
       height: 48,
     },
@@ -31,8 +32,16 @@ export const useStyles: any = makeStyles(() => ({
   },
   buttonDiscardMobile: {
     width: "25%",
-    height: 24,
-    padding: 25,
+    height: "100%",
+    paddingTop: 8,
+    "@media(min-width: 812px)": {
+      display: "none",
+    },
+  },
+  buttonPostdMobile: {
+    width: "25%",
+    height: "100%",
+    paddingTop: 8,
     "@media(min-width: 812px)": {
       display: "none",
     },
@@ -101,15 +110,18 @@ export const useStyles: any = makeStyles(() => ({
     "@media(max-width: 811px)": {},
   },
   addOptionPostL: {
-    "@media(min-width: 812px)": { display: "flex" },
-    "@media(max-width: 811px)": { display: "none" },
+    display: "flex",
   },
   textIcon: {
     marginLeft: 20,
   },
 
   attachFilePost: {
-    "@media(min-width: 812px)": { marginLeft: -20 },
+    "@media(min-width: 812px)": {
+      marginLeft: -20,
+      justifyContent: "center",
+      alignItems: "center",
+    },
     "@media(max-width: 811px)": {
       display: "flex",
       justifyContent: "center",
@@ -145,14 +157,29 @@ export const useStyles: any = makeStyles(() => ({
     marginLeft: -15,
     fontSize: 16,
   },
-  button: { display: "flex", justifyContent: "center" },
+  button: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
+  buttonPostScreen: {
+    "@media(min-width: 812px)": {},
+    "@media(max-width: 811px)": { display: "none" },
+  },
   buttonDiscardScreen: {
     "@media(min-width: 812px)": {
       marginLeft: 20,
+      alignItems: "center",
     },
     "@media(max-width: 811px)": {
       display: "none",
     },
+  },
+  loading: {
+    position: "absolute",
+    zIndex: 99,
+    top: "25%",
+    left: "50%",
   },
 }));
