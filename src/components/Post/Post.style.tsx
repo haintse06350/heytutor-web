@@ -7,6 +7,7 @@ export const useStyles: any = makeStyles(() => ({
     background: "#f6f6f7",
     width: "100vw",
     height: "100vh",
+    justifyContent: "center",
   },
   headerPost: {
     display: "flex",
@@ -75,6 +76,7 @@ export const useStyles: any = makeStyles(() => ({
     width: "90%",
     height: "auto",
     margin: "0 auto",
+    paddingLeft: 8,
   },
   titlePost: {
     width: "100%",
