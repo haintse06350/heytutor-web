@@ -12,7 +12,7 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
     width: "100%",
     textAlign: "center",
-
+    background: "#1976d2",
     "@media(min-width: 812px)": {
       height: 48,
     },
@@ -20,22 +20,23 @@ export const useStyles: any = makeStyles(() => ({
       height: 48,
     },
   },
-  buttonDiscardMobile: {
-    display: "inline-block",
-    width: "25%",
-    height: 48,
-    background: "#f6f6f7",
-    "@media(min-width: 812px)": {
-      display: "none",
-    },
-    "@media(max-width: 811px)": {
-      border: "none",
-    },
-  },
   titleHeader: {
     width: "50%",
     margin: "1vh auto",
+    color: "white",
+    "@media(max-width: 811px)": {
+      fontSize: 22,
+    },
   },
+  buttonDiscardMobile: {
+    width: "25%",
+    height: 24,
+    padding: 25,
+    "@media(min-width: 812px)": {
+      display: "none",
+    },
+  },
+
   addOptionPostS: {
     "@media(min-width: 812px)": {
       display: "none",
@@ -43,7 +44,7 @@ export const useStyles: any = makeStyles(() => ({
     "@media(max-width: 811px)": {
       width: "25%",
       height: 24,
-      margin: "9px auto",
+      padding: 25,
       position: "relative",
     },
   },
@@ -59,6 +60,9 @@ export const useStyles: any = makeStyles(() => ({
       backgroundColor: "#f6f6f7",
       border: "1px solid black",
     },
+  },
+  textOptionPost: {
+    marginLeft: 5,
   },
   contentPost: {
     width: "100%",
@@ -137,6 +141,7 @@ export const useStyles: any = makeStyles(() => ({
     paddingLeft: 15,
     paddingTop: 15,
     marginLeft: -15,
+    fontSize: 16,
   },
   button: { display: "flex", justifyContent: "center" },
 

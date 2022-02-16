@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useStyles } from "./Header.style";
 import { Filter } from "./Filter/Filter";
 
@@ -58,7 +58,6 @@ export const Header = () => {
     },
   }));
 
-  useEffect(() => {});
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -154,10 +153,14 @@ export const Header = () => {
               HEYTUTOR
             </Typography>
             <Search className={classes.search}>
-              <SearchIconWrapper>
+              <SearchIconWrapper className={classes.searchIconWrapper}>
                 <SearchIcon />
               </SearchIconWrapper>
-              <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                className={classes.styledInputBase}
+              />
             </Search>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
