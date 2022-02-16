@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useStyles } from "./Post.style";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,10 +9,14 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Button from "@mui/material/Button";
+
 export const Post = () => {
   const classes = useStyles();
   // const [toggleAttachFile, setToggleAttachFile] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [title, setTitle] = useState("");
+  const [hashTag, setHashTag] = useState("");
+  const [content, setContent] = useState("");
   const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
@@ -34,7 +38,9 @@ export const Post = () => {
   };
   const handlePost = () => {
     console.log("Post clicked");
+    console.log(title, hashTag, content);
   };
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,23 +49,27 @@ export const Post = () => {
     <div className={classes.post}>
       <div className={classes.headerPost}>
         {/* header post */}
-        <button className={classes.buttonDiscardMobile} onClick={handleDiscard}>
-          <ArrowBackIosIcon />
-        </button>
+        <Button variant="text" size="large">
+          <div className={classes.buttonDiscardMobile} onClick={handleDiscard}>
+            <ArrowBackIosIcon fontSize="small" sx={{ color: "white" }} />
+          </div>
+        </Button>
 
         {/* discard */}
-        <h2 className={classes.titleHeader}>Create Post</h2>
-        <div id="menu" className={classes.addOptionPostS} onClick={handleClick}>
-          <MenuIcon />
-        </div>
+        <h2 className={classes.titleHeader}>Tạo bài viết</h2>
+        <Button variant="text" size="large" onClick={handleClick}>
+          <div id="menu" className={classes.addOptionPostS}>
+            <MenuIcon sx={{ color: "white" }} />
+          </div>
+        </Button>
         <Menu id="menu" open={open} anchorEl={anchorEl} onClose={handleClose}>
           <MenuItem onClick={handleClose}>
             <AddPhotoAlternateIcon />
-            Thêm ảnh
+            <p className={classes.textOptionPost}>Thêm ảnh</p>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <PriceChangeIcon />
-            Thêm khoảng giá
+            <p className={classes.textOptionPost}>Thêm khoảng giá</p>
           </MenuItem>
         </Menu>
       </div>
@@ -68,10 +78,18 @@ export const Post = () => {
         <div className={classes.contentDetail}>
           {/* tiêu đề */}
           <div>
-            <input className={classes.titlePost} placeholder="Tiêu đề ... "></input>
+            <input
+              className={classes.titlePost}
+              placeholder="Tiêu đề ... "
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}></input>
           </div>
           <div>
-            <input className={classes.hashtagPost} placeholder="Hashtag ..."></input>
+            <input
+              className={classes.hashtagPost}
+              placeholder="Hashtag(gắn thẻ) ..."
+              value={hashTag}
+              onChange={(e) => setHashTag(e.target.value)}></input>
           </div>
           {/* hashtag */}
           {/* nội dung */}
@@ -81,21 +99,27 @@ export const Post = () => {
                 <AttachFileIcon />
               </div>
               <div className={classes.insertPhotoPost} onClick={handleInsertPhoto}>
-                <InsertPhotoIcon />
+                <AddPhotoAlternateIcon />
               </div>
               <div className={classes.priceChangePost} onClick={handleChangePrice}>
                 <PriceChangeIcon />
               </div>
             </div>
-            <textarea className={classes.contentDetailPost} placeholder="Nội dung ..."></textarea>
+            <textarea
+              className={classes.contentDetailPost}
+              placeholder="Nội dung ..."
+              rows={5}
+              cols={5}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}></textarea>
           </div>
         </div>
         <div className={classes.button}>
           <div className={classes.buttonPost} onClick={handlePost}>
-            <Button variant="contained">Post</Button>
+            <Button variant="contained">Đăng bài</Button>
           </div>
           <div className={classes.buttonDiscardScreen} onClick={handleDiscard}>
-            <Button variant="contained">Discard</Button>
+            <Button variant="contained">Hủy đăng bài</Button>
           </div>
         </div>
       </div>
