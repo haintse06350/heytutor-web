@@ -12,6 +12,7 @@ import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 
@@ -24,6 +25,24 @@ export const Post = () => {
 
   const [openSelect, setOpenSelect] = React.useState(false);
   const [loading, setLoading] = useState(false);
+  const [images, setImages]: any = useState([]);
+
+  const onUploadImage = ({ target }: any) => {
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(target.files[0]);
+    fileReader.onload = (e: any) => {
+      const prevImages = [...images];
+      prevImages.push(e.target.result as any);
+      setImages(prevImages);
+    };
+  };
+
+  const onRemoveImage = (image: string) => {
+    const newImages = images.filter((img: string) => img !== image);
+    setImages(newImages);
+  };
+
   const handleClose = () => {
     setOpenSelect(false);
   };
@@ -77,15 +96,14 @@ export const Post = () => {
         {/* post */}
         <Button variant="text" size="large">
           <div className={classes.buttonPostdMobile} onClick={handlePost}>
-            <SendIcon fontSize="small" sx={{ color: "white" }} />
+            {loading ? (
+              <CircularProgress size={25} sx={{ color: "white" }} />
+            ) : (
+              <SendIcon fontSize="small" sx={{ color: "white" }} />
+            )}
           </div>
         </Button>
       </div>
-      {loading && (
-        <div className={classes.loading}>
-          <CircularProgress />
-        </div>
-      )}
       <div className={classes.contentPost}>
         {/* content post */}
         <div className={classes.contentDetail}>
@@ -110,7 +128,7 @@ export const Post = () => {
             <div className={classes.addOptionPostL}>
               <div className={classes.attachFilePost} onClick={handleAttachFilePostL}>
                 <label htmlFor="icon-button-file">
-                  <Input accept="file/*" id="icon-button-file" type="file" />
+                  <Input onChange={onUploadImage} accept="file/*" id="icon-button-file" type="file" />
                   <IconButton aria-label="upload picture" component="span">
                     <AttachFileIcon sx={{ color: "black" }} fontSize="large" />
                   </IconButton>
@@ -155,6 +173,18 @@ export const Post = () => {
               onChange={(e) => setContent(e.target.value)}></textarea>
           </div>
         </div>
+        {images.length > 0 && (
+          <Grid container spacing={1} className={classes.listImg}>
+            {images.map((img: string, index: number) => (
+              <Grid item xs={4} className={classes.imagePost} key={index}>
+                <img className={classes.image} onClick={() => onRemoveImage(img)} key={index} src={img} alt="img" />
+                <div className={classes.deleteButton}>
+                  <CloseIcon />
+                </div>
+              </Grid>
+            ))}
+          </Grid>
+        )}
         <div className={classes.button}>
           <div className={classes.buttonPostScreen}>
             <LoadingButton
