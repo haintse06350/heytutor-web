@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Header from "./components/Header/Header";
 // import Message from "./components/Message/Message";
 import Post from "./components/Post/Post";
+import UserProfile from "./components/UserProfile/UserProfile";
 
 export default function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export default function AppRoutes() {
           <Route path={"/home"} element={<Header />} />
           <Route path={"/post"} element={<Post />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
+          <Route path={"/profile"} element={<UserProfile />} />
         </Routes>
         <BottomNav />
       </Fragment>

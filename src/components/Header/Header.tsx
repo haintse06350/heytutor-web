@@ -1,6 +1,6 @@
 import React from "react";
 import { useStyles } from "./Header.style";
-import { Filter } from "./Filter/Filter";
+// import { Filter } from "./Filter/Filter";
 
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
@@ -201,7 +201,7 @@ export const Header = () => {
         {renderMobileMenu}
         {renderMenu}
       </div>
-      <Filter />
+      {/* <Filter /> */}
     </div>
   );
 };

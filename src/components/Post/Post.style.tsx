@@ -124,10 +124,10 @@ export const useStyles: any = makeStyles(() => ({
     "@media(max-width: 811px)": {},
   },
   contentDetail: {
-    width: "90%",
+    width: "100%",
     height: "auto",
     margin: "0 auto",
-    paddingLeft: 8,
+    padding: "0px 16px",
   },
   titlePost: {
     width: "100%",
@@ -135,8 +135,7 @@ export const useStyles: any = makeStyles(() => ({
     borderRadius: 4,
     border: "1px solid #dcdfe6",
     margin: "10px 0",
-    paddingLeft: 15,
-    marginLeft: -15,
+    padding: "0px 15px",
     "@media(min-width: 812px)": {},
     "@media(max-width: 811px)": {},
   },
@@ -145,14 +144,13 @@ export const useStyles: any = makeStyles(() => ({
     height: 40,
     borderRadius: 4,
     border: "1px solid #dcdfe6",
-    paddingLeft: 15,
-    marginLeft: -15,
+    padding: "0px 15px",
     margin: "10px 0",
-
     "@media(max-width: 811px)": {},
   },
   addOptionPostL: {
     display: "flex",
+    padding: "0px 16px",
   },
   textIcon: {
     marginLeft: 20,
@@ -171,6 +169,14 @@ export const useStyles: any = makeStyles(() => ({
     },
   },
   insertPhotoPost: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+    "& > span": {
+      fontSize: 12,
+      fontWeight: 500,
+    },
     "@media(min-width: 812px)": {
       marginLeft: 5,
       marginRight: 15,
@@ -182,6 +188,7 @@ export const useStyles: any = makeStyles(() => ({
     },
   },
   priceChangePost: {
+    marginLeft: 30,
     "@media(min-width: 812px)": {},
     "@media(max-width: 811px)": {
       display: "flex",
@@ -191,12 +198,10 @@ export const useStyles: any = makeStyles(() => ({
   },
   contentDetailPost: {
     width: "100%",
-    minHeight: 300,
+    minHeight: 200,
     height: "30vh",
     margin: "10px 0",
-    paddingLeft: 15,
-    paddingTop: 15,
-    marginLeft: -15,
+    padding: 15,
     fontSize: 16,
   },
   button: {

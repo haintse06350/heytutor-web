@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-export const useStyles: any = makeStyles(() => ({
+export const useStyles: any = makeStyles((theme) => ({
   bottomNavigation: {
     position: "fixed",
     backgroundColor: "#fff",

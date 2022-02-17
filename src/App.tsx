@@ -1,6 +1,7 @@
 import "./App.css";
 import AppRoutes from "./AppRoutes";
 import React from "react";
+import withTheme from "./withTheme";
 
 function App() {
   return (
@@ -10,4 +11,4 @@ function App() {
   );
 }
 
-export default App;
+export default withTheme(App);
