@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useStyles } from "./UserProfile.style";
 import { Grid, Avatar, Typography } from "@mui/material";
 import Header from "../Common/Header/Header";
+import { UserCtx } from "../../context/user/state";
 
 const UserProfile = () => {
   const classes = useStyles();
+  const { user }: any = useContext(UserCtx);
 
   return (
     <div className={classes.root}>
@@ -15,7 +17,7 @@ const UserProfile = () => {
             <div className={classes.avatar}>
               <Avatar src={""} alt="" className={classes.roundedAvt} />
             </div>
-            <Typography className={classes.name}>Trung Hai</Typography>
+            <Typography className={classes.name}>{user?.name}</Typography>
           </div>
         </Grid>
       </div>

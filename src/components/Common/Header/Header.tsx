@@ -16,7 +16,7 @@ const Header = (props: IPropsHeader) => {
   const { leftIcon, rightIcon, titleCenter, actionLeft, isLoading, actionRight } = props;
 
   return (
-    <Grid container item xs={12} md={11} lg={10} className={classes.wrapper}>
+    <Grid container item xs={12} className={classes.wrapper}>
       {leftIcon && actionLeft ? (
         <Grid item xs={3} className={classes.actionLeft}>
           <div className={classes.iconLeft} onClick={() => actionLeft && actionLeft()}>

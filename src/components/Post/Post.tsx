@@ -16,6 +16,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Header from "../Common/Header/Header";
 import { Posts } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
+import { UserCtx } from "../../context/user/state";
 
 export const Post = () => {
   const classes = useStyles();
@@ -27,6 +28,9 @@ export const Post = () => {
   const [loading, setLoading] = useState(false);
   const [images, setImages]: any = useState([]);
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
+
+  const { user }: any = useContext(UserCtx);
+  console.log("user", user);
 
   const onUploadImage = ({ target }: any) => {
     const fileReader = new FileReader();

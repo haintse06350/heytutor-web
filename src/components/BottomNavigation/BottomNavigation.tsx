@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useStyles } from "./BottomNavigation.style";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -13,11 +13,16 @@ const BottomNav = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState("home");
   const navigate = useNavigate();
+  const pathname = window.location.pathname;
 
   const onChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
     navigate(`/${newValue}`);
   };
+
+  useEffect(() => {
+    setValue(pathname.split("/")[1]);
+  }, [pathname]);
 
   return (
     <>
