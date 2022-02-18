@@ -2,10 +2,8 @@ import React, { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BottomNav from "./components/BottomNavigation/BottomNavigation";
 // import Dashboard from "./components/Dashboard/Dashboard";
-// import Example from "./components/Example/Example";
-import Header from "./components/Header/Header";
+import HomePage from "./components/HomePage/HomePage";
 // import Login from "./components/Login/Login";
-// import Message from "./components/Message/Message";
 import Post from "./components/Post/Post";
 import UserProfile from "./components/UserProfile/UserProfile";
 // import { UserCtx } from "./context/user/state";
@@ -19,8 +17,8 @@ export default function AppRoutes() {
       <Fragment>
         <Routes>
           {/* <GlobalContextProvider> */}
-          <Route path={"/"} element={<Header />} />
-          <Route path={"/home"} element={<Header />} />
+          <Route path={"/"} element={<HomePage />} />
+          <Route path={"/home"} element={<HomePage />} />
           <Route path={"/post"} element={<Post />} />
           <Route path={"/profile"} element={<UserProfile />} />
 
