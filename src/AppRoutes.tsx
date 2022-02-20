@@ -7,6 +7,7 @@ import Header from "./components/Header/Header";
 import Login from "./components/Login/Login";
 // import Message from "./components/Message/Message";
 import Post from "./components/Post/Post";
+import Event from "./components/CreateEvent/CreatEvent";
 import UserProfile from "./components/UserProfile/UserProfile";
 import { UserCtx } from "./context/user/state";
 // import { GlobalContextProvider } from "./context/index";
@@ -22,6 +23,7 @@ export default function AppRoutes() {
           <Route path={"/"} element={<Header />} />
           <Route path={"/home"} element={<Header />} />
           <Route path={"/post"} element={<Post />} />
+          <Route path={"/event"} element={<Event />} />
           <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} />
           {/* </GlobalContextProvider> */}
         </Routes>
