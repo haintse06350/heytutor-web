@@ -12,6 +12,7 @@ export const useStyles: any = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     boxShadow: "0px -4px 4px rgba(0, 0, 0, 0.15)",
+    marginBottom: -5,
   },
   childrenContent: {
     height: "fit-content",

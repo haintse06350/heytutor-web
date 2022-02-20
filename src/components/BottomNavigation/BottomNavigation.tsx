@@ -28,11 +28,11 @@ const BottomNav = () => {
     <>
       <div id="bottom-nav" className={classes.bottomNavigation}>
         <BottomNavigation sx={{ width: 500 }} value={value} onChange={onChange}>
-          <BottomNavigationAction value="home" icon={<HomeIcon />} />
-          <BottomNavigationAction value="event" icon={<CelebrationIcon />} />
-          <BottomNavigationAction value="post" icon={<AddIcon />} />
-          <BottomNavigationAction value="notification" icon={<NotificationsNoneRoundedIcon />} />
-          <BottomNavigationAction value="profile" icon={<PermIdentityIcon />} />
+          <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
+          <BottomNavigationAction label="Event" value="event" icon={<CelebrationIcon />} />
+          <BottomNavigationAction label="Post" value="post" icon={<AddIcon />} />
+          <BottomNavigationAction label="Notification" value="notification" icon={<NotificationsNoneRoundedIcon />} />
+          <BottomNavigationAction label="Profile" value="profile" icon={<PermIdentityIcon />} />
         </BottomNavigation>
       </div>
     </>
