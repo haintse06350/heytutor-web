@@ -16,19 +16,15 @@ export default function AppRoutes() {
   return (
     <Router>
       <Fragment>
-        <Routes>
+      <Routes>
           {/* <GlobalContextProvider> */}
           <Route path={"/"} element={<HomePage />} />
           <Route path={"/home"} element={<HomePage />} />
           <Route path={"/post"} element={<Post />} />
-<<<<<<< HEAD
-          <Route path={"/event"} element={<Event />} />
-          <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} />
-=======
           <Route path={"/profile"} element={<UserProfile />} />
+          <Route path={"/event"} element={<Event />} />
 
           {/* <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} /> */}
->>>>>>> dev
           {/* </GlobalContextProvider> */}
         </Routes>
         <BottomNav />
