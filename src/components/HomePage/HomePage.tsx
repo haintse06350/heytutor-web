@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useStyles } from "./HomePage.style";
 import SearchIcon from "@mui/icons-material/Search";
-import { Grid, TextField, InputAdornment, Typography, Avatar, Dialog, Slide } from "@mui/material";
+import { Grid, TextField, InputAdornment, Typography, Avatar, Dialog, Slide, CircularProgress } from "@mui/material";
 // import { UserCtx } from "../../context/user/state";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -14,7 +14,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { TransitionProps } from "@mui/material/transitions";
 import SendIcon from "@mui/icons-material/Send";
-// import { stringAvatar } from "../UserProfile/helper";
+import { stringAvatar } from "../UserProfile/helper";
 // import { ChatEngineWrapper, ChatSocket, ChatList } from "react-chat-engine";
 import Search from "./Search/Search";
 import { Posts } from "../../models/post";
@@ -70,8 +70,12 @@ const HomePage = () => {
   const handleSendComment = () => {};
 
   const getListPost = async () => {
-    const res = await Posts.listPosts("", {});
-    setListPost(res.rows);
+    try {
+      const res = await Posts.listPosts("", {});
+      setListPost(res.rows);
+    } catch (error) {
+      setListPost([]);
+    }
   };
 
   //end xu li listent comment
@@ -154,39 +158,14 @@ const HomePage = () => {
   //   };
   // }, [currentLesson]);
 
-  return (
-    <div className={classes.container}>
-      {openSearch && <Search open={openSearch} onClose={onCloseSearch} />}
-      {openDialog && renderPostFullScreen()}
-      <Grid item className={classes.searchDialog}>
-        <TextField
-          fullWidth
-          disabled
-          variant="outlined"
-          onClick={onClickSearch}
-          className={classes.search}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon color="primary" />
-              </InputAdornment>
-            ),
-            classes: { notchedOutline: classes.noBorder },
-          }}
-          placeholder={"Tìm kiếm trên Heytutor"}
-        />
-      </Grid>
-
-      <div className={classes.content}>
-        <Typography>Nổi bật</Typography>
-      </div>
-      <div className={classes.filterByMajor}></div>
-      <div className={classes.listPost}>
+  const renderListPost = () => {
+    return (
+      <>
         {listPost?.map((post: any, i: number) => (
           <div key={i} className={classes.post}>
             <Grid container className={classes.userPanel}>
               <Grid item xs={2} className={classes.userAvatar}>
-                <Avatar src={user?.avatar} />
+                <Avatar {...stringAvatar(user.name)} src={user?.avatar} />
               </Grid>
               <Grid item xs={8} className={classes.userNameAndPostTime}>
                 <Typography>{user?.name}</Typography>
@@ -221,6 +200,50 @@ const HomePage = () => {
             <div className={classes.divider} />
           </div>
         ))}
+      </>
+    );
+  };
+
+  return (
+    <div className={classes.container}>
+      {openSearch && <Search open={openSearch} onClose={onCloseSearch} />}
+      {openDialog && renderPostFullScreen()}
+      <Grid item className={classes.searchDialog}>
+        <TextField
+          fullWidth
+          disabled
+          variant="outlined"
+          onClick={onClickSearch}
+          className={classes.search}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon color="primary" />
+              </InputAdornment>
+            ),
+            classes: { notchedOutline: classes.noBorder },
+          }}
+          placeholder={"Tìm kiếm trên Heytutor"}
+        />
+      </Grid>
+
+      <div className={classes.content}>
+        <Typography>Nổi bật</Typography>
+      </div>
+      <div className={classes.filterByMajor}></div>
+      <div className={classes.listPost}>
+        {!listPost ? (
+          <div className={classes.loading}>
+            <CircularProgress />
+            Loading ...
+          </div>
+        ) : listPost?.length === 0 ? (
+          <div className={classes.emptyData}>
+            <Typography>Không có bài viết nào</Typography>
+          </div>
+        ) : (
+          renderListPost()
+        )}
       </div>
     </div>
   );
