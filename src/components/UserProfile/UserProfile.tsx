@@ -12,6 +12,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
+import MessageIcon from "@mui/icons-material/Message";
 const UserProfile = () => {
   const classes = useStyles();
   const { user }: any = useContext(UserCtx);
@@ -20,7 +21,7 @@ const UserProfile = () => {
   const [isUpdate, setIsUpdate] = useState(false);
 
   //information of user
-
+  const userRoll = true;
   const userRanking = 100;
   const userStory = "Thích tìm hiểu những cái mới lạ";
   const userName = "Cao Duc Anh";
@@ -90,6 +91,11 @@ const UserProfile = () => {
   };
 
   // end change story
+  // begin message
+  const handleMessage = () => {
+    // tao room nhan tin giua 2 nguoi
+  };
+  // end message
 
   //begin style
   const styleColor = {
@@ -125,16 +131,27 @@ const UserProfile = () => {
                   value={story}
                   onChange={handleChangeStory}
                   readOnly={!isEdit}></textarea>
+
                 {isEdit && <div className={classes.countLenght}>Ký tự còn lại: {60 - story.length}/60</div>}
               </div>
               <div className={classes.buttonFixStory}>
-                <Button
-                  onClick={handleEditStory}
-                  endIcon={<CreateIcon />}
-                  sx={{ color: "black", background: "white" }}
-                  variant="contained">
-                  Chỉnh sửa
-                </Button>
+                {userRoll ? (
+                  <Button
+                    onClick={handleEditStory}
+                    endIcon={<CreateIcon />}
+                    sx={{ color: "black", background: "white" }}
+                    variant="contained">
+                    Chỉnh sửa
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleMessage}
+                    endIcon={<MessageIcon />}
+                    sx={{ color: "black", background: "white" }}
+                    variant="contained">
+                    Nhắn tin
+                  </Button>
+                )}
 
                 {isUpdate && (
                   <Button

@@ -12,6 +12,9 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { TransitionProps } from "@mui/material/transitions";
+import SendIcon from "@mui/icons-material/Send";
+import { stringAvatar } from "../UserProfile/helper";
+// import { ChatEngineWrapper, ChatSocket, ChatList } from "react-chat-engine";
 
 const HomePage = () => {
   const classes = useStyles();
@@ -19,10 +22,14 @@ const HomePage = () => {
   const [isLiked, setIsliked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-
+  const [commentContent, setCommentContent] = useState("");
+  const [currentLesson, setCurrentLesson] = useState(1);
   const user = {
     avatar: "",
-    name: "Nguyen Trung Hai",
+    name: "Cao Duc Anh",
+    userSecret: "123123",
+    projectID: "de969c63-1866-429e-bfa7-b632652dbede",
+    chatAccessKey: "ca-3eea076a-5113-4c34-b0e5-eb99e56472d0",
   };
 
   const post = {
@@ -38,8 +45,10 @@ const HomePage = () => {
 
   const onClickSearch = () => {};
 
-  const onClickCommentSection = () => {
+  const onClickCommentSection = (id: any) => {
     setOpenDialog(true);
+    setCurrentLesson(id);
+    window.dispatchEvent(new CustomEvent(`lesson-${id}`, { detail: `cmt lesson ${id}` }));
   };
 
   const onClickCommentSectionInsideDialog = () => {};
@@ -52,10 +61,26 @@ const HomePage = () => {
     setIsBookmarked(!isBookmarked);
   };
 
+  const handleSendComment = () => {};
+
   useEffect(() => {
     console.log("fetch list post");
   }, []);
 
+  // begin xu li listen comment
+
+  useEffect(() => {
+    const handleComment = () => {
+      console.log("qqq");
+    };
+
+    window.addEventListener(`lesson-${currentLesson}`, handleComment);
+    return () => {
+      window.removeEventListener(`lesson-${currentLesson}`, handleComment);
+    };
+  }, [currentLesson]);
+
+  //end xu li listent comment
   const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
       children: React.ReactElement<any, any>;
@@ -100,6 +125,18 @@ const HomePage = () => {
                 <ShareIcon color="primary" />
               </Grid>
             </Grid>
+            {/* begin comment */}
+            <div className={classes.inputComment}>
+              <input
+                placeholder="Bình luận tại đây ..."
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+              />
+              <div onClick={handleSendComment}>
+                <SendIcon />
+              </div>
+            </div>
+            {/* end comment */}
           </Grid>
         </div>
       </Dialog>
@@ -132,48 +169,66 @@ const HomePage = () => {
         <Typography>Nổi bật</Typography>
       </div>
       <div className={classes.filterByMajor}></div>
-      <div className={classes.listPost}>
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className={classes.post}>
-            <Grid container className={classes.userPanel}>
-              <Grid item xs={2} className={classes.userAvatar}>
-                <Avatar src={user?.avatar} />
+      <div className={classes.homeContent}>
+        <div className={classes.listPost}>
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className={classes.post}>
+              <Grid container className={classes.userPanel}>
+                <Grid item xs={2} className={classes.userAvatar}>
+                  <Avatar {...stringAvatar(user.name)} src={user?.avatar} />
+                </Grid>
+                <Grid item xs={8} className={classes.userNameAndPostTime}>
+                  <Typography>{user?.name}</Typography>
+                  <Typography>{post?.time}</Typography>
+                </Grid>
+                <Grid item xs={2} className={classes.userMoreActions}>
+                  <MoreHorizIcon color="info" />
+                </Grid>
               </Grid>
-              <Grid item xs={8} className={classes.userNameAndPostTime}>
-                <Typography>{user?.name}</Typography>
-                <Typography>{post?.time}</Typography>
+              <div className={classes.postContent}>
+                <Typography>{post.content}</Typography>
+                <Typography>{post.hashtag}</Typography>
+              </div>
+              <Grid container className={classes.postActions}>
+                <Grid item xs={10} className={classes.leftPanel}>
+                  <div className={classes.likeButton} onClick={onClickLike}>
+                    {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
+                    <Typography>{post.likeCount}</Typography>
+                  </div>
+                  <div className={classes.commentButton} onClick={(i) => onClickCommentSection(i)}>
+                    <ChatBubbleOutlineOutlinedIcon color="primary" />
+                    <Typography>{post.commentCount}</Typography>
+                  </div>
+                  <div className={classes.shareButton}>
+                    <ShareIcon color="primary" />
+                  </div>
+                </Grid>
+                <Grid item xs={2} className={classes.rightPanel}>
+                  <div className={classes.bookmarkButton} onClick={onClickBookmark}>
+                    {isBookmarked ? <BookmarkAddedIcon color="primary" /> : <BookmarkAddOutlinedIcon color="primary" />}
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={2} className={classes.userMoreActions}>
-                <MoreHorizIcon color="info" />
-              </Grid>
-            </Grid>
-            <div className={classes.postContent}>
-              <Typography>{post.content}</Typography>
-              <Typography>{post.hashtag}</Typography>
+              <div className={classes.divider} />
             </div>
-            <Grid container className={classes.postActions}>
-              <Grid item xs={10} className={classes.leftPanel}>
-                <div className={classes.likeButton} onClick={onClickLike}>
-                  {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
-                  <Typography>{post.likeCount}</Typography>
-                </div>
-                <div className={classes.commentButton} onClick={onClickCommentSection}>
-                  <ChatBubbleOutlineOutlinedIcon color="primary" />
-                  <Typography>{post.commentCount}</Typography>
-                </div>
-                <div className={classes.shareButton}>
-                  <ShareIcon color="primary" />
-                </div>
-              </Grid>
-              <Grid item xs={2} className={classes.rightPanel}>
-                <div className={classes.bookmarkButton} onClick={onClickBookmark}>
-                  {isBookmarked ? <BookmarkAddedIcon color="primary" /> : <BookmarkAddOutlinedIcon color="primary" />}
-                </div>
-              </Grid>
-            </Grid>
-            <div className={classes.divider} />
-          </div>
-        ))}
+          ))}
+        </div>
+        {/* begin chat list */}
+        {/* <div className={classes.chatListEngine}>
+          <ChatEngineWrapper>
+            <ChatSocket
+              projectID={user.projectID}
+              userName={user.name}
+              userSecret={user.userSecret}
+              senderUsername={user.name}
+              chatID="97980"
+              chatAccessKey="ca-3eea076a-5113-4c34-b0e5-eb99e56472d0"
+            />
+            <ChatList />
+          </ChatEngineWrapper>
+          {console.log(user)}
+        </div> */}
+        {/* end chat list */}
       </div>
     </div>
   );

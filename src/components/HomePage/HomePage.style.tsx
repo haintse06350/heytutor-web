@@ -3,8 +3,13 @@ import { makeStyles } from "@mui/styles";
 export const useStyles: any = makeStyles(
   () => ({
     container: {
+      position: "relative",
       padding: 16,
       marginBottom: 62,
+      width: "100%",
+      height: "calc(100vh - 62px)",
+      alignItems: "center",
+      justifyContent: "center",
     },
     searchDialog: {
       width: "100%",
@@ -51,8 +56,21 @@ export const useStyles: any = makeStyles(
         color: "#0288d1",
       },
     },
+    homeContent: {
+      width: "100%",
+      height: "auto",
+      display: "flex",
+    },
     listPost: {
-      marginTop: 20,
+      // marginTop: 20,
+      zIndex: 20,
+      width: "100%",
+      maxWidth: "500px",
+      margin: "0 auto",
+
+      "@media(min-width:600)": {
+        marginLeft: "calc(50% - 250px)",
+      },
     },
     post: {
       width: "100%",
@@ -183,6 +201,40 @@ export const useStyles: any = makeStyles(
         alignItems: "center",
       },
     },
+
+    inputComment: {
+      width: "100%",
+      height: 40,
+      display: "flex",
+      margin: "0 auto",
+      alignContent: "center",
+      "& > input": {
+        width: "70%",
+        height: "auto",
+        marginLeft: "5%",
+        marginRight: "5%",
+        border: "1px solid black",
+        borderRadius: "7px",
+        paddingLeft: "10px",
+      },
+      "& > div": {
+        width: "20%",
+        height: "auto",
+        textalign: "center",
+        marginTop: "auto",
+        marginBottom: "auto",
+      },
+    },
+    // chatListEngine: {
+    //   position: "absolute",
+    //   width: 500,
+    //   height: "auto",
+    //   right: 0,
+    //   "@media(max-width:1500px)": {
+    //     display: "none",
+    //   },
+    // },
   }),
+
   { index: 1 }
 );
