@@ -43,7 +43,7 @@ export const useStyles: any = makeStyles(() => ({
     width: "100%",
     height: "100%",
   },
-  emptyResult: {
+  centerView: {
     width: "100%",
     position: "absolute",
     top: "50%",

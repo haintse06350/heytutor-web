@@ -14,4 +14,10 @@ export class Posts {
     await ErrorUtils.throwError(res);
     return res.json();
   }
+
+  static async search(token: string, query: string) {
+    const res = await FetchUtils.get(`/search?query=${query}`, token);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
 }
