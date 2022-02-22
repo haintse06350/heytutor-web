@@ -48,7 +48,7 @@ const HomePage = () => {
   const getListPost = async () => {
     try {
       const res = await Posts.listPosts("", {});
-      setListPost(res.rows);
+      setListPost(res);
     } catch (error) {
       setListPost([]);
     }

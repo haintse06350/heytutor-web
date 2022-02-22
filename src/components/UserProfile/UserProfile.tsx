@@ -13,7 +13,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import MessageIcon from "@mui/icons-material/Message";
-import HomePage from "../HomePage/HomePage";
+import ListPost from "./ListPost";
 
 const UserProfile = () => {
   const classes = useStyles();
@@ -21,6 +21,7 @@ const UserProfile = () => {
   const inputStory: any = useRef(null);
   const [isEdit, setIsEdit] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [value, setValue] = useState(0);
 
   //information of user
   const userRoll = true;
@@ -38,7 +39,8 @@ const UserProfile = () => {
     index: number;
     value: number;
   }
-  function TabPanel(props: TabPanelProps) {
+
+  const TabPanel = (props: TabPanelProps) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -55,15 +57,14 @@ const UserProfile = () => {
         )}
       </div>
     );
-  }
+  };
 
-  function a11yProps(index: number) {
+  const a11yProps = (index: number) => {
     return {
       id: `simple-tab-${index}`,
       "aria-controls": `simple-tabpanel-${index}`,
     };
-  }
-  const [value, setValue] = React.useState(0);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -105,6 +106,7 @@ const UserProfile = () => {
   };
   //end style
   // end edit story
+
   return (
     <div className={classes.root}>
       <Header titleCenter={"Profile"} />
@@ -179,7 +181,7 @@ const UserProfile = () => {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                <HomePage />
+                <ListPost userProfile={user} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 Đánh giá

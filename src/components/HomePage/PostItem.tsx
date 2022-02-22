@@ -16,13 +16,6 @@ const PostItem = (props: any) => {
   const [isLiked, setIsliked] = useState(false);
   const [likePost, setLikedPost]: any = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const user = {
-    avatar: "",
-    name: "Cao Duc Anh",
-    userSecret: "123123",
-    projectID: "de969c63-1866-429e-bfa7-b632652dbede",
-    chatAccessKey: "ca-3eea076a-5113-4c34-b0e5-eb99e56472d0",
-  };
 
   const onClickLike = (postId: number) => {
     setLikedPost(postId);
@@ -37,10 +30,10 @@ const PostItem = (props: any) => {
     <>
       <Grid container className={classes.userPanel}>
         <Grid item xs={2} className={classes.userAvatar}>
-          <Avatar {...stringAvatar(user.name)} src={user?.avatar} />
+          <Avatar {...stringAvatar(post.user.name)} src={post.user?.avatar} />
         </Grid>
         <Grid item xs={8} className={classes.userNameAndPostTime}>
-          <Typography>{user?.name}</Typography>
+          <Typography>{post.user?.name}</Typography>
           <Typography>{moment().from(post?.createdAt)}</Typography>
         </Grid>
         <div className={classes.divider} />
