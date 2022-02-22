@@ -1,8 +1,7 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useStyles } from "./UserProfile.style";
 import { stringAvatar } from "./helper";
 import { Grid, Avatar, Typography, Button } from "@mui/material";
-import Header from "../Common/Header/Header";
 import { UserCtx } from "../../context/user/state";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -14,6 +13,7 @@ import Box from "@mui/material/Box";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import MessageIcon from "@mui/icons-material/Message";
 import ListPost from "./ListPost";
+import { User } from "../../models/users";
 
 const UserProfile = () => {
   const classes = useStyles();
@@ -22,6 +22,10 @@ const UserProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [value, setValue] = useState(0);
+  const [userProfile, setUserProfile]: any = useState(user);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get("userId");
 
   //information of user
   const userRoll = true;
@@ -31,7 +35,7 @@ const UserProfile = () => {
   const userMajor = "SE";
   const userSemester = 13;
 
-  const [story, setStory] = useState(user?.sumarry);
+  const [story, setStory] = useState(userProfile?.sumarry);
   // begin set tab view
 
   interface TabPanelProps {
@@ -107,26 +111,35 @@ const UserProfile = () => {
   //end style
   // end edit story
 
+  useEffect(() => {
+    if (userId) {
+      User.getUserProfile("", userId).then((res: any) => {
+        setUserProfile(res);
+      });
+    } else if (user) {
+      setUserProfile(user);
+    }
+  }, [userId, user]);
+
   return (
     <div className={classes.root}>
-      <Header titleCenter={"Profile"} />
       <div className={classes.wrap}>
         <Grid item className={classes.userHeader}>
           <div className={classes.header} style={styleColor}>
             <div className={classes.avatar}>
-              <Avatar {...stringAvatar(user?.name)} className={classes.roundedAvt} />
+              <Avatar {...stringAvatar(userProfile?.name)} className={classes.roundedAvt} />
             </div>
             {/* tom tat ca nhan */}
             <div className={classes.userSumarry}>
               <div className={classes.userName}>
-                <Typography className={classes.name}>{user?.name}</Typography>
+                <Typography className={classes.name}>{userProfile?.name}</Typography>
               </div>
               <div className={classes.userMajor}>
                 <CoPresentIcon />
                 {"K" + userSemester + "-" + userMajor}
               </div>
               <div className={classes.userRanking}>
-                <StarsIcon /> Điểm uy tín hiện tại: {user?.rateCount}/100
+                <StarsIcon /> Điểm uy tín hiện tại: {userProfile?.rateCount}/100
               </div>
               <div className={classes.userStory}>
                 <BorderColorIcon />
@@ -134,7 +147,7 @@ const UserProfile = () => {
                   maxLength={60}
                   ref={inputStory}
                   className={classes.storyInput}
-                  value={user?.sumarry}
+                  value={userProfile?.sumarry}
                   onChange={handleChangeStory}
                   readOnly={!isEdit}></textarea>
 
@@ -181,7 +194,7 @@ const UserProfile = () => {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                <ListPost userProfile={user} />
+                <ListPost userProfile={userProfile} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 Đánh giá

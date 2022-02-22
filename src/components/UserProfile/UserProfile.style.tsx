@@ -12,6 +12,7 @@ export const useStyles: any = makeStyles((theme) => ({
     margin: "auto",
   },
   header: {
+    padding: 20,
     width: "100%",
     textAlign: "center",
     "& > p": {

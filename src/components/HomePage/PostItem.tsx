@@ -9,6 +9,7 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ShareIcon from "@mui/icons-material/Share";
+import { useNavigate } from "react-router-dom";
 
 const PostItem = (props: any) => {
   const { post, onClickCommentSection } = props;
@@ -16,6 +17,7 @@ const PostItem = (props: any) => {
   const [isLiked, setIsliked] = useState(false);
   const [likePost, setLikedPost]: any = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const navigate = useNavigate();
 
   const onClickLike = (postId: number) => {
     setLikedPost(postId);
@@ -26,14 +28,18 @@ const PostItem = (props: any) => {
     setIsBookmarked(!isBookmarked);
   };
 
+  const onClickProfile = (userId: number) => {
+    navigate(`/profile/?userId=${userId}`);
+  };
+
   return (
     <>
       <Grid container className={classes.userPanel}>
-        <Grid item xs={2} className={classes.userAvatar}>
+        <Grid item xs={2} className={classes.userAvatar} onClick={() => onClickProfile(post.user.id)}>
           <Avatar {...stringAvatar(post.user.name)} src={post.user?.avatar} />
         </Grid>
         <Grid item xs={8} className={classes.userNameAndPostTime}>
-          <Typography>{post.user?.name}</Typography>
+          <Typography onClick={() => onClickProfile(post.user.id)}>{post.user?.name}</Typography>
           <Typography>{moment().from(post?.createdAt)}</Typography>
         </Grid>
         <div className={classes.divider} />
