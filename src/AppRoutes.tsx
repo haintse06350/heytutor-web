@@ -12,7 +12,7 @@ import UserProfile from "./components/UserProfile/UserProfile";
 // import { GlobalContextProvider } from "./context/index";
 
 export default function AppRoutes() {
-  // const { user }: any = useContext(UserCtx);
+  // const { user }: any = React.useContext(UserCtx);
 
   return (
     <Router>
