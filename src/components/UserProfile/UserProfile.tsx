@@ -24,13 +24,13 @@ const UserProfile = () => {
 
   //information of user
   const userRoll = true;
-  const userRanking = 100;
-  const userStory = "Thích tìm hiểu những cái mới lạ";
-  const userName = "Cao Duc Anh";
+  // const userRanking = 100;
+  // const userStory = "Thích tìm hiểu những cái mới lạ";
+  // const userName = "Cao Duc Anh";
   const userMajor = "SE";
   const userSemester = 13;
 
-  const [story, setStory] = useState(userStory);
+  const [story, setStory] = useState(user?.sumarry);
   // begin set tab view
 
   interface TabPanelProps {
@@ -116,13 +116,15 @@ const UserProfile = () => {
             </div>
             {/* tom tat ca nhan */}
             <div className={classes.userSumarry}>
-              <div className={classes.userName}>{userName}</div>
+              <div className={classes.userName}>
+                <Typography className={classes.name}>{user?.name}</Typography>
+              </div>
               <div className={classes.userMajor}>
                 <CoPresentIcon />
                 {"K" + userSemester + "-" + userMajor}
               </div>
               <div className={classes.userRanking}>
-                <StarsIcon /> Điểm uy tín hiện tại: {userRanking}/100
+                <StarsIcon /> Điểm uy tín hiện tại: {user?.rateCount}/100
               </div>
               <div className={classes.userStory}>
                 <BorderColorIcon />
@@ -130,7 +132,7 @@ const UserProfile = () => {
                   maxLength={60}
                   ref={inputStory}
                   className={classes.storyInput}
-                  value={story}
+                  value={user?.sumarry}
                   onChange={handleChangeStory}
                   readOnly={!isEdit}></textarea>
 
@@ -166,8 +168,6 @@ const UserProfile = () => {
                 )}
               </div>
             </div>
-
-            <Typography className={classes.name}>{user?.name}</Typography>
           </div>
           {/* chuyen tab */}
           <div className={classes.userView}>
