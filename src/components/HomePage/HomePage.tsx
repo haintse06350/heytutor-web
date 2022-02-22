@@ -19,6 +19,7 @@ import { stringAvatar } from "../UserProfile/helper";
 import Search from "./Search/Search";
 import { Posts } from "../../models/post";
 import moment from "moment";
+import Header from "../Header/Header";
 
 const HomePage = () => {
   const classes = useStyles();
@@ -205,47 +206,50 @@ const HomePage = () => {
   };
 
   return (
-    <div className={classes.container}>
-      {openSearch && <Search open={openSearch} onClose={onCloseSearch} />}
-      {openDialog && renderPostFullScreen()}
-      <Grid item className={classes.searchDialog}>
-        <TextField
-          fullWidth
-          disabled
-          variant="outlined"
-          onClick={onClickSearch}
-          className={classes.search}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon color="primary" />
-              </InputAdornment>
-            ),
-            classes: { notchedOutline: classes.noBorder },
-          }}
-          placeholder={"Tìm kiếm trên Heytutor"}
-        />
-      </Grid>
+    <>
+      <Header />
+      <div className={classes.container}>
+        {openSearch && <Search open={openSearch} onClose={onCloseSearch} />}
+        {openDialog && renderPostFullScreen()}
+        <Grid item className={classes.searchDialog}>
+          <TextField
+            fullWidth
+            disabled
+            variant="outlined"
+            onClick={onClickSearch}
+            className={classes.search}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon color="primary" />
+                </InputAdornment>
+              ),
+              classes: { notchedOutline: classes.noBorder },
+            }}
+            placeholder={"Tìm kiếm trên Heytutor"}
+          />
+        </Grid>
 
-      <div className={classes.content}>
-        <Typography>Nổi bật</Typography>
+        <div className={classes.content}>
+          <Typography>Nổi bật</Typography>
+        </div>
+        <div className={classes.filterByMajor}></div>
+        <div className={classes.listPost}>
+          {!listPost ? (
+            <div className={classes.loading}>
+              <CircularProgress />
+              Loading ...
+            </div>
+          ) : listPost?.length === 0 ? (
+            <div className={classes.emptyData}>
+              <Typography>Không có bài viết nào</Typography>
+            </div>
+          ) : (
+            renderListPost()
+          )}
+        </div>
       </div>
-      <div className={classes.filterByMajor}></div>
-      <div className={classes.listPost}>
-        {!listPost ? (
-          <div className={classes.loading}>
-            <CircularProgress />
-            Loading ...
-          </div>
-        ) : listPost?.length === 0 ? (
-          <div className={classes.emptyData}>
-            <Typography>Không có bài viết nào</Typography>
-          </div>
-        ) : (
-          renderListPost()
-        )}
-      </div>
-    </div>
+    </>
   );
 };
 
