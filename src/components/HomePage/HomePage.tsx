@@ -122,19 +122,6 @@ const HomePage = () => {
     getListPost();
   }, []);
 
-  // begin xu li listen comment
-
-  // useEffect(() => {
-  //   const handleComment = () => {
-  //     console.log("qqq");
-  //   };
-
-  //   window.addEventListener(`lesson-${currentLesson}`, handleComment);
-  //   return () => {
-  //     window.removeEventListener(`lesson-${currentLesson}`, handleComment);
-  //   };
-  // }, [currentLesson]);
-
   const renderListPost = () => {
     return (
       <>
