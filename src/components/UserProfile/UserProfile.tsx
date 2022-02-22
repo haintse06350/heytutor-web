@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import MessageIcon from "@mui/icons-material/Message";
 import HomePage from "../HomePage/HomePage";
+
 const UserProfile = () => {
   const classes = useStyles();
   const { user }: any = useContext(UserCtx);
@@ -111,7 +112,7 @@ const UserProfile = () => {
         <Grid item className={classes.userHeader}>
           <div className={classes.header} style={styleColor}>
             <div className={classes.avatar}>
-              <Avatar {...stringAvatar(userName)} className={classes.roundedAvt} />
+              <Avatar {...stringAvatar(user?.name)} className={classes.roundedAvt} />
             </div>
             {/* tom tat ca nhan */}
             <div className={classes.userSumarry}>
