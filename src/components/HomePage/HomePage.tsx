@@ -48,7 +48,6 @@ const HomePage = () => {
   const onClickCommentSection = (id: any) => {
     setOpenDialog(true);
     setCurrentLesson(id);
-    window.dispatchEvent(new CustomEvent(`lesson-${id}`, { detail: `cmt lesson ${id}` }));
   };
 
   const onClickCommentSectionInsideDialog = () => {};
