@@ -15,7 +15,6 @@ import SendIcon from "@mui/icons-material/Send";
 // import { ChatEngineWrapper, ChatSocket, ChatList } from "react-chat-engine";
 import Search from "./Search/Search";
 import { Posts } from "../../models/post";
-import moment from "moment";
 import Header from "../Header/Header";
 import PostItem from "./PostItem";
 
@@ -40,7 +39,6 @@ const HomePage = () => {
   const onClickCommentSection = (post: any) => {
     setSelectedPost(post);
     setOpenDialog(true);
-    setCurrentLesson(id);
   };
 
   const onClickCommentSectionInsideDialog = () => {};
