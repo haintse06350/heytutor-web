@@ -13,6 +13,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import MessageIcon from "@mui/icons-material/Message";
+import HomePage from "../HomePage/HomePage";
 
 const UserProfile = () => {
   const classes = useStyles();
@@ -178,7 +179,7 @@ const UserProfile = () => {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                Bài đăng
+                <HomePage />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 Đánh giá

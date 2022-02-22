@@ -17,6 +17,8 @@ import Header from "../Common/Header/Header";
 import { Posts } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
 import { UserCtx } from "../../context/user/state";
+// import Alert from "@mui/material/Alert";
+// import AlertTitle from "@mui/material/AlertTitle";
 
 export const Post = () => {
   const classes = useStyles();
@@ -166,7 +168,7 @@ export const Post = () => {
         {images.length > 0 && (
           <Grid container spacing={1} className={classes.listImg}>
             {images.map((img: any, index: number) => (
-              <Grid item xs={4} className={classes.imagePost} key={index}>
+              <Grid item xs={3} className={classes.imagePost} key={index}>
                 <img className={classes.image} key={index} src={img.src} alt="img" />
                 <div className={classes.deleteButton} onClick={() => onRemoveImage(img, index)}>
                   <CloseIcon />
