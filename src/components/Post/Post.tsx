@@ -70,7 +70,7 @@ export const Post = () => {
     setLoading(true);
     const params = { title, hashTag, content };
     try {
-      await Posts.create("", params);
+      await Posts.create(params);
       setNotificationSuccess("Post created successfully");
     } catch (error) {
       setNotificationError("Error creating post");

@@ -113,7 +113,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (userId) {
-      User.getUserProfile("", userId).then((res: any) => {
+      User.getUserProfile(userId).then((res: any) => {
         setUserProfile(res);
       });
     } else if (user) {

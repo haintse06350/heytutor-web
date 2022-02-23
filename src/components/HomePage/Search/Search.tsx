@@ -25,7 +25,7 @@ const Search = (props: any) => {
   const onSearch = async () => {
     setLoading(true);
     setSearchResult(null);
-    const result = await Posts.search("", query);
+    const result = await Posts.search(query);
     setSearchResult(result);
     setLoading(false);
   };

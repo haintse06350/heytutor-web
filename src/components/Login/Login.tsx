@@ -16,7 +16,8 @@ export const Login = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const user = await User.login("", { email, password });
+      const user = await User.login({ email, password });
+      localStorage.setItem("heytutor-user", JSON.stringify(user.token));
       login(user);
     } catch (e) {
       console.log(e);

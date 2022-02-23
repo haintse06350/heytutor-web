@@ -168,7 +168,7 @@ const Dashboard = () => {
   };
 
   const getStudentData = async () => {
-    const res: any = await Students.list("", { limit: 100, offset: 0 });
+    const res: any = await Students.list({ limit: 100, offset: 0 });
     const columns = filter(
       keys(res.rows[0]),
       (key: string) => key !== "createdAt" && key !== "updatedAt" && key !== "imageUrl" && key !== "major"
