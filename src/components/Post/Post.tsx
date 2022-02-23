@@ -14,11 +14,9 @@ import Grid from "@mui/material/Grid";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import Header from "../Common/Header/Header";
-import { Posts } from "../../models/post";
+import { Post as PostModel } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
 import { UserCtx } from "../../context/user/state";
-// import Alert from "@mui/material/Alert";
-// import AlertTitle from "@mui/material/AlertTitle";
 
 export const Post = () => {
   const classes = useStyles();
@@ -32,7 +30,6 @@ export const Post = () => {
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
 
   const { user }: any = useContext(UserCtx);
-  console.log("user", user);
 
   const onUploadImage = ({ target }: any) => {
     const fileReader = new FileReader();
@@ -68,9 +65,9 @@ export const Post = () => {
 
   const onPost = async () => {
     setLoading(true);
-    const params = { title, hashTag, content };
+    const params = { userId: user?.id, title, hashTag, content };
     try {
-      await Posts.create(params);
+      await PostModel.create(params);
       setNotificationSuccess("Post created successfully");
     } catch (error) {
       setNotificationError("Error creating post");

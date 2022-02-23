@@ -31,7 +31,7 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CookieIcon from "@mui/icons-material/Cookie";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Students } from "../../models/student";
+import { Student } from "../../models/student";
 import { keys, map, filter, pick } from "lodash";
 import { TERMS } from "../../constants/terms";
 import { useStyles } from "./Dashboard.style";
@@ -168,7 +168,7 @@ const Dashboard = () => {
   };
 
   const getStudentData = async () => {
-    const res: any = await Students.list({ limit: 100, offset: 0 });
+    const res: any = await Student.list({ limit: 100, offset: 0 });
     const columns = filter(
       keys(res.rows[0]),
       (key: string) => key !== "createdAt" && key !== "updatedAt" && key !== "imageUrl" && key !== "major"

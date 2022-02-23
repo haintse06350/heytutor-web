@@ -5,6 +5,7 @@ const userToken = localStorage.getItem("heytutor-user");
 
 if (userToken) {
   const decoded: any = jwt_decode(userToken);
+  console.log(decoded);
   user = decoded.user;
 }
 

@@ -3,7 +3,7 @@ import { useStyles } from "./Search.style";
 import { Dialog, Typography, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { debounce } from "lodash";
-import { Posts } from "../../../models/post";
+import { Post } from "../../../models/post";
 import PostItem from "../PostItem";
 
 const Search = (props: any) => {
@@ -25,7 +25,7 @@ const Search = (props: any) => {
   const onSearch = async () => {
     setLoading(true);
     setSearchResult(null);
-    const result = await Posts.search(query);
+    const result = await Post.search(query);
     setSearchResult(result);
     setLoading(false);
   };

@@ -1,7 +1,7 @@
 import FetchUtils from "../utils/fetch";
 import { ErrorUtils } from "../utils/error";
 
-export class Posts {
+export class Post {
   static async create(params = {}) {
     const res = await FetchUtils.post(`/post`, params);
     await ErrorUtils.throwError(res);

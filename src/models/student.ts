@@ -1,7 +1,7 @@
 import FetchUtils from "../utils/fetch";
 import { ErrorUtils } from "../utils/error";
 
-export class Students {
+export class Student {
   static async list(params: any = {}) {
     const { limit, offset } = params;
     const res = await FetchUtils.get(`/list-student?limit=${limit}&offset=${offset}`);

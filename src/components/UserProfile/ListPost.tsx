@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Posts } from "../../models/post";
+import { Post } from "../../models/post";
 import PostItem from "../HomePage/PostItem";
 import { map } from "lodash";
 
@@ -9,7 +9,7 @@ const ListPost = (props: any) => {
 
   useEffect(() => {
     if (userProfile) {
-      Posts.listPostsByUserId(userProfile.id, { limit: 100 }).then((res: any) => {
+      Post.listPostsByUserId(userProfile.id, { limit: 100 }).then((res: any) => {
         const listPosts = map(res.rows, (item: any) => {
           return { ...item, user: userProfile };
         });

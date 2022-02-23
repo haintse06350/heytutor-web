@@ -14,7 +14,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import SendIcon from "@mui/icons-material/Send";
 // import { ChatEngineWrapper, ChatSocket, ChatList } from "react-chat-engine";
 import Search from "./Search/Search";
-import { Posts } from "../../models/post";
+import { Post } from "../../models/post";
 import Header from "../Header/Header";
 import PostItem from "./PostItem";
 
@@ -47,7 +47,7 @@ const HomePage = () => {
 
   const getListPost = async () => {
     try {
-      const res = await Posts.listPosts({});
+      const res = await Post.listPosts({});
       setListPost(res);
     } catch (error) {
       setListPost([]);

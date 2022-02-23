@@ -4,6 +4,7 @@ import { useStyles } from "./Login.style";
 import { UserCtx } from "../../context/user/state";
 import { User } from "../../models/users";
 import GoogleIcon from "@mui/icons-material/Google";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const classes = useStyles();
@@ -11,14 +12,16 @@ export const Login = () => {
   const [isLoading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
     try {
       const user = await User.login({ email, password });
-      localStorage.setItem("heytutor-user", JSON.stringify(user.token));
+      localStorage.setItem("heytutor-user", user.token);
       login(user);
+      navigate("/");
     } catch (e) {
       console.log(e);
     }
