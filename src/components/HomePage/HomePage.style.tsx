@@ -129,11 +129,14 @@ export const useStyles: any = makeStyles(
     },
     postContent: {
       width: "100%",
-      height: "auto",
-      marginTop: 10,
+      height: "calc(100% - 40px)",
+      position: "relative",
       "& > p": {
         textAlign: "left",
       },
+    },
+    mainContent: {
+      marginTop: 10,
     },
     postActions: {
       marginTop: 30,
@@ -165,6 +168,7 @@ export const useStyles: any = makeStyles(
     },
     dialogContent: {
       padding: 16,
+      height: "100vh",
     },
     dialogHeader: {
       display: "flex",
@@ -201,26 +205,25 @@ export const useStyles: any = makeStyles(
         alignItems: "center",
       },
     },
-
     inputComment: {
+      position: "absolute",
+      bottom: 0,
       width: "100%",
       height: 40,
       display: "flex",
       margin: "0 auto",
       alignContent: "center",
       "& > input": {
-        width: "70%",
+        width: "85%",
         height: "auto",
-        marginLeft: "5%",
-        marginRight: "5%",
         border: "1px solid black",
         borderRadius: "7px",
         paddingLeft: "10px",
       },
       "& > div": {
-        width: "20%",
+        textAlign: "center",
+        width: "15%",
         height: "auto",
-        textalign: "center",
         marginTop: "auto",
         marginBottom: "auto",
       },
@@ -235,6 +238,50 @@ export const useStyles: any = makeStyles(
       alignItems: "center",
       justifyContent: "center",
       flexDirection: "column",
+    },
+    hashTag: {
+      width: "100%",
+      color: "#0288d1",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      "& > p": {
+        textAlign: "left",
+        textDecoration: "underline",
+        marginRight: 8,
+      },
+    },
+    commentSection: {
+      marginTop: 20,
+    },
+    commentItem: {
+      display: "flex",
+      alignItems: "flex-start",
+      marginBottom: 12,
+    },
+    commentRow: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "flex-start",
+    },
+    commentContent: {
+      marginLeft: 8,
+      background: "#F8F8F8",
+      padding: 8,
+      borderRadius: 12,
+      "& > p:first-child": {
+        fontSize: 16,
+        fontWeight: 500,
+      },
+    },
+    commentAt: {
+      "& > p": {
+        fontSize: 14,
+        color: "#727477",
+        textAlign: "left",
+        marginTop: 4,
+      },
     },
     // chatListEngine: {
     //   position: "absolute",

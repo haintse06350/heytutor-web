@@ -10,18 +10,26 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ShareIcon from "@mui/icons-material/Share";
 import { useNavigate } from "react-router-dom";
+import { map } from "lodash";
+import { Post } from "../../models/post";
 
 const PostItem = (props: any) => {
-  const { post, onClickCommentSection } = props;
+  const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
   const [isLiked, setIsliked] = useState(false);
   const [likePost, setLikedPost]: any = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const navigate = useNavigate();
 
-  const onClickLike = (postId: number) => {
+  const onClickLike = async (postId: number) => {
     setLikedPost(postId);
     setIsliked(!isLiked);
+    const params = {
+      postId,
+      isLiked: !isLiked,
+      likeCount: isLiked ? post?.likeCount - 1 : post?.likeCount + 1,
+    };
+    await Post.updatePost(params);
   };
 
   const onClickBookmark = (post: any) => {
@@ -30,6 +38,20 @@ const PostItem = (props: any) => {
 
   const onClickProfile = (userId: number) => {
     navigate(`/profile/?userId=${userId}`);
+  };
+
+  const renderHashTag = (hashTag: string) => {
+    let hashTagArray: any = null;
+    try {
+      hashTagArray = JSON.parse(hashTag.replaceAll("'", ""));
+    } catch (error) {
+      hashTagArray = [];
+    }
+    return map(hashTagArray, (item: string, idx: number) => (
+      <Typography key={idx} onClick={() => onClickHashTag(item)}>
+        {item}
+      </Typography>
+    ));
   };
 
   return (
@@ -46,10 +68,7 @@ const PostItem = (props: any) => {
       </Grid>
       <div className={classes.postContent}>
         <Typography>{post.content}</Typography>
-        <Typography>{post.hashtag}</Typography>
-        {/* {JSON.parse(post.hashtag).map((item: any, i: number) => (
-          <Typography key={i}>{item}</Typography>
-        ))} */}
+        <div className={classes.hashTag}>{renderHashTag(post.hashtag)}</div>
       </div>
       <Grid container className={classes.postActions}>
         <Grid item xs={10} className={classes.leftPanel}>

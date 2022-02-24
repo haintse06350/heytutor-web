@@ -14,6 +14,7 @@ import UpgradeIcon from "@mui/icons-material/Upgrade";
 import MessageIcon from "@mui/icons-material/Message";
 import ListPost from "./ListPost";
 import { User } from "../../models/users";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const classes = useStyles();
@@ -23,6 +24,7 @@ const UserProfile = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [value, setValue] = useState(0);
   const [userProfile, setUserProfile]: any = useState(user);
+  const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get("userId");
@@ -116,6 +118,11 @@ const UserProfile = () => {
       User.getUserProfile(userId).then((res: any) => {
         setUserProfile(res);
       });
+      if (parseInt(userId) === user?.id) {
+        const queryParams = new URLSearchParams(window.location.search);
+        queryParams.delete("userId");
+        navigate(`/profile`, { replace: true });
+      }
     } else if (user) {
       setUserProfile(user);
     }

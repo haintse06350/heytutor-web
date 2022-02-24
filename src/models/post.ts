@@ -26,4 +26,10 @@ export class Post {
     await ErrorUtils.throwError(res);
     return res.json();
   }
+
+  static updatePost = async (params: any) => {
+    const res = await FetchUtils.put(`/update-post`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
 }
