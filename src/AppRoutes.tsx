@@ -6,6 +6,7 @@ import HomePage from "./components/HomePage/HomePage";
 // import Login from "./components/Login/Login";
 import Post from "./components/Post/Post";
 import Event from "./components/CreateEvent/CreatEvent";
+import Feedback from "./components/Feedback/Feedback";
 import UserProfile from "./components/UserProfile/UserProfile";
 // import { UserCtx } from "./context/user/state";
 // import { GlobalContextProvider } from "./context/index";
@@ -23,6 +24,8 @@ export default function AppRoutes() {
           <Route path={"/post"} element={<Post />} />
           <Route path={"/profile"} element={<UserProfile />} />
           <Route path={"/event"} element={<Event />} />
+          <Route path={"/feedback"} element={<Feedback />} />
+
 
           {/* <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} /> */}
           {/* </GlobalContextProvider> */}
