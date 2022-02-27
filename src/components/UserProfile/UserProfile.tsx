@@ -28,7 +28,7 @@ const UserProfile = () => {
   const userId = urlParams.get("userId");
 
   //information of user
-  const userRoll = true;
+  // const userRoll = true;
   // const userRanking = 100;
   // const userStory = "Thích tìm hiểu những cái mới lạ";
   // const userName = "Cao Duc Anh";
@@ -121,6 +121,8 @@ const UserProfile = () => {
     }
   }, [userId, user]);
 
+  console.log(user?.id + ";" + userId);
+
   return (
     <div className={classes.root}>
       <div className={classes.wrap}>
@@ -157,21 +159,21 @@ const UserProfile = () => {
               </div>
             </div>
             <div className={classes.buttonFixStory}>
-              {userRoll ? (
-                <Button
-                  onClick={handleEditStory}
-                  endIcon={<CreateIcon />}
-                  sx={{ color: "black", background: "white" }}
-                  variant="contained">
-                  Chỉnh sửa
-                </Button>
-              ) : (
+              {userId ? (
                 <Button
                   onClick={handleMessage}
                   endIcon={<MessageIcon />}
                   sx={{ color: "black", background: "white" }}
                   variant="contained">
                   Nhắn tin
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleEditStory}
+                  endIcon={<CreateIcon />}
+                  sx={{ color: "black", background: "white" }}
+                  variant="contained">
+                  Chỉnh sửa
                 </Button>
               )}
 
