@@ -30,7 +30,7 @@ const UserProfile = () => {
   const userId = urlParams.get("userId");
 
   //information of user
-  const userRoll = true;
+  // const userRoll = true;
   // const userRanking = 100;
   // const userStory = "Thích tìm hiểu những cái mới lạ";
   // const userName = "Cao Duc Anh";
@@ -128,6 +128,8 @@ const UserProfile = () => {
     }
   }, [userId, user]);
 
+  console.log(user?.id + ";" + userId);
+
   return (
     <div className={classes.root}>
       <div className={classes.wrap}>
@@ -139,7 +141,9 @@ const UserProfile = () => {
             {/* tom tat ca nhan */}
             <div className={classes.userSumarry}>
               <div className={classes.userName}>
-                <Typography className={classes.name}>{userProfile?.name}</Typography>
+                <Typography fontSize={"2rem"} className={classes.name}>
+                  {userProfile?.name}
+                </Typography>
               </div>
               <div className={classes.userMajor}>
                 <CoPresentIcon />
@@ -160,35 +164,35 @@ const UserProfile = () => {
 
                 {isEdit && <div className={classes.countLenght}>Ký tự còn lại: {60 - story.length}/60</div>}
               </div>
-              <div className={classes.buttonFixStory}>
-                {userRoll ? (
-                  <Button
-                    onClick={handleEditStory}
-                    endIcon={<CreateIcon />}
-                    sx={{ color: "black", background: "white" }}
-                    variant="contained">
-                    Chỉnh sửa
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handleMessage}
-                    endIcon={<MessageIcon />}
-                    sx={{ color: "black", background: "white" }}
-                    variant="contained">
-                    Nhắn tin
-                  </Button>
-                )}
+            </div>
+            <div className={classes.buttonFixStory}>
+              {userId ? (
+                <Button
+                  onClick={handleMessage}
+                  endIcon={<MessageIcon />}
+                  sx={{ color: "black", background: "white" }}
+                  variant="contained">
+                  Nhắn tin
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleEditStory}
+                  endIcon={<CreateIcon />}
+                  sx={{ color: "black", background: "white" }}
+                  variant="contained">
+                  Chỉnh sửa
+                </Button>
+              )}
 
-                {isUpdate && (
-                  <Button
-                    onClick={handleUpdateStory}
-                    endIcon={<UpgradeIcon />}
-                    sx={{ color: "white" }}
-                    variant="contained">
-                    Lưu chỉnh sửa
-                  </Button>
-                )}
-              </div>
+              {isUpdate && (
+                <Button
+                  onClick={handleUpdateStory}
+                  endIcon={<UpgradeIcon />}
+                  sx={{ color: "white" }}
+                  variant="contained">
+                  Lưu chỉnh sửa
+                </Button>
+              )}
             </div>
           </div>
           {/* chuyen tab */}
