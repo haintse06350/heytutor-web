@@ -77,7 +77,7 @@ const HomePage = () => {
       <div className={classes.container}>
         {openSearch && <Search searchQuery={searchQuery} open={openSearch} onClose={onCloseSearch} />}
         {openDialog && <PostDetail post={selectedPost} onCloseDialog={onCloseDialog} openDialog={openDialog} />}
-        <Grid item className={classes.searchDialog}>
+        <Grid item className={classes.searchDialogScreen}>
           <TextField
             fullWidth
             disabled
