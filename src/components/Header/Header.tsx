@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./Header.style";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Badge from "@mui/material/Badge";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
+import {
+  Grid,
+  TextField,
+  InputAdornment,
+  Typography,
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Badge,
+  MenuItem,
+  Menu,
+} from "@mui/material";
+import Search from "../HomePage/Search/Search";
+import PostDetail from "../HomePage/PostDetail";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Header = () => {
   const classes = useStyles();
@@ -20,6 +28,11 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuId = "primary-search-account-menu";
+
+  const [openSearch, setOpenSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState(false);
+  // const [selectedPost, setSelectedPost]: any = useState(null);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     console.log("click menu open");
     setAnchorEl(event.currentTarget);
@@ -29,7 +42,9 @@ const Header = () => {
     setAnchorEl(null);
     setIsMenuOpen(false);
   };
-
+  const onCloseDialog = () => {
+    setOpenDialog(false);
+  };
   // end listen event
 
   //   begin listen redirect page
@@ -67,7 +82,13 @@ const Header = () => {
     </Menu>
   );
   //end render menu avatar
-
+  const onClickSearch = () => {
+    setOpenSearch(true);
+  };
+  const onCloseSearch = () => {
+    setSearchQuery("");
+    setOpenSearch(false);
+  };
   return (
     <div className={classes.headerWrap}>
       <AppBar position="static">
@@ -75,6 +96,26 @@ const Header = () => {
           <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
             HEYTUTOR
           </Typography>
+          {openSearch && <Search searchQuery={searchQuery} open={openSearch} onClose={onCloseSearch} />}
+          {openDialog && <PostDetail onCloseDialog={onCloseDialog} openDialog={openDialog} />}
+          <Grid item className={classes.searchDialog}>
+            <TextField
+              fullWidth
+              disabled
+              variant="outlined"
+              onClick={onClickSearch}
+              className={classes.search}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon color="primary" />
+                  </InputAdornment>
+                ),
+                classes: { notchedOutline: classes.noBorder },
+              }}
+              placeholder={"Tìm kiếm trên Heytutor"}
+            />
+          </Grid>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
