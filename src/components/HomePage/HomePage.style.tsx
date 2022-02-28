@@ -6,10 +6,12 @@ export const useStyles: any = makeStyles(
       position: "relative",
       padding: 16,
       marginBottom: 62,
+
       width: "100%",
       height: "calc(100vh - 62px)",
       alignItems: "center",
       justifyContent: "center",
+      backgroundColor: "whitesmoke",
     },
 
     searchIcon: {
@@ -21,6 +23,7 @@ export const useStyles: any = makeStyles(
     },
     content: {
       width: "100%",
+      marginTop: 10,
       "& > p:first-child": {
         fontSize: 18,
         fontWeight: 700,
@@ -32,7 +35,7 @@ export const useStyles: any = makeStyles(
       "@media(min-width:1024px)": {
         display: "none !important",
       },
-      width: "50%",
+      width: "100%",
       flexWrap: "nowrap",
       height: "auto",
       zIndex: 10,
@@ -51,12 +54,19 @@ export const useStyles: any = makeStyles(
       width: "100%",
       maxWidth: "500px",
       margin: "0 auto",
-
+      borderRadius: 8,
       "@media(min-width:600)": {
         marginLeft: "calc(50% - 250px)",
       },
     },
-
+    post: {
+      width: "100%",
+      height: "auto",
+      backgroundColor: "#fff",
+      padding: 15,
+      borderRadius: 8,
+      marginBottom: 16,
+    },
     userPanel: {
       "& > div": {
         "&:first-child": {
@@ -76,7 +86,7 @@ export const useStyles: any = makeStyles(
         flexDirection: "column",
         justifyContent: "center",
         "&:last-child": {
-          alignItems: "flex-end",
+          alignItems: "flex-start",
         },
       },
     },
@@ -127,7 +137,7 @@ export const useStyles: any = makeStyles(
         alignItems: "center",
         justifyContent: "flex-start",
         "&:last-child": {
-          justifyContent: "flex-end",
+          justifyContent: "flex-start",
         },
         "& > div": {
           display: "flex",
@@ -259,6 +269,9 @@ export const useStyles: any = makeStyles(
         textAlign: "left",
         marginTop: 4,
       },
+    },
+    isResolve: {
+      display: "flex",
     },
     // chatListEngine: {
     //   position: "absolute",

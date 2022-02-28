@@ -155,9 +155,8 @@ export const Post = () => {
                 <MenuItem value="">
                   <em>Không</em>
                 </MenuItem>
-                <MenuItem value={1}>100k-200k</MenuItem>
-                <MenuItem value={2}>200k-500k</MenuItem>
-                <MenuItem value={3}>500k-1000k</MenuItem>
+                <MenuItem value={1}>Không</MenuItem>
+                <MenuItem value={2}>Có</MenuItem>
               </Select>
             </FormControl>
           </div>
