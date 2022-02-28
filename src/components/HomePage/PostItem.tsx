@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useStyles } from "./HomePage.style";
 import { stringAvatar } from "../UserProfile/helper";
@@ -8,7 +6,8 @@ import moment from "moment";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import ShareIcon from "@mui/icons-material/Share";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import { useNavigate } from "react-router-dom";
 import { map } from "lodash";
 import { Post } from "../../models/post";
@@ -18,7 +17,7 @@ const PostItem = (props: any) => {
   const classes = useStyles();
   const [isLiked, setIsliked] = useState(false);
   const [likePost, setLikedPost]: any = useState(null);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isResolved, setIsResolved] = useState(false);
   const navigate = useNavigate();
 
   const onClickLike = async (postId: number) => {
@@ -32,8 +31,8 @@ const PostItem = (props: any) => {
     await Post.updatePost(params);
   };
 
-  const onClickBookmark = (post: any) => {
-    setIsBookmarked(!isBookmarked);
+  const onClickResolve = (post: any) => {
+    setIsResolved(!isResolved);
   };
 
   const onClickProfile = (userId: number) => {
@@ -84,13 +83,20 @@ const PostItem = (props: any) => {
             <ChatBubbleOutlineOutlinedIcon color="primary" />
             <Typography>{post.commentCount}</Typography>
           </div>
-          <div className={classes.shareButton}>
-            <ShareIcon color="primary" />
-          </div>
         </Grid>
         <Grid item xs={2} className={classes.rightPanel}>
-          <div className={classes.bookmarkButton} onClick={() => onClickBookmark(post)}>
-            {isBookmarked ? <BookmarkAddedIcon color="primary" /> : <BookmarkAddOutlinedIcon color="primary" />}
+          <div className={classes.bookmarkButton} onClick={() => onClickResolve(post)}>
+            {isResolved ? (
+              <div className={classes.isResolve}>
+                <DoneAllIcon color="primary" aria-label="Đã giải quyết"></DoneAllIcon>
+                <Typography>Đã giải quyết</Typography>
+              </div>
+            ) : (
+              <div className={classes.isResolve}>
+                <RemoveDoneIcon color="primary" aria-label="Chưa giải quyết"></RemoveDoneIcon>
+                <Typography>Chưa giải quyết</Typography>{" "}
+              </div>
+            )}
           </div>
         </Grid>
       </Grid>

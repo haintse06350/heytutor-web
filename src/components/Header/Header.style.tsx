@@ -21,7 +21,7 @@ export const useStyles = makeStyles(() => ({
   },
   search: {
     "& > div": {
-      background: "#F8F8F8",
+      background: "#fff",
       minHeight: 36,
       height: 46,
       padding: `3px 16px`,
@@ -35,7 +35,7 @@ export const useStyles = makeStyles(() => ({
         fontSize: 17,
         fontWeight: 400,
         border: "unset",
-        backgroundColor: "#F8F8F8",
+        backgroundColor: "#fff",
         padding: 0,
       },
     },
@@ -43,13 +43,5 @@ export const useStyles = makeStyles(() => ({
   noBorder: {
     border: "none",
     borderStyle: "unset !important",
-  },
-  post: {
-    width: "100%",
-    height: "auto",
-    backgroundColor: "#F8F8F8",
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 16,
   },
 }));
