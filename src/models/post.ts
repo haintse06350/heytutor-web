@@ -9,8 +9,14 @@ export class Post {
     return res.json();
   }
 
-  static async listPosts(params = {}) {
-    const res = await FetchUtils.get(`/list-post`, params);
+  static async listPostsByUserRole(params = {}) {
+    const res = await FetchUtils.get(`/list-post-by-user-role`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async listAllPosts(params = {}) {
+    const res = await FetchUtils.get(`/list-all-post`, params);
     await ErrorUtils.throwError(res);
     return res.json();
   }

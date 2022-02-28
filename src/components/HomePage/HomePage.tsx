@@ -20,8 +20,10 @@ const HomePage = () => {
   // const [currentLesson, setCurrentLesson] = useState(1);
   const [openSearch, setOpenSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [listPost, setListPost]: any = useState(null);
+  const [listPostHighlight, setListPostHighlight]: any = useState(null);
+  const [listAllPost, setAllPost]: any = useState(null);
   const [selectedPost, setSelectedPost]: any = useState(null);
+  const [activeTab, setActiveTab] = useState("highlight");
 
   const onClickSearch = () => {
     setOpenSearch(true);
@@ -39,10 +41,11 @@ const HomePage = () => {
 
   const getListPost = async () => {
     try {
-      const res = await Post.listPosts({});
-      setListPost(res);
+      const [highlightPosts, allPost] = await Promise.all([Post.listPostsByUserRole({}), Post.listAllPosts({})]);
+      setListPostHighlight(highlightPosts);
+      setAllPost(allPost);
     } catch (error) {
-      setListPost([]);
+      setListPostHighlight([]);
     }
   };
 
@@ -59,7 +62,7 @@ const HomePage = () => {
     getListPost();
   }, []);
 
-  const renderListPost = () => {
+  const renderListPost = (listPost: any) => {
     return (
       <>
         {listPost?.map((post: any, i: number) => (
@@ -97,21 +100,32 @@ const HomePage = () => {
         </Grid>
 
         <div className={classes.content}>
-          <Typography>Nổi bật</Typography>
+          <div className={classes.tabContent}>
+            <Typography
+              onClick={() => setActiveTab("highlight")}
+              className={activeTab === "highlight" && classes.active}>
+              Nổi bật
+            </Typography>
+            <Typography onClick={() => setActiveTab("post")} className={activeTab === "post" && classes.active}>
+              Bài viết
+            </Typography>
+          </div>
         </div>
         <div className={classes.filterByMajor}></div>
         <div className={classes.listPost}>
-          {!listPost ? (
+          {!listPostHighlight ? (
             <div className={classes.loading}>
               <CircularProgress />
               Loading ...
             </div>
-          ) : listPost?.length === 0 ? (
+          ) : listPostHighlight?.length === 0 ? (
             <div className={classes.emptyData}>
               <Typography>Không có bài viết nào</Typography>
             </div>
+          ) : activeTab === "highlight" ? (
+            renderListPost(listPostHighlight)
           ) : (
-            renderListPost()
+            renderListPost(listAllPost)
           )}
         </div>
       </div>

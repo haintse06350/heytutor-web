@@ -25,10 +25,16 @@ export const useStyles: any = makeStyles(
       width: "100%",
       marginTop: 10,
       "& > p:first-child": {
+    },
+    tabContent: {
+      display: "flex",
+      position: "sticky",
+      "& > p": {
         fontSize: 18,
         fontWeight: 700,
         textAlign: "left",
-        color: "#0288d1",
+        color: "#666666",
+        marginRight: 16,
       },
     },
     searchDialogScreen: {
@@ -42,6 +48,9 @@ export const useStyles: any = makeStyles(
       background: "#FFFFFF",
       alignItems: "center",
       borderRadius: 8,
+    active: {
+      color: "#0288d1 !important",
+      textDecoration: "underline",
     },
     homeContent: {
       width: "100%",
@@ -49,7 +58,7 @@ export const useStyles: any = makeStyles(
       display: "flex",
     },
     listPost: {
-      // marginTop: 20,
+      marginTop: 20,
       zIndex: 20,
       width: "100%",
       maxWidth: "500px",

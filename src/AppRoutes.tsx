@@ -10,7 +10,6 @@ import Login from "./components/Login/Login";
 import Post from "./components/Post/Post";
 import UserProfile from "./components/UserProfile/UserProfile";
 import { UserCtx } from "./context/user/state";
-// import { GlobalContextProvider } from "./context/index";
 
 export default function AppRoutes() {
   const { user }: any = useContext(UserCtx);
@@ -19,7 +18,6 @@ export default function AppRoutes() {
     <Router>
       <Fragment>
         <Routes>
-          {/* <GlobalContextProvider> */}
           <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} />
           <Route path={"/"} element={<HomePage />} />
           <Route path={"/home"} element={<HomePage />} />
@@ -28,8 +26,6 @@ export default function AppRoutes() {
           <Route path={"/chat"} element={<Chat />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
           <Route path={"/test"} element={<Header />} />
-
-          {/* </GlobalContextProvider> */}
         </Routes>
         <BottomNav />
       </Fragment>
