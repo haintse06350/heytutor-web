@@ -8,8 +8,14 @@ export class User {
     //do something here
   };
 
-  static login = async (token: string, params = {}) => {
-    const res = await FetchUtils.post(`/auth/login`, token, params);
+  static login = async (params = {}) => {
+    const res = await FetchUtils.post(`/auth/login`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
+
+  static getUserProfile = async (userId: string) => {
+    const res = await FetchUtils.get(`/user/${userId}`);
     await ErrorUtils.throwError(res);
     return res.json();
   };

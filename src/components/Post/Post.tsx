@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import Header from "../Common/Header/Header";
-import { Posts } from "../../models/post";
+import { Post as PostModel } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
 import { UserCtx } from "../../context/user/state";
 
@@ -30,7 +30,6 @@ export const Post = () => {
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
 
   const { user }: any = useContext(UserCtx);
-  console.log("user", user);
 
   const onUploadImage = ({ target }: any) => {
     const fileReader = new FileReader();
@@ -66,9 +65,9 @@ export const Post = () => {
 
   const onPost = async () => {
     setLoading(true);
-    const params = { title, hashTag, content };
+    const params = { userId: user?.id, title, hashTag, content };
     try {
-      await Posts.create("", params);
+      await PostModel.create(params);
       setNotificationSuccess("Post created successfully");
     } catch (error) {
       setNotificationError("Error creating post");
@@ -156,9 +155,8 @@ export const Post = () => {
                 <MenuItem value="">
                   <em>Không</em>
                 </MenuItem>
-                <MenuItem value={1}>100k-200k</MenuItem>
-                <MenuItem value={2}>200k-500k</MenuItem>
-                <MenuItem value={3}>500k-1000k</MenuItem>
+                <MenuItem value={1}>Không</MenuItem>
+                <MenuItem value={2}>Có</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -166,7 +164,7 @@ export const Post = () => {
         {images.length > 0 && (
           <Grid container spacing={1} className={classes.listImg}>
             {images.map((img: any, index: number) => (
-              <Grid item xs={4} className={classes.imagePost} key={index}>
+              <Grid item xs={3} className={classes.imagePost} key={index}>
                 <img className={classes.image} key={index} src={img.src} alt="img" />
                 <div className={classes.deleteButton} onClick={() => onRemoveImage(img, index)}>
                   <CloseIcon />

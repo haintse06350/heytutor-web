@@ -13,6 +13,9 @@ export const useStyles: any = makeStyles((theme) => ({
     alignItems: "center",
     boxShadow: "0px -4px 4px rgba(0, 0, 0, 0.15)",
     marginBottom: -5,
+    "@media(min-width:1025px)": {
+      display: "none",
+    },
   },
   childrenContent: {
     height: "fit-content",

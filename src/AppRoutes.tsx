@@ -1,34 +1,36 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BottomNav from "./components/BottomNavigation/BottomNavigation";
-// import Dashboard from "./components/Dashboard/Dashboard";
+import Chat from "./components/Chat/Chat";
+import Dashboard from "./components/Dashboard/Dashboard";
+// import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
-// import Login from "./components/Login/Login";
+// import Message from "./components/Message/Message";
+import Login from "./components/Login/Login";
 import Post from "./components/Post/Post";
 import Event from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";
+import Post2 from "./components/Post2/Post";
 import UserProfile from "./components/UserProfile/UserProfile";
-// import { UserCtx } from "./context/user/state";
-// import { GlobalContextProvider } from "./context/index";
+import { UserCtx } from "./context/user/state";
 
 export default function AppRoutes() {
-  // const { user }: any = useContext(UserCtx);
+  const { user }: any = useContext(UserCtx);
 
   return (
     <Router>
       <Fragment>
-      <Routes>
-          {/* <GlobalContextProvider> */}
+        <Routes>
+          <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} />
           <Route path={"/"} element={<HomePage />} />
           <Route path={"/home"} element={<HomePage />} />
           <Route path={"/post"} element={<Post />} />
           <Route path={"/profile"} element={<UserProfile />} />
           <Route path={"/event"} element={<Event />} />
           <Route path={"/feedback"} element={<Feedback />} />
-
-
-          {/* <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} /> */}
-          {/* </GlobalContextProvider> */}
+          <Route path={"/chat"} element={<Chat />} />
+          <Route path={"/dashboard"} element={<Dashboard />} />
+          <Route path={"/test"} element={<Post2 />} />
         </Routes>
         <BottomNav />
       </Fragment>

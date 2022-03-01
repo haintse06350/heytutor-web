@@ -22,19 +22,21 @@ export const useStyles: any = makeStyles(() => ({
     maxHeight: 100,
     width: 100,
     height: 100,
-    marginRight: 5,
+    // marginRight: 5,
+
     position: "relative",
   },
   image: {
     borderRadius: 8,
-    width: "100%",
-    height: "100%",
+    width: "100px",
+    height: "100px",
     objectFit: "cover",
+    marginTop: 5,
   },
   deleteButton: {
     position: "absolute",
     top: 10,
-    right: 0,
+    right: 22,
     width: 20,
     height: 20,
     background: "#fff",
@@ -211,13 +213,16 @@ export const useStyles: any = makeStyles(() => ({
   },
 
   buttonPostScreen: {
-    "@media(min-width: 812px)": {},
+    "@media(min-width: 812px)": {
+      marginTop: 20,
+    },
     "@media(max-width: 811px)": { display: "none" },
   },
   buttonDiscardScreen: {
     "@media(min-width: 812px)": {
       marginLeft: 20,
       alignItems: "center",
+      marginTop: 20,
     },
     "@media(max-width: 811px)": {
       display: "none",

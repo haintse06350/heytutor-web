@@ -17,11 +17,13 @@ export const stringToColor = (string: string) => {
   return color;
 };
 export const stringAvatar = (name: string) => {
+  const nameSplit = name.split(" ");
+
   return {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: nameSplit.length > 1 ? `${nameSplit[0][0]}${nameSplit[1][0]}` : nameSplit[0][0],
   };
 };
 // end set avatar

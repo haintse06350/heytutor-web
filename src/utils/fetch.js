@@ -1,52 +1,46 @@
-import _ from "lodash";
 import fetch from "isomorphic-unfetch";
-// import Cookies from "js-cookie";
 
 const api = process.env.REACT_APP_API;
+const getSessionId = () => localStorage.getItem("heytutor-user");
 
 export default class Network {
-  static async ajax(url, sessionId, method, body, headers) {
-    let token = sessionId;
-    // if (process.browser) {
-    //   token = Cookies.get(process.env.COOKIE_USER) || Cookies.get(process.env.COOKIE_ANONYMOUS);
-    // }
+  static async fetch(url, method, body = null, headers = {}) {
+    const fullUrl = `${api}${url}`;
 
-    return Network.fetch(
-      url,
+    return fetch(fullUrl, {
       method,
-      body,
-      _.extend(headers, { authorization: `Bearer ${token}`, "X-Auth-Token": `Bearer ${token}` })
-    );
-  }
-
-  static async fetch(url, method, body, headers) {
-    return fetch(`${api}${url}`, {
-      method,
-      headers: _.extend(
-        {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "X-Auth-Token": headers.authorization,
-        },
-        headers
-      ),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-Auth-Token": headers.authorization,
+        ...headers,
+      },
       body: body ? JSON.stringify(body) : null,
     });
   }
 
-  static get(url, token, headers) {
-    return Network.ajax(url, token, "GET", null, headers);
+  static async ajax(url, method, body, headers) {
+    const token = getSessionId();
+
+    return Network.fetch(url, method, body, {
+      ...headers,
+      authorization: `Bearer ${token}`,
+    });
   }
 
-  static put(url, token, body, headers) {
-    return Network.ajax(url, token, "PUT", body, headers);
+  static get(url, headers) {
+    return Network.ajax(url, "GET", null, headers);
   }
 
-  static post(url, token, body, headers) {
-    return Network.ajax(url, token, "POST", body, headers);
+  static put(url, body, headers) {
+    return Network.ajax(url, "PUT", body, headers);
   }
 
-  static delete(url, token, body, headers) {
-    return Network.ajax(url, token, "DELETE", body, headers);
+  static post(url, body, headers) {
+    return Network.ajax(url, "POST", body, headers);
+  }
+
+  static delete(url, body, headers) {
+    return Network.ajax(url, "DELETE", body, headers);
   }
 }

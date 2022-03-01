@@ -1,9 +1,11 @@
 import React from "react";
 import { ACTIONS } from "./actions";
+import jwt_decode from "jwt-decode";
 
 export const login = async (dispatch: React.Dispatch<any>, user: any) => {
   try {
-    dispatch({ type: ACTIONS.LOGIN, user: user.user });
+    const userObj: any = jwt_decode(user);
+    dispatch({ type: ACTIONS.LOGIN, user: userObj.user });
     return user;
   } catch (e) {
     console.error("Fail to log in", e);

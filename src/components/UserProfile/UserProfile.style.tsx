@@ -6,14 +6,27 @@ export const useStyles: any = makeStyles((theme) => ({
     width: "100%",
     margin: "auto",
     fontFamily: "sans-serif",
+    alignItems: "center",
+    textAlign: "center",
   },
   userHeader: {
     width: "100%",
     margin: "auto",
+    "@media(max-width:1023px)": {
+      alignItems: "center",
+      textAlign: "center",
+    },
   },
   header: {
+    padding: 20,
     width: "100%",
     textAlign: "center",
+    "@media(min-width:1024px)": {
+      display: "flex",
+    },
+    "@media(max-width:1023px)": {
+      display: "block",
+    },
     "& > p": {
       marginTop: 9,
       fontWeight: "bold",
@@ -24,9 +37,7 @@ export const useStyles: any = makeStyles((theme) => ({
     color: "white",
   },
   avatar: {
-    width: 128,
-    height: 128,
-    margin: "auto",
+    margin: "0 4%",
   },
   roundedAvt: {
     width: "128px !important",
@@ -34,14 +45,25 @@ export const useStyles: any = makeStyles((theme) => ({
     borderRadius: "50%",
     border: "3px solid #fff",
     objectFit: "cover",
+    "@media(max-width:1023px)": {
+      margin: "auto",
+    },
+    "@media(min-width:1024px)": {
+      margin: "0",
+    },
     "& > svg": {
       width: "80%",
       height: "80%",
     },
   },
   userSumarry: {
-    textAlign: "center",
     alignItems: "center",
+    "@media(min-width:1024px)": {
+      textAlign: "start",
+    },
+    "@media(max-width:1023px)": {
+      textAlign: "center",
+    },
   },
   userName: {
     fontFamily: "sans-serif",
@@ -55,7 +77,12 @@ export const useStyles: any = makeStyles((theme) => ({
   },
 
   userRanking: {
-    // color: "liner-gradient(to right, blue, green)",
+    "@media(min-width:1024px)": {
+      display: "flex",
+    },
+    "@media(max-width:1023px)": {
+      display: "center",
+    },
     "& > svg": {
       marginRight: 12,
     },
@@ -66,15 +93,14 @@ export const useStyles: any = makeStyles((theme) => ({
     height: 40,
     display: "flex",
     "& > svg": {
-      margin: "0 12px",
       position: "relative",
       top: 5,
     },
     "& > textarea": {
       background: "transparent",
-      textAlign: "center",
+      textAlign: "start",
       position: "relative",
-      fontSize: 15,
+      fontSize: "17px",
       wordWrap: "break-word",
       border: "none",
       width: 200,
@@ -85,6 +111,7 @@ export const useStyles: any = makeStyles((theme) => ({
       maxHeight: 50,
       resize: "none",
       color: "white",
+      marginLeft: "11px",
       "&:focus": {
         outline: "none",
       },
@@ -106,8 +133,9 @@ export const useStyles: any = makeStyles((theme) => ({
     margin: 10,
     padding: 10,
     "& > Button": {
-      top: -4,
-      marginLeft: 15,
+      "@media(min-width:1024px)": {
+        marginTop: "65px",
+      },
     },
   },
   storyInput: {},

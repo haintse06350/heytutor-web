@@ -1,8 +1,7 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useStyles } from "./UserProfile.style";
 import { stringAvatar } from "./helper";
 import { Grid, Avatar, Typography, Button } from "@mui/material";
-import Header from "../Common/Header/Header";
 import { UserCtx } from "../../context/user/state";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -12,22 +11,33 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
+import MessageIcon from "@mui/icons-material/Message";
+import ListPost from "./ListPost";
+import { User } from "../../models/users";
+import { useNavigate } from "react-router-dom";
+
 const UserProfile = () => {
   const classes = useStyles();
   const { user }: any = useContext(UserCtx);
   const inputStory: any = useRef(null);
   const [isEdit, setIsEdit] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [value, setValue] = useState(0);
+  const [userProfile, setUserProfile]: any = useState(user);
+  const navigate = useNavigate();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get("userId");
 
   //information of user
-
-  const userRanking = 100;
-  const userStory = "Thích tìm hiểu những cái mới lạ";
-  const userName = "Cao Duc Anh";
+  // const userRoll = true;
+  // const userRanking = 100;
+  // const userStory = "Thích tìm hiểu những cái mới lạ";
+  // const userName = "Cao Duc Anh";
   const userMajor = "SE";
   const userSemester = 13;
 
-  const [story, setStory] = useState(userStory);
+  const [story, setStory] = useState(userProfile?.sumarry);
   // begin set tab view
 
   interface TabPanelProps {
@@ -35,7 +45,8 @@ const UserProfile = () => {
     index: number;
     value: number;
   }
-  function TabPanel(props: TabPanelProps) {
+
+  const TabPanel = (props: TabPanelProps) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -52,15 +63,14 @@ const UserProfile = () => {
         )}
       </div>
     );
-  }
+  };
 
-  function a11yProps(index: number) {
+  const a11yProps = (index: number) => {
     return {
       id: `simple-tab-${index}`,
       "aria-controls": `simple-tabpanel-${index}`,
     };
-  }
-  const [value, setValue] = React.useState(0);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -90,6 +100,11 @@ const UserProfile = () => {
   };
 
   // end change story
+  // begin message
+  const handleMessage = () => {
+    // tao room nhan tin giua 2 nguoi
+  };
+  // end message
 
   //begin style
   const styleColor = {
@@ -97,24 +112,43 @@ const UserProfile = () => {
   };
   //end style
   // end edit story
+
+  useEffect(() => {
+    if (userId) {
+      User.getUserProfile(userId).then((res: any) => {
+        setUserProfile(res);
+      });
+      if (parseInt(userId) === user?.id) {
+        const queryParams = new URLSearchParams(window.location.search);
+        queryParams.delete("userId");
+        navigate(`/profile`, { replace: true });
+      }
+    } else if (user) {
+      setUserProfile(user);
+    }
+  }, [userId, user]);
+
   return (
     <div className={classes.root}>
-      <Header titleCenter={"Profile"} />
       <div className={classes.wrap}>
         <Grid item className={classes.userHeader}>
           <div className={classes.header} style={styleColor}>
             <div className={classes.avatar}>
-              <Avatar {...stringAvatar(userName)} className={classes.roundedAvt} />
+              <Avatar {...stringAvatar(userProfile?.name)} className={classes.roundedAvt} />
             </div>
             {/* tom tat ca nhan */}
             <div className={classes.userSumarry}>
-              <div className={classes.userName}>{userName}</div>
+              <div className={classes.userName}>
+                <Typography fontSize={"2rem"} className={classes.name}>
+                  {userProfile?.name}
+                </Typography>
+              </div>
               <div className={classes.userMajor}>
                 <CoPresentIcon />
                 {"K" + userSemester + "-" + userMajor}
               </div>
               <div className={classes.userRanking}>
-                <StarsIcon /> Điểm uy tín hiện tại: {userRanking}/100
+                <StarsIcon /> Điểm uy tín hiện tại: {userProfile?.rateCount}/100
               </div>
               <div className={classes.userStory}>
                 <BorderColorIcon />
@@ -122,33 +156,53 @@ const UserProfile = () => {
                   maxLength={60}
                   ref={inputStory}
                   className={classes.storyInput}
-                  value={story}
+                  value={userProfile?.sumarry}
                   onChange={handleChangeStory}
                   readOnly={!isEdit}></textarea>
+
                 {isEdit && <div className={classes.countLenght}>Ký tự còn lại: {60 - story.length}/60</div>}
               </div>
-              <div className={classes.buttonFixStory}>
+            </div>
+            <div className={classes.buttonFixStory}>
+              {userId ? (
                 <Button
-                  onClick={handleEditStory}
-                  endIcon={<CreateIcon />}
+                  onClick={handleMessage}
+                  endIcon={<MessageIcon />}
                   sx={{ color: "black", background: "white" }}
                   variant="contained">
-                  Chỉnh sửa
+                  Nhắn tin
                 </Button>
-
-                {isUpdate && (
+              ) : (
+                <>
                   <Button
-                    onClick={handleUpdateStory}
-                    endIcon={<UpgradeIcon />}
-                    sx={{ color: "white" }}
+                    onClick={handleEditStory}
+                    endIcon={<CreateIcon />}
+                    sx={{ color: "black", background: "white" }}
                     variant="contained">
-                    Lưu chỉnh sửa
+                    Chỉnh sửa
                   </Button>
-                )}
-              </div>
-            </div>
+                  <Button
+                    onClick={() => {
+                      localStorage.removeItem("heytutor-user");
+                      window.location.reload();
+                    }}
+                    sx={{ color: "black", background: "white" }}
+                    variant="contained">
+                    Logout
+                  </Button>
+                </>
+              )}
 
-            <Typography className={classes.name}>{user?.name}</Typography>
+              {isUpdate && (
+                <Button
+                  onClick={handleUpdateStory}
+                  endIcon={<UpgradeIcon />}
+                  sx={{ color: "white" }}
+                  variant="contained">
+                  Lưu chỉnh sửa
+                </Button>
+              )}
+            </div>
           </div>
           {/* chuyen tab */}
           <div className={classes.userView}>
@@ -160,7 +214,7 @@ const UserProfile = () => {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                Bài đăng
+                <ListPost userProfile={userProfile} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 Đánh giá
