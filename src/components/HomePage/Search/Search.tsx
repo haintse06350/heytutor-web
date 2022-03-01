@@ -64,6 +64,7 @@ const Search = (props: any) => {
       <div className={classes.searchContainer}>
         <div className={classes.searchBox}>
           <TextField
+            autoFocus
             fullWidth
             variant="outlined"
             value={query}

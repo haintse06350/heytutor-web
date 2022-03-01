@@ -6,6 +6,10 @@ export const useStyles = makeStyles(() => ({
       display: "none",
     },
   },
+  headerTitle: {
+    cursor: "pointer",
+  },
+
   headerMenu: {
     display: "block",
   },
@@ -17,7 +21,7 @@ export const useStyles = makeStyles(() => ({
     background: "#FFFFFF",
     alignItems: "center",
     borderRadius: 8,
-    marginLeft: "10% !important",
+    marginLeft: "3% !important",
   },
   search: {
     "& > div": {

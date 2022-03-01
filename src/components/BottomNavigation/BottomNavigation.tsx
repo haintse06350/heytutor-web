@@ -28,11 +28,11 @@ const BottomNav = () => {
     <>
       <div id="bottom-nav" className={classes.bottomNavigation}>
         <BottomNavigation sx={{ width: 500 }} value={value} onChange={onChange}>
-          <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
-          <BottomNavigationAction label="Event" value="event" icon={<CelebrationIcon />} />
-          <BottomNavigationAction label="Post" value="post" icon={<AddIcon />} />
-          <BottomNavigationAction label="Notification" value="notification" icon={<NotificationsNoneRoundedIcon />} />
-          <BottomNavigationAction label="Profile" value="profile" icon={<PermIdentityIcon />} />
+          <BottomNavigationAction label="Trang chủ" value="home" icon={<HomeIcon />} />
+          <BottomNavigationAction label="Sự kiện" value="event" icon={<CelebrationIcon />} />
+          <BottomNavigationAction label="Tạo bài viết" value="post" icon={<AddIcon />} />
+          <BottomNavigationAction label="Thông báo" value="notification" icon={<NotificationsNoneRoundedIcon />} />
+          <BottomNavigationAction label="Trang cá nhân" value="profile" icon={<PermIdentityIcon />} />
         </BottomNavigation>
       </div>
     </>
