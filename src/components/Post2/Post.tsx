@@ -41,9 +41,10 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 // end change font
 
-export const Post = () => {
+export const Post = (props: any) => {
+  const { openDialog, closeDialog } = props;
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  // const [open, setOpen] = useState(true);
   const [typePost, setTypePost] = useState();
   const [titlePost, setTitlePost] = useState("");
   const [contentPost, setContentPost] = useState("");
@@ -60,7 +61,7 @@ export const Post = () => {
   //   end change font event
 
   const handleClose = () => {
-    setOpen(false);
+    // setOpen(false);
   };
   const handleChangeTypePost = (e: any) => {
     setTypePost(e.target.value);
@@ -87,7 +88,7 @@ export const Post = () => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth={true}>
+    <Dialog open={openDialog} onClose={closeDialog} maxWidth="lg" fullWidth={true}>
       <DialogTitle>Tạo bài viết</DialogTitle>
       <DialogContent>
         <FormControl sx={{ m: 1, minWidth: 200 }} className={classes.selectTypePost}>

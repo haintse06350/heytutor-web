@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useStyles } from "./Header.style";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
+import CelebrationIcon from "@mui/icons-material/Celebration";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import Tooltip from "@mui/material/Tooltip";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 import {
   Grid,
   TextField,
@@ -20,6 +23,7 @@ import {
 import Search from "../HomePage/Search/Search";
 import PostDetail from "../HomePage/PostDetail";
 import SearchIcon from "@mui/icons-material/Search";
+import Post from "../Post2/Post";
 
 const Header = () => {
   const classes = useStyles();
@@ -32,6 +36,7 @@ const Header = () => {
   const [openSearch, setOpenSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [openDialog, setOpenDialog] = useState(false);
+  const [openCreatePost, setOpenCreatePost] = useState(false);
   // const [selectedPost, setSelectedPost]: any = useState(null);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     console.log("click menu open");
@@ -89,11 +94,26 @@ const Header = () => {
     setSearchQuery("");
     setOpenSearch(false);
   };
+  const handleClickHome = () => {
+    navigate("/home");
+  };
+  const handleRequiredCreatePost = () => {
+    setOpenCreatePost(true);
+  };
+  const handleRequiredCreatePostClose = () => {
+    setOpenCreatePost(false);
+  };
   return (
     <div className={classes.headerWrap}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
+          <Typography
+            className={classes.headerTitle}
+            onClick={handleClickHome}
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ display: { xs: "none", sm: "block" } }}>
             HEYTUTOR
           </Typography>
           {openSearch && <Search searchQuery={searchQuery} open={openSearch} onClose={onCloseSearch} />}
@@ -117,21 +137,39 @@ const Header = () => {
             />
           </Grid>
           <Box sx={{ flexGrow: 1 }} />
+
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <div onClick={handleProfileMenuOpen}>
-              <IconButton size="large" edge="end" color="inherit" aria-label="account of current user">
-                <AccountCircle />
+            <Tooltip title={"Tạo bài viêt"} onClick={handleRequiredCreatePost}>
+              <IconButton size="large" color="inherit">
+                <BorderColorIcon />
               </IconButton>
+            </Tooltip>
+            {openCreatePost && <Post openDialog={openCreatePost} closeDialog={handleRequiredCreatePostClose}></Post>}
+            <Tooltip title={"Sự kiện"}>
+              <IconButton size="large" color="inherit">
+                <CelebrationIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={"Tin nhắn"}>
+              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={4} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={"Thông báo"}>
+              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <div onClick={handleProfileMenuOpen}>
+              <Tooltip title={"Trang cá nhân"}>
+                <IconButton size="large" edge="end" color="inherit" aria-label="account of current user">
+                  <AccountCircle />
+                </IconButton>
+              </Tooltip>
             </div>
           </Box>
         </Toolbar>
