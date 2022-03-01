@@ -15,6 +15,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import ListPost from "./ListPost";
 import { User } from "../../models/users";
 import { useNavigate } from "react-router-dom";
+import Header from "../Header/Header";
 
 const UserProfile = () => {
   const classes = useStyles();
@@ -132,6 +133,7 @@ const UserProfile = () => {
 
   return (
     <div className={classes.root}>
+      <Header />
       <div className={classes.wrap}>
         <Grid item className={classes.userHeader}>
           <div className={classes.header} style={styleColor}>

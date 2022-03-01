@@ -61,7 +61,7 @@ export const Post = (props: any) => {
   //   end change font event
 
   const handleClose = () => {
-    // setOpen(false);
+    closeDialog();
   };
   const handleChangeTypePost = (e: any) => {
     setTypePost(e.target.value);

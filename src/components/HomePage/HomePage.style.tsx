@@ -6,7 +6,7 @@ export const useStyles: any = makeStyles(() => ({
     padding: 16,
     marginBottom: 62,
     width: "100%",
-    height: "calc(100vh - 62px)",
+    height: "calc(100% - 62px)",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "whitesmoke",

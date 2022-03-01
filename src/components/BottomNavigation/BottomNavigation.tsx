@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useStyles } from "./BottomNavigation.style";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -11,10 +11,9 @@ import { useNavigate } from "react-router-dom";
 
 const BottomNav = () => {
   const classes = useStyles();
-  const [value, setValue] = React.useState("home");
+  const [value, setValue] = useState("home");
   const navigate = useNavigate();
   const pathname = window.location.pathname;
-
   const onChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
     navigate(`/${newValue}`);
@@ -30,7 +29,7 @@ const BottomNav = () => {
         <BottomNavigation sx={{ width: 500 }} value={value} onChange={onChange}>
           <BottomNavigationAction label="Trang chủ" value="home" icon={<HomeIcon />} />
           <BottomNavigationAction label="Sự kiện" value="event" icon={<CelebrationIcon />} />
-          <BottomNavigationAction label="Tạo bài viết" value="post" icon={<AddIcon />} />
+          <BottomNavigationAction label="Tạo bài viết" value={"post"} icon={<AddIcon />} />
           <BottomNavigationAction label="Thông báo" value="notification" icon={<NotificationsNoneRoundedIcon />} />
           <BottomNavigationAction label="Trang cá nhân" value="profile" icon={<PermIdentityIcon />} />
         </BottomNavigation>
