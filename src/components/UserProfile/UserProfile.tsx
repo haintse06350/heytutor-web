@@ -128,8 +128,6 @@ const UserProfile = () => {
     }
   }, [userId, user]);
 
-  console.log(user?.id + ";" + userId);
-
   return (
     <div className={classes.root}>
       <div className={classes.wrap}>
@@ -175,13 +173,24 @@ const UserProfile = () => {
                   Nhắn tin
                 </Button>
               ) : (
-                <Button
-                  onClick={handleEditStory}
-                  endIcon={<CreateIcon />}
-                  sx={{ color: "black", background: "white" }}
-                  variant="contained">
-                  Chỉnh sửa
-                </Button>
+                <>
+                  <Button
+                    onClick={handleEditStory}
+                    endIcon={<CreateIcon />}
+                    sx={{ color: "black", background: "white" }}
+                    variant="contained">
+                    Chỉnh sửa
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      localStorage.removeItem("heytutor-user");
+                      window.location.reload();
+                    }}
+                    sx={{ color: "black", background: "white" }}
+                    variant="contained">
+                    Logout
+                  </Button>
+                </>
               )}
 
               {isUpdate && (
