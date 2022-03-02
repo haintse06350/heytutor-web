@@ -9,14 +9,14 @@ export class Post {
     return res.json();
   }
 
-  static async listPostsByUserRole(params = {}) {
-    const res = await FetchUtils.get(`/list-post-by-user-role`, params);
+  static async listPostsByUserRole() {
+    const res = await FetchUtils.get(`/list-post-by-user-role`);
     await ErrorUtils.throwError(res);
     return res.json();
   }
 
-  static async listAllPosts(params = {}) {
-    const res = await FetchUtils.get(`/list-all-post`, params);
+  static async listAllPosts() {
+    const res = await FetchUtils.get(`/list-all-post`);
     await ErrorUtils.throwError(res);
     return res.json();
   }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Grid, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import { useStyles } from "./HomePage.style";
 import { stringAvatar } from "../UserProfile/helper";
@@ -9,19 +9,26 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { useNavigate } from "react-router-dom";
 import { map } from "lodash";
 import { Post } from "../../models/post";
+import { Bookmark } from "../../models/bookmark";
+import { NotificationCtx } from "../../context/notification/state";
 
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const [isLiked, setIsliked] = useState(false);
   const [isResolved, setIsResolved] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(post?.isBookmarked);
   const [postItem, setPostItem] = useState(post);
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
+  const { setNotificationSuccess } = useContext(NotificationCtx);
 
   const onClickLike = async (post: any) => {
     setIsliked(!isLiked);
@@ -31,6 +38,19 @@ const PostItem = (props: any) => {
 
     const res = await Post.likePost(params);
     setPostItem({ ...res, user: post.user });
+  };
+
+  const onClickBookmarkPost = async (post: any) => {
+    if (isBookmarked) {
+      await Bookmark.removeBookmark({ postId: post.id });
+      setNotificationSuccess("Removed from your bookmarks !");
+    } else {
+      const res = await Bookmark.addBookmark({ postId: post.id });
+      if (res.id) {
+        setNotificationSuccess("Add bookmark successfully !");
+      }
+    }
+    setIsBookmarked(!isBookmarked);
   };
 
   const onClickResolve = (post: any) => {
@@ -111,6 +131,9 @@ const PostItem = (props: any) => {
           <div className={classes.commentButton} onClick={() => onClickCommentSection(postItem)}>
             <ChatBubbleOutlineOutlinedIcon color="primary" />
             <Typography>{postItem?.commentCount}</Typography>
+          </div>
+          <div className={classes.bookmarkBtn} onClick={() => onClickBookmarkPost(post)}>
+            {isBookmarked ? <BookmarkAddedIcon color="primary" /> : <BookmarkAddOutlinedIcon color="primary" />}
           </div>
         </Grid>
         <Grid item xs={4} className={classes.rightPanel}>

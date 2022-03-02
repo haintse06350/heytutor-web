@@ -12,6 +12,9 @@ import { Post } from "../../models/post";
 import Header from "../Header/Header";
 import PostItem from "./PostItem";
 import PostDetail from "./PostDetail";
+import { Bookmark } from "../../models/bookmark";
+import { map, findIndex } from "lodash";
+import { sortBy } from "lodash";
 
 const HomePage = () => {
   const classes = useStyles();
@@ -41,8 +44,20 @@ const HomePage = () => {
 
   const getListPost = async () => {
     try {
-      const [highlightPosts, allPost] = await Promise.all([Post.listPostsByUserRole({}), Post.listAllPosts({})]);
-      setListPostHighlight(highlightPosts);
+      const [highlightPosts, allPost, bookMarkedPost] = await Promise.all([
+        Post.listPostsByUserRole(),
+        Post.listAllPosts(),
+        Bookmark.listBookmarksLite(),
+      ]);
+
+      const mapBookmarkPost = map(highlightPosts, (post: any) => {
+        const isBookmarked = findIndex(bookMarkedPost, (item: any) => item.postId === post.id) !== -1;
+        return { ...post, isBookmarked };
+      });
+
+      const orderByBookmarkPost = sortBy(mapBookmarkPost, "isBookmarked").reverse();
+
+      setListPostHighlight(orderByBookmarkPost);
       setAllPost(allPost);
     } catch (error) {
       setListPostHighlight([]);
@@ -61,8 +76,6 @@ const HomePage = () => {
   useEffect(() => {
     getListPost();
   }, []);
-
-  const FILTER = [""];
 
   const renderListPost = (listPost: any) => {
     return (
