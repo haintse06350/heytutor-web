@@ -38,4 +38,10 @@ export class Post {
     await ErrorUtils.throwError(res);
     return res.json();
   };
+
+  static likePost = async (params: any) => {
+    const res = await FetchUtils.put(`/like-post`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
 }

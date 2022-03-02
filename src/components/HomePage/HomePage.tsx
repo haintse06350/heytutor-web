@@ -62,9 +62,12 @@ const HomePage = () => {
     getListPost();
   }, []);
 
+  const FILTER = [""];
+
   const renderListPost = (listPost: any) => {
     return (
       <>
+        <div className={classes.postFilter}></div>
         {listPost?.map((post: any, i: number) => (
           <div key={i} className={classes.post}>
             <PostItem post={post} onClickCommentSection={onClickCommentSection} onClickHashTag={onClickHashTag} />

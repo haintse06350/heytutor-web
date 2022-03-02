@@ -17,20 +17,20 @@ const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
   const [isLiked, setIsliked] = useState(false);
-  const [likePost, setLikedPost]: any = useState(null);
   const [isResolved, setIsResolved] = useState(false);
+  const [postItem, setPostItem] = useState(post);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
-  const onClickLike = async (postId: number) => {
-    setLikedPost(postId);
+
+  const onClickLike = async (post: any) => {
     setIsliked(!isLiked);
     const params = {
-      postId,
-      isLiked: !isLiked,
-      likeCount: isLiked ? post?.likeCount - 1 : post?.likeCount + 1,
+      postId: postItem?.id,
     };
-    await Post.updatePost(params);
+
+    const res = await Post.likePost(params);
+    setPostItem({ ...res, user: post.user });
   };
 
   const onClickResolve = (post: any) => {
@@ -86,12 +86,12 @@ const PostItem = (props: any) => {
   return (
     <>
       <Grid container className={classes.userPanel}>
-        <Grid item xs={2} className={classes.userAvatar} onClick={() => onClickProfile(post.user.id)}>
-          <Avatar {...stringAvatar(post.user.name)} src={post.user?.avatar} />
+        <Grid item xs={2} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
+          <Avatar {...stringAvatar(postItem?.user?.name)} src={postItem?.user?.avatar} />
         </Grid>
         <Grid item xs={8} className={classes.userNameAndPostTime}>
-          <Typography onClick={() => onClickProfile(post.user.id)}>{post.user?.name}</Typography>
-          <Typography>{moment().from(post?.createdAt)}</Typography>
+          <Typography onClick={() => onClickProfile(postItem?.user?.id)}>{postItem?.user?.name}</Typography>
+          <Typography>{moment().from(postItem?.createdAt)}</Typography>
         </Grid>
         <Grid item xs={2} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
           <MoreHorizIcon />
@@ -99,26 +99,22 @@ const PostItem = (props: any) => {
       </Grid>
       {isOptionOpen && renderOption}
       <div className={classes.postContent}>
-        <Typography>{post.content}</Typography>
-        <div className={classes.hashTag}>{renderHashTag(post.hashtag)}</div>
+        <Typography>{postItem?.content}</Typography>
+        <div className={classes.hashTag}>{renderHashTag(postItem?.hashtag)}</div>
       </div>
       <Grid container className={classes.postActions}>
         <Grid item xs={8} className={classes.leftPanel}>
-          <div className={classes.likeButton} onClick={() => onClickLike(post.id)}>
-            {isLiked && likePost === post.id ? (
-              <ThumbUpIcon color="primary" />
-            ) : (
-              <ThumbUpOutlinedIcon color="primary" />
-            )}
-            <Typography>{post.likeCount}</Typography>
+          <div className={classes.likeButton} onClick={() => onClickLike(postItem)}>
+            {postItem?.isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
+            <Typography>{postItem?.likeCount}</Typography>
           </div>
-          <div className={classes.commentButton} onClick={() => onClickCommentSection(post)}>
+          <div className={classes.commentButton} onClick={() => onClickCommentSection(postItem)}>
             <ChatBubbleOutlineOutlinedIcon color="primary" />
-            <Typography>{post.commentCount}</Typography>
+            <Typography>{postItem?.commentCount}</Typography>
           </div>
         </Grid>
         <Grid item xs={4} className={classes.rightPanel}>
-          <div className={classes.btnResolve} onClick={() => onClickResolve(post)}>
+          <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
             {isResolved ? (
               <div className={classes.isResolve}>
                 <DoneAllIcon color="primary" aria-label="Đã giải quyết"></DoneAllIcon>
