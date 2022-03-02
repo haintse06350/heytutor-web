@@ -6,11 +6,13 @@ export const useStyles: any = makeStyles(() => ({
     padding: 16,
     marginBottom: 62,
     width: "100%",
-    height: "calc(100vh - 62px)",
+    height: "calc(100% - 62px)",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "whitesmoke",
   },
+
+  btnResolve: {},
 
   searchIcon: {
     width: 20,
@@ -93,7 +95,7 @@ export const useStyles: any = makeStyles(() => ({
       flexDirection: "column",
       justifyContent: "center",
       "&:last-child": {
-        alignItems: "flex-start",
+        alignItems: "flex-end",
       },
     },
   },
@@ -279,7 +281,11 @@ export const useStyles: any = makeStyles(() => ({
   },
   isResolve: {
     display: "flex",
+    "& > p": {
+      marginLeft: 5,
+    },
   },
+
   // chatListEngine: {
   //   position: "absolute",
   //   width: 500,
