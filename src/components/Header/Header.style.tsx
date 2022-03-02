@@ -5,6 +5,9 @@ export const useStyles = makeStyles(() => ({
     "@media(max-width:1024px)": {
       display: "none",
     },
+    position: "fixed",
+    zIndex: 100,
+    width: "100%",
   },
   headerTitle: {
     cursor: "pointer",

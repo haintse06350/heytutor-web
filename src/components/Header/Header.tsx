@@ -72,6 +72,10 @@ const Header = () => {
       className={classes.headerMenu}
       id={menuId}
       keepMounted
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
       transformOrigin={{
         vertical: "top",
         horizontal: "right",

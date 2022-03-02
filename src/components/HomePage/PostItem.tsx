@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Typography, Avatar } from "@mui/material";
+import { Grid, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import { useStyles } from "./HomePage.style";
 import { stringAvatar } from "../UserProfile/helper";
 import moment from "moment";
@@ -8,6 +8,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
 import { map } from "lodash";
 import { Post } from "../../models/post";
@@ -19,7 +20,8 @@ const PostItem = (props: any) => {
   const [likePost, setLikedPost]: any = useState(null);
   const [isResolved, setIsResolved] = useState(false);
   const navigate = useNavigate();
-
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [isOptionOpen, setIsOptionOpen] = useState(false);
   const onClickLike = async (postId: number) => {
     setLikedPost(postId);
     setIsliked(!isLiked);
@@ -52,6 +54,34 @@ const PostItem = (props: any) => {
       </Typography>
     ));
   };
+  const handleOptionPostOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setIsOptionOpen(true);
+  };
+
+  const handleOptionClose = () => {
+    setIsOptionOpen(false);
+  };
+
+  const renderOption = (
+    <Menu
+      anchorEl={anchorEl}
+      id={"menuOption"}
+      anchorOrigin={{
+        vertical: "center",
+        horizontal: "right",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isOptionOpen}
+      onClose={handleOptionClose}>
+      <MenuItem value="repost">Báo cáo bài viết</MenuItem>
+      <MenuItem value="hide">Ẩn bài viết</MenuItem>
+      <MenuItem value="save">Lưu bài viết</MenuItem>
+    </Menu>
+  );
 
   return (
     <>
@@ -63,14 +93,17 @@ const PostItem = (props: any) => {
           <Typography onClick={() => onClickProfile(post.user.id)}>{post.user?.name}</Typography>
           <Typography>{moment().from(post?.createdAt)}</Typography>
         </Grid>
-        <div className={classes.divider} />
+        <Grid item xs={2} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
+          <MoreHorizIcon />
+        </Grid>
       </Grid>
+      {isOptionOpen && renderOption}
       <div className={classes.postContent}>
         <Typography>{post.content}</Typography>
         <div className={classes.hashTag}>{renderHashTag(post.hashtag)}</div>
       </div>
       <Grid container className={classes.postActions}>
-        <Grid item xs={10} className={classes.leftPanel}>
+        <Grid item xs={8} className={classes.leftPanel}>
           <div className={classes.likeButton} onClick={() => onClickLike(post.id)}>
             {isLiked && likePost === post.id ? (
               <ThumbUpIcon color="primary" />
@@ -84,8 +117,8 @@ const PostItem = (props: any) => {
             <Typography>{post.commentCount}</Typography>
           </div>
         </Grid>
-        <Grid item xs={2} className={classes.rightPanel}>
-          <div className={classes.bookmarkButton} onClick={() => onClickResolve(post)}>
+        <Grid item xs={4} className={classes.rightPanel}>
+          <div className={classes.btnResolve} onClick={() => onClickResolve(post)}>
             {isResolved ? (
               <div className={classes.isResolve}>
                 <DoneAllIcon color="primary" aria-label="Đã giải quyết"></DoneAllIcon>
