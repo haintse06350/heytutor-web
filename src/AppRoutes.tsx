@@ -5,12 +5,14 @@ import Chat from "./components/Chat/Chat";
 import Dashboard from "./components/Dashboard/Dashboard";
 // import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
+import PostDetail from "./components/HomePage/PostDetail";
 // import Message from "./components/Message/Message";
 import Login from "./components/Login/Login";
 import Post from "./components/Post/Post";
+// import Post2 from "./components/Post2/Post";
 import Event from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";
-import Post2 from "./components/Post2/Post";
+
 import UserProfile from "./components/UserProfile/UserProfile";
 import { UserCtx } from "./context/user/state";
 
@@ -30,7 +32,7 @@ export default function AppRoutes() {
           <Route path={"/feedback"} element={<Feedback />} />
           <Route path={"/chat"} element={<Chat />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
-          <Route path={"/test"} element={<Post2 />} />
+          <Route path={"/test"} element={<PostDetail />} />
         </Routes>
         <BottomNav />
       </Fragment>

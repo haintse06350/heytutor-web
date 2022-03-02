@@ -165,6 +165,7 @@ export const useStyles: any = makeStyles(() => ({
   dialogContent: {
     padding: 16,
     height: "100vh",
+    margin: "0 20px",
   },
   dialogHeader: {
     display: "flex",
@@ -205,23 +206,18 @@ export const useStyles: any = makeStyles(() => ({
     position: "absolute",
     bottom: 0,
     width: "100%",
-    height: 40,
     display: "flex",
-    margin: "0 auto",
     alignContent: "center",
-    "& > input": {
-      width: "85%",
-      height: "auto",
-      border: "1px solid black",
-      borderRadius: "7px",
-      paddingLeft: "10px",
+    justifyContent: "center",
+    marginBottom: "40px",
+    "& > Button": {
+      width: "10%",
+      height: "5%",
+      marginTop: "10px",
     },
     "& > div": {
-      textAlign: "center",
-      width: "15%",
-      height: "auto",
-      marginTop: "auto",
-      marginBottom: "auto",
+      width: "70%",
+      marginRight: "40px",
     },
   },
   loading: {
@@ -258,7 +254,6 @@ export const useStyles: any = makeStyles(() => ({
   commentRow: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
     justifyContent: "flex-start",
   },
   commentContent: {
@@ -266,17 +261,28 @@ export const useStyles: any = makeStyles(() => ({
     background: "#F8F8F8",
     padding: 8,
     borderRadius: 12,
+    position: "relative",
     "& > p:first-child": {
       fontSize: 16,
       fontWeight: 500,
     },
+    "& > div": {
+      position: "absolute",
+      top: 3,
+      right: 10,
+    },
+    "& > Button": {
+      width: "100%",
+    },
   },
+
   commentAt: {
     "& > p": {
       fontSize: 14,
       color: "#727477",
       textAlign: "left",
       marginTop: 4,
+      marginLeft: 20,
     },
   },
   isResolve: {

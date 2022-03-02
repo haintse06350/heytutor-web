@@ -5,7 +5,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Tooltip from "@mui/material/Tooltip";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import {
   Grid,
@@ -19,6 +18,7 @@ import {
   Badge,
   MenuItem,
   Menu,
+  Tooltip,
 } from "@mui/material";
 import Search from "../HomePage/Search/Search";
 import PostDetail from "../HomePage/PostDetail";
