@@ -10,15 +10,63 @@ import { useStyles } from "./HomePage.style";
 import { Comment as CommentModel } from "../../models/comment";
 import { stringAvatar } from "../UserProfile/helper";
 import moment from "moment";
-
+import { MenuItem, Menu, Button, Tooltip } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import EmailIcon from "@mui/icons-material/Email";
 const PostDetail = (props: any) => {
   const { post, onCloseDialog, openDialog } = props;
   const [commentContent, setCommentContent] = useState("");
   const [listComment, setListComment]: any = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [isOptionCommentOpen, setOptionCommentOpen] = useState(false);
   const classes = useStyles();
   const onClickCommentSectionInsideDialog = () => {};
 
-  const onSendComment = () => {};
+  const onSendComment = () => {
+    console.log("comment send");
+  };
+  const handleClose = () => {
+    setOptionCommentOpen(false);
+  };
+
+  const handleHideComent = () => {
+    console.log("comment hide");
+    setOptionCommentOpen(false);
+  };
+
+  const handleDeleteComment = () => {
+    console.log("comment del");
+    setOptionCommentOpen(false);
+  };
+  const handleOpenOptionComment = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setOptionCommentOpen(true);
+  };
+  //begin render menu avatar
+  const renderMenuOptionComment = (
+    <Menu
+      anchorEl={anchorEl}
+      className={classes.headerMenu}
+      id="commentOption"
+      keepMounted
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "center",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isOptionCommentOpen}
+      onClose={handleClose}>
+      <MenuItem value="hideComment" onClick={handleHideComent}>
+        Ẩn bình luận
+      </MenuItem>
+      <MenuItem value="deleteComment" onClick={handleDeleteComment}>
+        Xóa bình luận
+      </MenuItem>
+    </Menu>
+  );
 
   useEffect(() => {
     CommentModel.listCommentByPost({ postId: post.id }).then((res: any) => {
@@ -71,6 +119,17 @@ const PostDetail = (props: any) => {
                     <div className={classes.commentContent}>
                       <Typography>{comment.user.name}</Typography>
                       <Typography>{comment.comment}</Typography>
+                      <div onClick={handleOpenOptionComment}>
+                        <MoreHorizIcon />
+                      </div>
+
+                      <Tooltip title={"Nhắn tin"}>
+                        <Button aria-label="Nhắn tin">
+                          <EmailIcon color="action" />
+                        </Button>
+                      </Tooltip>
+
+                      {isOptionCommentOpen && renderMenuOptionComment}
                     </div>
                     <div className={classes.commentAt}>
                       <Typography>{moment().from(comment.createdAt)}</Typography>
@@ -82,14 +141,19 @@ const PostDetail = (props: any) => {
           </div>
 
           <div className={classes.inputComment}>
-            <input
-              placeholder="Bình luận tại đây ..."
+            <TextField
+              id="comment-content"
+              autoFocus
+              margin="dense"
+              variant="outlined"
+              label="Bình luận tại đây ..."
+              fullWidth
+              type="text"
               value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-            />
-            <div onClick={onSendComment}>
-              <SendIcon color="primary" />
-            </div>
+              onChange={(e) => setCommentContent(e.target.value)}></TextField>
+            <Button variant="contained" endIcon={<SendIcon />} onClick={onSendComment}>
+              Đăng bài
+            </Button>
           </div>
         </Grid>
       </div>
