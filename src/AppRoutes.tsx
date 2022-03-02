@@ -8,6 +8,8 @@ import HomePage from "./components/HomePage/HomePage";
 // import Message from "./components/Message/Message";
 import Login from "./components/Login/Login";
 import Post from "./components/Post/Post";
+import Event from "./components/CreateEvent/CreatEvent";
+import Feedback from "./components/Feedback/Feedback";
 import Post2 from "./components/Post2/Post";
 import UserProfile from "./components/UserProfile/UserProfile";
 import { UserCtx } from "./context/user/state";
@@ -24,6 +26,8 @@ export default function AppRoutes() {
           <Route path={"/home"} element={<HomePage />} />
           <Route path={"/post"} element={<Post />} />
           <Route path={"/profile"} element={<UserProfile />} />
+          <Route path={"/event"} element={<Event />} />
+          <Route path={"/feedback"} element={<Feedback />} />
           <Route path={"/chat"} element={<Chat />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
           <Route path={"/test"} element={<Post2 />} />
