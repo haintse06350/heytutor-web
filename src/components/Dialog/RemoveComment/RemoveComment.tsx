@@ -36,7 +36,7 @@ export default function RemoveComment() {
               width: 500,
               maxWidth: "100%",
             }}>
-            <TextField fullWidth  id="outlined-multiline-static" multiline rows={4} placeholder="Viết ghi chú..." />{" "}
+            <TextField fullWidth  id="outlined-multiline-static" multiline rows={4} placeholder="Viết ghi chú..." />
           </Box>
         </DialogContent>
         <DialogActions>

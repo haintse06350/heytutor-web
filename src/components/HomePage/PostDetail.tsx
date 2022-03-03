@@ -13,6 +13,7 @@ import moment from "moment";
 import { MenuItem, Menu, Button, Tooltip } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import EmailIcon from "@mui/icons-material/Email";
+
 const PostDetail = (props: any) => {
   const { post, onCloseDialog, openDialog } = props;
   const [commentContent, setCommentContent] = useState("");
