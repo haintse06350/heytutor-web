@@ -16,6 +16,7 @@ import { map } from "lodash";
 import { Post } from "../../models/post";
 import { Bookmark } from "../../models/bookmark";
 import { NotificationCtx } from "../../context/notification/state";
+import clsx from "classnames";
 
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
@@ -68,10 +69,32 @@ const PostItem = (props: any) => {
     } catch (error) {
       hashTagArray = [];
     }
-    return map(hashTagArray, (item: string, idx: number) => (
-      <Typography key={idx} onClick={() => onClickHashTag(item)}>
-        {item}
-      </Typography>
+    const listHashTag = map(hashTagArray, (h: string) => {
+      return {
+        type: "hashtag",
+        value: h,
+      };
+    });
+
+    if (post.isBookmarked) {
+      listHashTag.push({ type: "bookmark", value: "#recentBookmark" });
+    }
+
+    if (post.eventId) {
+      listHashTag.push({ type: "event", value: post.eventId });
+    }
+
+    return map(listHashTag, (item: any, idx: number) => (
+      <div
+        className={clsx(
+          classes.hashTagItem,
+          item.type === "bookmark" && classes.bookmark,
+          item.type === "event" && classes.event
+        )}
+        key={idx}
+        onClick={() => onClickHashTag(item)}>
+        <Typography>{item.type === "event" ? "On Event" : item.value}</Typography>
+      </div>
     ));
   };
   const handleOptionPostOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -119,6 +142,7 @@ const PostItem = (props: any) => {
       </Grid>
       {isOptionOpen && renderOption}
       <div className={classes.postContent}>
+        <Typography>{postItem?.title}</Typography>
         <Typography>{postItem?.content}</Typography>
         <div className={classes.hashTag}>{renderHashTag(postItem?.hashtag)}</div>
       </div>

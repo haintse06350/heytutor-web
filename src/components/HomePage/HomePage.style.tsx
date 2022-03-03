@@ -6,6 +6,7 @@ export const useStyles: any = makeStyles(() => ({
     padding: 16,
     marginBottom: 62,
     width: "100%",
+    minWidth: "100vw",
     height: "calc(100% - 62px)",
     alignItems: "center",
     justifyContent: "center",
@@ -61,7 +62,7 @@ export const useStyles: any = makeStyles(() => ({
     marginTop: 20,
     zIndex: 20,
     width: "100%",
-    maxWidth: "500px",
+    maxWidth: "calc(100vw - 20%)",
     margin: "0 auto",
     borderRadius: 8,
     "@media(min-width:600)": {
@@ -126,9 +127,13 @@ export const useStyles: any = makeStyles(() => ({
   postContent: {
     width: "100%",
     height: "calc(100% - 40px)",
+    marginTop: 8,
     position: "relative",
     "& > p": {
       textAlign: "left",
+      "&:first-child": {
+        fontWeight: 500,
+      },
     },
   },
   mainContent: {
@@ -233,15 +238,34 @@ export const useStyles: any = makeStyles(() => ({
   },
   hashTag: {
     width: "100%",
+    marginTop: 10,
     color: "#0288d1",
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
+    overflow: "auto",
+  },
+  hashTagItem: {
+    backgroundColor: "#f4f4f5",
+    border: "1px solid #e9e9eb",
+    color: "#909399",
+    padding: "0px 5px",
+    borderRadius: 8,
+    marginRight: 8,
+    cursor: "pointer",
     "& > p": {
       textAlign: "left",
-      textDecoration: "underline",
-      marginRight: 8,
     },
+  },
+  bookmark: {
+    backgroundColor: "#5488c7",
+    border: "1px solid #5488c7",
+    color: "#fff",
+  },
+  event: {
+    backgroundColor: "#fea3b8",
+    border: "1px solid #fd4e73",
+    color: "#fff",
   },
   commentSection: {
     marginTop: 20,
