@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import ShareIcon from "@mui/icons-material/Share";
+// import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SendIcon from "@mui/icons-material/Send";
@@ -96,13 +97,25 @@ const PostDetail = (props: any) => {
           <Grid container item xs={12} className={classes.simpleActions}>
             <Grid item xs={4} className={classes.likeButton}>
               {/* {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />} */}
-              <ThumbUpOutlinedIcon color="primary" />
+              <Tooltip title={"Thích"}>
+                <Button>
+                  <ThumbUpOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
             </Grid>
             <Grid item xs={4} className={classes.commentButton} onClick={onClickCommentSectionInsideDialog}>
-              <ChatBubbleOutlineOutlinedIcon color="primary" />
+              <Tooltip title={"Bình luận"}>
+                <Button>
+                  <ChatBubbleOutlineOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
             </Grid>
             <Grid item xs={4} className={classes.shareButton}>
-              <ShareIcon color="primary" />
+              <Tooltip title={"Lưu bài viết"}>
+                <Button>
+                  <BookmarkAddedIcon color="primary" />
+                </Button>
+              </Tooltip>
             </Grid>
           </Grid>
 

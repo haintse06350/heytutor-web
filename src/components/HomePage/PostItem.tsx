@@ -16,12 +16,12 @@ import { map } from "lodash";
 import { Post } from "../../models/post";
 import { Bookmark } from "../../models/bookmark";
 import { NotificationCtx } from "../../context/notification/state";
-
+import { Button, Tooltip } from "@mui/material";
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const rollUser = 1;
   const [isLiked, setIsliked] = useState(false);
   const [isResolved, setIsResolved] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(post?.isBookmarked);
@@ -97,9 +97,19 @@ const PostItem = (props: any) => {
       }}
       open={isOptionOpen}
       onClose={handleOptionClose}>
-      <MenuItem value="repost">Báo cáo bài viết</MenuItem>
-      <MenuItem value="hide">Ẩn bài viết</MenuItem>
-      <MenuItem value="save">Lưu bài viết</MenuItem>
+      {rollUser === 1 ? (
+        <>
+          <MenuItem value="repost">Báo cáo bài viết</MenuItem>
+          <MenuItem value="hide">Ẩn bài viết</MenuItem>
+          <MenuItem value="save">Lưu bài viết</MenuItem>
+        </>
+      ) : (
+        <>
+          <MenuItem value="warning">Cảnh báo nội dung</MenuItem>
+          <MenuItem value="del">Xóa bài viết</MenuItem>
+          <MenuItem value="limitPost">Giới hạn đăng bài</MenuItem>
+        </>
+      )}
     </Menu>
   );
 
@@ -125,18 +135,48 @@ const PostItem = (props: any) => {
       <Grid container className={classes.postActions}>
         <Grid item xs={8} className={classes.leftPanel}>
           <div className={classes.likeButton} onClick={() => onClickLike(postItem)}>
-            {postItem?.isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
+            {postItem?.isLiked ? (
+              <Tooltip title={"Thích"}>
+                <Button aria-label="like">
+                  <ThumbUpIcon color="primary" />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title={"Không thích"}>
+                <Button aria-label="dislike">
+                  <ThumbUpOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            )}
             <Typography>{postItem?.likeCount}</Typography>
           </div>
           <div className={classes.commentButton} onClick={() => onClickCommentSection(postItem)}>
-            <ChatBubbleOutlineOutlinedIcon color="primary" />
+            <Tooltip title={"Bình luận"}>
+              <Button aria-label="comment">
+                <ChatBubbleOutlineOutlinedIcon color="primary" />
+              </Button>
+            </Tooltip>
+
             <Typography>{postItem?.commentCount}</Typography>
           </div>
           <div className={classes.bookmarkBtn} onClick={() => onClickBookmarkPost(post)}>
-            {isBookmarked ? <BookmarkAddedIcon color="primary" /> : <BookmarkAddOutlinedIcon color="primary" />}
+            {isBookmarked ? (
+              <Tooltip title={"Lưu bài"}>
+                <Button aria-label="Bookmark">
+                  <BookmarkAddedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title={"Không lưu bài"}>
+                <Button>
+                  <BookmarkAddOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </Grid>
         <Grid item xs={4} className={classes.rightPanel}>
+          {/* lấy giá trị isResolved của post để thêm vào đây chứ k phải click */}
           <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
             {isResolved ? (
               <div className={classes.isResolve}>
@@ -146,7 +186,7 @@ const PostItem = (props: any) => {
             ) : (
               <div className={classes.isResolve}>
                 <RemoveDoneIcon color="primary" aria-label="Chưa giải quyết"></RemoveDoneIcon>
-                <Typography>Chưa giải quyết</Typography>{" "}
+                <Typography>Chưa giải quyết</Typography>
               </div>
             )}
           </div>
