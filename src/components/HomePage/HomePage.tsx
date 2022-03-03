@@ -64,9 +64,9 @@ const HomePage = () => {
     }
   };
 
-  const onClickHashTag = (hashTag: string) => {
+  const onClickHashTag = (hashTag: any) => {
     setOpenSearch(true);
-    setSearchQuery(hashTag);
+    setSearchQuery(hashTag.value);
   };
 
   const onCloseDialog = () => {
