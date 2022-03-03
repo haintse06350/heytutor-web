@@ -14,7 +14,7 @@ export class User {
     return res.json();
   };
 
-  static getUserProfile = async (userId: string) => {
+  static getUserProfile = async (userId: string | number) => {
     const res = await FetchUtils.get(`/user/${userId}`);
     await ErrorUtils.throwError(res);
     return res.json();

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useStyles } from "./HomePage.style";
 import SearchIcon from "@mui/icons-material/Search";
-import { Grid, TextField, InputAdornment, Typography, CircularProgress } from "@mui/material";
+import { Grid, TextField, InputAdornment, Typography, Skeleton } from "@mui/material";
 // import { UserCtx } from "../../context/user/state";
 // import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
@@ -23,8 +23,11 @@ const HomePage = () => {
   // const [currentLesson, setCurrentLesson] = useState(1);
   const [openSearch, setOpenSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
+
   const [listPostHighlight, setListPostHighlight]: any = useState(null);
   const [listAllPost, setAllPost]: any = useState(null);
+  const [listPost, setListPost]: any = useState(null);
+
   const [selectedPost, setSelectedPost]: any = useState(null);
   const [activeTab, setActiveTab] = useState("highlight");
 
@@ -77,15 +80,85 @@ const HomePage = () => {
     getListPost();
   }, []);
 
-  const renderListPost = (listPost: any) => {
+  useEffect(() => {
+    if (activeTab === "highlight") {
+      if (listPostHighlight) {
+        setListPost(listPostHighlight);
+      } else {
+        setActiveTab("all");
+      }
+    } else if (activeTab === "all" && listAllPost) {
+      setListPost(listAllPost);
+    }
+  }, [activeTab, listPostHighlight, listAllPost]);
+
+  const renderLoadingPost = (index: number) => {
+    return (
+      <div key={index} className={classes.post}>
+        <Grid container className={classes.userPanel}>
+          <Grid item xs={2} className={classes.userAvatar}>
+            <Skeleton width={30} height={30} variant="circular" />
+          </Grid>
+          <Grid item xs={8} className={classes.userNameAndPostTime}>
+            <Skeleton width={160} variant="text" />
+            <Skeleton width={60} variant="text" />
+          </Grid>
+          <Grid item xs={2} className={classes.userOptionPost}>
+            <Skeleton width={20} height={10} variant="rectangular" />
+          </Grid>
+        </Grid>
+        <div className={classes.postContent}>
+          <Skeleton width={200} variant="text" />
+          <Skeleton width={500} variant="text" />
+          <div className={classes.hashTag}>
+            {map(Array.from(Array(3)), (item: any, index: number) => (
+              <Skeleton
+                key={index}
+                width={50}
+                height={26}
+                style={{ marginRight: 8, borderRadius: 8 }}
+                variant="rectangular"
+              />
+            ))}
+          </div>
+        </div>
+        <Grid container className={classes.postActions}>
+          <Grid item xs={8} className={classes.leftPanel}>
+            <div className={classes.likeButton}>
+              <Skeleton width={20} variant="rectangular" />
+              <Skeleton width={16} style={{ marginLeft: 8 }} variant="text" />
+            </div>
+            <div className={classes.commentButton}>
+              <Skeleton width={20} variant="rectangular" />
+              <Skeleton width={16} style={{ marginLeft: 8 }} variant="text" />
+            </div>
+            <div className={classes.bookmarkBtn}>
+              <Skeleton width={20} variant="rectangular" />
+            </div>
+          </Grid>
+          <Grid item xs={4} className={classes.rightPanel}>
+            <div className={classes.btnResolve}>
+              <Skeleton width={20} variant="rectangular" />
+              <Skeleton width={50} style={{ marginLeft: 8 }} variant="text" />
+            </div>
+          </Grid>
+        </Grid>
+      </div>
+    );
+  };
+
+  const renderListPost = () => {
     return (
       <>
         <div className={classes.postFilter}></div>
-        {listPost?.map((post: any, i: number) => (
-          <div key={i} className={classes.post}>
-            <PostItem post={post} onClickCommentSection={onClickCommentSection} onClickHashTag={onClickHashTag} />
-          </div>
-        ))}
+        {!listPost
+          ? map(Array.from(Array(10)), (item: any, index: number) => renderLoadingPost(index))
+          : listPost.map((post: any, i: number) => (
+              <div key={i} className={classes.post}>
+                <PostItem post={post} onClickCommentSection={onClickCommentSection} onClickHashTag={onClickHashTag} />
+              </div>
+            ))}
+        {}
       </>
     );
   };
@@ -122,26 +195,19 @@ const HomePage = () => {
               className={activeTab === "highlight" && classes.active}>
               Nổi bật
             </Typography>
-            <Typography onClick={() => setActiveTab("post")} className={activeTab === "post" && classes.active}>
+            <Typography onClick={() => setActiveTab("all")} className={activeTab === "all" && classes.active}>
               Bài viết
             </Typography>
           </div>
         </div>
         <div className={classes.filterByMajor}></div>
         <div className={classes.listPost}>
-          {!listPostHighlight ? (
-            <div className={classes.loading}>
-              <CircularProgress />
-              Loading ...
-            </div>
-          ) : listPostHighlight?.length === 0 ? (
+          {listPost?.length === 0 ? (
             <div className={classes.emptyData}>
               <Typography>Không có bài viết nào</Typography>
             </div>
-          ) : activeTab === "highlight" ? (
-            renderListPost(listPostHighlight)
           ) : (
-            renderListPost(listAllPost)
+            renderListPost()
           )}
         </div>
       </div>

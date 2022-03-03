@@ -24,7 +24,7 @@ export const useStyles: any = makeStyles(() => ({
   },
   content: {
     width: "100%",
-    marginTop: 10,
+    marginTop: 20,
   },
   tabContent: {
     display: "flex",
@@ -62,6 +62,8 @@ export const useStyles: any = makeStyles(() => ({
     marginTop: 20,
     zIndex: 20,
     width: "100%",
+    height: "auto",
+    minHeight: "100vh",
     maxWidth: "calc(100vw - 20%)",
     margin: "0 auto",
     borderRadius: 8,
@@ -78,6 +80,7 @@ export const useStyles: any = makeStyles(() => ({
     marginBottom: 16,
   },
   userPanel: {
+    position: "relative",
     "& > div": {
       "&:first-child": {
         maxWidth: 43,
@@ -114,6 +117,10 @@ export const useStyles: any = makeStyles(() => ({
       letterSpacing: -0.2,
       fontWeight: 700,
       color: "#0288d1",
+      "&:hover": {
+        cursor: "pointer",
+        textDecoration: "underline",
+      },
     },
     "& > p:nth-child(2)": {
       marginTop: 4,
@@ -146,12 +153,13 @@ export const useStyles: any = makeStyles(() => ({
     alignItems: "center",
     justifyContent: "flex-start",
     "& > div": {
+      cursor: "pointer",
       width: "100%",
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-start",
       "&:last-child": {
-        justifyContent: "flex-start",
+        justifyContent: "flex-end",
       },
       "& > div": {
         display: "flex",
@@ -227,6 +235,7 @@ export const useStyles: any = makeStyles(() => ({
   },
   loading: {
     width: "100%",
+    height: "100%",
     position: "absolute",
     top: "50%",
     right: "50%",
@@ -315,7 +324,84 @@ export const useStyles: any = makeStyles(() => ({
       marginLeft: 5,
     },
   },
-
+  previewProfile: {
+    zIndex: 20,
+    height: 140,
+    width: 340,
+    backgroundColor: "#ffffff",
+    border: "1px solid #ebeef5",
+    borderRadius: 4,
+    padding: 12,
+    display: "block",
+    position: "absolute",
+    top: 20,
+    left: 50,
+  },
+  previewProfileContent: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+  },
+  avatar: {
+    "& > div": {
+      width: 50,
+      height: 50,
+    },
+  },
+  nameAndEmail: {
+    display: "flex",
+    height: "fit-content",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    marginLeft: 12,
+    padding: 5,
+    borderBottom: "1px solid #909399",
+    "& > p:first-child": {
+      color: "#0288d1",
+      fontWeight: 500,
+    },
+    "& > p:nth-child(2)": {
+      color: "#909399",
+      fontWeight: 500,
+    },
+  },
+  stats: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 4,
+    "& > div:nth-child(2)": {
+      marginLeft: 12,
+    },
+  },
+  statsItem: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    "& > svg": {
+      width: 16,
+      height: 16,
+    },
+    "& > span": {
+      fontSize: 12,
+      color: "#909399",
+      padding: "0px 4px",
+    },
+  },
+  inboxButton: {
+    position: "absolute",
+    right: 10,
+    bottom: 10,
+    padding: "2px 4px",
+    cursor: "pointer",
+    border: "1px solid #0288d1",
+    borderRadius: 4,
+    "& > p": {
+      fontSize: 14,
+      color: "#0288d1",
+    },
+  },
   // chatListEngine: {
   //   position: "absolute",
   //   width: 500,

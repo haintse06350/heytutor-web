@@ -28,17 +28,7 @@ const UserProfile = () => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get("userId");
-
-  //information of user
-  // const userRoll = true;
-  // const userRanking = 100;
-  // const userStory = "Thích tìm hiểu những cái mới lạ";
-  // const userName = "Cao Duc Anh";
-  const userMajor = "SE";
-  const userSemester = 13;
-
   const [story, setStory] = useState(userProfile?.sumarry);
-  // begin set tab view
 
   interface TabPanelProps {
     children?: React.ReactNode;
@@ -145,7 +135,7 @@ const UserProfile = () => {
               </div>
               <div className={classes.userMajor}>
                 <CoPresentIcon />
-                {"K" + userSemester + "-" + userMajor}
+                {"K" + userProfile?.stdId.slice(2, 4) + "-" + userProfile?.major}
               </div>
               <div className={classes.userRanking}>
                 <StarsIcon /> Điểm uy tín hiện tại: {userProfile?.rateCount}/100

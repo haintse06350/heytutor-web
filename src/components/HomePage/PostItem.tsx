@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Grid, Typography, Avatar, Menu, MenuItem } from "@mui/material";
+import React, { useState, useContext, useEffect } from "react";
+import { Grid, Typography, Avatar, Menu, MenuItem, Skeleton } from "@mui/material";
 import { useStyles } from "./HomePage.style";
 import { stringAvatar } from "../UserProfile/helper";
 import moment from "moment";
@@ -17,18 +17,24 @@ import { Post } from "../../models/post";
 import { Bookmark } from "../../models/bookmark";
 import { NotificationCtx } from "../../context/notification/state";
 import clsx from "classnames";
+import { User } from "../../models/users";
+import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const [isLiked, setIsliked] = useState(false);
+  const [isLiked, setIsliked] = useState(post?.isLiked);
   const [isResolved, setIsResolved] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(post?.isBookmarked);
   const [postItem, setPostItem] = useState(post);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
+  const [userProfile, setUserProfile]: any = useState(null);
+  const [onHover, setOnHover] = useState(false);
+
   const { setNotificationSuccess } = useContext(NotificationCtx);
 
   const onClickLike = async (post: any) => {
@@ -122,23 +128,104 @@ const PostItem = (props: any) => {
       onClose={handleOptionClose}>
       <MenuItem value="repost">Báo cáo bài viết</MenuItem>
       <MenuItem value="hide">Ẩn bài viết</MenuItem>
-      <MenuItem value="save">Lưu bài viết</MenuItem>
     </Menu>
   );
 
+  const getUserProfile = async (userId: number | string) => {
+    const profile = await User.getUserProfile(userId);
+    setUserProfile(profile);
+  };
+
+  const loadingProfile = () => {
+    return (
+      <div className={classes.previewProfileContent}>
+        <div className={classes.avatar}>
+          <Skeleton width={50} height={50} variant="circular" />
+        </div>
+        <div className={classes.nameAndEmail}>
+          <Skeleton width={100} variant="text" />
+          <Skeleton width={200} variant="text" />
+          <div className={classes.stats}>
+            <div className={classes.statsItem}>
+              <Skeleton width={16} variant="rectangular" />
+              <Skeleton width={12} style={{ marginLeft: 12 }} variant="text" />
+            </div>
+            <div className={classes.statsItem}>
+              <Skeleton width={16} variant="rectangular" />
+              <Skeleton width={12} style={{ marginLeft: 12 }} variant="text" />
+            </div>
+          </div>
+        </div>
+        <div className={classes.inboxButton}>
+          <Skeleton width={60} variant="text" />
+        </div>
+      </div>
+    );
+  };
+
+  const renderPreviewProfile = () => {
+    return (
+      <div
+        className={classes.previewProfile}
+        onMouseEnter={() => setOnHover(true)}
+        onMouseLeave={() => setOnHover(false)}>
+        {!userProfile ? (
+          loadingProfile()
+        ) : (
+          <div className={classes.previewProfileContent}>
+            <div className={classes.avatar}>
+              <Avatar {...stringAvatar(userProfile.name)} />
+            </div>
+            <div className={classes.nameAndEmail}>
+              <Typography variant="body2">{userProfile.name}</Typography>
+              <Typography variant="body2">{userProfile.email}</Typography>
+              <div className={classes.stats}>
+                <div className={classes.statsItem}>
+                  <FeedOutlinedIcon sx={{ color: "#909399" }} />
+                  <span>{userProfile.postCount || 0}</span>
+                </div>
+                <div className={classes.statsItem}>
+                  <StarBorderOutlinedIcon sx={{ color: "#909399" }} />
+                  <span>{userProfile.rateCount || 0}</span>
+                </div>
+              </div>
+            </div>
+            <div className={classes.inboxButton}>
+              <Typography>Nhắn tin</Typography>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    if (onHover) {
+      getUserProfile(post.userId);
+    } else {
+      setUserProfile(null);
+    }
+  }, [onHover]);
+
   return (
-    <>
+    <div>
       <Grid container className={classes.userPanel}>
-        <Grid item xs={2} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
+        <Grid item xs={1} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
           <Avatar {...stringAvatar(postItem?.user?.name)} src={postItem?.user?.avatar} />
         </Grid>
-        <Grid item xs={8} className={classes.userNameAndPostTime}>
-          <Typography onClick={() => onClickProfile(postItem?.user?.id)}>{postItem?.user?.name}</Typography>
+        <Grid item xs={10} className={classes.userNameAndPostTime}>
+          <Typography
+            onMouseEnter={() => setOnHover(true)}
+            onMouseLeave={() => setOnHover(false)}
+            onClick={() => onClickProfile(postItem?.user?.id)}>
+            {postItem?.user?.name}
+          </Typography>
           <Typography>{moment().from(postItem?.createdAt)}</Typography>
         </Grid>
-        <Grid item xs={2} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
+        <Grid item xs={1} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
           <MoreHorizIcon />
         </Grid>
+        {onHover && renderPreviewProfile()}
       </Grid>
       {isOptionOpen && renderOption}
       <div className={classes.postContent}>
@@ -149,7 +236,7 @@ const PostItem = (props: any) => {
       <Grid container className={classes.postActions}>
         <Grid item xs={8} className={classes.leftPanel}>
           <div className={classes.likeButton} onClick={() => onClickLike(postItem)}>
-            {postItem?.isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
+            {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
             <Typography>{postItem?.likeCount}</Typography>
           </div>
           <div className={classes.commentButton} onClick={() => onClickCommentSection(postItem)}>
@@ -176,8 +263,7 @@ const PostItem = (props: any) => {
           </div>
         </Grid>
       </Grid>
-      <div className={classes.divider} />
-    </>
+    </div>
   );
 };
 
