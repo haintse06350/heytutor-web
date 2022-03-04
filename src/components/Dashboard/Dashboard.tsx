@@ -273,7 +273,7 @@ const Dashboard = () => {
         return <div>Quản lí event</div>;
       }
       case "Quản lí người dùng": {
-        return <div>Quản lí người dùng</div>;
+        return rederUsers();
       }
     }
   };
@@ -346,6 +346,22 @@ const Dashboard = () => {
       </div>
     );
   };
+
+  const rederUsers = () => {
+    return (
+      <>
+        <div className={classes.postFilter}></div>
+        {!listPost
+          ? map(Array.from(Array(10)), (item: any, index: number) => renderLoadingPost(index))
+          : listPost.map((post: any, i: number) => (
+              <div key={i} className={classes.post}>
+                <PostItem post={post} onClickCommentSection={onClickCommentSection} />
+              </div>
+            ))}
+        {}
+      </>
+    );
+  }
 
   const renderImportDataUI = () => {
     return (

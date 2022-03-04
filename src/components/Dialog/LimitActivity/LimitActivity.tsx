@@ -14,7 +14,8 @@ import { useStyles } from "./LimitActivity.style";
 export default function LimitDialog() {
   const classes = useStyles();
   const [postNumber, setPostNumber] = React.useState("2");
-  const [limitTime, setTimeLimit] = React.useState("24 hours");
+  const [limitTimePost, setTimeLimitPost] = React.useState("6 hours");
+  const [limitTimeComment, setTimeLimitComment] = React.useState("6 hours");
   const [commentNumber, setCommentNumber] = React.useState("2");
   const [open, setOpen] = React.useState(false);
 
@@ -26,8 +27,12 @@ export default function LimitDialog() {
     setCommentNumber(event.target.value);
   };
 
-  const handTimeLimitChange = (event: any) => {
-    setTimeLimit(event.target.value);
+  const handleTimeLimitChangeComment = (event: any) => {
+    setTimeLimitPost(event.target.value);
+  };
+
+  const handleTimeLimitChangePost = (event: any) => {
+    setTimeLimitComment(event.target.value);
   };
 
   const handleClickOpen = () => {
@@ -84,8 +89,8 @@ export default function LimitDialog() {
             <InputLabel htmlFor="timeLimitForPost"></InputLabel>
             <Select
               autoFocus
-              value={limitTime}
-              onChange={handTimeLimitChange}
+              value={limitTimePost}
+              onChange={handleTimeLimitChangePost}
               inputProps={{
                 name: "timeLimitForPost",
                 id: "timeLimitForPost",
@@ -131,14 +136,14 @@ export default function LimitDialog() {
             <h2>Hết hạn trong</h2>
           </div>
           <FormControl sx={{ mt: 1 }}>
-            <InputLabel htmlFor="timeLimitForPost"></InputLabel>
+            <InputLabel htmlFor="timeLimitForComment"></InputLabel>
             <Select
               autoFocus
-              value={limitTime}
-              onChange={handTimeLimitChange}
+              value={limitTimeComment}
+              onChange={handleTimeLimitChangeComment}
               inputProps={{
-                name: "timeLimitForPost",
-                id: "timeLimitForPost",
+                name: "timeLimitForComment",
+                id: "timeLimitForComment",
               }}>
               <MenuItem value="6 hours">6 giờ</MenuItem>
               <MenuItem value="8 hours">8 giờ</MenuItem>
