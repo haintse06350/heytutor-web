@@ -18,6 +18,8 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import { Bookmark } from "../../models/bookmark";
 import { NotificationCtx } from "../../context/notification/state";
+// import { User } from "../../models/users";
+// import { UserCtx } from "../../context/user/state";
 
 const PostDetail = (props: any) => {
   const { post, onCloseDialog, openDialog } = props;
@@ -31,6 +33,9 @@ const PostDetail = (props: any) => {
   const [isLiked, setIsliked] = useState(post?.isLiked);
   const [isBookmarked, setIsBookmarked] = useState(post?.isBookmarked);
   const { setNotificationSuccess } = useContext(NotificationCtx);
+  // const urlParams = new URLSearchParams(window.location.search);
+  // const { user }: any = useContext(UserCtx);
+  // const userId = urlParams.get("userId");
 
   const onClickLike = async (post: any) => {
     setIsliked(!isLiked);

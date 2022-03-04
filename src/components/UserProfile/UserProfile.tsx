@@ -15,6 +15,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import ListPost from "./ListPost";
 import { User } from "../../models/users";
 import { useNavigate } from "react-router-dom";
+import Header from "../Header/Header";
 
 const UserProfile = () => {
   const classes = useStyles();
@@ -25,7 +26,6 @@ const UserProfile = () => {
   const [value, setValue] = useState(0);
   const [userProfile, setUserProfile]: any = useState(user);
   const navigate = useNavigate();
-
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get("userId");
   const [story, setStory] = useState(userProfile?.sumarry);
@@ -120,6 +120,7 @@ const UserProfile = () => {
 
   return (
     <div className={classes.root}>
+      <Header />
       <div className={classes.wrap}>
         <Grid item className={classes.userHeader}>
           <div className={classes.header} style={styleColor}>
