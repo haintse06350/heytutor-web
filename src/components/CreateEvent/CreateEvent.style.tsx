@@ -2,20 +2,19 @@ import { makeStyles } from "@mui/styles";
 
 export const useStyles: any = makeStyles(
   () => ({
-    hashtag: {
-
+    hashtag: {},
+    title: {
+      color:"blue"
     },
-    listPost: {
-      marginTop: 20,
-    },
-    post: {
-      width: "100%",
-      height: "auto",
-      backgroundColor: "#F8F8F8",
-      padding: 15,
-      borderRadius: 8,
-      marginBottom: 16,
-    },
+    
+  contentDetailPost: {
+    width: "100%",
+    minHeight: 200,
+    height: "30vh",
+    margin: "10px 0",
+    padding: 15,
+    fontSize: 16,
+  },
     userPanel: {
       "& > div": {
         "&:first-child": {
@@ -107,9 +106,7 @@ export const useStyles: any = makeStyles(
           },
         },
       },
-    }
+    },
   }),
   { index: 1 }
-
-  
 );

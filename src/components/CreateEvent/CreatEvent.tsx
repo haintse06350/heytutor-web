@@ -1,187 +1,116 @@
-import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
-import { useStyles } from "./Event.style";
-import { Grid, Typography, Dialog, Slide, Avatar } from "@mui/material";
-import { TransitionProps } from "@mui/material/transitions";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import ShareIcon from "@mui/icons-material/Share";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Comment as CommentModel } from "../../models/comment";
-import { stringAvatar } from "../UserProfile/helper";
-import moment from "moment";
+import React, { useState } from "react";
+import { Box, MenuItem } from "@mui/material";
+import { useStyles } from "./CreateEvent.style";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import Button from "@mui/material/Button";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
-const Event = () => {
+const CreateEvent = () => {
   const classes = useStyles();
-  const [openDialog, setOpenDialog] = useState(false);
-  const [isLiked, setIsliked] = useState(false);
 
-  // const user = {
-  //   avatar: "",
-  //   name: "Nguyen Trung Hai",
-  // };
-
-  const onClickLike = () => {
-    setIsliked(!isLiked);
+  const [department, setDepartmentValue] = React.useState("2");
+  const handleDepartmentValue = (event: any) => {
+    setDepartmentValue(event.target.value);
   };
-  const [listComment, setListComment]: any = useState(null);
+  const [content, setContent] = useState("");
 
-  const post = {
-    title: "Lorem Ipsum",
-    time: "20h",
-    content: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccccccccccccccccccccccccccccc",
-    hashtag: "#CSD",
-    isLiked: false,
-    likeCount: 23,
-    commentCount: 5,
-    isBookmarked: false,
+  const [subject, setSubjectValue] = React.useState("2");
+  const handleSubjectValue = (event: any) => {
+    setSubjectValue(event.target.value);
   };
 
-  useEffect(() => {
-    CommentModel.listCommentByPost({}).then((res: any) => {
-      setListComment(res);
-    });
-  }, [post]);
+  const current = new Date();
+  const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
+  const [value, setValue] = React.useState(date);
 
-  const onClickCommentSection = () => {
-    setOpenDialog(true);
-  };
-
-  const onClickCommentSectionInsideDialog = () => {};
-
-  const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<any, any>;
-    },
-    ref: React.Ref<unknown>
-  ) {
-    return <Slide direction="left" ref={ref} {...props} />;
-  });
-
-  const onCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  const renderPostFullScreen = () => {
-    return (
-      <Dialog keepMounted TransitionComponent={Transition} onClose={onCloseDialog} fullScreen open={openDialog}>
-        <div className={classes.dialogContent}>
-          <Grid container className={classes.dialogHeader}>
-            <Grid onClick={onCloseDialog} xs={2} item className={classes.backBtn}>
-              <ArrowBackIosIcon color="primary" />
-            </Grid>
-            <Grid xs={8} item className={classes.postTitle}>
-              <Typography>{post.title}</Typography>
-            </Grid>
-            <Grid xs={2} item className={classes.moreBtn}>
-              <MoreHorizIcon color="primary" />
-            </Grid>
-          </Grid>
-          <Grid item xs={12} className={classes.postContent}>
-            <div className={classes.postContent}>
-              <Typography>{post.content}</Typography>
-              <Typography>{post.hashtag}</Typography>
-            </div>
-            <Grid container item xs={12} className={classes.simpleActions}>
-              <Grid item xs={4} className={classes.likeButton} onClick={onClickLike}>
-                {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
-              </Grid>
-              <Grid item xs={4} className={classes.commentButton} onClick={onClickCommentSectionInsideDialog}>
-                <ChatBubbleOutlineOutlinedIcon color="primary" />
-              </Grid>
-              <Grid item xs={4} className={classes.shareButton}>
-                <ShareIcon color="primary" />
-              </Grid>
-            </Grid>
-          </Grid>
-        </div>
-      </Dialog>
-    );
+  const handleChange = (newValue: any) => {
+    setValue(newValue);
   };
 
   return (
-    <div className={classes.hashtag}>
-      {openDialog && renderPostFullScreen()}
-      <div className={classes.listPost}>
-        <div key={1} className={classes.post}>
-          <div className={classes.postContent}>
-            <Typography>{post.content}</Typography>
-            <Typography>{post.hashtag}</Typography>
-          </div>
-          <Grid container className={classes.postActions}>
-            <Grid item xs={12} className={classes.rightPanel}>
-              <div className={classes.likeButton} onClick={onClickLike}>
-                {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
-                <Typography>{post.likeCount}</Typography>
-              </div>
-              <div className={classes.commentButton} onClick={onClickCommentSection}>
-                <ChatBubbleOutlineOutlinedIcon color="primary" />
-                <Typography>{post.commentCount}</Typography>
-              </div>
-              <div className={classes.shareButton}>
-                <ShareIcon color="primary" />
-              </div>
-            </Grid>
-          </Grid>
-          <div className={classes.divider} />
+    <div>
+      <Box>
+        <div className={classes.title}>
+          <h3>Chủ đề</h3>
         </div>
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <div className={classes.commentSection}>
-                {!listComment ? (
-                  <Typography>Loading comments...</Typography>
-                ) : (
-                  listComment?.map((comment: any) => (
-                    <div key={comment.id} className={classes.commentItem}>
-                      <div className={classes.userAvatar}>
-                        <Avatar {...stringAvatar(comment.user.name)} />
-                      </div>
-                      <div className={classes.commentRow}>
-                        <div className={classes.commentContent}>
-                          <Typography>{comment.user.name}</Typography>
-                          <Typography>{comment.comment}</Typography>
-                        </div>
-                        <div className={classes.commentAt}>
-                          <Typography>{moment().from(comment.createdAt)}</Typography>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </Grid>
-            <Grid item xs={6}>
-              <div className={classes.commentSection}>
-                {!listComment ? (
-                  <Typography>Loading comments...</Typography>
-                ) : (
-                  listComment?.map((comment: any) => (
-                    <div key={comment.id} className={classes.commentItem}>
-                      <div className={classes.userAvatar}>
-                        <Avatar {...stringAvatar(comment.user.name)} />
-                      </div>
-                      <div className={classes.commentRow}>
-                        <div className={classes.commentContent}>
-                          <Typography>{comment.user.name}</Typography>
-                          <Typography>{comment.comment}</Typography>
-                        </div>
-                        <div className={classes.commentAt}>
-                          <Typography>{moment().from(comment.createdAt)}</Typography>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </Grid>
-          </Grid>
+        <TextField id="filled-basic" placeholder="Nhập chủ đề của sự kiện" variant="filled" onChange={(e) => setContent(e.target.value)}/>
+        <div className={classes.title}>
+          <h3>Nội dung</h3>
+        </div>
+        <textarea
+              className={classes.contentDetailPost}
+              placeholder="Nhập nội dung của sự kiện"
+              rows={5}
+              cols={4}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}></textarea>
+        <Box>
+          <div className={classes.title}>
+            <h3>Khối ngành</h3>
+          </div>
+          <Select
+            autoFocus
+            value={department}
+            onChange={handleDepartmentValue}
+            inputProps={{
+              name: "departmentValue",
+              id: "departmentValue",
+            }}>
+            <MenuItem value="1">SE</MenuItem>
+            <MenuItem value="2">IS</MenuItem>
+            <MenuItem value="3">MKT</MenuItem>
+          </Select>
+          <div className={classes.title}>
+            <h3>Môn học</h3>
+          </div>
+          <Select
+            autoFocus
+            value={subject}
+            onChange={handleSubjectValue}
+            inputProps={{
+              name: "subjectValue",
+              id: "subjectValue",
+            }}>
+            <MenuItem value="1">CDS</MenuItem>
+            <MenuItem value="2">MAS</MenuItem>
+            <MenuItem value="3">PMG</MenuItem>
+          </Select>
         </Box>
-      </div>
+        <Box>
+          <div className={classes.title}>
+            <h3>Chọn thời gian của sự kiện</h3>
+          </div>
+          <h4>Thời gian bắt đầu</h4>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DesktopDatePicker
+              label="Start"
+              inputFormat="MM/dd/yyyy"
+              value={value}
+              onChange={handleChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <h4>Thời gian kết thúc</h4>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DesktopDatePicker
+              label="End"
+              inputFormat="MM/dd/yyyy"
+              value={value}
+              onChange={handleChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box>
+          <Button variant="text">Hủy</Button>
+          <Button variant="contained">Tạo sự kiện</Button>
+        </Box>
+      </Box>
     </div>
   );
 };
 
-export default Event;
+export default CreateEvent;
