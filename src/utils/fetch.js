@@ -1,6 +1,6 @@
 import fetch from "isomorphic-unfetch";
 
-const api = process.env.REACT_APP_API;
+const api = process.env.REACT_APP_API || "http://18.215.25.41:3001";
 const getSessionId = () => localStorage.getItem("heytutor-user");
 
 export default class Network {
