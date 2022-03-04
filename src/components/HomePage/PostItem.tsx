@@ -20,7 +20,7 @@ import clsx from "classnames";
 import { User } from "../../models/users";
 import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-
+import { Button, Tooltip } from "@mui/material";
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
@@ -34,7 +34,7 @@ const PostItem = (props: any) => {
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [userProfile, setUserProfile]: any = useState(null);
   const [onHover, setOnHover] = useState(false);
-
+  const rollUser = 1;
   const { setNotificationSuccess } = useContext(NotificationCtx);
 
   const onClickLike = async (post: any) => {
@@ -126,8 +126,19 @@ const PostItem = (props: any) => {
       }}
       open={isOptionOpen}
       onClose={handleOptionClose}>
-      <MenuItem value="repost">Báo cáo bài viết</MenuItem>
-      <MenuItem value="hide">Ẩn bài viết</MenuItem>
+      {rollUser === 1 ? (
+        <>
+          <MenuItem value="repost">Báo cáo bài viết</MenuItem>
+          <MenuItem value="hide">Ẩn bài viết</MenuItem>
+          <MenuItem value="save">Lưu bài viết</MenuItem>
+        </>
+      ) : (
+        <>
+          <MenuItem value="warning">Cảnh báo nội dung</MenuItem>
+          <MenuItem value="del">Xóa bài viết</MenuItem>
+          <MenuItem value="limitPost">Giới hạn đăng bài</MenuItem>
+        </>
+      )}
     </Menu>
   );
 
@@ -210,10 +221,10 @@ const PostItem = (props: any) => {
   return (
     <div>
       <Grid container className={classes.userPanel}>
-        <Grid item xs={1} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
+        <Grid item xs={1} md={2} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
           <Avatar {...stringAvatar(postItem?.user?.name)} src={postItem?.user?.avatar} />
         </Grid>
-        <Grid item xs={10} className={classes.userNameAndPostTime}>
+        <Grid item xs={6} md={8} className={classes.userNameAndPostTime}>
           <Typography
             onMouseEnter={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}
@@ -222,7 +233,7 @@ const PostItem = (props: any) => {
           </Typography>
           <Typography>{moment().from(postItem?.createdAt)}</Typography>
         </Grid>
-        <Grid item xs={1} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
+        <Grid item xs={3} md={3} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
           <MoreHorizIcon />
         </Grid>
         {onHover && renderPreviewProfile()}
@@ -235,19 +246,48 @@ const PostItem = (props: any) => {
       </div>
       <Grid container className={classes.postActions}>
         <Grid item xs={8} className={classes.leftPanel}>
-          <div className={classes.likeButton} onClick={() => onClickLike(postItem)}>
-            {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
+          <div onClick={() => onClickLike(postItem)}>
+            {isLiked ? (
+              <Tooltip title={"Thích"}>
+                <Button aria-label="like">
+                  <ThumbUpIcon color="primary" />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title={"Không thích"}>
+                <Button aria-label="dislike">
+                  <ThumbUpOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            )}
             <Typography>{postItem?.likeCount}</Typography>
           </div>
-          <div className={classes.commentButton} onClick={() => onClickCommentSection(postItem)}>
-            <ChatBubbleOutlineOutlinedIcon color="primary" />
+          <div onClick={() => onClickCommentSection(postItem)}>
+            <Tooltip title={"Bình luận"}>
+              <Button aria-label="comment">
+                <ChatBubbleOutlineOutlinedIcon color="primary" />
+              </Button>
+            </Tooltip>
             <Typography>{postItem?.commentCount}</Typography>
           </div>
-          <div className={classes.bookmarkBtn} onClick={() => onClickBookmarkPost(post)}>
-            {isBookmarked ? <BookmarkAddedIcon color="primary" /> : <BookmarkAddOutlinedIcon color="primary" />}
+          <div onClick={() => onClickBookmarkPost(post)}>
+            {isBookmarked ? (
+              <Tooltip title={"Lưu bài"}>
+                <Button aria-label="Bookmark">
+                  <BookmarkAddedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title={"Không lưu bài"}>
+                <Button>
+                  <BookmarkAddOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </Grid>
         <Grid item xs={4} className={classes.rightPanel}>
+          {/* lấy giá trị isResolved của post để thêm vào đây chứ k phải click */}
           <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
             {isResolved ? (
               <div className={classes.isResolve}>
@@ -257,7 +297,7 @@ const PostItem = (props: any) => {
             ) : (
               <div className={classes.isResolve}>
                 <RemoveDoneIcon color="primary" aria-label="Chưa giải quyết"></RemoveDoneIcon>
-                <Typography>Chưa giải quyết</Typography>{" "}
+                <Typography>Chưa giải quyết</Typography>
               </div>
             )}
           </div>
