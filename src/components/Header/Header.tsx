@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./Header.style";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import CelebrationIcon from "@mui/icons-material/Celebration";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import {
   Grid,
   TextField,
@@ -16,91 +13,42 @@ import {
   Toolbar,
   IconButton,
   Badge,
-  MenuItem,
-  Menu,
   Tooltip,
+  Button,
 } from "@mui/material";
 import Search from "../HomePage/Search/Search";
 import PostDetail from "../HomePage/PostDetail";
 import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
 import Post from "../Post2/Post";
+import AccountPopover from "./AccountPopover/AccountPopover";
+import NotificationsPopover from "./NotificationsPopover/NotificationsPopover";
 
 const Header = () => {
   const classes = useStyles();
-
-  //   begin listen event
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuId = "primary-search-account-menu";
-
   const [openSearch, setOpenSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [openDialog, setOpenDialog] = useState(false);
   const [openCreatePost, setOpenCreatePost] = useState(false);
-  // const [selectedPost, setSelectedPost]: any = useState(null);
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    console.log("click menu open");
-    setAnchorEl(event.currentTarget);
-    setIsMenuOpen(true);
-  };
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setIsMenuOpen(false);
-  };
+  const navigate = useNavigate();
+
   const onCloseDialog = () => {
     setOpenDialog(false);
   };
-  // end listen event
 
-  //   begin listen redirect page
-  const navigate = useNavigate();
-  const handleMenuProfile = () => {
-    setAnchorEl(null);
-    setIsMenuOpen(false);
-    navigate("/profile");
-  };
-  const handleMenuLogout = () => {
-    setAnchorEl(null);
-    setIsMenuOpen(false);
-  };
-  //   end listen redirect page
-
-  //begin render menu avatar
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      className={classes.headerMenu}
-      id={menuId}
-      keepMounted
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "right",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}>
-      <MenuItem value="profile" onClick={handleMenuProfile}>
-        Trang cá nhân
-      </MenuItem>
-      <MenuItem value="logout" onClick={handleMenuLogout}>
-        Thoát ra
-      </MenuItem>
-    </Menu>
-  );
-  //end render menu avatar
   const onClickSearch = () => {
     setOpenSearch(true);
   };
+
   const onCloseSearch = () => {
     setSearchQuery("");
     setOpenSearch(false);
   };
+
   const handleClickHome = () => {
     navigate("/home");
   };
+
   const handleRequiredCreatePost = () => {
     setOpenCreatePost(true);
   };
@@ -117,7 +65,7 @@ const Header = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}>
+            sx={{ color: "#5048E5", display: { xs: "none", sm: "block" } }}>
             HEYTUTOR
           </Typography>
           {openSearch && <Search searchQuery={searchQuery} open={openSearch} onClose={onCloseSearch} />}
@@ -142,43 +90,34 @@ const Header = () => {
           </Grid>
           <Box sx={{ flexGrow: 1 }} />
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <Tooltip title={"Tạo bài viêt"} onClick={handleRequiredCreatePost}>
-              <IconButton size="large" color="inherit">
-                <BorderColorIcon />
-              </IconButton>
-            </Tooltip>
+          <Box sx={{ display: { xs: "flex", md: "flex", alignItems: "center" } }}>
+            <Button
+              sx={{ maxHeight: 36, width: 150 }}
+              onClick={handleRequiredCreatePost}
+              variant="contained"
+              startIcon={<AddIcon sx={{ color: "#FFFFFF" }} />}>
+              Tạo bài viết
+            </Button>
             {openCreatePost && <Post openDialog={openCreatePost} closeDialog={handleRequiredCreatePostClose}></Post>}
             <Tooltip title={"Sự kiện"}>
               <IconButton size="large" color="inherit">
-                <CelebrationIcon />
+                <CelebrationIcon color="primary" />
               </IconButton>
             </Tooltip>
             <Tooltip title={"Tin nhắn"}>
               <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                 <Badge badgeContent={4} color="error">
-                  <MailIcon />
+                  <MailIcon color="primary" />
                 </Badge>
               </IconButton>
             </Tooltip>
             <Tooltip title={"Thông báo"}>
-              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
+              <NotificationsPopover />
             </Tooltip>
-            <div onClick={handleProfileMenuOpen}>
-              <Tooltip title={"Trang cá nhân"}>
-                <IconButton size="large" edge="end" color="inherit" aria-label="account of current user">
-                  <AccountCircle />
-                </IconButton>
-              </Tooltip>
-            </div>
+            <AccountPopover />
           </Box>
         </Toolbar>
       </AppBar>
-      {isMenuOpen && renderMenu}
     </div>
   );
 };

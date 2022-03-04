@@ -24,7 +24,7 @@ const Loginv2 = () => {
       try {
         const user = await User.login({ email: formik.values.email, password: formik.values.password });
         localStorage.setItem("heytutor-user", user.token);
-        login(user);
+        await login(user.token);
         navigate("/");
       } catch (e) {
         console.log(e);

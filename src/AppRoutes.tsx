@@ -1,6 +1,5 @@
 import React, { Fragment, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import BottomNav from "./components/BottomNavigation/BottomNavigation";
 import Chat from "./components/Chat/Chat";
 import Dashboard from "./components/Dashboard/Dashboard";
 // import Header from "./components/Header/Header";
@@ -19,6 +18,7 @@ import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 
 import UserProfile from "./components/UserProfile/UserProfile";
 import { UserCtx } from "./context/user/state";
+import RequireAuth from "./RequireAuth";
 
 export default function AppRoutes() {
   const { user }: any = useContext(UserCtx);
@@ -27,21 +27,58 @@ export default function AppRoutes() {
     <Router>
       <Fragment>
         <Routes>
-          <Route path={"/profile"} element={!user ? <Loginv2 /> : user.isAdmin ? <Dashboard /> : <UserProfile />} />
-          <Route path={"/"} element={<HomePage />} />
-          <Route path={"/home"} element={<HomePage />} />
-          <Route path={"/post"} element={<Post />} />
-          <Route path={"/profile"} element={<UserProfile />} />
+          <Route
+            path={"/"}
+            element={
+              <RequireAuth>
+                <HomePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={"/profile"}
+            element={<RequireAuth>{user?.isAdmin ? <Dashboard /> : <UserProfile />}</RequireAuth>}
+          />
+          <Route
+            path={"/home"}
+            element={
+              <RequireAuth>
+                <HomePage />
+              </RequireAuth>
+            }
+          />
+          <Route path={"/login"} element={<Loginv2 />} />
+          <Route
+            path={"/post"}
+            element={
+              <RequireAuth>
+                <Post />
+              </RequireAuth>
+            }
+          />
           <Route path={"/createEvent"} element={<CreateEvent />} />
           <Route path={"/feedback"} element={<Feedback />} />
-          <Route path={"/chat"} element={<Chat />} />
-          <Route path={"/dashboard"} element={<Dashboard />} />
+          <Route
+            path={"/chat"}
+            element={
+              <RequireAuth>
+                <Chat />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={"/dashboard"}
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>
+            }
+          />
           <Route path={"/test"} element={<PostDetail />} />
           <Route path={"/limitActivity"} element={<LimitActivity />} />
           <Route path={"/removePost"} element={<RemovePost />} />
           <Route path={"/removeComment"} element={<RemoveComment />} />
         </Routes>
-        <BottomNav />
       </Fragment>
     </Router>
   );

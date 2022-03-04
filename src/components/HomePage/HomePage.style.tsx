@@ -38,7 +38,7 @@ export const useStyles: any = makeStyles(() => ({
     },
   },
   searchDialogScreen: {
-    "@media(min-width:1024px)": {
+    "@media(min-width:680px)": {
       display: "none !important",
     },
     width: "100%",
