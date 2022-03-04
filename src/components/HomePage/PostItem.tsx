@@ -21,6 +21,7 @@ import { User } from "../../models/users";
 import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import { Button, Tooltip } from "@mui/material";
+import { UserCtx } from "../../context/user/state";
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
@@ -34,8 +35,13 @@ const PostItem = (props: any) => {
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [userProfile, setUserProfile]: any = useState(null);
   const [onHover, setOnHover] = useState(false);
-  const rollUser = 1;
+
   const { setNotificationSuccess } = useContext(NotificationCtx);
+  const { user } = useContext(UserCtx);
+
+  const isMyPost = (postItem: any) => {
+    return postItem?.user?.id === user?.id;
+  };
 
   const onClickLike = async (post: any) => {
     setIsliked(!isLiked);
@@ -112,6 +118,11 @@ const PostItem = (props: any) => {
     setIsOptionOpen(false);
   };
 
+  const onRepostPost = () => {
+    console.log("postID: ", post.id, "userID: ", post.user.id);
+    // Post.report({ postId: post.id, userId: post.user.id });
+  };
+
   const renderOption = (
     <Menu
       anchorEl={anchorEl}
@@ -126,17 +137,19 @@ const PostItem = (props: any) => {
       }}
       open={isOptionOpen}
       onClose={handleOptionClose}>
-      {rollUser === 1 ? (
+      {isMyPost(post) ? (
         <>
-          <MenuItem value="repost">Báo cáo bài viết</MenuItem>
-          <MenuItem value="hide">Ẩn bài viết</MenuItem>
-          <MenuItem value="save">Lưu bài viết</MenuItem>
+          <MenuItem onClick={onRepostPost} value="repost">
+            Xoá bài viết
+          </MenuItem>
+          <MenuItem value="hide">Chỉnh sửa bài viết</MenuItem>
         </>
       ) : (
         <>
-          <MenuItem value="warning">Cảnh báo nội dung</MenuItem>
-          <MenuItem value="del">Xóa bài viết</MenuItem>
-          <MenuItem value="limitPost">Giới hạn đăng bài</MenuItem>
+          <MenuItem onClick={onRepostPost} value="repost">
+            Báo cáo bài viết
+          </MenuItem>
+          <MenuItem value="hide">Ẩn bài viết</MenuItem>
         </>
       )}
     </Menu>

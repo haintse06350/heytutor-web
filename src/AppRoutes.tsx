@@ -7,15 +7,15 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import HomePage from "./components/HomePage/HomePage";
 import PostDetail from "./components/HomePage/PostDetail";
 // import Message from "./components/Message/Message";
-import Login from "./components/Login/Login";
+// import Login from "./components/Login/Login";
+import Loginv2 from "./components/Loginv2/Loginv2";
 import Post from "./components/Post/Post";
 // import Post2 from "./components/Post2/Post";
 import CreateEvent from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";
-import LimitActivity from "./components/Dialog/LimitActivity/LimitActivity"
-import RemovePost from "./components/Dialog/RemovePost/RemovePost"
-import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment"
-
+import LimitActivity from "./components/Dialog/LimitActivity/LimitActivity";
+import RemovePost from "./components/Dialog/RemovePost/RemovePost";
+import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 
 import UserProfile from "./components/UserProfile/UserProfile";
 import { UserCtx } from "./context/user/state";
@@ -27,7 +27,7 @@ export default function AppRoutes() {
     <Router>
       <Fragment>
         <Routes>
-          <Route path={"/profile"} element={!user ? <Login /> : user.isAdmin ? <Dashboard /> : <UserProfile />} />
+          <Route path={"/profile"} element={!user ? <Loginv2 /> : user.isAdmin ? <Dashboard /> : <UserProfile />} />
           <Route path={"/"} element={<HomePage />} />
           <Route path={"/home"} element={<HomePage />} />
           <Route path={"/post"} element={<Post />} />
@@ -40,7 +40,6 @@ export default function AppRoutes() {
           <Route path={"/limitActivity"} element={<LimitActivity />} />
           <Route path={"/removePost"} element={<RemovePost />} />
           <Route path={"/removeComment"} element={<RemoveComment />} />
-
         </Routes>
         <BottomNav />
       </Fragment>
