@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Grid, Typography, Avatar, Menu, MenuItem } from "@mui/material";
+import React, { useState, useContext, useEffect } from "react";
+import { Grid, Typography, Avatar, Menu, MenuItem, Skeleton } from "@mui/material";
 import { useStyles } from "./HomePage.style";
 import { stringAvatar } from "../UserProfile/helper";
 import moment from "moment";
@@ -17,18 +17,24 @@ import { Post } from "../../models/post";
 import { Bookmark } from "../../models/bookmark";
 import { NotificationCtx } from "../../context/notification/state";
 import clsx from "classnames";
-
+import { User } from "../../models/users";
+import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
+import { Button, Tooltip } from "@mui/material";
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const [isLiked, setIsliked] = useState(false);
+  const [isLiked, setIsliked] = useState(post?.isLiked);
   const [isResolved, setIsResolved] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(post?.isBookmarked);
   const [postItem, setPostItem] = useState(post);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
+  const [userProfile, setUserProfile]: any = useState(null);
+  const [onHover, setOnHover] = useState(false);
+  const rollUser = 1;
   const { setNotificationSuccess } = useContext(NotificationCtx);
 
   const onClickLike = async (post: any) => {
@@ -120,25 +126,117 @@ const PostItem = (props: any) => {
       }}
       open={isOptionOpen}
       onClose={handleOptionClose}>
-      <MenuItem value="repost">Báo cáo bài viết</MenuItem>
-      <MenuItem value="hide">Ẩn bài viết</MenuItem>
-      <MenuItem value="save">Lưu bài viết</MenuItem>
+      {rollUser === 1 ? (
+        <>
+          <MenuItem value="repost">Báo cáo bài viết</MenuItem>
+          <MenuItem value="hide">Ẩn bài viết</MenuItem>
+          <MenuItem value="save">Lưu bài viết</MenuItem>
+        </>
+      ) : (
+        <>
+          <MenuItem value="warning">Cảnh báo nội dung</MenuItem>
+          <MenuItem value="del">Xóa bài viết</MenuItem>
+          <MenuItem value="limitPost">Giới hạn đăng bài</MenuItem>
+        </>
+      )}
     </Menu>
   );
 
+  const getUserProfile = async (userId: number | string) => {
+    const profile = await User.getUserProfile(userId);
+    setUserProfile(profile);
+  };
+
+  const loadingProfile = () => {
+    return (
+      <div className={classes.previewProfileContent}>
+        <div className={classes.avatar}>
+          <Skeleton width={50} height={50} variant="circular" />
+        </div>
+        <div className={classes.nameAndEmail}>
+          <Skeleton width={100} variant="text" />
+          <Skeleton width={200} variant="text" />
+          <div className={classes.stats}>
+            <div className={classes.statsItem}>
+              <Skeleton width={16} variant="rectangular" />
+              <Skeleton width={12} style={{ marginLeft: 12 }} variant="text" />
+            </div>
+            <div className={classes.statsItem}>
+              <Skeleton width={16} variant="rectangular" />
+              <Skeleton width={12} style={{ marginLeft: 12 }} variant="text" />
+            </div>
+          </div>
+        </div>
+        <div className={classes.inboxButton}>
+          <Skeleton width={60} variant="text" />
+        </div>
+      </div>
+    );
+  };
+
+  const renderPreviewProfile = () => {
+    return (
+      <div
+        className={classes.previewProfile}
+        onMouseEnter={() => setOnHover(true)}
+        onMouseLeave={() => setOnHover(false)}>
+        {!userProfile ? (
+          loadingProfile()
+        ) : (
+          <div className={classes.previewProfileContent}>
+            <div className={classes.avatar}>
+              <Avatar {...stringAvatar(userProfile.name)} />
+            </div>
+            <div className={classes.nameAndEmail}>
+              <Typography variant="body2">{userProfile.name}</Typography>
+              <Typography variant="body2">{userProfile.email}</Typography>
+              <div className={classes.stats}>
+                <div className={classes.statsItem}>
+                  <FeedOutlinedIcon sx={{ color: "#909399" }} />
+                  <span>{userProfile.postCount || 0}</span>
+                </div>
+                <div className={classes.statsItem}>
+                  <StarBorderOutlinedIcon sx={{ color: "#909399" }} />
+                  <span>{userProfile.rateCount || 0}</span>
+                </div>
+              </div>
+            </div>
+            <div className={classes.inboxButton}>
+              <Typography>Nhắn tin</Typography>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    if (onHover) {
+      getUserProfile(post.userId);
+    } else {
+      setUserProfile(null);
+    }
+  }, [onHover]);
+
   return (
-    <>
+    <div>
       <Grid container className={classes.userPanel}>
-        <Grid item xs={2} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
+        <Grid item xs={1} md={2} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
           <Avatar {...stringAvatar(postItem?.user?.name)} src={postItem?.user?.avatar} />
         </Grid>
-        <Grid item xs={8} className={classes.userNameAndPostTime}>
-          <Typography onClick={() => onClickProfile(postItem?.user?.id)}>{postItem?.user?.name}</Typography>
+        <Grid item xs={6} md={8} className={classes.userNameAndPostTime}>
+          <Typography
+            onMouseEnter={() => setOnHover(true)}
+            onMouseLeave={() => setOnHover(false)}
+            onClick={() => onClickProfile(postItem?.user?.id)}>
+            {postItem?.user?.name}
+          </Typography>
           <Typography>{moment().from(postItem?.createdAt)}</Typography>
         </Grid>
-        <Grid item xs={2} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
+        <Grid item xs={3} md={3} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
           <MoreHorizIcon />
         </Grid>
+        {onHover && renderPreviewProfile()}
       </Grid>
       {isOptionOpen && renderOption}
       <div className={classes.postContent}>
@@ -148,19 +246,48 @@ const PostItem = (props: any) => {
       </div>
       <Grid container className={classes.postActions}>
         <Grid item xs={8} className={classes.leftPanel}>
-          <div className={classes.likeButton} onClick={() => onClickLike(postItem)}>
-            {postItem?.isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon color="primary" />}
+          <div onClick={() => onClickLike(postItem)}>
+            {isLiked ? (
+              <Tooltip title={"Thích"}>
+                <Button aria-label="like">
+                  <ThumbUpIcon color="primary" />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title={"Không thích"}>
+                <Button aria-label="dislike">
+                  <ThumbUpOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            )}
             <Typography>{postItem?.likeCount}</Typography>
           </div>
-          <div className={classes.commentButton} onClick={() => onClickCommentSection(postItem)}>
-            <ChatBubbleOutlineOutlinedIcon color="primary" />
+          <div onClick={() => onClickCommentSection(postItem)}>
+            <Tooltip title={"Bình luận"}>
+              <Button aria-label="comment">
+                <ChatBubbleOutlineOutlinedIcon color="primary" />
+              </Button>
+            </Tooltip>
             <Typography>{postItem?.commentCount}</Typography>
           </div>
-          <div className={classes.bookmarkBtn} onClick={() => onClickBookmarkPost(post)}>
-            {isBookmarked ? <BookmarkAddedIcon color="primary" /> : <BookmarkAddOutlinedIcon color="primary" />}
+          <div onClick={() => onClickBookmarkPost(post)}>
+            {isBookmarked ? (
+              <Tooltip title={"Lưu bài"}>
+                <Button aria-label="Bookmark">
+                  <BookmarkAddedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title={"Không lưu bài"}>
+                <Button>
+                  <BookmarkAddOutlinedIcon color="primary" />
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </Grid>
         <Grid item xs={4} className={classes.rightPanel}>
+          {/* lấy giá trị isResolved của post để thêm vào đây chứ k phải click */}
           <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
             {isResolved ? (
               <div className={classes.isResolve}>
@@ -170,14 +297,13 @@ const PostItem = (props: any) => {
             ) : (
               <div className={classes.isResolve}>
                 <RemoveDoneIcon color="primary" aria-label="Chưa giải quyết"></RemoveDoneIcon>
-                <Typography>Chưa giải quyết</Typography>{" "}
+                <Typography>Chưa giải quyết</Typography>
               </div>
             )}
           </div>
         </Grid>
       </Grid>
-      <div className={classes.divider} />
-    </>
+    </div>
   );
 };
 
