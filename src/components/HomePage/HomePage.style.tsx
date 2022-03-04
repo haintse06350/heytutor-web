@@ -24,7 +24,7 @@ export const useStyles: any = makeStyles(() => ({
   },
   content: {
     width: "100%",
-    marginTop: 20,
+    marginTop: 65,
   },
   tabContent: {
     display: "flex",
@@ -207,8 +207,8 @@ export const useStyles: any = makeStyles(() => ({
     marginTop: "30px !important",
     width: "100%",
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
     "& > div": {
       display: "flex",
       justifyContent: "center",
@@ -266,6 +266,8 @@ export const useStyles: any = makeStyles(() => ({
       textAlign: "left",
     },
   },
+  likeButton: { marginRight: 20 },
+  commentButton: { marginRight: 20 },
   bookmark: {
     backgroundColor: "#5488c7",
     border: "1px solid #5488c7",
@@ -322,6 +324,9 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
     "& > p": {
       marginLeft: 5,
+      "@media(max-width:375px)": {
+        display: "none",
+      },
     },
   },
   previewProfile: {
