@@ -18,7 +18,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
+// import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -93,12 +93,12 @@ const Dashboard = () => {
 
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("Import Data");
   const [dataStudent, setDataStudent]: any = useState(null);
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [cookie, setCookie] = useState("");
-  const [progress, setProgress] = useState(0);
+  // const [progress, setProgress] = useState(0);
 
   const onClickFetchData = async () => {
     setLoading(true);
@@ -184,31 +184,31 @@ const Dashboard = () => {
     setDataStudent({ columns: formatColumns, rows });
   };
 
-  const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
-    return (
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Box sx={{ width: "100%", mr: 1 }}>
-          <LinearProgress variant="determinate" {...props} />
-        </Box>
-        <Box sx={{ minWidth: 35 }}>
-          <Typography variant="body2" color="text.secondary">{`${props.value.toFixed(1)}%`}</Typography>
-        </Box>
-      </Box>
-    );
-  };
+  // const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
+  //   return (
+  //     <Box sx={{ display: "flex", alignItems: "center" }}>
+  //       <Box sx={{ width: "100%", mr: 1 }}>
+  //         <LinearProgress variant="determinate" {...props} />
+  //       </Box>
+  //       <Box sx={{ minWidth: 35 }}>
+  //         <Typography variant="body2" color="text.secondary">{`${props.value.toFixed(1)}%`}</Typography>
+  //       </Box>
+  //     </Box>
+  //   );
+  // };
 
   useEffect(() => {
     getStudentData();
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 0.1));
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 0.1));
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
 
   // useEffect(() => {
   //   const es = new EventSource("http://localhost:3001/fap-data");
@@ -228,6 +228,27 @@ const Dashboard = () => {
   //   es.addEventListener("error", listener);
   //   es.addEventListener("result", listener);
   // }, []);
+
+  const renderContent = () => {
+    console.log(activeTab);
+    switch (activeTab) {
+      case "Import Data": {
+        return renderImportDataUI();
+      }
+      case "Export Data": {
+        return renderDemoData();
+      }
+      case "Quản lí bài đăng": {
+        return <div>Quản lí bài đăng</div>;
+      }
+      case "Quản lí event": {
+        return <div>Quản lí event</div>;
+      }
+      case "Quản lí người dùng": {
+        return <div>Quản lí người dùng</div>;
+      }
+    }
+  };
 
   const renderImportDataUI = () => {
     return (
@@ -270,11 +291,11 @@ const Dashboard = () => {
           variant="outlined">
           Fetch data
         </LoadingButton>
-        {loading && (
+        {/* {loading && (
           <Box sx={{ width: "100%" }}>
             <LinearProgressWithLabel value={progress} />
           </Box>
-        )}
+        )} */}
       </div>
     );
   };
@@ -317,7 +338,7 @@ const Dashboard = () => {
         <Divider />
         <List>
           {["Import Data", "Export Data"].map((text, index) => (
-            <ListItem button key={text} onClick={() => onChangeTab(index === 0 ? "dashboard" : "export")}>
+            <ListItem button key={text} onClick={() => onChangeTab(text)}>
               <ListItemIcon>{index === 0 ? <CloudDownloadIcon /> : <CloudUploadIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -325,8 +346,8 @@ const Dashboard = () => {
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
+          {["Quản lí bài đăng", "Quản lí event", "Quản lí người dùng"].map((text, index) => (
+            <ListItem button key={text} onClick={() => onChangeTab(text)}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -335,7 +356,7 @@ const Dashboard = () => {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {activeTab === "dashboard" ? renderImportDataUI() : renderDemoData()}
+        {renderContent()}
       </Main>
     </Box>
   );
