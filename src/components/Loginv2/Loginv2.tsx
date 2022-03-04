@@ -45,10 +45,10 @@ const Loginv2 = () => {
         <Container maxWidth="sm">
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
-              <Typography color="textPrimary" variant="h4">
+              <Typography color="textPrimary" variant="h4" sx={{ textAlign: "left" }}>
                 Sign in
               </Typography>
-              <Typography color="textSecondary" gutterBottom variant="body2">
+              <Typography color="textSecondary" gutterBottom variant="body2" sx={{ textAlign: "left" }}>
                 Sign in on the internal platform
               </Typography>
             </Box>
