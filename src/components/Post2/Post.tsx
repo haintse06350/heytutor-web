@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useStyles } from "./Post.style";
 import FormControl from "@mui/material/FormControl";
 import Dialog from "@mui/material/Dialog";
@@ -23,6 +23,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { PostCtx } from "../../context/post/state";
 // begin change font
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
@@ -41,8 +42,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 // end change font
 
-export const Post = (props: any) => {
-  const { openDialog, closeDialog } = props;
+export const CreatePost = () => {
   const classes = useStyles();
   // const [open, setOpen] = useState(true);
   const [typePost, setTypePost] = useState();
@@ -50,6 +50,7 @@ export const Post = (props: any) => {
   const [contentPost, setContentPost] = useState("");
   const [hashtag, setHashtag] = useState("");
   const [images, setImages]: any = useState([]);
+  const { discardCreatingPost, isCreatingPost } = useContext(PostCtx);
   // begin change font event
 
   const [formats, setFormats] = React.useState(() => ["italic"]);
@@ -62,6 +63,7 @@ export const Post = (props: any) => {
 
   const handleClose = () => {
     // setOpen(false);
+    discardCreatingPost();
   };
   const handleChangeTypePost = (e: any) => {
     setTypePost(e.target.value);
@@ -88,7 +90,7 @@ export const Post = (props: any) => {
   };
 
   return (
-    <Dialog open={openDialog} onClose={closeDialog} maxWidth="lg" fullWidth={true}>
+    <Dialog open={isCreatingPost} onClose={discardCreatingPost} maxWidth="lg" fullWidth={true}>
       <DialogTitle>Tạo bài viết</DialogTitle>
       <DialogContent>
         <FormControl sx={{ m: 1, minWidth: 200 }} className={classes.selectTypePost}>
@@ -201,4 +203,4 @@ export const Post = (props: any) => {
   );
 };
 
-export default Post;
+export default CreatePost;

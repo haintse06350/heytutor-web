@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useStyles } from "./HomePage.style";
 import SearchIcon from "@mui/icons-material/Search";
 import { Grid, TextField, InputAdornment, Typography, Skeleton } from "@mui/material";
@@ -15,6 +15,8 @@ import PostDetail from "./PostDetail";
 import { Bookmark } from "../../models/bookmark";
 import { map, findIndex } from "lodash";
 import { sortBy } from "lodash";
+import { CreatePost } from "../Post2/Post";
+import { PostCtx } from "../../context/post/state";
 
 const HomePage = () => {
   const classes = useStyles();
@@ -30,6 +32,7 @@ const HomePage = () => {
 
   const [selectedPost, setSelectedPost]: any = useState(null);
   const [activeTab, setActiveTab] = useState("highlight");
+  const { isCreatingPost } = useContext(PostCtx);
 
   const onClickSearch = () => {
     setOpenSearch(true);
@@ -166,6 +169,7 @@ const HomePage = () => {
   return (
     <>
       <Header />
+      {isCreatingPost && <CreatePost />}
       <div className={classes.container}>
         {openSearch && <Search searchQuery={searchQuery} open={openSearch} onClose={onCloseSearch} />}
         {openDialog && <PostDetail post={selectedPost} onCloseDialog={onCloseDialog} openDialog={openDialog} />}

@@ -146,7 +146,7 @@ const UserProfile = () => {
                   maxLength={60}
                   ref={inputStory}
                   className={classes.storyInput}
-                  value={userProfile?.sumarry}
+                  value={userProfile?.summary}
                   onChange={handleChangeStory}
                   readOnly={!isEdit}></textarea>
 

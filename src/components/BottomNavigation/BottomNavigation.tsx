@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useStyles } from "./BottomNavigation.style";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -8,16 +8,22 @@ import AddIcon from "@mui/icons-material/Add";
 import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import { useNavigate } from "react-router-dom";
+import { PostCtx } from "../../context/post/state";
 
 const BottomNav = () => {
   const classes = useStyles();
-  const [value, setValue] = React.useState("home");
+  const [value, setValue] = useState("home");
+  const { createPost } = useContext(PostCtx);
   const navigate = useNavigate();
   const pathname = window.location.pathname;
 
   const onChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-    navigate(`/${newValue}`);
+    if (newValue === "post") {
+      createPost();
+    } else {
+      setValue(newValue);
+      navigate(`/${newValue}`);
+    }
   };
 
   useEffect(() => {

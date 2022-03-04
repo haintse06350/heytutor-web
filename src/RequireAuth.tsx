@@ -5,7 +5,7 @@ import { UserCtx } from "./context/user/state";
 
 const RequireAuth = ({ children }: any) => {
   const { user } = useContext(UserCtx);
-  console.log(user);
+
   if (!user) {
     return <Navigate to="/login" />;
   }

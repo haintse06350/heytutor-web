@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./Header.style";
 import MailIcon from "@mui/icons-material/Mail";
@@ -20,16 +20,16 @@ import Search from "../HomePage/Search/Search";
 import PostDetail from "../HomePage/PostDetail";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
-import Post from "../Post2/Post";
 import AccountPopover from "./AccountPopover/AccountPopover";
 import NotificationsPopover from "./NotificationsPopover/NotificationsPopover";
+import { PostCtx } from "../../context/post/state";
 
 const Header = () => {
   const classes = useStyles();
   const [openSearch, setOpenSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [openDialog, setOpenDialog] = useState(false);
-  const [openCreatePost, setOpenCreatePost] = useState(false);
+  const { createPost } = useContext(PostCtx);
   const navigate = useNavigate();
 
   const onCloseDialog = () => {
@@ -49,12 +49,6 @@ const Header = () => {
     navigate("/home");
   };
 
-  const handleRequiredCreatePost = () => {
-    setOpenCreatePost(true);
-  };
-  const handleRequiredCreatePostClose = () => {
-    setOpenCreatePost(false);
-  };
   return (
     <div className={classes.headerWrap}>
       <AppBar position="static">
@@ -93,12 +87,11 @@ const Header = () => {
           <Box sx={{ display: { xs: "flex", md: "flex", alignItems: "center" } }}>
             <Button
               sx={{ maxHeight: 36, width: 150 }}
-              onClick={handleRequiredCreatePost}
+              onClick={() => createPost()}
               variant="contained"
               startIcon={<AddIcon sx={{ color: "#FFFFFF" }} />}>
               Tạo bài viết
             </Button>
-            {openCreatePost && <Post openDialog={openCreatePost} closeDialog={handleRequiredCreatePostClose}></Post>}
             <Tooltip title={"Sự kiện"}>
               <IconButton size="large" color="inherit">
                 <CelebrationIcon color="primary" />

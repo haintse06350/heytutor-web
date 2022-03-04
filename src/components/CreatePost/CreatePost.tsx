@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useStyles } from "./Post.style";
+import { useStyles } from "./CreatePost.style";
 import { styled } from "@mui/material/styles";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import MenuItem from "@mui/material/MenuItem";
@@ -18,7 +18,7 @@ import { Post as PostModel } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
 import { UserCtx } from "../../context/user/state";
 
-export const Post = () => {
+export const CreatePost = () => {
   const classes = useStyles();
   const [title, setTitle] = useState("");
   const [hashTag, setHashTag] = useState("");
@@ -195,4 +195,4 @@ export const Post = () => {
   );
 };
 
-export default Post;
+export default CreatePost;

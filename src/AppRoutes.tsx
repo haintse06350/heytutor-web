@@ -8,7 +8,7 @@ import PostDetail from "./components/HomePage/PostDetail";
 // import Message from "./components/Message/Message";
 // import Login from "./components/Login/Login";
 import Loginv2 from "./components/Loginv2/Loginv2";
-import Post from "./components/Post/Post";
+import Post from "./components/CreatePost/CreatePost";
 // import Post2 from "./components/Post2/Post";
 import CreateEvent from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";

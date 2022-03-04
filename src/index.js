@@ -5,12 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import NotificationProvider from "./context/notification/state";
 import UserProvider from "./context/user/state";
+import PostProvider from "./context/post/state";
 
 ReactDOM.render(
   <React.StrictMode>
     <NotificationProvider>
       <UserProvider>
-        <App />
+        <PostProvider>
+          <App />
+        </PostProvider>
       </UserProvider>
     </NotificationProvider>
   </React.StrictMode>,
