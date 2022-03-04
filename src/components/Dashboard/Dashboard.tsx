@@ -17,6 +17,8 @@ import {
   Input,
   Select,
   MenuItem,
+  Grid,
+  Skeleton,
 } from "@mui/material";
 // import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -36,6 +38,9 @@ import { keys, map, filter, pick } from "lodash";
 import { TERMS } from "../../constants/terms";
 import { useStyles } from "./Dashboard.style";
 import { Admin } from "../../models/admin";
+import PostItem from "../HomePage/PostItem";
+import { Post } from "../../models/post";
+import PostDetail from "../HomePage/PostDetail";
 
 const drawerWidth = 240;
 
@@ -98,6 +103,10 @@ const Dashboard = () => {
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [cookie, setCookie] = useState("");
+  const [listPost, setListPost]: any = useState(null);
+  const [listAllPost, setAllPost]: any = useState(null);
+  const [selectedPost, setSelectedPost]: any = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   // const [progress, setProgress] = useState(0);
 
   const onClickFetchData = async () => {
@@ -135,6 +144,25 @@ const Dashboard = () => {
       </div>
     );
   };
+
+  const getListPost = async () => {
+      const [allPost] = await Post.listAllPosts();
+      setAllPost(allPost);
+  };
+
+  const onClickCommentSection = (post: any) => {
+    setSelectedPost(post);
+    setOpenDialog(true);
+  };
+
+  const onCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  useEffect(() => {
+    getListPost();
+    setListPost(listAllPost);
+  }, []);
 
   const renderHeaderName = (field: string) => {
     switch (field) {
@@ -239,7 +267,7 @@ const Dashboard = () => {
         return renderDemoData();
       }
       case "Quản lí bài đăng": {
-        return <div>Quản lí bài đăng</div>;
+        return renderListPost();
       }
       case "Quản lí event": {
         return <div>Quản lí event</div>;
@@ -248,6 +276,75 @@ const Dashboard = () => {
         return <div>Quản lí người dùng</div>;
       }
     }
+  };
+
+  const renderListPost = () => {
+    return (
+      <>
+        <div className={classes.postFilter}></div>
+        {!listPost
+          ? map(Array.from(Array(10)), (item: any, index: number) => renderLoadingPost(index))
+          : listPost.map((post: any, i: number) => (
+              <div key={i} className={classes.post}>
+                <PostItem post={post} onClickCommentSection={onClickCommentSection} />
+              </div>
+            ))}
+        {}
+      </>
+    );
+  };
+
+  const renderLoadingPost = (index: number) => {
+    return (
+      <div key={index} className={classes.post}>
+        {openDialog && <PostDetail post={selectedPost} onCloseDialog={onCloseDialog} openDialog={openDialog} />}
+        <Grid container className={classes.userPanel}>
+          <Grid item xs={2} className={classes.userAvatar}>
+            <Skeleton width={30} height={30} variant="circular" />
+          </Grid>
+          <Grid item xs={8} className={classes.userNameAndPostTime}>
+            <Skeleton width={160} variant="text" />
+            <Skeleton width={60} variant="text" />
+          </Grid>
+          <Grid item xs={2} className={classes.userOptionPost}>
+            <Skeleton width={20} height={10} variant="rectangular" />
+          </Grid>
+        </Grid>
+        <div className={classes.postContent}>
+          <Skeleton width={200} variant="text" />
+          <Skeleton width={500} variant="text" />
+          <div className={classes.hashTag}>
+            {map(Array.from(Array(3)), (item: any, index: number) => (
+              <Skeleton
+                key={index}
+                width={50}
+                height={26}
+                style={{ marginRight: 8, borderRadius: 8 }}
+                variant="rectangular"
+              />
+            ))}
+          </div>
+        </div>
+        <Grid container className={classes.postActions}>
+          <Grid item xs={8} className={classes.leftPanel}>
+            <div className={classes.likeButton}>
+              <Skeleton width={20} variant="rectangular" />
+              <Skeleton width={16} style={{ marginLeft: 8 }} variant="text" />
+            </div>
+            <div className={classes.commentButton}>
+              <Skeleton width={20} variant="rectangular" />
+              <Skeleton width={16} style={{ marginLeft: 8 }} variant="text" />
+            </div>
+          </Grid>
+          <Grid item xs={4} className={classes.rightPanel}>
+            <div className={classes.btnResolve}>
+              <Skeleton width={20} variant="rectangular" />
+              <Skeleton width={50} style={{ marginLeft: 8 }} variant="text" />
+            </div>
+          </Grid>
+        </Grid>
+      </div>
+    );
   };
 
   const renderImportDataUI = () => {
