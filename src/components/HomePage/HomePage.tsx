@@ -84,16 +84,20 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    if (listPostHighlight) {
+      setActiveTab("highlight");
+    } else {
+      setActiveTab("all");
+    }
+  }, [listPostHighlight, listAllPost]);
+
+  useEffect(() => {
     if (activeTab === "highlight") {
-      if (listPostHighlight) {
-        setListPost(listPostHighlight);
-      } else {
-        setActiveTab("all");
-      }
-    } else if (activeTab === "all" && listAllPost) {
+      setListPost(listPostHighlight);
+    } else {
       setListPost(listAllPost);
     }
-  }, [activeTab, listPostHighlight, listAllPost]);
+  }, [activeTab]);
 
   const renderLoadingPost = (index: number) => {
     return (

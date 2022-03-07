@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import Notification from "../../components/Notification/Notification";
+import InAppNotification from "../../components/InAppNotification/InAppNotification";
 import { INITIAL_STATE } from "./constants";
 import { setShowNotif, setNotificationError, setNotificationSuccess, setNotificationInfo } from "./dispatchers";
 import Reducer from "./reducer";
@@ -20,7 +20,7 @@ export default function NotificationProvider({ children }: any) {
   return (
     <NotificationCtx.Provider value={{ ...state, ...setters }}>
       <>
-        {state.isShowNotification && <Notification />}
+        {state.isShowNotification && <InAppNotification />}
         {children}
       </>
     </NotificationCtx.Provider>

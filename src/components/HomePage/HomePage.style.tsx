@@ -153,6 +153,7 @@ export const useStyles: any = makeStyles(() => ({
     alignItems: "center",
     justifyContent: "flex-start",
     "& > div": {
+      padding: 6,
       cursor: "pointer",
       width: "100%",
       display: "flex",
@@ -165,12 +166,13 @@ export const useStyles: any = makeStyles(() => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-start",
-        marginRight: 20,
+        "&  >button": {
+          width: 40,
+          maxWidth: 40,
+          minWidth: 40,
+        },
         "&:last-child": {
           margin: 0,
-        },
-        "& > p": {
-          marginLeft: 6,
         },
       },
     },
@@ -346,6 +348,10 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
     width: "100%",
     height: "100%",
+    "& > button": {
+      position: "absolute",
+      padding: "6px 18px",
+    },
   },
   avatar: {
     "& > div": {
@@ -395,16 +401,19 @@ export const useStyles: any = makeStyles(() => ({
     },
   },
   inboxButton: {
+    height: 30,
     position: "absolute",
+    padding: "6px 18px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     right: 10,
     bottom: 10,
-    padding: "2px 4px",
     cursor: "pointer",
     border: "1px solid #0288d1",
-    borderRadius: 4,
+    borderRadius: 8,
     "& > p": {
       fontSize: 14,
-      color: "#0288d1",
     },
   },
   // chatListEngine: {

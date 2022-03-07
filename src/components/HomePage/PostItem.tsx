@@ -22,6 +22,7 @@ import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import { Button, Tooltip } from "@mui/material";
 import { UserCtx } from "../../context/user/state";
+
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
@@ -123,6 +124,11 @@ const PostItem = (props: any) => {
     // Post.report({ postId: post.id, userId: post.user.id });
   };
 
+  const onClickMessage = () => {
+    setOnHover(false);
+    setUserProfile(null);
+  };
+
   const renderOption = (
     <Menu
       anchorEl={anchorEl}
@@ -214,9 +220,9 @@ const PostItem = (props: any) => {
                 </div>
               </div>
             </div>
-            <div className={classes.inboxButton}>
+            <Button onClick={onClickMessage} variant="outlined" color="primary" className={classes.inboxButton}>
               <Typography>Nhắn tin</Typography>
-            </div>
+            </Button>
           </div>
         )}
       </div>
@@ -231,6 +237,11 @@ const PostItem = (props: any) => {
     }
   }, [onHover]);
 
+  useEffect(() => {
+    post && setPostItem(post);
+  }, [post]);
+
+  console.log(postItem);
   return (
     <div>
       <Grid container className={classes.userPanel}>
@@ -261,13 +272,13 @@ const PostItem = (props: any) => {
         <Grid item xs={8} className={classes.leftPanel}>
           <div onClick={() => onClickLike(postItem)}>
             {isLiked ? (
-              <Tooltip title={"Thích"}>
+              <Tooltip title={"Bỏ Thích"}>
                 <Button aria-label="like">
                   <ThumbUpIcon color="primary" />
                 </Button>
               </Tooltip>
             ) : (
-              <Tooltip title={"Không thích"}>
+              <Tooltip title={"Thích"}>
                 <Button aria-label="dislike">
                   <ThumbUpOutlinedIcon color="primary" />
                 </Button>
@@ -285,13 +296,13 @@ const PostItem = (props: any) => {
           </div>
           <div onClick={() => onClickBookmarkPost(post)}>
             {isBookmarked ? (
-              <Tooltip title={"Lưu bài"}>
+              <Tooltip title={"Bỏ Lưu bài"}>
                 <Button aria-label="Bookmark">
                   <BookmarkAddedIcon color="primary" />
                 </Button>
               </Tooltip>
             ) : (
-              <Tooltip title={"Không lưu bài"}>
+              <Tooltip title={"Lưu bài viết"}>
                 <Button>
                   <BookmarkAddOutlinedIcon color="primary" />
                 </Button>

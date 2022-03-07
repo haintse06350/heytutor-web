@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { useStyles } from "./Notification.style";
+import { useStyles } from "./InAppNotification.style";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { NotificationCtx } from "../../context/notification/state";
@@ -8,7 +8,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const Notification = () => {
+const InAppNotification = () => {
   const classes = useStyles();
   const { setShowNotif, classify, message } = useContext(NotificationCtx);
 
@@ -39,4 +39,4 @@ const Notification = () => {
   );
 };
 
-export default Notification;
+export default InAppNotification;
