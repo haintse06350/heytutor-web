@@ -225,12 +225,16 @@ export const useStyles: any = makeStyles(() => ({
     marginBottom: "40px",
     "& > Button": {
       width: "10%",
+      maxWidth: 110,
       height: "5%",
-      marginTop: "10px",
+      margin: "auto 0",
     },
     "& > div": {
       width: "70%",
       marginRight: "40px",
+    },
+    "& > svg": {
+      margin: "0 auto",
     },
   },
   loading: {
@@ -292,22 +296,23 @@ export const useStyles: any = makeStyles(() => ({
     justifyContent: "flex-start",
   },
   commentContent: {
+    minWidth: 120,
     marginLeft: 8,
     background: "#F8F8F8",
     padding: 8,
     borderRadius: 12,
-    position: "relative",
-    "& > p:first-child": {
-      fontSize: 16,
-      fontWeight: 500,
-    },
-    "& > div": {
-      position: "absolute",
-      top: 3,
-      right: 10,
-    },
+
     "& > Button": {
       width: "100%",
+    },
+  },
+  commentContentHeader: {
+    position: "relative",
+    display: "flex",
+    "& > p": {
+      minWidth: 100,
+      fontSize: 16,
+      fontWeight: 500,
     },
   },
 
@@ -333,8 +338,11 @@ export const useStyles: any = makeStyles(() => ({
     zIndex: 20,
     height: 140,
     width: 340,
+    maxWidth: 340,
+    maxHeight: 140,
     backgroundColor: "#ffffff",
-    border: "1px solid #ebeef5",
+    border: "1px solid red",
+    // #ebeef5
     borderRadius: 4,
     padding: 12,
     display: "block",
@@ -344,8 +352,8 @@ export const useStyles: any = makeStyles(() => ({
   },
   previewProfileContent: {
     display: "flex",
-    width: "100%",
-    height: "100%",
+    maxWidth: 340,
+    maxHeight: 140,
   },
   avatar: {
     "& > div": {
