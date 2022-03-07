@@ -9,6 +9,7 @@ import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneR
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import { useNavigate } from "react-router-dom";
 import { PostCtx } from "../../context/post/state";
+import { Grid } from "@mui/material";
 
 const BottomNav = () => {
   const classes = useStyles();
@@ -32,7 +33,7 @@ const BottomNav = () => {
 
   return (
     <>
-      <div id="bottom-nav" className={classes.bottomNavigation}>
+      <Grid sx={{ display: { xs: "flex", sm: "none" } }} id="bottom-nav" className={classes.bottomNavigation}>
         <BottomNavigation sx={{ width: 500 }} value={value} onChange={onChange}>
           <BottomNavigationAction label="Trang chủ" value="home" icon={<HomeIcon />} />
           <BottomNavigationAction label="Sự kiện" value="event" icon={<CelebrationIcon />} />
@@ -40,7 +41,7 @@ const BottomNav = () => {
           <BottomNavigationAction label="Thông báo" value="notification" icon={<NotificationsNoneRoundedIcon />} />
           <BottomNavigationAction label="Trang cá nhân" value="profile" icon={<PermIdentityIcon />} />
         </BottomNavigation>
-      </div>
+      </Grid>
     </>
   );
 };

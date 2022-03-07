@@ -1,7 +1,5 @@
 import React from "react";
 import { useStyles } from "./Feedback.style";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import Header from "../Common/Header/Header";
 import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
@@ -11,19 +9,12 @@ import Button from "@mui/material/Button";
 
 const Feedback = () => {
   const classes = useStyles();
-  const onDiscard = () => {
-    console.log("discard clicked");
-  };
+
   const [value, setValue] = React.useState(0);
 
   return (
     <Box className={classes.feedback}>
-      <div >
-        <Header
-          leftIcon={<ArrowBackIosIcon fontSize="small" sx={{ color: "white" }} />}
-          actionLeft={onDiscard}
-          titleCenter={"Feedback"}
-        />
+      <div>
         <Box className={classes.middleBox}>
           <div className={classes.title}>
             <h1>Rate your experience</h1>
@@ -39,7 +30,7 @@ const Feedback = () => {
           />
           {/* <LinearProgress color="inherit" /> */}
           <hr></hr>
-          <div >
+          <div>
             <h3>Tell us what can be improve!</h3>
             <Fab variant="extended" aria-label="add">
               Overall Service
@@ -58,16 +49,14 @@ const Feedback = () => {
             </Fab>
           </div>
           <div>
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              rows={4}
-              defaultValue="Default Value"
-            />
+            <TextField id="outlined-multiline-static" multiline rows={4} defaultValue="Default Value" />
           </div>
         </Box>
         <Box className={classes.bottomBox}>
-          <Button className={classes.bottomButton} variant="contained" style={{height: '50px', width : '370px', borderRadius: 8, background:"#f20c32"}}>
+          <Button
+            className={classes.bottomButton}
+            variant="contained"
+            style={{ height: "50px", width: "370px", borderRadius: 8, background: "#f20c32" }}>
             Summit
           </Button>
         </Box>

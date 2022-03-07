@@ -3,7 +3,6 @@ import { useStyles } from "./CreatePost.style";
 import { styled } from "@mui/material/styles";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import MenuItem from "@mui/material/MenuItem";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
@@ -13,7 +12,6 @@ import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import Header from "../Common/Header/Header";
 import { Post as PostModel } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
 import { UserCtx } from "../../context/user/state";
@@ -92,14 +90,6 @@ export const CreatePost = () => {
 
   return (
     <div className={classes.post}>
-      <Header
-        isLoading={loading}
-        leftIcon={<ArrowBackIosIcon fontSize="small" sx={{ color: "white" }} />}
-        actionLeft={onDiscard}
-        actionRight={onPost}
-        rightIcon={<SendIcon fontSize="small" sx={{ color: "white" }} />}
-        titleCenter={"Tạo bài viết"}
-      />
       <div className={classes.contentPost}>
         {/* content post */}
         <div className={classes.contentDetail}>

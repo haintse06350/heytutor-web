@@ -18,7 +18,7 @@ import {
   ListItemAvatar,
   ListItemButton,
 } from "@mui/material";
-import MenuPopover from "../AccountPopover/MenuPopover";
+import MenuPopover from "./MenuPopover";
 import Scrollbar from "./Scrollbar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";

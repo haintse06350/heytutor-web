@@ -20,8 +20,8 @@ import Search from "../HomePage/Search/Search";
 import PostDetail from "../HomePage/PostDetail";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
-import AccountPopover from "./AccountPopover/AccountPopover";
-import NotificationsPopover from "./NotificationsPopover/NotificationsPopover";
+import AccountPopover from "./AccountPopover";
+import NotificationsPopover from "./NotificationsPopover";
 import { PostCtx } from "../../context/post/state";
 
 const Header = () => {

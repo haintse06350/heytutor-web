@@ -1,14 +1,17 @@
+import React from "react";
 import "./App.css";
 import AppRoutes from "./AppRoutes";
-import React from "react";
-import withTheme from "./withTheme";
+import ThemeConfig from "./theme";
+import GlobalStyles from "./theme/globalStyles";
+// theme
 
-function App() {
+// ----------------------------------------------------------------------
+
+export default function App() {
   return (
-    <div className="App">
+    <ThemeConfig>
+      <GlobalStyles />
       <AppRoutes />
-    </div>
+    </ThemeConfig>
   );
 }
-
-export default withTheme(App);

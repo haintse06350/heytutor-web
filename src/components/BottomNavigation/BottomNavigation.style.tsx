@@ -8,7 +8,6 @@ export const useStyles: any = makeStyles((theme) => ({
     width: "100%",
     bottom: 0,
     height: 62,
-    display: "flex",
     justifyContent: "center",
     alignItems: "center",
     boxShadow: "0px -4px 4px rgba(0, 0, 0, 0.15)",

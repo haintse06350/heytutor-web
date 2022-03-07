@@ -4,26 +4,14 @@ import { Link as RouterLink } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from "@mui/material";
 // components
-import Iconify from "./Iconify";
 import MenuPopover from "./MenuPopover";
-
-import { UserCtx } from "../../../context/user/state";
-import { stringAvatar } from "../../UserProfile/helper";
-
-// ----------------------------------------------------------------------
-
-const MENU_OPTIONS = [
-  {
-    label: "Profile",
-    icon: "eva:person-fill",
-    linkTo: "/profile",
-  },
-  {
-    label: "Settings",
-    icon: "eva:settings-2-fill",
-    linkTo: "#",
-  },
-];
+//context
+import { UserCtx } from "../../context/user/state";
+//utils
+import { stringAvatar } from "../UserProfile/helper";
+//icons
+import PersonIcon from "@mui/icons-material/Person";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 // ----------------------------------------------------------------------
 
@@ -75,25 +63,37 @@ export default function AccountPopover() {
 
         <Divider sx={{ my: 1 }} />
 
-        {MENU_OPTIONS.map((option) => (
-          <MenuItem
-            key={option.label}
-            to={option.linkTo}
-            component={RouterLink}
-            onClick={handleClose}
-            sx={{ typography: "body2", py: 1, px: 2.5 }}>
-            <Iconify
-              icon={option.icon}
-              sx={{
-                mr: 2,
-                width: 24,
-                height: 24,
-              }}
-            />
+        <MenuItem
+          key={"profile"}
+          to={"/profile"}
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: "body2", py: 1, px: 2.5 }}>
+          <PersonIcon
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24,
+            }}
+          />
+          Profile
+        </MenuItem>
 
-            {option.label}
-          </MenuItem>
-        ))}
+        <MenuItem
+          key={"setting"}
+          to={"/setting"}
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: "body2", py: 1, px: 2.5 }}>
+          <SettingsIcon
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24,
+            }}
+          />
+          Setting
+        </MenuItem>
 
         <Box sx={{ p: 2, pt: 1.5 }}>
           <Button
