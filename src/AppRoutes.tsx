@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Chat from "./components/Chat/Chat";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -16,12 +16,13 @@ import LimitActivity from "./components/Dialog/LimitActivity/LimitActivity";
 import RemovePost from "./components/Dialog/RemovePost/RemovePost";
 import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 
-import UserProfile from "./components/UserProfile/UserProfile";
-import { UserCtx } from "./context/user/state";
+// import UserProfile from "./components/UserProfile/UserProfile";
+// import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
+import NotFound from "./components/NotFound/NotFound";
 
 export default function AppRoutes() {
-  const { user }: any = useContext(UserCtx);
+  // const { user }: any = React.useContext(UserCtx);
 
   return (
     <Router>
@@ -35,10 +36,12 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-          <Route
+
+          {/** test */}
+          {/* <Route
             path={"/profile"}
             element={<RequireAuth>{user?.isAdmin ? <Dashboard /> : <UserProfile />}</RequireAuth>}
-          />
+          /> */}
           <Route
             path={"/home"}
             element={
@@ -48,6 +51,12 @@ export default function AppRoutes() {
             }
           />
           <Route path={"/login"} element={<Loginv2 />} />
+
+          {/** chưa có page */}
+          <Route path={"/profile"} element={<NotFound />} />
+          <Route path={"/event"} element={<NotFound />} />
+          <Route path={"/notification"} element={<NotFound />} />
+
           <Route
             path={"/post"}
             element={

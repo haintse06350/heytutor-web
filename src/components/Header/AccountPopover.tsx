@@ -48,16 +48,16 @@ export default function AccountPopover() {
             },
           }),
         }}>
-        <Avatar {...stringAvatar(user?.name)} alt="photoURL" />
+        <Avatar {...stringAvatar(user?.name || "Trung Hai")} alt="photoURL" />
       </IconButton>
 
       <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ width: 220 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {user?.name}
+            {user?.name || "Nguyễn Trung Hải"}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {user?.email}
+            {user?.email || "haintse06350@fpt.edu.vn"}
           </Typography>
         </Box>
 

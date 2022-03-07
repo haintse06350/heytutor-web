@@ -21,10 +21,10 @@ const OnGoingEvent = () => {
   return (
     <Card>
       <Grid container>
-        <Grid item xs={10}>
+        <Grid item xs={9}>
           <CardHeader title="Sự kiện đang diễn ra" subheader="Còn 4 ngày" />
         </Grid>
-        <Grid item xs={2} sx={{ p: 3, textAlign: "end" }}>
+        <Grid item xs={3} sx={{ p: 3, textAlign: "end" }}>
           <EventPopover />
         </Grid>
       </Grid>
