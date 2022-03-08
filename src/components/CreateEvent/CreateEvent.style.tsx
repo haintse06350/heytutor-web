@@ -4,17 +4,17 @@ export const useStyles: any = makeStyles(
   () => ({
     hashtag: {},
     title: {
-      color:"blue"
+      color: "blue",
     },
-    
-  contentDetailPost: {
-    width: "100%",
-    minHeight: 200,
-    height: "30vh",
-    margin: "10px 0",
-    padding: 15,
-    fontSize: 16,
-  },
+
+    contentDetailPost: {
+      width: "100%",
+      minHeight: 200,
+      height: "30vh",
+      margin: "10px 0",
+      padding: 15,
+      fontSize: 16,
+    },
     userPanel: {
       "& > div": {
         "&:first-child": {

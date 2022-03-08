@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useStyles } from "./Search.style";
-import { Dialog, Typography, TextField, InputAdornment, Avatar } from "@mui/material";
+import { Dialog, Typography, TextField, InputAdornment, Avatar, Box, Tooltip, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { debounce } from "lodash";
 import { Post } from "../../../models/post";
 import { map } from "lodash";
 import clsx from "classnames";
 import moment from "moment";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 
 const Search = (props: any) => {
   const { open, onClose, searchQuery } = props;
@@ -35,20 +38,6 @@ const Search = (props: any) => {
 
   const debounceSearch = useCallback(debounce(onSearch, 500), []);
 
-  useEffect(() => {
-    if (query === "") {
-      setSearchResult(null);
-    }
-
-    debounceSearch(query);
-  }, [query]);
-
-  useEffect(() => {
-    if (searchQuery) {
-      setQuery(searchQuery);
-    }
-  }, [searchQuery]);
-
   const renderHashTag = (hashTag: string) => {
     let hashTagArray: any = null;
     try {
@@ -58,6 +47,19 @@ const Search = (props: any) => {
     }
     return map(hashTagArray, (item: string, idx: number) => <span key={idx}>{item}</span>);
   };
+
+  useEffect(() => {
+    if (query === "") {
+      setSearchResult(null);
+    }
+    debounceSearch(query);
+  }, [query]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setQuery(searchQuery);
+    }
+  }, [searchQuery]);
 
   return (
     <Dialog open={open} onClose={onClose} fullScreen>
@@ -102,13 +104,16 @@ const Search = (props: any) => {
           {searchResult && (
             <div className={classes.searchResult}>
               <div className={classes.filter}>
-                {map(["All", "Post", "User", "Event"], (filter: string) => (
-                  <div
-                    className={clsx(classes.filterItem, activeFilter === filter && classes.active)}
-                    onClick={() => onChangeFilter(filter)}>
-                    {filter}
-                  </div>
-                ))}
+                <div className={classes.formSelect}></div>
+                <div className={classes.filterItemContainer}>
+                  {map(["All", "Post", "User", "Event"], (filter: string) => (
+                    <div
+                      className={clsx(classes.filterItem, activeFilter === filter && classes.active)}
+                      onClick={() => onChangeFilter(filter)}>
+                      {filter}
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className={classes.countResult}>{searchResult?.length} results</div>
               {searchResult.map((item: any, index: number) => (
@@ -125,14 +130,42 @@ const Search = (props: any) => {
                       </Typography>
                       <div className={classes.hashTag}>{renderHashTag(item.hashtag)}</div>
                       <div className={classes.postReaction}>
-                        <div>
-                          <ThumbUpOutlinedIcon />
-                          <span>{item.likeCount}</span>
-                        </div>
-                        <div>
-                          <ChatBubbleOutlineOutlinedIcon />
-                          <span>{item.commentCount}</span>
-                        </div>
+                        <Tooltip title="Số lượt xem">
+                          <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                            <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                            <Typography style={{ fontSize: 14 }}>10</Typography>
+                          </Box>
+                        </Tooltip>
+                        <Tooltip title="Số lượt đăng kí">
+                          <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                            <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                            <Typography style={{ fontSize: 14 }}>5</Typography>
+                          </Box>
+                        </Tooltip>
+                        <Tooltip title="Số bình luận">
+                          <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                            <CommentOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                            <Typography style={{ fontSize: 14 }}>15</Typography>
+                          </Box>
+                        </Tooltip>
+                        <Tooltip title="Chưa giải quyết">
+                          <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                            <RemoveDoneIcon color="error" sx={{ mr: 0.5, width: 20, height: 20 }} />
+                          </Box>
+                        </Tooltip>
+                        <Tooltip title="Đã giải quyết">
+                          <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                            <DoneAllIcon color="success" sx={{ mr: 0.5, width: 20, height: 20 }} />
+                          </Box>
+                        </Tooltip>
+                      </div>
+                      <div className={classes.button}>
+                        <Button variant="contained" color="primary">
+                          Đăng ký
+                        </Button>
+                        <Button variant="contained" color="primary">
+                          Xem chi tiết
+                        </Button>
                       </div>
                     </div>
                   </div>

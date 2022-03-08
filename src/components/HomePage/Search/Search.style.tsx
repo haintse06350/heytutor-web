@@ -60,11 +60,22 @@ export const useStyles: any = makeStyles(() => ({
     },
   },
   filter: {
-    display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 10,
   },
+  formSelect: {
+    width: "100%",
+    position: "relative",
+    "& > div": {
+      margin: "10px 20px 10px 0",
+    },
+    "& > Button": {
+      position: "absolute",
+      bottom: 12,
+    },
+  },
+  filterItemContainer: { display: "flex" },
   filterItem: {
     width: "auto",
     height: 30,
@@ -99,9 +110,15 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
   },
   postUser: {
+    position: "relative",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    minWidth: 40,
+    "& > div": {
+      position: "absolute",
+      top: 5,
+    },
   },
   postContent: {
     marginLeft: 10,
@@ -153,7 +170,20 @@ export const useStyles: any = makeStyles(() => ({
       lineHeight: "16px",
       letterSpacing: -0.2,
       fontWeight: 400,
+      backgroundColor: "#bfbebe",
       color: "#727477",
+      borderRadius: 4,
+      padding: 3,
     },
+  },
+  button: {
+    margin: "5px 0",
+    "& > Button": {
+      marginLeft: 12,
+    },
+  },
+  previewProfileContent: {
+    width: "100%",
+    height: 42,
   },
 }));

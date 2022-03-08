@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 //material
 import { Typography, Box, Button } from "@mui/material";
 //components
 import MainTabLayout from "../../layout/MainTabLayout";
+import { PostCtx } from "../../context/post/state";
+
 //icons
 import ArticleIcon from "@mui/icons-material/Article";
 
 const MyPost = () => {
+  const { createPost } = useContext(PostCtx);
+
   const renderMyPostContent = (myPostData: any) => {
     if (myPostData.length === 0) {
       return (
@@ -21,7 +25,7 @@ const MyPost = () => {
           <Typography variant="subtitle2" sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
             Tạo bài viết ngay để tìm người giải quyết vấn đề của bạn
           </Typography>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={() => createPost()}>
             Tạo bài viết
           </Button>
         </Box>

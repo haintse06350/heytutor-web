@@ -4,7 +4,7 @@ import Chat from "./components/Chat/Chat";
 import Dashboard from "./components/Dashboard/Dashboard";
 // import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
-import PostDetail from "./components/HomePage/PostDetail";
+// import PostDetail from "./components/HomePage/PostDetail";
 // import Message from "./components/Message/Message";
 // import Login from "./components/Login/Login";
 import Loginv2 from "./components/Loginv2/Loginv2";
@@ -20,6 +20,7 @@ import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 // import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
+import Header from "./components/Header/Header";
 
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
@@ -83,7 +84,7 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-          <Route path={"/test"} element={<PostDetail />} />
+          <Route path={"/test"} element={<Header />} />
           <Route path={"/limitActivity"} element={<LimitActivity />} />
           <Route path={"/removePost"} element={<RemovePost />} />
           <Route path={"/removeComment"} element={<RemoveComment />} />
