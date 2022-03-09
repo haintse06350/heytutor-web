@@ -21,6 +21,7 @@ import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/HomePage/PostItem";
+import ManagerUser from "./components/ManagerUser/ManagerUser";
 
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
@@ -101,6 +102,7 @@ export default function AppRoutes() {
               />
             }
           />
+          <Route path={"/testTableList"} element={<ManagerUser />} />
           <Route path={"/limitActivity"} element={<LimitActivity />} />
           <Route path={"/removePost"} element={<RemovePost />} />
           <Route path={"/removeComment"} element={<RemoveComment />} />

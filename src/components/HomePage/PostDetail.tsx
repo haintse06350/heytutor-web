@@ -1,23 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import React, { useState, useEffect } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SendIcon from "@mui/icons-material/Send";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import { Avatar, Dialog, Grid, Typography } from "@mui/material";
+import { Avatar, Dialog, Grid, Typography, Box, Tooltip, MenuItem, Menu, Button } from "@mui/material";
 import { useStyles } from "./HomePage.style";
 import { Comment as CommentModel } from "../../models/comment";
 import { stringAvatar } from "../UserProfile/helper";
 import moment from "moment";
-import { MenuItem, Menu, Button, Tooltip } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import EmailIcon from "@mui/icons-material/Email";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Post } from "../../models/post";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
-import { Bookmark } from "../../models/bookmark";
-import { NotificationCtx } from "../../context/notification/state";
+import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+// import DoneAllIcon from "@mui/icons-material/DoneAll";
+// import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 
 const PostDetail = (props: any) => {
   const { post, onCloseDialog, openDialog } = props;
@@ -28,21 +23,9 @@ const PostDetail = (props: any) => {
   const classes = useStyles();
   const onClickCommentSectionInsideDialog = () => {};
   const [postItem, setPostItem] = useState(post);
-  const [isLiked, setIsliked] = useState(post?.isLiked);
-  const [isBookmarked, setIsBookmarked] = useState(post?.isBookmarked);
-  const { setNotificationSuccess } = useContext(NotificationCtx);
-
-  const onClickLike = async (post: any) => {
-    setIsliked(!isLiked);
-    const params = {
-      postId: postItem?.id,
-    };
-
-    const res = await Post.likePost(params);
-    setPostItem({ ...res, user: post.user });
-  };
   const onSendComment = () => {
     console.log("comment send");
+    setPostItem(postItem);
   };
   const handleClose = () => {
     setOptionCommentOpen(false);
@@ -62,18 +45,6 @@ const PostDetail = (props: any) => {
     setOptionCommentOpen(true);
   };
 
-  const onClickBookmarkPost = async (post: any) => {
-    if (isBookmarked) {
-      await Bookmark.removeBookmark({ postId: post.id });
-      setNotificationSuccess("Removed from your bookmarks !");
-    } else {
-      const res = await Bookmark.addBookmark({ postId: post.id });
-      if (res.id) {
-        setNotificationSuccess("Add bookmark successfully !");
-      }
-    }
-    setIsBookmarked(!isBookmarked);
-  };
   //begin render menu avatar
   const renderMenuOptionComment = (
     <Menu
@@ -126,47 +97,40 @@ const PostDetail = (props: any) => {
             <Typography>{post?.hashtag}</Typography>
           </div>
           <Grid container item xs={12} className={classes.simpleActions}>
-            <div className={classes.likeButton} onClick={() => onClickLike(postItem)}>
-              {isLiked ? (
-                <Tooltip title={"Thích"}>
-                  <Button aria-label="like">
-                    <ThumbUpIcon color="primary" />
-                  </Button>
-                </Tooltip>
-              ) : (
-                <Tooltip title={"Không thích"}>
-                  <Button aria-label="dislike">
-                    <ThumbUpOutlinedIcon color="primary" />
-                  </Button>
-                </Tooltip>
-              )}
-              <Typography>{postItem?.likeCount}</Typography>
-            </div>
-
-            <div className={classes.commentButton} onClick={onClickCommentSectionInsideDialog}>
-              <Tooltip title={"Bình luận"}>
-                <Button aria-label="comment">
-                  <ChatBubbleOutlineOutlinedIcon color="primary" />
-                </Button>
+            <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+              <Tooltip title="Số lượt xem">
+                <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                  <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                  <Typography style={{ fontSize: 14 }}>15</Typography>
+                </Box>
               </Tooltip>
-              <Typography>{postItem?.commentCount}</Typography>
-            </div>
-
-            <div className={classes.bookmarkBtn} onClick={() => onClickBookmarkPost(post)}>
-              {isBookmarked ? (
-                <Tooltip title={"Lưu bài"}>
-                  <Button aria-label="Bookmark">
-                    <BookmarkAddedIcon color="primary" />
+              <Tooltip title="Số lượt đăng kí">
+                <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                  <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                  <Typography style={{ fontSize: 14 }}>5</Typography>
+                </Box>
+              </Tooltip>
+              <div className={classes.commentButton} onClick={onClickCommentSectionInsideDialog}>
+                <Tooltip title={"Bình luận"}>
+                  <Button aria-label="comment" startIcon={<CommentOutlinedIcon color="primary" />}>
+                    <Typography style={{ fontSize: 14 }}>{postItem?.commentCount}</Typography>
                   </Button>
                 </Tooltip>
-              ) : (
-                <Tooltip title={"Không lưu bài"}>
-                  <Button>
-                    <BookmarkAddOutlinedIcon color="primary" />
-                  </Button>
-                </Tooltip>
-              )}
-            </div>
+                <Typography>{postItem?.commentCount}</Typography>
+              </div>
+              {/* lấy giá trị isResolved của post để thêm vào đây chứ k phải click */}
+              {/* <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
+                {isResolved ? (
+                  <Tooltip title="Đã giải quyết">
+                    <DoneAllIcon color="success" />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Chưa giải quyết">
+                    <RemoveDoneIcon color="error" />
+                  </Tooltip>
+                )}
+              </div> */}
+            </Box>
           </Grid>
 
           <div className={classes.commentSection}>
@@ -185,12 +149,6 @@ const PostDetail = (props: any) => {
                       <div onClick={handleOpenOptionComment}>
                         <MoreHorizIcon />
                       </div>
-
-                      <Tooltip title={"Nhắn tin"}>
-                        <Button aria-label="Nhắn tin">
-                          <EmailIcon color="action" />
-                        </Button>
-                      </Tooltip>
 
                       {isOptionCommentOpen && renderMenuOptionComment}
                     </div>
