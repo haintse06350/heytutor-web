@@ -1,78 +1,34 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Grid, Typography, Avatar, Menu, MenuItem, Skeleton } from "@mui/material";
-import { useStyles } from "./HomePage.style";
-import { stringAvatar } from "../UserProfile/helper";
-import moment from "moment";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import { Grid, Typography, Menu, MenuItem, Tooltip, Box, Button } from "@mui/material";
+import { useStyles } from "./PostItem.style";
+// import { stringAvatar } from "../UserProfile/helper";
+// import moment from "moment";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { map } from "lodash";
-import { Post } from "../../models/post";
-import { Bookmark } from "../../models/bookmark";
-import { NotificationCtx } from "../../context/notification/state";
 import clsx from "classnames";
-import { User } from "../../models/users";
-import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
-import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import { Button, Tooltip } from "@mui/material";
 import { UserCtx } from "../../context/user/state";
-
+import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
-  const navigate = useNavigate();
-
-  const [isLiked, setIsliked] = useState(post?.isLiked);
+  // const navigate = useNavigate();
   const [isResolved, setIsResolved] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(post?.isBookmarked);
   const [postItem, setPostItem] = useState(post);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
-  const [userProfile, setUserProfile]: any = useState(null);
-  const [onHover, setOnHover] = useState(false);
-
-  const { setNotificationSuccess } = useContext(NotificationCtx);
   const { user } = useContext(UserCtx);
 
   const isMyPost = (postItem: any) => {
     return postItem?.user?.id === user?.id;
   };
 
-  const onClickLike = async (post: any) => {
-    setIsliked(!isLiked);
-    const params = {
-      postId: postItem?.id,
-    };
-
-    const res = await Post.likePost(params);
-    setPostItem({ ...res, user: post.user });
-  };
-
-  const onClickBookmarkPost = async (post: any) => {
-    if (isBookmarked) {
-      await Bookmark.removeBookmark({ postId: post.id });
-      setNotificationSuccess("Removed from your bookmarks !");
-    } else {
-      const res = await Bookmark.addBookmark({ postId: post.id });
-      if (res.id) {
-        setNotificationSuccess("Add bookmark successfully !");
-      }
-    }
-    setIsBookmarked(!isBookmarked);
-  };
-
   const onClickResolve = (post: any) => {
     setIsResolved(!isResolved);
-  };
-
-  const onClickProfile = (userId: number) => {
-    navigate(`/profile/?userId=${userId}`);
   };
 
   const renderHashTag = (hashTag: string) => {
@@ -89,21 +45,13 @@ const PostItem = (props: any) => {
       };
     });
 
-    if (post.isBookmarked) {
-      listHashTag.push({ type: "bookmark", value: "#recentBookmark" });
-    }
-
     if (post.eventId) {
       listHashTag.push({ type: "event", value: post.eventId });
     }
 
     return map(listHashTag, (item: any, idx: number) => (
       <div
-        className={clsx(
-          classes.hashTagItem,
-          item.type === "bookmark" && classes.bookmark,
-          item.type === "event" && classes.event
-        )}
+        className={clsx(classes.hashTagItem, item.type === "event" && classes.event)}
         key={idx}
         onClick={() => onClickHashTag(item)}>
         <Typography>{item.type === "event" ? "On Event" : item.value}</Typography>
@@ -122,11 +70,6 @@ const PostItem = (props: any) => {
   const onRepostPost = () => {
     console.log("postID: ", post.id, "userID: ", post.user.id);
     // Post.report({ postId: post.id, userId: post.user.id });
-  };
-
-  const onClickMessage = () => {
-    setOnHover(false);
-    setUserProfile(null);
   };
 
   const renderOption = (
@@ -161,170 +104,63 @@ const PostItem = (props: any) => {
     </Menu>
   );
 
-  const getUserProfile = async (userId: number | string) => {
-    const profile = await User.getUserProfile(userId);
-    setUserProfile(profile);
-  };
-
-  const loadingProfile = () => {
-    return (
-      <div className={classes.previewProfileContent}>
-        <div className={classes.avatar}>
-          <Skeleton width={50} height={50} variant="circular" />
-        </div>
-        <div className={classes.nameAndEmail}>
-          <Skeleton width={100} variant="text" />
-          <Skeleton width={200} variant="text" />
-          <div className={classes.stats}>
-            <div className={classes.statsItem}>
-              <Skeleton width={16} variant="rectangular" />
-              <Skeleton width={12} style={{ marginLeft: 12 }} variant="text" />
-            </div>
-            <div className={classes.statsItem}>
-              <Skeleton width={16} variant="rectangular" />
-              <Skeleton width={12} style={{ marginLeft: 12 }} variant="text" />
-            </div>
-          </div>
-        </div>
-        <div className={classes.inboxButton}>
-          <Skeleton width={60} variant="text" />
-        </div>
-      </div>
-    );
-  };
-
-  const renderPreviewProfile = () => {
-    return (
-      <div
-        className={classes.previewProfile}
-        onMouseEnter={() => setOnHover(true)}
-        onMouseLeave={() => setOnHover(false)}>
-        {!userProfile ? (
-          loadingProfile()
-        ) : (
-          <div className={classes.previewProfileContent}>
-            <div className={classes.avatar}>
-              <Avatar {...stringAvatar(userProfile.name)} />
-            </div>
-            <div className={classes.nameAndEmail}>
-              <Typography variant="body2">{userProfile.name}</Typography>
-              <Typography variant="body2">{userProfile.email}</Typography>
-              <div className={classes.stats}>
-                <div className={classes.statsItem}>
-                  <FeedOutlinedIcon sx={{ color: "#909399" }} />
-                  <span>{userProfile.postCount || 0}</span>
-                </div>
-                <div className={classes.statsItem}>
-                  <StarBorderOutlinedIcon sx={{ color: "#909399" }} />
-                  <span>{userProfile.rateCount || 0}</span>
-                </div>
-              </div>
-            </div>
-            <Button onClick={onClickMessage} variant="outlined" color="primary" className={classes.inboxButton}>
-              <Typography>Nhắn tin</Typography>
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  useEffect(() => {
-    if (onHover) {
-      getUserProfile(post.userId);
-    } else {
-      setUserProfile(null);
-    }
-  }, [onHover]);
-
   useEffect(() => {
     post && setPostItem(post);
   }, [post]);
 
-  console.log(postItem);
   return (
-    <div>
+    <div className={classes.wrapPostItem}>
       <Grid container className={classes.userPanel}>
-        <Grid item xs={1} md={2} className={classes.userAvatar} onClick={() => onClickProfile(postItem?.user?.id)}>
-          <Avatar {...stringAvatar(postItem?.user?.name)} src={postItem?.user?.avatar} />
-        </Grid>
-        <Grid item xs={6} md={8} className={classes.userNameAndPostTime}>
-          <Typography
-            onMouseEnter={() => setOnHover(true)}
-            onMouseLeave={() => setOnHover(false)}
-            onClick={() => onClickProfile(postItem?.user?.id)}>
-            {postItem?.user?.name}
-          </Typography>
-          <Typography>{moment().from(postItem?.createdAt)}</Typography>
-        </Grid>
-        <Grid item xs={3} md={3} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
+        <Grid item xs={1} md={1} className={classes.userOptionPost} onClick={handleOptionPostOpen}>
           <MoreHorizIcon />
         </Grid>
-        {onHover && renderPreviewProfile()}
       </Grid>
       {isOptionOpen && renderOption}
-      <div className={classes.postContent}>
-        <Typography>{postItem?.title}</Typography>
-        <Typography>{postItem?.content}</Typography>
+      <Grid>
+        <Typography variant="subtitle1">{postItem?.title}</Typography>
+        <Typography variant="body1">{postItem?.content}</Typography>
         <div className={classes.hashTag}>{renderHashTag(postItem?.hashtag)}</div>
-      </div>
+      </Grid>
+
       <Grid container className={classes.postActions}>
-        <Grid item xs={8} className={classes.leftPanel}>
-          <div onClick={() => onClickLike(postItem)}>
-            {isLiked ? (
-              <Tooltip title={"Bỏ Thích"}>
-                <Button aria-label="like">
-                  <ThumbUpIcon color="primary" />
-                </Button>
-              </Tooltip>
-            ) : (
-              <Tooltip title={"Thích"}>
-                <Button aria-label="dislike">
-                  <ThumbUpOutlinedIcon color="primary" />
-                </Button>
-              </Tooltip>
-            )}
-            <Typography>{postItem?.likeCount}</Typography>
-          </div>
-          <div onClick={() => onClickCommentSection(postItem)}>
-            <Tooltip title={"Bình luận"}>
-              <Button aria-label="comment">
-                <ChatBubbleOutlineOutlinedIcon color="primary" />
-              </Button>
+        <Grid item xs={8} md={8} className={classes.leftPanel}>
+          <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+            <Tooltip title="Số lượt xem">
+              <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                <Typography style={{ fontSize: 14 }}>15</Typography>
+              </Box>
             </Tooltip>
-            <Typography>{postItem?.commentCount}</Typography>
-          </div>
-          <div onClick={() => onClickBookmarkPost(post)}>
-            {isBookmarked ? (
-              <Tooltip title={"Bỏ Lưu bài"}>
-                <Button aria-label="Bookmark">
-                  <BookmarkAddedIcon color="primary" />
-                </Button>
-              </Tooltip>
-            ) : (
-              <Tooltip title={"Lưu bài viết"}>
-                <Button>
-                  <BookmarkAddOutlinedIcon color="primary" />
-                </Button>
-              </Tooltip>
-            )}
-          </div>
+            <Tooltip title="Số lượt đăng kí">
+              <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                <Typography style={{ fontSize: 14 }}>5</Typography>
+              </Box>
+            </Tooltip>
+            <Tooltip title="Số bình luận">
+              <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                <CommentOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                <Typography style={{ fontSize: 14 }}>{postItem?.commentCount}</Typography>
+              </Box>
+            </Tooltip>
+            {/* lấy giá trị isResolved của post để thêm vào đây chứ k phải click */}
+            <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
+              {isResolved ? (
+                <Tooltip title="Đã giải quyết">
+                  <DoneAllIcon color="success" />
+                </Tooltip>
+              ) : (
+                <Tooltip title="Chưa giải quyết">
+                  <RemoveDoneIcon color="error" />
+                </Tooltip>
+              )}
+            </div>
+          </Box>
         </Grid>
-        <Grid item xs={4} className={classes.rightPanel}>
-          {/* lấy giá trị isResolved của post để thêm vào đây chứ k phải click */}
-          <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
-            {isResolved ? (
-              <div className={classes.isResolve}>
-                <DoneAllIcon color="primary" aria-label="Đã giải quyết"></DoneAllIcon>
-                <Typography>Đã giải quyết</Typography>
-              </div>
-            ) : (
-              <div className={classes.isResolve}>
-                <RemoveDoneIcon color="primary" aria-label="Chưa giải quyết"></RemoveDoneIcon>
-                <Typography>Chưa giải quyết</Typography>
-              </div>
-            )}
-          </div>
+        <Grid item xs={4} md={4}>
+          <Button variant="contained" color="info" onClick={() => onClickCommentSection(postItem)}>
+            Xem chi tiết
+          </Button>
         </Grid>
       </Grid>
     </div>

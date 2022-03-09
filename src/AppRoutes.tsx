@@ -20,7 +20,7 @@ import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 // import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
-import Header from "./components/Header/Header";
+import PostItem from "./components/HomePage/PostItem";
 
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
@@ -84,7 +84,23 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-          <Route path={"/test"} element={<Header />} />
+          <Route
+            path={"/test"}
+            element={
+              <PostItem
+                post={{
+                  id: 1,
+                  userId: 1,
+                  eventId: 1,
+                  user: { id: 1, name: "Duc anh" },
+                  title: "Help CSD nao cac tinh yeu",
+                  content: "sjahdkashdkjsahdkjsahdkjsahkd dhsakjdhksajhda",
+                  hashtag: ["#CSD", "#MAS"],
+                  commentCount: 12,
+                }}
+              />
+            }
+          />
           <Route path={"/limitActivity"} element={<LimitActivity />} />
           <Route path={"/removePost"} element={<RemovePost />} />
           <Route path={"/removeComment"} element={<RemoveComment />} />
