@@ -1,6 +1,7 @@
 import React from "react";
 //material
-import { Typography, Box, Tooltip } from "@mui/material";
+import { Typography, Box, Tooltip, Button, ButtonProps } from "@mui/material";
+import { purple } from "@mui/material/colors";
 //components
 import MainTabLayout from "../../layout/MainTabLayout";
 // icons
@@ -8,8 +9,21 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-
+// style
+// import { useStyles } from "./HomePage.style";
+import { styled } from "@mui/material/styles";
 const RecentPost = () => {
+  const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    color: theme.palette.getContrastText(purple[500]),
+    backgroundColor: purple[500],
+    "&:hover": {
+      backgroundColor: purple[700],
+    },
+  }));
+  const handleViewDetail = () => {
+    console.log("view detail clicked");
+  };
+
   const renderMyRecentPost = (myRecentPostData: any) => {
     if (!myRecentPostData) {
       return (
@@ -51,6 +65,9 @@ const RecentPost = () => {
               </Box>
             </Tooltip>
           </Box>
+          <ColorButton variant="contained" onClick={handleViewDetail}>
+            Xem chi tiết
+          </ColorButton>
         </Box>
       );
     }

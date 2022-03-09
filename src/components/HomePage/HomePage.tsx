@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
-
 // components
 import Page from "../../layout/Page";
 import NavigationBar from "../Common/NavigationBar/NavigationBar";
@@ -14,7 +13,6 @@ import MyPost from "./MyPost";
 import RecentPost from "./RecentPost";
 
 //utils
-
 // import { fShortenNumber } from "../../utils/formatNumber";
 
 const HomePage = () => {
