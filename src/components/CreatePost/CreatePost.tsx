@@ -1,30 +1,37 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { useStyles } from "./CreatePost.style";
-import { styled } from "@mui/material/styles";
+//component marterial
+import {
+  styled,
+  MenuItem,
+  Button,
+  IconButton,
+  FormControl,
+  Grid,
+  Select,
+  SelectChangeEvent,
+  InputLabel,
+} from "@mui/material";
+// icon
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
-import FormControl from "@mui/material/FormControl";
-import Grid from "@mui/material/Grid";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
+// component
 import { Post as PostModel } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
 import { UserCtx } from "../../context/user/state";
+import { useLocalStorage } from "../usingLocalStorage/usingLocalStorage";
 
 export const CreatePost = () => {
   const classes = useStyles();
-  const [title, setTitle] = useState("");
-  const [hashTag, setHashTag] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useLocalStorage("title", "");
+  const [hashTag, setHashTag] = useLocalStorage("hashTag", "");
+  const [content, setContent] = useLocalStorage("content", "");
 
-  const [openSelect, setOpenSelect] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [images, setImages]: any = useState([]);
+  const [openSelect, setOpenSelect] = useLocalStorage("openSelect", false);
+  const [loading, setLoading] = useLocalStorage("loading", false);
+  const [images, setImages]: any = useLocalStorage("images", []);
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
 
   const { user }: any = useContext(UserCtx);

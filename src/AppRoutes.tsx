@@ -8,7 +8,7 @@ import HomePage from "./components/HomePage/HomePage";
 // import Message from "./components/Message/Message";
 // import Login from "./components/Login/Login";
 import Loginv2 from "./components/Loginv2/Loginv2";
-import Post from "./components/CreatePost/CreatePost";
+import Post, { CreatePost } from "./components/CreatePost/CreatePost";
 // import Post2 from "./components/Post2/Post";
 import CreateEvent from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";
@@ -21,7 +21,7 @@ import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/HomePage/PostItem";
-import ManagerUser from "./components/ManagerUser/ManagerUser";
+// import ManagerUser from "./components/ManagerUser/ManagerUser";
 
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
@@ -102,7 +102,7 @@ export default function AppRoutes() {
               />
             }
           />
-          <Route path={"/testTableList"} element={<ManagerUser />} />
+          <Route path={"/testUseLocalStorage"} element={<CreatePost />} />
           <Route path={"/limitActivity"} element={<LimitActivity />} />
           <Route path={"/removePost"} element={<RemovePost />} />
           <Route path={"/removeComment"} element={<RemoveComment />} />
