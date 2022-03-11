@@ -2,7 +2,7 @@ import React from "react";
 //material
 import { Typography, Box, Button } from "@mui/material";
 //components
-import MainTabLayout from "../../layout/MainTabLayout";
+import MainTabLayout from "../../../layout/MainTabLayout";
 //icons
 import EventIcon from "@mui/icons-material/Event";
 

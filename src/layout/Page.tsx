@@ -2,14 +2,13 @@
 import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
 // material
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
 const Page = forwardRef(({ children, title = "", ...other }: any, ref) => (
   <Box ref={ref} {...other}>
-    <title>{title}</title>
-    {children}
+    <Container maxWidth="lg">{children}</Container>
   </Box>
 ));
 

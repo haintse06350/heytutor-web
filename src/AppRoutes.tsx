@@ -12,9 +12,6 @@ import Post from "./components/CreatePost/CreatePost";
 // import Post2 from "./components/Post2/Post";
 import CreateEvent from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";
-import LimitActivity from "./components/Dialog/LimitActivity/LimitActivity";
-import RemovePost from "./components/Dialog/RemovePost/RemovePost";
-import RemoveComment from "./components/Dialog/RemoveComment/RemoveComment";
 
 // import UserProfile from "./components/UserProfile/UserProfile";
 // import { UserCtx } from "./context/user/state";
@@ -22,6 +19,8 @@ import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/HomePage/PostItem";
 import ManagerUser from "./components/ManagerUser/ManagerUser";
+import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
+import { DetailPage } from "./components/DetailPage";
 
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
@@ -38,7 +37,6 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-
           {/** test */}
           {/* <Route
             path={"/profile"}
@@ -52,13 +50,28 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-          <Route path={"/login"} element={<Loginv2 />} />
+          <Route
+            path={"/my-request"}
+            element={
+              <RequireAuth>
+                <DetailPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={"/registered-request"}
+            element={
+              <RequireAuth>
+                <DetailPage />
+              </RequireAuth>
+            }
+          />
 
+          <Route path={"/login"} element={<Loginv2 />} />
           {/** chưa có page */}
           <Route path={"/profile"} element={<NotFound />} />
           <Route path={"/event"} element={<NotFound />} />
           <Route path={"/notification"} element={<NotFound />} />
-
           <Route
             path={"/post"}
             element={
@@ -74,6 +87,14 @@ export default function AppRoutes() {
             element={
               <RequireAuth>
                 <Chat />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={"/my-posts"}
+            element={
+              <RequireAuth>
+                <ListMyPost />
               </RequireAuth>
             }
           />
