@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Avatar, Dialog, Grid, Typography, MenuItem, Menu, Button, Tooltip, TextField } from "@mui/material";
+import { useStyles } from "./HomePage.style";
+import { Comment as CommentModel } from "../../models/comment";
+import { stringAvatar } from "../UserProfile/helper";
+import { Post } from "../../models/post";
+import { Bookmark } from "../../models/bookmark";
+import { NotificationCtx } from "../../context/notification/state";
+import moment from "moment";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import { Avatar, Dialog, Grid, Typography } from "@mui/material";
-import { useStyles } from "./HomePage.style";
-import { Comment as CommentModel } from "../../models/comment";
-import { stringAvatar } from "../UserProfile/helper";
-import moment from "moment";
-import { MenuItem, Menu, Button, Tooltip } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import EmailIcon from "@mui/icons-material/Email";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Post } from "../../models/post";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
-import { Bookmark } from "../../models/bookmark";
-import { NotificationCtx } from "../../context/notification/state";
 
 const PostDetail = (props: any) => {
   const { post, onCloseDialog, openDialog } = props;

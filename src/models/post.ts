@@ -5,7 +5,6 @@ export class Post {
   static async create(params = {}) {
     const res = await FetchUtils.post(`/post`, params);
     await ErrorUtils.throwError(res);
-
     return res.json();
   }
 

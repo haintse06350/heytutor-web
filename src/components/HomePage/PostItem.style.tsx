@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles";
 
 export const useStyles: any = makeStyles(() => ({
   wrapPostItem: {
-    width: "90%",
+    maxWidth: "800px",
     height: "auto",
     borderRadius: 20,
     alignItems: "center",

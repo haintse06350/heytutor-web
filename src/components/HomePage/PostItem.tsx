@@ -1,27 +1,29 @@
 import React, { useState, useContext, useEffect } from "react";
+// material
 import { Grid, Typography, Menu, MenuItem, Tooltip, Box, Button } from "@mui/material";
+// component
+import { map } from "lodash";
+import clsx from "classnames";
+import { UserCtx } from "../../context/user/state";
 import { useStyles } from "./PostItem.style";
-// import { stringAvatar } from "../UserProfile/helper";
-// import moment from "moment";
+// icon
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-// import { useNavigate } from "react-router-dom";
-import { map } from "lodash";
-import clsx from "classnames";
-import { UserCtx } from "../../context/user/state";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+
 const PostItem = (props: any) => {
   const { post, onClickCommentSection, onClickHashTag } = props;
   const classes = useStyles();
-  // const navigate = useNavigate();
   const [isResolved, setIsResolved] = useState(false);
   const [postItem, setPostItem] = useState(post);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const { user } = useContext(UserCtx);
+
+  
 
   const isMyPost = (postItem: any) => {
     return postItem?.user?.id === user?.id;
