@@ -18,6 +18,7 @@ import Feedback from "./components/Feedback/Feedback";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/HomePage/PostItem";
+import ManagerUser from "./components/ManagerUser/ManagerUser";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
 import { DetailPage } from "./components/DetailPage";
 
@@ -122,6 +123,10 @@ export default function AppRoutes() {
               />
             }
           />
+          <Route path={"/testTableList"} element={<ManagerUser />} />
+          <Route path={"/limitActivity"} element={<LimitActivity />} />
+          <Route path={"/removePost"} element={<RemovePost />} />
+          <Route path={"/removeComment"} element={<RemoveComment />} />
         </Routes>
       </Fragment>
     </Router>
