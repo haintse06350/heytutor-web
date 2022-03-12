@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 // import { Navigate } from "react-router-dom";
 import BottomNav from "./components/BottomNavigation/BottomNavigation";
+import NavigationBar from "./components/Common/NavigationBar/NavigationBar";
 import { UserCtx } from "./context/user/state";
 
 const RequireAuth = ({ children }: any) => {
@@ -12,6 +13,7 @@ const RequireAuth = ({ children }: any) => {
 
   return (
     <div>
+      <NavigationBar />
       {children}
       <BottomNav />
     </div>

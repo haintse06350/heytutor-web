@@ -15,7 +15,7 @@ import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import SupervisedUserCircleOutlinedIcon from "@mui/icons-material/SupervisedUserCircleOutlined";
 
 import { Link as RouterLink } from "react-router-dom";
-import EventPopover from "./EventPopover";
+import EventPopover from "./Event/EventPopover";
 
 const OnGoingEvent = () => {
   return (

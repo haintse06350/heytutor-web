@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { alpha } from "@mui/material/styles";
 import { MenuItem, IconButton } from "@mui/material";
 // components
-import MenuPopover from "../Header/MenuPopover";
+import MenuPopover from "../../Header/MenuPopover";
 
 //icons
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
