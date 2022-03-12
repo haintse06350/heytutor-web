@@ -32,7 +32,6 @@ const HomePage = () => {
               <Grid item xs={12} sm={6}>
                 <RegisteredPost />
               </Grid>
-
               <Grid item xs={12}>
                 <OnGoingEvent />
               </Grid>
