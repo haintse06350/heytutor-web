@@ -1,7 +1,7 @@
 import React from "react";
 // material
 import { styled } from "@mui/material/styles";
-import { Card, Typography, Divider } from "@mui/material";
+import { Card, CardHeader, Divider } from "@mui/material";
 // utils
 
 // ----------------------------------------------------------------------
@@ -61,9 +61,7 @@ const MainTabLayout = (props: any) => {
     <RootStyle>
       <CardHeaderStyle>
         {icon}
-        <Typography variant="subtitle2" sx={{ fontWeight: 900, ml: 1 }}>
-          {title}
-        </Typography>
+        <CardHeader title={title} sx={{ mb: 3 }} />
       </CardHeaderStyle>
       <Divider />
       {content}

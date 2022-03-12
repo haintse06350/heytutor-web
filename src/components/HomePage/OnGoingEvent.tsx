@@ -17,17 +17,13 @@ import SupervisedUserCircleOutlinedIcon from "@mui/icons-material/SupervisedUser
 import { Link as RouterLink } from "react-router-dom";
 import EventPopover from "./Event/EventPopover";
 
-const OnGoingEvent = () => {
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+const itemEvent = () => {
   return (
-    <Card>
-      <Grid container>
-        <Grid item xs={9}>
-          <CardHeader title="Sự kiện đang diễn ra" subheader="Còn 4 ngày" />
-        </Grid>
-        <Grid item xs={3} sx={{ p: 3, textAlign: "end" }}>
-          <EventPopover />
-        </Grid>
-      </Grid>
+    <>
       <Box sx={{ display: "flex", alignItems: "center", px: 3, pt: 1 }}>
         <Tooltip title="Số lượt xem">
           <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
@@ -110,6 +106,37 @@ const OnGoingEvent = () => {
           Xem chi tiết
         </Button>
       </Box>
+    </>
+  );
+};
+const OnGoingEvent = () => {
+  const [value, setValue] = React.useState("1");
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Card>
+      <Grid container>
+        <Grid item xs={9}>
+          <CardHeader title="Sự kiện đang diễn ra" subheader="Còn 4 ngày" />
+        </Grid>
+        <Grid item xs={3} sx={{ p: 3, textAlign: "end" }}>
+          <EventPopover />
+        </Grid>
+      </Grid>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="Sự kiện dài hạn" value="1" />
+            <Tab label="Sự kiện ngắn hạn" value="2" />
+            <Tab label="Sự kiện đã tham gia" value="3" />
+          </TabList>
+        </Box>
+        <TabPanel value="1"> {itemEvent()}</TabPanel>
+        <TabPanel value="2">Sự kiện ngắn hạn</TabPanel>
+        <TabPanel value="3">Sự kiện đã tham gia</TabPanel>
+      </TabContext>
     </Card>
   );
 };
