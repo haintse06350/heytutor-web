@@ -10,7 +10,6 @@ import { StatItem } from "../Common/StatItem";
 //icons
 import ArticleIcon from "@mui/icons-material/Article";
 import SubjectIcon from "@mui/icons-material/Subject";
-import AllInboxOutlinedIcon from "@mui/icons-material/AllInboxOutlined";
 import PendingActionsOutlinedIcon from "@mui/icons-material/PendingActionsOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
@@ -77,25 +76,19 @@ const MyPost = () => {
               tab="subjects"
               icon={<SubjectIcon sx={{ color: theme.palette.grey[500] }} />}
               data={map(myPostData.subject, (subject: string) => `${subject}, `)}
-              title="Subjects"
+              title="Môn học"
+              subTitle="Số lượng các môn học của vấn đề được đăng ký"
               onNavigate={() => onNavigate("/my-request?detail=subjects")}
             />
-            <StatItem
-              onHoverElem={onHoverElem}
-              setOnHoverElem={setOnHoverElem}
-              tab="allPost"
-              icon={<AllInboxOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={myPostData.totalPost}
-              title="All posts"
-              onNavigate={() => onNavigate("/my-request?detail=allPost")}
-            />
+
             <StatItem
               onHoverElem={onHoverElem}
               setOnHoverElem={setOnHoverElem}
               tab="pendingPost"
               icon={<PendingActionsOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
               data={myPostData.pendingPost}
-              title="Pending"
+              title="Vấn đề chưa có người đăng ký "
+              subTitle="Số lượng các vấn đề chưa có người đăng ký"
               onNavigate={() => onNavigate("/my-request?detail=pending")}
             />
             <StatItem
@@ -104,16 +97,18 @@ const MyPost = () => {
               tab="activePost"
               icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
               data={myPostData.activePostCount}
-              title="Active"
+              title="Vấn đề đã có người đăng ký"
+              subTitle="Số lượng các vấn đề đã có người đăng ký"
               onNavigate={() => onNavigate("/my-request?detail=active")}
             />
             <StatItem
               onHoverElem={onHoverElem}
               setOnHoverElem={setOnHoverElem}
-              tab="donePost"
+              tab="processSupportPost"
               icon={<FactCheckOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
               data={myPostData.donePostCount}
-              title="Done"
+              title="Vấn đề đang được hỗ trợ"
+              subTitle="Số lượng các vấn đề  đang trong quá trình hỗ trợ"
               onNavigate={() => onNavigate("/my-request?detail=done")}
             />
           </Box>
@@ -125,7 +120,7 @@ const MyPost = () => {
               color="inherit"
               component={RouterLink}
               endIcon={<ArrowForwardIosOutlinedIcon />}>
-              View detail
+              Xem chi tiết
             </Button>
           </Box>
         </>
@@ -133,7 +128,12 @@ const MyPost = () => {
     }
   };
   return (
-    <MainTabLayout title={"Bài đăng của tôi"} content={renderMyPostContent()} type="myPost" icon={<ArticleIcon />} />
+    <MainTabLayout
+      title={"Vấn đề tôi cần hỗ trợ"}
+      content={renderMyPostContent()}
+      type="myPost"
+      icon={<ArticleIcon />}
+    />
   );
 };
 

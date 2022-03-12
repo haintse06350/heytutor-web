@@ -64,14 +64,23 @@ const OnGoingEvent = () => {
       </Box>
       <Box dir="ltr">
         {map(["1", "2"], (item: any, index: number) => (
-          <Box key={index} sx={{ p: 3 }}>
-            <Grid>
-              <Typography variant="subtitle2">Tiêu đề bài viết</Typography>
-              <Typography variant="caption">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                industry standard dummy text ever since the 1500s
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+          <Box key={index}>
+            <Divider />
+            <Grid container sx={{ p: 2 }}>
+              <Grid sx={{ display: "flex", alignItems: "center" }} item xs={9}>
+                <Typography variant="h6" sx={{ ml: 1 }}>
+                  Tiêu đề bài viết
+                </Typography>
+                <Typography variant="caption" color="#637381" sx={{ ml: 1 }}>
+                  Hôm nay
+                </Typography>
+              </Grid>
+              <Grid item xs={3} sx={{ display: "grid", justifyContent: "center" }}>
+                <Button to="#" size="small" color="inherit" component={RouterLink} variant="contained">
+                  Xem chi tiết
+                </Button>
+              </Grid>
+              <Box sx={{ display: "flex", ml: 1 }}>
                 <Tooltip title="Số lượt xem">
                   <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                     <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
@@ -98,7 +107,7 @@ const OnGoingEvent = () => {
       <Divider />
       <Box sx={{ p: 2, textAlign: "right" }}>
         <Button to="#" size="small" color="inherit" component={RouterLink} endIcon={<ArrowForwardIosOutlinedIcon />}>
-          View all
+          Xem chi tiết
         </Button>
       </Box>
     </Card>

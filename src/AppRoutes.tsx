@@ -124,9 +124,6 @@ export default function AppRoutes() {
             }
           />
           <Route path={"/testTableList"} element={<ManagerUser />} />
-          <Route path={"/limitActivity"} element={<LimitActivity />} />
-          <Route path={"/removePost"} element={<RemovePost />} />
-          <Route path={"/removeComment"} element={<RemoveComment />} />
         </Routes>
       </Fragment>
     </Router>
