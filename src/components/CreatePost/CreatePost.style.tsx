@@ -4,7 +4,7 @@ export const useStyles: any = makeStyles(() => ({
   post: {
     fontFamily: "sans-serif",
     background: "#f6f6f7",
-    width: "100vw",
+    width: "100%",
     height: "calc(100vh - 62px)",
     justifyContent: "center",
   },
@@ -12,8 +12,7 @@ export const useStyles: any = makeStyles(() => ({
     width: "100%",
     padding: "0px 10px",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    paddingLeft: 15,
   },
   imagePost: {
     maxWidth: 100,
@@ -22,6 +21,7 @@ export const useStyles: any = makeStyles(() => ({
     maxHeight: 100,
     width: 100,
     height: 100,
+    marginTop: 5,
     // marginRight: 5,
 
     position: "relative",
@@ -35,8 +35,8 @@ export const useStyles: any = makeStyles(() => ({
   },
   deleteButton: {
     position: "absolute",
-    top: 10,
-    right: 22,
+    top: 16,
+    right: 6,
     width: 20,
     height: 20,
     background: "#fff",
@@ -119,11 +119,7 @@ export const useStyles: any = makeStyles(() => ({
   contentPost: {
     width: "100%",
     background: "#f6f6f7",
-    overflow: "scroll",
     marginBottom: 40,
-    // marginTop: 48,
-    "@media(min-width: 812px)": {},
-    "@media(max-width: 811px)": {},
   },
   contentDetail: {
     width: "100%",
@@ -189,15 +185,7 @@ export const useStyles: any = makeStyles(() => ({
       textAlign: "center",
     },
   },
-  priceChangePost: {
-    marginLeft: 30,
-    "@media(min-width: 812px)": {},
-    "@media(max-width: 811px)": {
-      display: "flex",
-      justifyContent: "center",
-      textAlign: "center",
-    },
-  },
+
   contentDetailPost: {
     width: "100%",
     minHeight: 200,
@@ -212,21 +200,11 @@ export const useStyles: any = makeStyles(() => ({
     alignItems: "center",
   },
 
-  buttonPostScreen: {
-    "@media(min-width: 812px)": {
-      marginTop: 20,
-    },
-    "@media(max-width: 811px)": { display: "none" },
-  },
+  buttonPostScreen: { marginTop: 20 },
   buttonDiscardScreen: {
-    "@media(min-width: 812px)": {
-      marginLeft: 20,
-      alignItems: "center",
-      marginTop: 20,
-    },
-    "@media(max-width: 811px)": {
-      display: "none",
-    },
+    marginLeft: 20,
+    alignItems: "center",
+    marginTop: 20,
   },
   loading: {
     position: "absolute",
