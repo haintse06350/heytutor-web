@@ -124,6 +124,7 @@ export default function AppRoutes() {
               />
             }
           />
+          <Route path={"/testTableList"} element={<ManagerUser />} />
           <Route path={"/testUseLocalStorage"} element={<CreatePost />} />
           <Route path={"/limitActivity"} element={<LimitActivity />} />
           <Route path={"/removePost"} element={<RemovePost />} />

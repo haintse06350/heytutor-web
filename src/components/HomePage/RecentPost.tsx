@@ -1,7 +1,8 @@
 import React from "react";
-//material
-import { Typography, Box, Tooltip, Button, ButtonProps } from "@mui/material";
+import { map } from "lodash";
 import { purple } from "@mui/material/colors";
+//material
+import { Typography, Box, Tooltip, Button, ButtonProps, Grid } from "@mui/material";
 //components
 import MainTabLayout from "../../layout/MainTabLayout";
 // icons
@@ -16,6 +17,7 @@ const RecentPost = () => {
   const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
     color: theme.palette.getContrastText(purple[500]),
     backgroundColor: purple[500],
+    boxShadow: "0 8px 16px 0 rgb(181 25 208 / 24%)",
     "&:hover": {
       backgroundColor: purple[700],
     },
@@ -36,38 +38,51 @@ const RecentPost = () => {
       );
     } else {
       return (
-        <Box sx={{ my: 1, px: 1 }}>
-          <Typography variant="subtitle2" sx={{ textAlign: "left" }} noWrap>
-            Tiêu đề của bài post
-          </Typography>
-          <Typography variant="body2" sx={{ textAlign: "left" }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry
-            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-            make a type specimen book. It has survived not only five centuries,
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-            <Tooltip title="Số lượt xem">
-              <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                <VisibilityOutlinedIcon sx={{ mr: 0.5 }} />
-                <span style={{ fontSize: 14 }}>10</span>
+        <Box>
+          {map(["1", "2"], (item: any, index: number) => (
+            <Box sx={{ my: 1, px: 1 }}>
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="subtitle1" sx={{ textAlign: "left" }} noWrap>
+                  Tiêu đề của bài post
+                </Typography>
+                <Typography variant="caption" color="#637381" sx={{ ml: 1 }}>
+                  Hôm nay
+                </Typography>
               </Box>
-            </Tooltip>
-            <Tooltip title="Số lượt đăng kí">
-              <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                <HowToRegOutlinedIcon sx={{ mr: 0.5 }} />
-                <span style={{ fontSize: 14 }}>5</span>
-              </Box>
-            </Tooltip>
-            <Tooltip title="Số bình luận">
-              <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                <CommentOutlinedIcon sx={{ mr: 0.5 }} />
-                <span style={{ fontSize: 14 }}>15</span>
-              </Box>
-            </Tooltip>
-          </Box>
-          <ColorButton variant="contained" onClick={handleViewDetail}>
-            Xem chi tiết
-          </ColorButton>
+              <Typography variant="body2" sx={{ textAlign: "left" }}>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book. It has survived not only five centuries,
+              </Typography>
+              <Grid container sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                <Grid item xs={8} md={8} sx={{ display: "flex" }}>
+                  <Tooltip title="Số lượt xem">
+                    <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                      <VisibilityOutlinedIcon sx={{ mr: 0.5 }} />
+                      <span style={{ fontSize: 14 }}>10</span>
+                    </Box>
+                  </Tooltip>
+                  <Tooltip title="Số lượt đăng kí">
+                    <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                      <HowToRegOutlinedIcon sx={{ mr: 0.5 }} />
+                      <span style={{ fontSize: 14 }}>5</span>
+                    </Box>
+                  </Tooltip>
+                  <Tooltip title="Số bình luận">
+                    <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                      <CommentOutlinedIcon sx={{ mr: 0.5 }} />
+                      <span style={{ fontSize: 14 }}>15</span>
+                    </Box>
+                  </Tooltip>
+                </Grid>
+                <Grid item xs={4} md={4} sx={{ display: "flex", justifyContent: "center" }}>
+                  <ColorButton variant="contained" onClick={handleViewDetail}>
+                    Xem chi tiết
+                  </ColorButton>
+                </Grid>
+              </Grid>
+            </Box>
+          ))}
         </Box>
       );
     }

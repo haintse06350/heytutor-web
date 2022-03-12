@@ -7,7 +7,7 @@ import Page from "../../layout/Page";
 import { Box, Typography, Grid } from "@mui/material";
 import OnGoingEvent from "./OnGoingEvent";
 import RegisteredPost from "./RegisteredPost";
-import EventJoined from "./Event/EventJoined";
+// import EventJoined from "./Event/EventJoined";
 import MyPost from "./MyPost";
 import RecentPost from "./RecentPost";
 
@@ -22,24 +22,22 @@ const HomePage = () => {
       <Box sx={{ mt: 10 }}>
         <Page>
           <Box sx={{ pb: 5 }}>
-            <Typography variant="h4">Hi, Welcome back</Typography>
+            <Typography variant="h4">Xin chào, chào mừng bạn đã quay trở lại</Typography>
           </Box>
           <Grid container spacing={3}>
-            <Grid container spacing={2} item xs={12} md={9}>
-              <Grid item xs={12} sm={4}>
+            <Grid container spacing={2} item xs={12} md={12}>
+              <Grid item xs={12} sm={6}>
                 <MyPost />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <RegisteredPost />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <EventJoined />
-              </Grid>
+
               <Grid item xs={12}>
                 <OnGoingEvent />
               </Grid>
             </Grid>
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md={12}>
               <Grid item xs={12} sx={{ mb: { xs: 10 } }}>
                 <RecentPost />
               </Grid>

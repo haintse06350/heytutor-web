@@ -11,8 +11,6 @@ import { useNavigate } from "react-router-dom";
 //icons
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
-import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
-import PendingActionsOutlinedIcon from "@mui/icons-material/PendingActionsOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
@@ -63,7 +61,7 @@ const RegisteredPost = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               flexGrow: 1,
             }}>
             <StatItem
@@ -72,7 +70,8 @@ const RegisteredPost = () => {
               tab="registered"
               icon={<AppRegistrationOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
               data={registerdData.registeredPostCount}
-              title="Registered"
+              title="Vấn đề đã đăng ký"
+              subTitle="Số vấn đề tôi đã đăng ký hỗ trợ"
               onNavigate={() => onNavigate("/registered-request?detail=registered")}
             />
             <StatItem
@@ -81,26 +80,9 @@ const RegisteredPost = () => {
               tab="confirmed"
               icon={<ConfirmationNumberOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
               data={registerdData.activePostCount}
-              title="Confirmed"
+              title="Vấn đề tôi đang hỗ trợ"
+              subTitle="Số vấn đề tôi đang đăng ký hỗ trợ"
               onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
-            />
-            <StatItem
-              onHoverElem={onHoverElem}
-              setOnHoverElem={setOnHoverElem}
-              tab="pending"
-              icon={<PendingActionsOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={registerdData.pendingPost}
-              title="Pending"
-              onNavigate={() => onNavigate("/registered-request?detail=pending")}
-            />
-            <StatItem
-              onHoverElem={onHoverElem}
-              setOnHoverElem={setOnHoverElem}
-              tab="active"
-              icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={registerdData.activePostCount}
-              title="Active"
-              onNavigate={() => onNavigate("/registered-request?detail=active")}
             />
             <StatItem
               onHoverElem={onHoverElem}
@@ -108,7 +90,8 @@ const RegisteredPost = () => {
               tab="done"
               icon={<FactCheckOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
               data={registerdData.activePostCount}
-              title="Done"
+              title="Vấn đề tôi đã đăng ký thành công"
+              subTitle="Số vấn đề tôi đang đăng ký hỗ trợ thành công"
               onNavigate={() => onNavigate("/registered-request?detail=done")}
             />
           </Box>
@@ -120,7 +103,7 @@ const RegisteredPost = () => {
               color="inherit"
               component={RouterLink}
               endIcon={<ArrowForwardIosOutlinedIcon />}>
-              View detail
+              Xem chi tiết
             </Button>
           </Box>
         </>
@@ -129,7 +112,7 @@ const RegisteredPost = () => {
   };
   return (
     <MainTabLayout
-      title={"Vấn đề đã đăng kí"}
+      title={"Vấn đề tôi đăng kí hỗ trợ"}
       content={renderRegisterPost()}
       type="registeredPost"
       icon={<FactCheckIcon />}
