@@ -1,53 +1,29 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { useStyles } from "./CreatePost.style";
-import { styled } from "@mui/material/styles";
+//component marterial
+import { styled, Button, IconButton, Grid } from "@mui/material";
+// icon
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
-import FormControl from "@mui/material/FormControl";
-import Grid from "@mui/material/Grid";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
+// component
 import { Post as PostModel } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
-import { UserCtx } from "../../context/user/state";
+// import { UserCtx } from "../../context/user/state";
+import { useLocalStorage } from "../usingLocalStorage/usingLocalStorage";
 
 export const CreatePost = () => {
   const classes = useStyles();
-  const [title, setTitle] = useState("");
-  const [hashTag, setHashTag] = useState("");
-  const [content, setContent] = useState("");
 
-  const [openSelect, setOpenSelect] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [images, setImages]: any = useState([]);
+  const [postItem, setPostItem] = useLocalStorage("postItem", { title: "", hashTag: "", content: "", images: [] });
+
+  // const [openSelect, setOpenSelect] = useLocalStorage("openSelect", false);
+  const [loading, setLoading] = useLocalStorage("loading", false);
+
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
 
-  const { user }: any = useContext(UserCtx);
-
-  const onUploadImage = ({ target }: any) => {
-    const fileReader = new FileReader();
-
-    fileReader.readAsDataURL(target.files[0]);
-    fileReader.onload = (e: any) => {
-      const prevImages = [...images];
-      prevImages.push({ src: e.target.result } as any);
-      setImages(prevImages);
-    };
-  };
-
-  const onRemoveImage = (image: string, index: number) => {
-    const newImages = images.filter((img: string, idx: number) => img !== image && idx !== index);
-    setImages(newImages);
-  };
-
-  const onClose = () => {
-    setOpenSelect(false);
-  };
+  // const { user }: any = useContext(UserCtx);
 
   const onDiscard = () => {
     console.log("discard clicked");
@@ -57,13 +33,10 @@ export const CreatePost = () => {
     console.log("insert photo clicked");
   };
 
-  const onChangePrice = () => {
-    console.log("change price clicked");
-  };
-
   const onPost = async () => {
     setLoading(true);
-    const params = { userId: user?.id, title, hashTag, content };
+    // const params = { userId: user?.id, postItem.title, postItem.hashTag, postItem.content };
+    const params = {};
     try {
       await PostModel.create(params);
       setNotificationSuccess("Post created successfully");
@@ -78,16 +51,39 @@ export const CreatePost = () => {
     display: "none",
   });
 
-  const [age, setAge] = React.useState<string | number>("");
-
-  const onChange = (event: SelectChangeEvent<typeof age>) => {
-    setAge(event.target.value);
+  const handleChangeTitle = (e: any) => {
+    postItem.title = e.target.value;
+    setPostItem({ ...postItem, [e.target.name]: e.target.value });
+    console.log(postItem);
   };
 
-  const onOpen = () => {
-    setOpenSelect(true);
+  const handleChangeHashtag = (e: any) => {
+    postItem.hashTag = e.target.value;
+    setPostItem({ ...postItem, [e.target.name]: e.target.value });
   };
 
+  const handleChangeContent = (e: any) => {
+    postItem.content = e.target.value;
+    setPostItem({ ...postItem, [e.target.name]: e.target.value });
+  };
+
+  const onUploadImage = ({ target }: any) => {
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(target.files[0]);
+    fileReader.onload = (e: any) => {
+      const prevImages = [...postItem.images];
+      prevImages.push({ src: e.target.result } as any);
+      postItem.images = prevImages;
+      setPostItem({ ...postItem, [e.target.name]: e.target.value });
+    };
+  };
+
+  const onRemoveImage = (image: string, index: number) => {
+    const newImages = postItem.images.filter((img: string, idx: number) => img !== image && idx !== index);
+    postItem.images = newImages;
+    setPostItem({ ...postItem });
+  };
   return (
     <div className={classes.post}>
       <div className={classes.contentPost}>
@@ -98,15 +94,17 @@ export const CreatePost = () => {
             <input
               className={classes.titlePost}
               placeholder="Tiêu đề ... "
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}></input>
+              value={postItem.title}
+              onChange={(e) => handleChangeTitle(e)}
+            />
           </div>
           <div>
             <input
               className={classes.hashtagPost}
               placeholder="Hashtag(gắn thẻ) ..."
-              value={hashTag}
-              onChange={(e) => setHashTag(e.target.value)}></input>
+              value={postItem.hashTag}
+              onChange={(e) => handleChangeHashtag(e)}
+            />
           </div>
           {/* hashtag */}
           {/* nội dung */}
@@ -116,8 +114,8 @@ export const CreatePost = () => {
               placeholder="Nội dung ..."
               rows={5}
               cols={5}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}></textarea>
+              value={postItem.content}
+              onChange={(e) => handleChangeContent(e)}></textarea>
           </div>
         </div>
         <div className={classes.addOptionPostL}>
@@ -130,30 +128,10 @@ export const CreatePost = () => {
             </label>
             <span>Thêm ảnh</span>
           </div>
-          <div className={classes.priceChangePost} onClick={onChangePrice}>
-            <FormControl sx={{ m: 0.5, minWidth: 120 }}>
-              <InputLabel id="demo-controlled-open-select-label">Giá</InputLabel>
-              <Select
-                labelId="demo-controlled-open-select-label"
-                id="demo-controlled-open-select"
-                open={openSelect}
-                onClose={onClose}
-                onOpen={onOpen}
-                value={age}
-                label="Giá"
-                onChange={onChange}>
-                <MenuItem value="">
-                  <em>Không</em>
-                </MenuItem>
-                <MenuItem value={1}>Không</MenuItem>
-                <MenuItem value={2}>Có</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
         </div>
-        {images.length > 0 && (
+        {postItem.images.length > 0 && (
           <Grid container spacing={1} className={classes.listImg}>
-            {images.map((img: any, index: number) => (
+            {postItem.images.map((img: any, index: number) => (
               <Grid item xs={3} className={classes.imagePost} key={index}>
                 <img className={classes.image} key={index} src={img.src} alt="img" />
                 <div className={classes.deleteButton} onClick={() => onRemoveImage(img, index)}>
