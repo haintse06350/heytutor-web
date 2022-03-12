@@ -1,5 +1,4 @@
 import React from "react";
-
 //material
 import { Card, CardHeader, Box, Grid, Typography, Divider, Button, Tooltip } from "@mui/material";
 //lodash
@@ -13,10 +12,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import RecordVoiceOverOutlinedIcon from "@mui/icons-material/RecordVoiceOverOutlined";
 import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import SupervisedUserCircleOutlinedIcon from "@mui/icons-material/SupervisedUserCircleOutlined";
-
 import { Link as RouterLink } from "react-router-dom";
-import EventPopover from "./Event/EventPopover";
-
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -120,9 +116,6 @@ const OnGoingEvent = () => {
       <Grid container>
         <Grid item xs={9}>
           <CardHeader title="Sự kiện đang diễn ra" subheader="Còn 4 ngày" />
-        </Grid>
-        <Grid item xs={3} sx={{ p: 3, textAlign: "end" }}>
-          <EventPopover />
         </Grid>
       </Grid>
       <TabContext value={value}>
