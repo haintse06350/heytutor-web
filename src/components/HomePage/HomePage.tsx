@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React from "react";
+import React, { useEffect } from "react";
 // components
 import Page from "../../layout/Page";
 
@@ -10,12 +10,24 @@ import RegisteredPost from "./RegisteredPost";
 // import EventJoined from "./Event/EventJoined";
 import MyPost from "./MyPost";
 import RecentPost from "./RecentPost";
+import { Home } from "../../models/home";
 
 //utils
 // import { fShortenNumber } from "../../utils/formatNumber";
 
 const HomePage = () => {
+  const [data, setData]: any = React.useState(null);
+
+  console.log(data);
+
   // const classes = useStyles();
+  const getUserStats = async () => {
+    const data = await Home.getUserStats();
+    setData(data);
+  };
+  useEffect(() => {
+    getUserStats();
+  }, []);
 
   return (
     <>
@@ -27,10 +39,10 @@ const HomePage = () => {
           <Grid container spacing={3}>
             <Grid container spacing={2} item xs={12} md={12}>
               <Grid item xs={12} sm={6}>
-                <MyPost />
+                <MyPost data={data?.myRequestStats} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <RegisteredPost />
+                <RegisteredPost data={data?.myRegisterStats} />
               </Grid>
               <Grid item xs={12}>
                 <OnGoingEvent />

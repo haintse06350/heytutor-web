@@ -1,12 +1,12 @@
 import React from "react";
 //material
-import { Box, Typography, Button, Divider } from "@mui/material";
+import { Box, Typography, Button, Divider, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 //components
 import MainTabLayout from "../../layout/MainTabLayout";
 import { StatItem } from "../Common/StatItem";
 //library
-import { isEmpty } from "lodash";
+// import { isEmpty } from "lodash";
 import { useNavigate } from "react-router-dom";
 //icons
 import FactCheckIcon from "@mui/icons-material/FactCheck";
@@ -14,17 +14,13 @@ import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutl
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
-
+import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import { Link as RouterLink } from "react-router-dom";
 
-const registerdData = {
-  registeredPostCount: 10,
-  activePostCount: 3,
-  pendingPost: 2,
-  donePostCount: 4,
-};
-
-const RegisteredPost = () => {
+const RegisteredPost = (props: any) => {
+  const { data } = props;
   const [onHoverElem, setOnHoverElem]: any = React.useState(null);
   const theme = useTheme();
   const navigate = useNavigate();
@@ -34,7 +30,20 @@ const RegisteredPost = () => {
   };
 
   const renderRegisterPost = () => {
-    if (isEmpty(registerdData)) {
+    if (!data) {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            width: "568px",
+            height: "470px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+          <CircularProgress />
+        </Box>
+      );
+    } else if (data?.length === 0) {
       return (
         <Box
           sx={{
@@ -67,31 +76,62 @@ const RegisteredPost = () => {
             <StatItem
               onHoverElem={onHoverElem}
               setOnHoverElem={setOnHoverElem}
-              tab="registered"
+              tab="pending"
               icon={<AppRegistrationOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={registerdData.registeredPostCount}
+              data={data.nbOfPendingPost}
               title="Vấn đề đã đăng ký"
-              subTitle="Số vấn đề tôi đã đăng ký hỗ trợ"
+              subTitle="Số vấn đề tôi đã đăng ký hỗ trợ nhưng chưa được xác nhận"
               onNavigate={() => onNavigate("/registered-request?detail=registered")}
             />
             <StatItem
               onHoverElem={onHoverElem}
               setOnHoverElem={setOnHoverElem}
               tab="confirmed"
-              icon={<ConfirmationNumberOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={registerdData.activePostCount}
+              icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
+              data={data.nbOfConfirmedPost}
               title="Vấn đề tôi đang hỗ trợ"
-              subTitle="Số vấn đề tôi đang đăng ký hỗ trợ"
+              subTitle="Số vấn đề tôi đang trong quá trình hỗ trợ"
               onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
             />
             <StatItem
               onHoverElem={onHoverElem}
               setOnHoverElem={setOnHoverElem}
-              tab="done"
+              tab="onEvent"
+              icon={<ConfirmationNumberOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
+              data={data.nbOfPostOnEvent}
+              title="Vấn đề tôi đang hỗ trợ trong các sự kiện"
+              subTitle="Số vấn đề tôi đang hỗ trợ trong các sự kiện"
+              onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
+            />
+
+            <StatItem
+              onHoverElem={onHoverElem}
+              setOnHoverElem={setOnHoverElem}
+              tab="active"
               icon={<FactCheckOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={registerdData.activePostCount}
-              title="Vấn đề tôi đã đăng ký thành công"
-              subTitle="Số vấn đề tôi đang đăng ký hỗ trợ thành công"
+              data={data.nbOfActivePost}
+              title="Vấn đề tôi đã đăng ký thành công nhưng chưa trao đổi thông tin"
+              subTitle="Số vấn đề tôi đang đăng ký hỗ trợ thành công nhưng hai người chưa trao đổi thông tin"
+              onNavigate={() => onNavigate("/registered-request?detail=done")}
+            />
+            <StatItem
+              onHoverElem={onHoverElem}
+              setOnHoverElem={setOnHoverElem}
+              tab="done"
+              icon={<DoneAllIcon sx={{ color: theme.palette.grey[500] }} />}
+              data={data.nbOfDonePost}
+              title="Vấn đề tôi đã giải quyết thành công"
+              subTitle="Số vấn đề tôi đã giải quyết hỗ trợ thành công"
+              onNavigate={() => onNavigate("/registered-request?detail=done")}
+            />
+            <StatItem
+              onHoverElem={onHoverElem}
+              setOnHoverElem={setOnHoverElem}
+              tab="allPost"
+              icon={<EventNoteIcon sx={{ color: theme.palette.grey[500] }} />}
+              data={data.nbOfAllPost}
+              title="Tất cả vấn đề tôi đã đăng ký"
+              subTitle="Số vấn đề tôi đã hỗ trợ từ trước tới nay"
               onNavigate={() => onNavigate("/registered-request?detail=done")}
             />
           </Box>

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SendIcon from "@mui/icons-material/Send";
-import { Avatar, Dialog, Grid, Typography, Box, Tooltip, MenuItem, Menu, Button } from "@mui/material";
-import { useStyles } from "./HomePage.style";
+import { Avatar, Dialog, Grid, Typography, Box, Tooltip, MenuItem, Menu, Button, IconButton } from "@mui/material";
+import { useStyles } from "./PostDetail.style";
 import { Comment as CommentModel } from "../../models/comment";
 import { stringAvatar } from "../UserProfile/helper";
 import moment from "moment";
@@ -11,18 +11,24 @@ import TextField from "@mui/material/TextField";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-// import DoneAllIcon from "@mui/icons-material/DoneAll";
-// import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
+import Page from "../../layout/Page";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
+import { useLocalStorage } from "../usingLocalStorage/usingLocalStorage";
 
 const PostDetail = (props: any) => {
   const { post, onCloseDialog, openDialog } = props;
-  const [commentContent, setCommentContent] = useState("");
+  console.log(post);
+
+  const [commentContent, setCommentContent] = useLocalStorage("commentContent", "");
   const [listComment, setListComment]: any = useState(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isOptionCommentOpen, setOptionCommentOpen] = useState(false);
   const classes = useStyles();
   const onClickCommentSectionInsideDialog = () => {};
   const [postItem, setPostItem] = useState(post);
+  const [isResolved, setIsResolved] = useState(false);
+
   const onSendComment = () => {
     console.log("comment send");
     setPostItem(postItem);
@@ -43,6 +49,9 @@ const PostDetail = (props: any) => {
   const handleOpenOptionComment = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setOptionCommentOpen(true);
+  };
+  const onClickResolve = () => {
+    setIsResolved(!isResolved);
   };
 
   //begin render menu avatar
@@ -79,19 +88,27 @@ const PostDetail = (props: any) => {
 
   return (
     <Dialog keepMounted onClose={onCloseDialog} fullScreen open={openDialog}>
-      <div className={classes.dialogContent}>
+      <Page className={classes.root}>
         <Grid container className={classes.dialogHeader}>
-          <Grid onClick={onCloseDialog} xs={2} item className={classes.backBtn}>
-            <ArrowBackIosIcon color="primary" />
+          <Grid onClick={onCloseDialog} xs={6} item className={classes.backBtn}>
+            <Tooltip title="Trở lại">
+              <IconButton>
+                <ArrowBackIosIcon />
+              </IconButton>
+            </Tooltip>
           </Grid>
-          <Grid xs={8} item className={classes.postTitle}>
-            <Typography>{post?.title}</Typography>
-          </Grid>
-          <Grid xs={2} item className={classes.moreBtn}>
-            <MoreHorizIcon color="primary" />
+          <Grid xs={6} item className={classes.moreBtn}>
+            <IconButton>
+              <MoreHorizIcon />
+            </IconButton>
           </Grid>
         </Grid>
+        <br></br>
         <Grid item xs={12} className={classes.postContent}>
+          <Grid item className={classes.postTitle}>
+            <Typography>{post?.title}</Typography>
+          </Grid>
+
           <div className={classes.mainContent}>
             <Typography>{post?.content}</Typography>
             <Typography>{post?.hashtag}</Typography>
@@ -99,27 +116,27 @@ const PostDetail = (props: any) => {
           <Grid container item xs={12} className={classes.simpleActions}>
             <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
               <Tooltip title="Số lượt xem">
-                <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
                   <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                   <Typography style={{ fontSize: 14 }}>15</Typography>
                 </Box>
               </Tooltip>
               <Tooltip title="Số lượt đăng kí">
-                <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
                   <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                   <Typography style={{ fontSize: 14 }}>5</Typography>
                 </Box>
               </Tooltip>
               <div className={classes.commentButton} onClick={onClickCommentSectionInsideDialog}>
                 <Tooltip title={"Bình luận"}>
-                  <Button aria-label="comment" startIcon={<CommentOutlinedIcon color="primary" />}>
+                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                    <CommentOutlinedIcon />
                     <Typography style={{ fontSize: 14 }}>{postItem?.commentCount}</Typography>
-                  </Button>
+                  </Box>
                 </Tooltip>
-                <Typography>{postItem?.commentCount}</Typography>
               </div>
               {/* lấy giá trị isResolved của post để thêm vào đây chứ k phải click */}
-              {/* <div className={classes.btnResolve} onClick={() => onClickResolve(postItem)}>
+              <div className={classes.btnResolve} onClick={onClickResolve}>
                 {isResolved ? (
                   <Tooltip title="Đã giải quyết">
                     <DoneAllIcon color="success" />
@@ -129,7 +146,7 @@ const PostDetail = (props: any) => {
                     <RemoveDoneIcon color="error" />
                   </Tooltip>
                 )}
-              </div> */}
+              </div>
             </Box>
           </Grid>
 
@@ -168,7 +185,6 @@ const PostDetail = (props: any) => {
               margin="dense"
               variant="outlined"
               label="Bình luận tại đây ..."
-              fullWidth
               type="text"
               value={commentContent}
               onChange={(e) => setCommentContent(e.target.value)}></TextField>
@@ -177,7 +193,7 @@ const PostDetail = (props: any) => {
             </Button>
           </div>
         </Grid>
-      </div>
+      </Page>
     </Dialog>
   );
 };
