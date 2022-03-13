@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 //material
-import { Typography, Box, Button, Divider } from "@mui/material";
+import { Typography, Box, Button, Divider, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 //components
 import MainTabLayout from "../../layout/MainTabLayout";
@@ -9,27 +9,20 @@ import { PostCtx } from "../../context/post/state";
 import { StatItem } from "../Common/StatItem";
 //icons
 import ArticleIcon from "@mui/icons-material/Article";
-import SubjectIcon from "@mui/icons-material/Subject";
 import PendingActionsOutlinedIcon from "@mui/icons-material/PendingActionsOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 //lodash
-import { isEmpty } from "lodash";
-import { map } from "lodash";
+// import { isEmpty } from "lodash";
 
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-const myPostData = {
-  subject: ["PE", "PRO", "CSD", "DBI"],
-  totalPost: 10,
-  registeredCount: 20,
-  pendingPost: 1,
-  activePostCount: 3,
-  donePostCount: 6,
-};
+const MyPost = (props: any) => {
+  const { data } = props;
 
-const MyPost = () => {
   const { createPost } = useContext(PostCtx);
   const theme = useTheme();
   const [onHoverElem, setOnHoverElem]: any = React.useState(null);
@@ -40,7 +33,20 @@ const MyPost = () => {
   };
 
   const renderMyPostContent = () => {
-    if (isEmpty(myPostData)) {
+    if (!data) {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            width: "568px",
+            height: "470px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+          <CircularProgress />
+        </Box>
+      );
+    } else if (data?.length === 0) {
       return (
         <Box
           sx={{
@@ -73,20 +79,9 @@ const MyPost = () => {
             <StatItem
               onHoverElem={onHoverElem}
               setOnHoverElem={setOnHoverElem}
-              tab="subjects"
-              icon={<SubjectIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={map(myPostData.subject, (subject: string) => `${subject}, `)}
-              title="Môn học"
-              subTitle="Số lượng các môn học của vấn đề được đăng ký"
-              onNavigate={() => onNavigate("/my-request?detail=subjects")}
-            />
-
-            <StatItem
-              onHoverElem={onHoverElem}
-              setOnHoverElem={setOnHoverElem}
               tab="pendingPost"
               icon={<PendingActionsOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={myPostData.pendingPost}
+              data={data.nbOfPendingPost}
               title="Vấn đề chưa có người đăng ký "
               subTitle="Số lượng các vấn đề chưa có người đăng ký"
               onNavigate={() => onNavigate("/my-request?detail=pending")}
@@ -96,7 +91,7 @@ const MyPost = () => {
               setOnHoverElem={setOnHoverElem}
               tab="activePost"
               icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={myPostData.activePostCount}
+              data={data.nbOfActivePost}
               title="Vấn đề đã có người đăng ký"
               subTitle="Số lượng các vấn đề đã có người đăng ký"
               onNavigate={() => onNavigate("/my-request?detail=active")}
@@ -106,10 +101,40 @@ const MyPost = () => {
               setOnHoverElem={setOnHoverElem}
               tab="processSupportPost"
               icon={<FactCheckOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-              data={myPostData.donePostCount}
+              data={data.nbOfConfirmedPost}
               title="Vấn đề đang được hỗ trợ"
               subTitle="Số lượng các vấn đề  đang trong quá trình hỗ trợ"
+              onNavigate={() => onNavigate("/my-request?detail=processing")}
+            />
+            <StatItem
+              onHoverElem={onHoverElem}
+              setOnHoverElem={setOnHoverElem}
+              tab="donePost"
+              icon={<DoneAllIcon sx={{ color: theme.palette.grey[500] }} />}
+              data={data.nbOfDonePost}
+              title="Vấn đề đã hoàn thành hỗ trợ"
+              subTitle="Số lượng các vấn đề  đã hoàn thành quá trình hỗ trợ"
               onNavigate={() => onNavigate("/my-request?detail=done")}
+            />
+            <StatItem
+              onHoverElem={onHoverElem}
+              setOnHoverElem={setOnHoverElem}
+              tab="onEventPost"
+              icon={<EventNoteIcon sx={{ color: theme.palette.grey[500] }} />}
+              data={data.nbOfPostOnEvent}
+              title="Vấn đề đang tham gia trong các event"
+              subTitle="Số lượng các vấn đề  đang tham gia của các event"
+              onNavigate={() => onNavigate("/my-request?detail=onEvent")}
+            />
+            <StatItem
+              onHoverElem={onHoverElem}
+              setOnHoverElem={setOnHoverElem}
+              tab="allPost"
+              icon={<EventNoteIcon sx={{ color: theme.palette.grey[500] }} />}
+              data={data.nbOfAllPost}
+              title="Tất cả vấn đề của bạn"
+              subTitle="Số lượng các vấn đề của bạn từ trước đên nay"
+              onNavigate={() => onNavigate("/my-request?detail=all")}
             />
           </Box>
           <Divider />

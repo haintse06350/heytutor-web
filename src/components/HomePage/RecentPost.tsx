@@ -41,7 +41,8 @@ const RecentPost = () => {
         <Box>
           {map(["1", "2"], (item: any, index: number) => (
             <>
-              <Box sx={{ my: 1, px: 1 }} key={index}>
+              <Box sx={{ my: 1, px: 1 }} key={index
+              }>
                 <Box sx={{ display: "flex" }}>
                   <Typography variant="subtitle1" sx={{ textAlign: "left" }} noWrap>
                     Tiêu đề của bài post

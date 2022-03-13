@@ -22,6 +22,7 @@ import PostItem from "./components/HomePage/PostItem";
 import ManagerUser from "./components/ManagerUser/ManagerUser";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
 import { DetailPage } from "./components/DetailPage";
+import PostDetail from "./components/HomePage/PostDetail";
 
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
@@ -115,7 +116,7 @@ export default function AppRoutes() {
                   id: 1,
                   userId: 1,
                   eventId: 1,
-                  user: { id: 1, name: "Duc anh" },
+                  user: { id: 2, name: "Duc anh" },
                   title: "Help CSD nao cac tinh yeu",
                   content: "sjahdkashdkjsahdkjsahdkjsahkd dhsakjdhksajhda",
                   hashtag: ["#CSD", "#MAS"],
@@ -124,11 +125,30 @@ export default function AppRoutes() {
               />
             }
           />
+          <Route
+            path={"/test-post-detail"}
+            element={
+              <PostDetail
+                post={{
+                  id: 1,
+                  userId: 1,
+                  eventId: 1,
+                  user: { id: 2, name: "Duc anh" },
+                  title: "Help CSD nao cac tinh yeu",
+                  content: "sjahdkashdkjsahdkjsahdkjsahkd dhsakjdhksajhda",
+                  hashtag: ["#CSD", "#MAS"],
+                  commentCount: 12,
+                }}
+                openDialog={true}
+                listComment={[
+                  { id: 1, user: { name: "Duc Anh" }, comment: "Inbox toi ban oi", createdAt: "9 phút trước" },
+                  { id: 2, user: { name: "Trung Hai" }, comment: "Inbox toi ban oi", createdAt: "9 phút trước" },
+                ]}
+              />
+            }
+          />
           <Route path={"/testTableList"} element={<ManagerUser />} />
           <Route path={"/testUseLocalStorage"} element={<CreatePost />} />
-          <Route path={"/limitActivity"} element={<LimitActivity />} />
-          <Route path={"/removePost"} element={<RemovePost />} />
-          <Route path={"/removeComment"} element={<RemoveComment />} />
         </Routes>
       </Fragment>
     </Router>
