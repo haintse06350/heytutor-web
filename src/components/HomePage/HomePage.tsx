@@ -18,8 +18,6 @@ import { Home } from "../../models/home";
 const HomePage = () => {
   const [data, setData]: any = React.useState(null);
 
-  console.log(data);
-
   // const classes = useStyles();
   const getUserStats = async () => {
     const data = await Home.getUserStats();
