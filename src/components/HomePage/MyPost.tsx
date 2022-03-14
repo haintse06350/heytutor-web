@@ -84,7 +84,7 @@ const MyPost = (props: any) => {
               data={data.nbOfPendingPost}
               title="Vấn đề chưa có người đăng ký "
               subTitle="Số lượng các vấn đề chưa có người đăng ký"
-              onNavigate={() => onNavigate("/my-request?detail=pending")}
+              onNavigate={() => onNavigate("/my-request?detail=isPending")}
             />
             <StatItem
               onHoverElem={onHoverElem}
@@ -94,7 +94,7 @@ const MyPost = (props: any) => {
               data={data.nbOfActivePost}
               title="Vấn đề đã có người đăng ký"
               subTitle="Số lượng các vấn đề đã có người đăng ký"
-              onNavigate={() => onNavigate("/my-request?detail=active")}
+              onNavigate={() => onNavigate("/my-request?detail=isActive")}
             />
             <StatItem
               onHoverElem={onHoverElem}
@@ -104,7 +104,7 @@ const MyPost = (props: any) => {
               data={data.nbOfConfirmedPost}
               title="Vấn đề đang được hỗ trợ"
               subTitle="Số lượng các vấn đề  đang trong quá trình hỗ trợ"
-              onNavigate={() => onNavigate("/my-request?detail=processing")}
+              onNavigate={() => onNavigate("/my-request?detail=isProcessing")}
             />
             <StatItem
               onHoverElem={onHoverElem}
@@ -114,7 +114,7 @@ const MyPost = (props: any) => {
               data={data.nbOfDonePost}
               title="Vấn đề đã hoàn thành hỗ trợ"
               subTitle="Số lượng các vấn đề  đã hoàn thành quá trình hỗ trợ"
-              onNavigate={() => onNavigate("/my-request?detail=done")}
+              onNavigate={() => onNavigate("/my-request?detail=isDone")}
             />
             <StatItem
               onHoverElem={onHoverElem}

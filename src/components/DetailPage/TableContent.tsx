@@ -17,6 +17,7 @@ import { visuallyHidden } from "@mui/utils";
 import moment from "moment";
 import { map } from "lodash";
 import { stringAvatar } from "../UserProfile/helper";
+import { useNavigate } from "react-router-dom";
 
 type Order = "asc" | "desc";
 
@@ -55,6 +56,12 @@ const headCells = [
     label: "Hashtag",
   },
   {
+    id: "event",
+    numeric: true,
+    disablePadding: false,
+    label: "Sự kiện",
+  },
+  {
     id: "registerCount",
     numeric: true,
     disablePadding: false,
@@ -75,6 +82,7 @@ export const TableContent = ({ data, status }: any) => {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Post>("createdAt");
+  const navigate = useNavigate();
 
   const EnhancedTableHead = (props: any) => {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
@@ -124,18 +132,6 @@ export const TableContent = ({ data, status }: any) => {
     setOrderBy(property);
   };
 
-  function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) {
-        return order;
-      }
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-  }
-
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -155,15 +151,6 @@ export const TableContent = ({ data, status }: any) => {
     setPage(0);
   };
 
-  function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-  ): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-    return order === "desc"
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
@@ -179,6 +166,10 @@ export const TableContent = ({ data, status }: any) => {
     }
 
     setSelected(newSelected);
+  };
+
+  const handleViewDetail = (eventId: any) => {
+    navigate(`/event-detail?eventid=${eventId}`);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
@@ -276,6 +267,12 @@ export const TableContent = ({ data, status }: any) => {
                   </TableCell>
                   <TableCell sx={{ textDecoration: "underline", cursor: "pointer" }} align="center">
                     {map(JSON.parse(row["Post.hashtag"]), (item: any) => item)}
+                  </TableCell>
+                  <TableCell
+                    onClick={() => handleViewDetail(row.eventId)}
+                    sx={{ textDecoration: "underline", cursor: "pointer", fontWeight: 500 }}
+                    align="center">
+                    {row.eventId}
                   </TableCell>
                   <TableCell align="center">{row.registerUsers.length}</TableCell>
                   <TableCell align="center">{moment().from(row["Post.createdAt"])}</TableCell>

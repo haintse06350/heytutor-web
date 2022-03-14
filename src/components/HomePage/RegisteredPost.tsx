@@ -101,7 +101,7 @@ const RegisteredPost = (props: any) => {
               data={data.nbOfPostOnEvent}
               title="Vấn đề tôi đang hỗ trợ trong các sự kiện"
               subTitle="Số vấn đề tôi đang hỗ trợ trong các sự kiện"
-              onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
+              onNavigate={() => onNavigate("/registered-request?detail=isActive")}
             />
 
             <StatItem
@@ -112,7 +112,7 @@ const RegisteredPost = (props: any) => {
               data={data.nbOfActivePost}
               title="Vấn đề tôi đã đăng ký thành công nhưng chưa trao đổi thông tin"
               subTitle="Số vấn đề tôi đang đăng ký hỗ trợ thành công nhưng hai người chưa trao đổi thông tin"
-              onNavigate={() => onNavigate("/registered-request?detail=done")}
+              onNavigate={() => onNavigate("/registered-request?detail=isActive")}
             />
             <StatItem
               onHoverElem={onHoverElem}
@@ -122,7 +122,7 @@ const RegisteredPost = (props: any) => {
               data={data.nbOfDonePost}
               title="Vấn đề tôi đã giải quyết thành công"
               subTitle="Số vấn đề tôi đã giải quyết hỗ trợ thành công"
-              onNavigate={() => onNavigate("/registered-request?detail=done")}
+              onNavigate={() => onNavigate("/registered-request?detail=isDone")}
             />
             <StatItem
               onHoverElem={onHoverElem}
@@ -132,7 +132,7 @@ const RegisteredPost = (props: any) => {
               data={data.nbOfAllPost}
               title="Tất cả vấn đề tôi đã đăng ký"
               subTitle="Số vấn đề tôi đã hỗ trợ từ trước tới nay"
-              onNavigate={() => onNavigate("/registered-request?detail=done")}
+              onNavigate={() => onNavigate("/registered-request?detail=all")}
             />
           </Box>
           <Divider />
