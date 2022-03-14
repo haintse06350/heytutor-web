@@ -7,166 +7,197 @@ import {
   Box,
   Paper,
   TextField,
-  InputAdornment,
   MenuItem,
   Grid,
-  TableHead,
-  TableRow,
-  TableCell,
+  Chip,
+  InputAdornment,
+  Popover,
+  FormGroup,
+  FormControlLabel,
   Checkbox,
-  TableSortLabel,
-  TableContainer,
-  Table,
-  TableBody,
-  TablePagination,
 } from "@mui/material";
+import DateRangePicker from "./DateRangePicker";
+import MultiSelectUnstyled, { MultiSelectUnstyledProps } from "@mui/base/MultiSelectUnstyled";
+import { selectUnstyledClasses } from "@mui/base/SelectUnstyled";
+import OptionUnstyled, { optionUnstyledClasses } from "@mui/base/OptionUnstyled";
+import PopperUnstyled from "@mui/base/PopperUnstyled";
+import { styled } from "@mui/system";
+import { DateRange } from "@mui/lab/DateRangePicker";
+import { TableContent } from "./TableContent";
+
 import SearchIcon from "@mui/icons-material/Search";
 import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
-import { visuallyHidden } from "@mui/utils";
+import { values, map, uniq, compact, flattenDeep } from "lodash";
+import moment from "moment";
+import { Post } from "../../models/post";
+import { filter } from "lodash";
+
+const blue = {
+  100: "#DAECFF",
+  200: "#99CCF3",
+  400: "#3399FF",
+  500: "#007FFF",
+  600: "#0072E5",
+  900: "#003A75",
+};
+
+const grey = {
+  100: "#E7EBF0",
+  200: "#E0E3E7",
+  300: "#CDD2D7",
+  400: "#B2BAC2",
+  500: "#A0AAB4",
+  600: "#6F7E8C",
+  700: "#3E5060",
+  800: "#2D3843",
+  900: "#1A2027",
+};
+
+const StyledButton = styled("button")(
+  ({ theme }) => `
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+  border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[300]};
+  border-radius: 0.75em;
+  padding: 14px 16.5px;
+  text-align: left;
+  line-height: 1.5;
+  color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+
+  &:hover {
+    background: ${theme.palette.mode === "dark" ? "" : grey[100]};
+    border-color: ${theme.palette.mode === "dark" ? grey[700] : grey[400]};
+  }
+
+  &.${selectUnstyledClasses.focusVisible} {
+    outline: 3px solid ${theme.palette.mode === "dark" ? blue[600] : blue[100]};
+  }
+
+  &.${selectUnstyledClasses.expanded} {
+    &::after {
+      margin-left: 8px;
+      content: '▴';
+    }
+  }
+
+  &::after {
+    margin-left: 8px;
+    content: '▾';
+    float: right;
+  }
+  `
+);
+
+const StyledListbox = styled("ul")(
+  ({ theme }) => `
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  padding: 5px;
+  margin: 10px 0;
+  min-width: 320px;
+  background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+  border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[300]};
+  border-radius: 0.75em;
+  color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+  overflow: auto;
+  outline: 0px;
+  `
+);
+
+const StyledOption = styled(OptionUnstyled)(
+  ({ theme }) => `
+  list-style: none;
+  padding: 8px;
+  border-radius: 0.45em;
+  cursor: default;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  &.${optionUnstyledClasses.selected} {
+    background-color: ${theme.palette.mode === "dark" ? blue[900] : blue[100]};
+    color: ${theme.palette.mode === "dark" ? blue[100] : blue[900]};
+  }
+
+  &.${optionUnstyledClasses.highlighted} {
+    background-color: ${theme.palette.mode === "dark" ? grey[800] : grey[100]};
+    color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+  }
+
+  &.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
+    background-color: ${theme.palette.mode === "dark" ? blue[900] : blue[100]};
+    color: ${theme.palette.mode === "dark" ? blue[100] : blue[900]};
+  }
+
+  &.${optionUnstyledClasses.disabled} {
+    color: ${theme.palette.mode === "dark" ? grey[700] : grey[400]};
+  }
+
+  &:hover:not(.${optionUnstyledClasses.disabled}) {
+    background-color: ${theme.palette.mode === "dark" ? grey[800] : grey[100]};
+    color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+  }
+  `
+);
+
+const StyledPopper = styled(PopperUnstyled)`
+  z-index: 1;
+`;
+
+const renderValue = (option: any) => {
+  if (option.length === 0) {
+    return <span>Select hashtag...</span>;
+  }
+
+  return <span>Select hashtag...</span>;
+};
+const CustomMultiSelect = React.forwardRef(function CustomMultiSelect(
+  props: MultiSelectUnstyledProps<any>,
+  ref: React.ForwardedRef<any>
+) {
+  const components: MultiSelectUnstyledProps<number>["components"] = {
+    Root: StyledButton,
+    Listbox: StyledListbox,
+    Popper: StyledPopper,
+    ...props.components,
+  };
+
+  return <MultiSelectUnstyled {...props} ref={ref} components={components} />;
+});
 
 const filterOptions = [
   {
     value: "all",
-    label: "All",
+    label: "Tất cả",
   },
   {
-    value: "registered",
-    label: "Registered",
-  },
-  {
-    value: "confirmed",
+    value: "isConfirmed",
     label: "Confirmed",
   },
   {
-    value: "pending",
+    value: "isPending",
     label: "Pending",
   },
   {
-    value: "active",
+    value: "isActive",
     label: "Active",
   },
   {
-    value: "done",
+    value: "isDone",
     label: "Done",
   },
 ];
 
-type Order = "asc" | "desc";
-
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  hashtag: string;
-  registeredCount: number;
-  commentCount: number;
-  createdAt: string;
-}
-
-const headCells = [
-  {
-    id: "id",
-    numeric: true,
-    disablePadding: true,
-    label: "#",
-  },
-  {
-    id: "title",
-    numeric: false,
-    disablePadding: false,
-    label: "Title",
-  },
-  {
-    id: "content",
-    numeric: false,
-    disablePadding: false,
-    label: "Content",
-  },
-  {
-    id: "hashtag",
-    numeric: false,
-    disablePadding: false,
-    label: "Hashtag",
-  },
-  {
-    id: "registeredCount",
-    numeric: true,
-    disablePadding: false,
-    label: "Registered Count",
-  },
-  {
-    id: "commentCount",
-    numeric: true,
-    disablePadding: false,
-    label: "Comment Count",
-  },
-  {
-    id: "createdAt",
-    numeric: false,
-    disablePadding: false,
-    label: "Created At",
-  },
-];
-
-function createData(
-  id: number,
-  title: string,
-  content: string,
-  hashtag: string,
-  registeredCount: number,
-  commentCount: number,
-  createdAt: string
-): Post {
-  return {
-    id,
-    title,
-    content,
-    hashtag,
-    registeredCount,
-    commentCount,
-    createdAt,
-  };
-}
-
-const rows = [
-  createData(1, "help me with csd", "co ai nhan support PE mon CSD khong", "CSD", 67, 43, "2022-02-28 09:43:09"),
-  createData(
-    2,
-    "Nhan sp PRO, DBI, WED",
-    "Mình nhận sp PE các môn code PRO, DBI, WED nhé Các bạn cần có thể ib mình",
-    "CSD",
-    51,
-    49,
-    "2022-02-28 09:43:09"
-  ),
-  createData(
-    3,
-    "Help lap thay haint",
-    "Các ac ơi,HL có gv nào dạy lab dễ dễ ko ạ. Chứ em học thầy hailt tới bh mới kiếm đc 110 loc.",
-    "CSD",
-    24,
-    60,
-    "2022-02-28 09:43:09"
-  ),
-  createData(
-    4,
-    "Nhan sp MAD101, MAE101",
-    "Nhận sp progress test 2 MAD101, MAE101 , assignment, homework...",
-    "CSD",
-    24,
-    40,
-    "2022-02-28 09:43:09"
-  ),
-  createData(
-    5,
-    "Can ng sp PRN211",
-    "Mình cần người SP môn prn211giá cả thoả thận ạ",
-    "CSD",
-    49,
-    39,
-    "2022-02-28 09:43:09"
-  ),
-  createData(6, "Nhan sp DBI,JAVA, JAVAWEB", "Mình nhận làm sp PRJ", "CSD", 87, 65, "2022-02-28 09:43:09"),
+const timeOpts = [
+  { value: "Tuần này", label: "Tuần này" },
+  { value: "Tháng này", label: "Tháng này" },
+  { value: "Chọn ngày", label: "Chọn ngày" },
 ];
 
 export const DetailPage = () => {
@@ -179,143 +210,149 @@ export const DetailPage = () => {
   const isMyRequest = pathname.includes("my-request");
   const isRegistered = pathname.includes("registered-request");
 
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selected, setSelected] = React.useState<readonly number[]>([]);
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Post>("createdAt");
+  const [filters, setFilters]: any = React.useState({ status: "all" });
+  const [openDatePicker, setOpenDatePicker] = React.useState(false);
+  const [finishPickDate, setFinishPickDate] = React.useState(false);
+  const [postData, setPostData] = React.useState(null);
+  const [listHashtag, setListHashtag]: any = React.useState(null);
+  const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
+  const [postStatus, setPostStatus] = React.useState("");
 
-  const [filter, setFilter] = React.useState("all");
+  const onChangeFilter = (event: any, type: string) => {
+    if (type === "status") {
+      setPostStatus(event.target.value);
+    }
+    if (type === "hashtag") {
+      if (event.length === 0) {
+        delete filters["hashtag"];
+        setFilters({ ...filters });
+      } else {
+        const newFilter = {
+          hashtag: event,
+        };
+        setFilters({ ...filters, ...newFilter });
+      }
+    } else if (type === "time") {
+      if (event.target.value === "Chọn ngày") {
+        delete filters["time"];
+        setOpenDatePicker(true);
+      } else {
+        const newFilter = {
+          time: event.target.value,
+        };
+        setFilters({ ...filters, ...newFilter });
+      }
+    } else {
+      const newFilter = {
+        status: event.target.value,
+      };
+      setFilters({ ...filters, ...newFilter });
+    }
+  };
 
-  const onChangeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(event.target.value);
+  const onCloseDatePicker = () => {
+    setOpenDatePicker(false);
+    setFinishPickDate(true);
+  };
+
+  const onDeleteFilter = (type: string, item: string) => {
+    if (type === "hashtag") {
+      const filterHashtag = filter(filters.hashtag, (o: string) => o !== item);
+      filters.hashtag = filterHashtag;
+    } else {
+      for (const key in filters) {
+        if (filters[key] === item) {
+          delete filters[key];
+        }
+      }
+    }
+    setFilters({ ...filters });
+  };
+
+  const renderHashtag = (item: any) => {
+    return map(item, (tag: any) => {
+      return (
+        <Chip
+          key={tag}
+          label={tag}
+          classes={{ root: classes.deleteIcon }}
+          onDelete={() => onDeleteFilter("hashtag", tag)}
+        />
+      );
+    });
   };
 
   React.useEffect(() => {
     if (detail) {
-      setFilter(detail);
+      const newFilter = {
+        status: detail,
+      };
+      setFilters({ ...filters, ...newFilter });
     }
   }, [detail]);
 
-  const EnhancedTableHead = (props: any) => {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof Post) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
-    return (
-      <TableHead>
-        <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                "aria-label": "select all desserts",
-              }}
-            />
-          </TableCell>
-          {headCells.map((headCell: any) => (
-            <TableCell
-              key={headCell.id}
-              align={"center"}
-              padding={"normal"}
-              sortDirection={orderBy === headCell.id ? order : false}>
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}>
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc" ? "sorted descending" : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-    );
-  };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      // const newSelecteds = rows.map((n) => n.name);
-      // setSelected(newSelecteds);
-      // return;
-    }
-    setSelected([]);
-  };
-
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Post) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) {
-        return order;
+  React.useEffect(() => {
+    let time: any = null;
+    const compactDateData = compact(dateData);
+    if (finishPickDate) {
+      if (compactDateData.length === 1) {
+        time = { date: moment(compactDateData[0].toString()).format("MMM Do YY") };
+      } else {
+        time = {
+          fromto: `
+            Từ ${moment(compactDateData[0].toString()).format("MMM Do YY")} Tới ${moment(
+            compactDateData[1].toString()
+          ).format("MMM Do YY")}
+          `,
+        };
       }
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-  }
-
-  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
+      setFilters({ ...filters, ...time });
     }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
+  }, [finishPickDate]);
+
+  React.useEffect(() => {
+    if (postData) {
+      const listHashtag = map(postData, (item: any) => {
+        return JSON.parse(item["Post.hashtag"]);
+      });
+      const uniqHashTag = uniq(flattenDeep(listHashtag));
+      setListHashtag(uniqHashTag);
     }
-    return 0;
-  }
+  }, [postData]);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  React.useEffect(() => {
+    if (filters) {
+      const statusFilter = filters.status;
+      const hashtagFilter = filters.hashtag;
+      let filterOptions = {};
+      let hashtagOptions = {};
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+      if (statusFilter) {
+        filterOptions = {
+          type: statusFilter,
+          value: 1,
+        };
+      }
+      if (hashtagFilter) {
+        hashtagOptions = {
+          type: "hashtag",
+          value: hashtagFilter,
+        };
+      }
 
-  function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-  ): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-    return order === "desc"
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      Post.getListPostByFilter({ filters: [filterOptions, hashtagOptions] }).then((res) => {
+        setPostData(res);
+      });
     }
+  }, [filters]);
 
-    setSelected(newSelected);
+  // console.log(filters);
+
+  const isHashTag = (item: any) => {
+    if (filters["hashtag"] === item) {
+      return true;
+    }
   };
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-  const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
   return (
     <Box sx={{ mt: 10 }}>
@@ -326,12 +363,21 @@ export const DetailPage = () => {
             current={{ title: isMyRequest ? "My requests" : isRegistered ? "Registered Requests" : "" }}
           />
         </Box>
-        <Box sx={{ pb: 3 }}>
-          <Paper elevation={2}>
-            <Box sx={{ p: 2, width: "100%" }}>
+        <Box sx={{ pb: 3, mr: 1 }}>
+          <Paper elevation={2} sx={{ p: 2 }}>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginBottom: 16,
+                padding: "0px 8px",
+              }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   fullWidth
+                  autoFocus
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -344,121 +390,89 @@ export const DetailPage = () => {
                   variant="outlined"
                 />
               </Box>
-            </Box>
+            </div>
+            <Grid container item xs={12} spacing={1} sx={{ width: "100%" }}>
+              <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+                <Box component="form" noValidate autoComplete="off">
+                  <TextField
+                    fullWidth
+                    id="outlined-select-currency"
+                    select
+                    label="Trạng thái"
+                    value={filters.status}
+                    onChange={(e: any) => onChangeFilter(e, "status")}>
+                    {filterOptions.map((option: any) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+                <Box component="form" noValidate autoComplete="off">
+                  <TextField
+                    fullWidth
+                    id="outlined-select-currency"
+                    select
+                    label="Thời gian"
+                    value={filters.time}
+                    onChange={(e: any) => onChangeFilter(e, "time")}>
+                    {timeOpts.map((option: any) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+                <Popover
+                  open={openDatePicker}
+                  onClose={onCloseDatePicker}
+                  anchorOrigin={{ vertical: "center", horizontal: "center" }}
+                  transformOrigin={{ vertical: "center", horizontal: "center" }}>
+                  <DateRangePicker setValue={setDateData} value={dateData} />
+                </Popover>
+              </Grid>
+              <Grid item xs={12} md={3} sx={{ minWidth: "20%", "& > form": { height: "100%" } }}>
+                <Box component="form" noValidate autoComplete="off">
+                  <CustomMultiSelect onChange={(e: any) => onChangeFilter(e, "hashtag")} renderValue={renderValue}>
+                    {listHashtag?.map((option: any, index: number) => (
+                      <StyledOption key={index} value={option}>
+                        {option}
+                      </StyledOption>
+                    ))}
+                  </CustomMultiSelect>
+                </Box>
+              </Grid>
+            </Grid>
+            <Grid container spacing={1} sx={{ mt: 1, width: "100%" }}>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox defaultChecked />} label="Đang trongg event" />
+                <FormControlLabel control={<Checkbox />} label="Disabled" />
+              </FormGroup>
+            </Grid>
 
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <Box sx={{ px: 2, pb: 2, width: "100%" }}>
-                  <Box component="form" noValidate autoComplete="off">
-                    <TextField
-                      fullWidth
-                      id="outlined-select-currency"
-                      select
-                      label="Request status"
-                      value={filter}
-                      onChange={onChangeFilter}>
-                      {filterOptions.map((option: any) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <Box sx={{ px: 2, pb: 2, width: "100%" }}>
-                  <Box component="form" noValidate autoComplete="off">
-                    <TextField
-                      fullWidth
-                      id="outlined-select-currency"
-                      select
-                      label="Request status"
-                      value={filter}
-                      onChange={onChangeFilter}>
-                      {filterOptions.map((option: any) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                </Box>
-              </Grid>
+            <Grid container spacing={1} sx={{ mt: 1, width: "100%" }}>
+              {map(values(filters), (item: any) => (
+                <Grid item sx={{ mr: 0.5 }}>
+                  {isHashTag(item) ? (
+                    renderHashtag(item)
+                  ) : (
+                    <Chip
+                      classes={{ root: classes.deleteIcon }}
+                      label={item}
+                      variant="outlined"
+                      onDelete={() => onDeleteFilter("filter", item)}
+                    />
+                  )}
+                </Grid>
+              ))}
             </Grid>
           </Paper>
         </Box>
         <Box sx={{ pb: 5, width: "100%" }}>
           <Paper sx={{ width: "100%" }} elevation={2}>
-            <TableContainer>
-              <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? "small" : "medium"}>
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
-                <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          onClick={(event) => handleClick(event, row.id)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.id}
-                          selected={isItemSelected}>
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell align="center">{row.id}</TableCell>
-                          <TableCell size="medium" align="center">
-                            {row.title}
-                          </TableCell>
-                          <TableCell align="center">{row.content}</TableCell>
-                          <TableCell align="center">{row.hashtag}</TableCell>
-                          <TableCell align="center">{row.commentCount}</TableCell>
-                          <TableCell align="center">{row.registeredCount}</TableCell>
-                          <TableCell align="center">{row.createdAt}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: (dense ? 33 : 53) * emptyRows,
-                      }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            <TableContent data={postData} status={postStatus} />
           </Paper>
         </Box>
       </Page>

@@ -44,4 +44,11 @@ export class Post {
     await ErrorUtils.throwError(res);
     return res.json();
   };
+
+  static getListPostByFilter = async (params: any) => {
+    const query = JSON.stringify(params);
+    const res = await FetchUtils.get(`/get-list-post-by-filter?filter=${query}`);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
 }
