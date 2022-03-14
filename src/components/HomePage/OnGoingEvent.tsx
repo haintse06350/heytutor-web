@@ -12,7 +12,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import RecordVoiceOverOutlinedIcon from "@mui/icons-material/RecordVoiceOverOutlined";
 import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import SupervisedUserCircleOutlinedIcon from "@mui/icons-material/SupervisedUserCircleOutlined";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -26,8 +26,15 @@ const OnGoingEvent = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  const navigate = useNavigate();
 
   const [data, setData]: any = useState(null);
+  console.log(data);
+
+  const handleViewDetail = (eventId: any) => {
+    //navigate sang URL detail EVENT
+    navigate(`/event-detail?eventid=${eventId}`);
+  };
 
   const itemEvent = (data: any) => {
     return (
@@ -80,7 +87,11 @@ const OnGoingEvent = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={3} sx={{ display: "grid", justifyContent: "center" }}>
-                  <Button to="#" size="small" color="inherit" component={RouterLink} variant="contained">
+                  <Button
+                    size="small"
+                    color="inherit"
+                    onClick={() => handleViewDetail(item["Event.id"])}
+                    variant="contained">
                     Xem chi tiết
                   </Button>
                 </Grid>
@@ -104,7 +115,7 @@ const OnGoingEvent = () => {
         </Box>
         <Divider />
         <Box sx={{ p: 2, textAlign: "right" }}>
-          <Button to="#" size="small" color="inherit" component={RouterLink} endIcon={<ArrowForwardIosOutlinedIcon />}>
+          <Button size="small" color="inherit" endIcon={<ArrowForwardIosOutlinedIcon />}>
             Xem chi tiết
           </Button>
         </Box>

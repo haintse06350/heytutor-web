@@ -13,4 +13,9 @@ export class Event {
         await ErrorUtils.throwError(res);
         return res.json();
     }
+    static async getEventDetailByEventId(eventId:any){
+        const res = await FetchUtils.get(`/get-event-detail/${eventId}`);
+        await ErrorUtils.throwError(res);
+        return res.json();
+    }
 }

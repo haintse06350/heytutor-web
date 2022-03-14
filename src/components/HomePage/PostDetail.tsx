@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import SendIcon from "@mui/icons-material/Send";
 import { Avatar, Dialog, Grid, Typography, Box, Tooltip, MenuItem, Menu, Button, IconButton } from "@mui/material";
 import { useStyles } from "./PostDetail.style";
 import { Comment as CommentModel } from "../../models/comment";
 import { stringAvatar } from "../UserProfile/helper";
+import Page from "../../layout/Page";
+import { useLocalStorage } from "../usingLocalStorage/usingLocalStorage";
 import moment from "moment";
 import TextField from "@mui/material/TextField";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import SendIcon from "@mui/icons-material/Send";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-import Page from "../../layout/Page";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
-import { useLocalStorage } from "../usingLocalStorage/usingLocalStorage";
 
 const PostDetail = (props: any) => {
   const { post, onCloseDialog, openDialog } = props;

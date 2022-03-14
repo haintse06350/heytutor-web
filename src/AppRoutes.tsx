@@ -23,7 +23,7 @@ import ManagerUser from "./components/ManagerUser/ManagerUser";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
 import { DetailPage } from "./components/DetailPage";
 import PostDetail from "./components/HomePage/PostDetail";
-
+import EventDetail from "./components/Event/EventDetail";
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
 
@@ -149,6 +149,7 @@ export default function AppRoutes() {
           />
           <Route path={"/testTableList"} element={<ManagerUser />} />
           <Route path={"/testUseLocalStorage"} element={<CreatePost />} />
+          <Route path={"/event-detail"} element={<EventDetail />} />
         </Routes>
       </Fragment>
     </Router>
