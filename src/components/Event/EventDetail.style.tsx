@@ -2,11 +2,13 @@ import { makeStyles } from "@mui/styles";
 
 export const useStyles: any = makeStyles(() => ({
   root: {
-    width: "100%",
+    width: "calc(100%-20px)",
+    height: "auto",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    margin: 20,
   },
   moreBtn: {
     display: "flex",

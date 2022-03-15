@@ -20,9 +20,11 @@ import TabPanel from "@mui/lab/TabPanel";
 import { Event } from "../../models/event";
 import moment from "moment";
 import { map } from "lodash";
+import { useStyles } from "./HomePage.style";
 
 const OnGoingEvent = () => {
   const [value, setValue] = React.useState("1");
+  const classes = useStyles();
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -76,43 +78,52 @@ const OnGoingEvent = () => {
         <Box dir="ltr">
           {data?.map((item: any, index: number) => (
             <Box key={index}>
+              <br />
               <Divider />
-              <Grid container sx={{ p: 2 }}>
-                <Grid sx={{ display: "flex", alignItems: "center" }} item xs={9}>
+
+              <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
+                <Grid item xs={10}>
                   <Typography variant="h6" sx={{ ml: 1 }}>
                     {item["Event.title"]}
                   </Typography>
-                  <Typography variant="caption" color="#637381" sx={{ ml: 1 }}>
-                    {moment().from(item["Event.updatedAt"])}
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography
+                    variant="caption"
+                    color="#637381"
+                    sx={{ ml: 1, display: "flex", justifyContent: "flex-start" }}>
+                    {moment(item["Event.updatedAt"]).lang("vi").format("LL")}
                   </Typography>
                 </Grid>
-                <Grid item xs={3} sx={{ display: "grid", justifyContent: "center" }}>
-                  <Button
-                    size="small"
-                    color="inherit"
-                    onClick={() => handleViewDetail(item["Event.id"])}
-                    variant="contained">
-                    Xem chi tiết
-                  </Button>
-                </Grid>
-                <Box sx={{ display: "flex", ml: 1 }}>
-                  <Tooltip title="Số lượt xem">
-                    <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                      <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item["Event.viewCount"]}</Typography>
-                    </Box>
-                  </Tooltip>
-                  <Tooltip title="Số lượt đăng kí">
-                    <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                      <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item.eventStats.listEventUser.numberOfUser}</Typography>
-                    </Box>
-                  </Tooltip>
-                </Box>
+              </Grid>
+
+              <Box sx={{ display: "flex", ml: 1, mt: 1, mb: 1 }}>
+                <Tooltip title="Số lượt xem">
+                  <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                    <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                    <Typography style={{ fontSize: 14 }}>{item["Event.viewCount"]}</Typography>
+                  </Box>
+                </Tooltip>
+                <Tooltip title="Số lượt đăng kí">
+                  <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                    <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                    <Typography style={{ fontSize: 14 }}>{item.eventStats.listEventUser.numberOfUser}</Typography>
+                  </Box>
+                </Tooltip>
+              </Box>
+              <Grid item>
+                <Button
+                  size="small"
+                  color="inherit"
+                  onClick={() => handleViewDetail(item["Event.id"])}
+                  variant="contained">
+                  Xem chi tiết
+                </Button>
               </Grid>
             </Box>
           ))}
         </Box>
+        <br />
         <Divider />
         <Box sx={{ p: 2, textAlign: "right" }}>
           <Button size="small" color="inherit" endIcon={<ArrowForwardIosOutlinedIcon />}>
