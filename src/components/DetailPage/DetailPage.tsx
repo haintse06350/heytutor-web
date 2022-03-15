@@ -217,6 +217,21 @@ export const DetailPage = () => {
   const [listHashtag, setListHashtag]: any = React.useState(null);
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   const [postStatus, setPostStatus] = React.useState("");
+  const [isOnEventChecked, setIsOnEventChecked] = React.useState(false);
+
+  const onChangeEventFilter = (e: any) => {
+    let onEventFilter = {};
+    if (e.target.checked) {
+      onEventFilter = { onEvent: "onEvent" };
+      setIsOnEventChecked(true);
+    } else {
+      setIsOnEventChecked(false);
+      delete filters["onEvent"];
+    }
+    setFilters({ ...filters, ...onEventFilter });
+  };
+
+  console.log(filters);
 
   const onChangeFilter = (event: any, type: string) => {
     if (type === "status") {
@@ -256,6 +271,9 @@ export const DetailPage = () => {
   };
 
   const onDeleteFilter = (type: string, item: string) => {
+    if (type === "onEvent") {
+      setIsOnEventChecked(false);
+    }
     if (type === "hashtag") {
       const filterHashtag = filter(filters.hashtag, (o: string) => o !== item);
       filters.hashtag = filterHashtag;
@@ -324,8 +342,11 @@ export const DetailPage = () => {
     if (filters) {
       const statusFilter = filters.status;
       const hashtagFilter = filters.hashtag;
+      const eventFilter = filters.onEvent;
+
       let filterOptions = {};
       let hashtagOptions = {};
+      let eventOptions = {};
 
       if (statusFilter) {
         filterOptions = {
@@ -340,13 +361,18 @@ export const DetailPage = () => {
         };
       }
 
-      Post.getListPostByFilter({ filters: [filterOptions, hashtagOptions] }).then((res) => {
+      if (eventFilter) {
+        eventOptions = {
+          type: "onEvent",
+          value: 1,
+        };
+      }
+
+      Post.getListPostByFilter({ filters: [filterOptions, hashtagOptions, eventOptions] }).then((res) => {
         setPostData(res);
       });
     }
   }, [filters]);
-
-  // console.log(filters);
 
   const isHashTag = (item: any) => {
     if (filters["hashtag"] === item) {
@@ -445,10 +471,13 @@ export const DetailPage = () => {
                 </Box>
               </Grid>
             </Grid>
-            <Grid container spacing={1} sx={{ mt: 1, width: "100%" }}>
+            <Grid container spacing={1} sx={{ p: 1, width: "100%" }}>
               <FormGroup>
-                <FormControlLabel control={<Checkbox defaultChecked />} label="Đang trongg event" />
-                <FormControlLabel control={<Checkbox />} label="Disabled" />
+                <FormControlLabel
+                  onChange={onChangeEventFilter}
+                  control={<Checkbox checked={isOnEventChecked} />}
+                  label="Đang trong event"
+                />
               </FormGroup>
             </Grid>
 
@@ -462,7 +491,7 @@ export const DetailPage = () => {
                       classes={{ root: classes.deleteIcon }}
                       label={item}
                       variant="outlined"
-                      onDelete={() => onDeleteFilter("filter", item)}
+                      onDelete={() => onDeleteFilter(item === "onEvent" ? "onEvent" : "filter", item)}
                     />
                   )}
                 </Grid>

@@ -106,7 +106,6 @@ const RegisteredPost = (props: any) => {
               />
             </Box>
           )}
-
           <Divider />
           <Box sx={{ display: "flex" }} className={classes.btnHideContentMyPost}>
             <Box sx={{ pt: 2, textAlign: "left" }}>
