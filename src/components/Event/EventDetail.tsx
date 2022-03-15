@@ -10,7 +10,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Event } from "../../models/event";
+import moment from "moment";
 const EventDetail = () => {
   const classes = useStyles();
   const urlParams = new URLSearchParams(window.location.search);
@@ -29,22 +31,22 @@ const EventDetail = () => {
 
   return (
     <Page className={classes.root}>
-      <Grid container className={classes.dialogHeader}>
-        <Grid xs={6} item className={classes.backBtn}>
-          <Tooltip title="Trở lại">
-            <IconButton>
-              <ArrowBackIosIcon />
-            </IconButton>
-          </Tooltip>
-        </Grid>
-        <Grid xs={6} item className={classes.moreBtn}>
-          <IconButton>
-            <MoreHorizIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-      <br></br>
       <Grid item xs={12} className={classes.postContent}>
+        <Grid container className={classes.dialogHeader}>
+          <Grid xs={6} item className={classes.backBtn}>
+            <Tooltip title="Trở lại">
+              <IconButton>
+                <ArrowBackIosIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+          <Grid xs={6} item className={classes.moreBtn}>
+            <IconButton>
+              <MoreHorizIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <br></br>
         <Grid item className={classes.postTitle}>
           <Typography variant="h5">{dataDetail?.eventContent?.title}</Typography>
         </Grid>
@@ -66,11 +68,20 @@ const EventDetail = () => {
                 <Typography style={{ fontSize: 14 }}>5</Typography>
               </Box>
             </Tooltip>
+            <Tooltip title="Thời gian kết thúc đăng kí">
+              <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                <Typography style={{ fontSize: 14 }}>{moment(dataDetail?.eventContent?.endAt).fromNow()}</Typography>
+              </Box>
+            </Tooltip>
           </Box>
         </Grid>
         <Grid>
           <Tooltip title="Danh sách số vấn đề có trong sự kiện">
-            <Button variant="contained">Xem danh sách vấn đề</Button>
+            <Button variant="contained">Xem danh sách vấn đề </Button>
+          </Tooltip>
+          <Tooltip title="Danh sách người đăng ký hỗ trợ">
+            <Button variant="contained">Xem danh sách người đăng ký hỗ trợ</Button>
           </Tooltip>
         </Grid>
       </Grid>

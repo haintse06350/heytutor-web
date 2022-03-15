@@ -25,16 +25,11 @@ export const StatItem = (props: any) => {
             <Typography color={"text.primary"} variant="subtitle2" align="left">
               {title}:
             </Typography>
-            <Typography
-              ml={1}
-              color={tab === "subjects" ? "primary.main" : "text.primary"}
-              variant="subtitle2"
-              align="left"
-              noWrap>
+            <Typography ml={1} color={tab === "subjects" ? "primary.main" : "text.primary"} variant="subtitle2" noWrap>
               {data}
             </Typography>
           </Box>
-          <Typography variant="caption" color={"text.primary"} align="left">
+          <Typography variant="caption" color={"text.primary"}>
             {subTitle}
           </Typography>
         </Grid>
