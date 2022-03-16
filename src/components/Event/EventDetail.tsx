@@ -6,19 +6,22 @@ import Page from "../../layout/Page";
 //component material
 import { Grid, Typography, Box, Tooltip, IconButton, Button } from "@mui/material";
 // icon
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Event } from "../../models/event";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+
 const EventDetail = () => {
   const classes = useStyles();
   const urlParams = new URLSearchParams(window.location.search);
   const eventid = urlParams.get("eventid");
-  console.log(eventid);
   const [dataDetail, setDataDetail]: any = useState(null);
+
+  const navigate = useNavigate();
+
   const getEventDetailByEventId = async () => {
     const data = await Event.getEventDetailByEventId(eventid);
     setDataDetail(data);
@@ -27,7 +30,6 @@ const EventDetail = () => {
   useEffect(() => {
     getEventDetailByEventId();
   }, [eventid]);
-  console.log(dataDetail, "event");
 
   return (
     <Page className={classes.root}>
@@ -42,7 +44,7 @@ const EventDetail = () => {
           </Grid>
           <Grid xs={6} item className={classes.moreBtn}>
             <IconButton>
-              <MoreHorizIcon />
+              <ArrowBackIosIcon onClick={() => navigate(-1)} />
             </IconButton>
           </Grid>
         </Grid>

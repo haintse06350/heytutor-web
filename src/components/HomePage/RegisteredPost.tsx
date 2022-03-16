@@ -25,8 +25,9 @@ const RegisteredPost = (props: any) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const classes = useStyles();
+
   const onNavigate = (path: string) => {
-    navigate(path);
+    navigate(path, { state: { data } });
   };
 
   const [openInformation, setOpenInformation] = useState(true);

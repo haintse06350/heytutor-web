@@ -270,9 +270,9 @@ export const TableContent = ({ data, status }: any) => {
                   </TableCell>
                   <TableCell
                     onClick={() => handleViewDetail(row.eventId)}
-                    sx={{ textDecoration: "underline", cursor: "pointer", fontWeight: 500 }}
+                    sx={{ textDecoration: "underline", cursor: "pointer", fontWeight: 700, color: "#ff1943" }}
                     align="center">
-                    {row.eventId}
+                    {row.eventId ? "On Event" : ""}
                   </TableCell>
                   <TableCell align="center">{row.registerUsers.length}</TableCell>
                   <TableCell align="center">{moment().from(row["Post.createdAt"])}</TableCell>
