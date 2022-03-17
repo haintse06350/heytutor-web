@@ -13,17 +13,17 @@ import Post, { CreatePost } from "./components/CreatePost/CreatePost";
 import CreateEvent from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";
 
-// import UserProfile from "./components/UserProfile/UserProfile";
+import UserProfile from "./components/UserProfile/UserProfile";
 // import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/HomePage/PostItem";
-// import ManagerUser from "./components/ManagerUser/ManagerUser";
 import ManagerUser from "./components/ManagerUser/ManagerUser";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
 import { DetailPage } from "./components/DetailPage";
 import PostDetail from "./components/HomePage/PostDetail";
 import EventDetail from "./components/Event/EventDetail";
+import EventList from "./components/Event/EventList";
 export default function AppRoutes() {
   // const { user }: any = React.useContext(UserCtx);
 
@@ -71,7 +71,7 @@ export default function AppRoutes() {
 
           <Route path={"/login"} element={<Loginv2 />} />
           {/** chưa có page */}
-          <Route path={"/profile"} element={<NotFound />} />
+          <Route path={"/profile"} element={<UserProfile />} />
           <Route path={"/event"} element={<NotFound />} />
           <Route path={"/notification"} element={<NotFound />} />
           <Route
@@ -111,18 +111,20 @@ export default function AppRoutes() {
           <Route
             path={"/test"}
             element={
-              <PostItem
-                post={{
-                  id: 1,
-                  userId: 1,
-                  eventId: 1,
-                  user: { id: 2, name: "Duc anh" },
-                  title: "Help CSD nao cac tinh yeu",
-                  content: "sjahdkashdkjsahdkjsahdkjsahkd dhsakjdhksajhda",
-                  hashtag: ["#CSD", "#MAS"],
-                  commentCount: 12,
-                }}
-              />
+              <RequireAuth>
+                <PostItem
+                  post={{
+                    id: 1,
+                    userId: 1,
+                    eventId: 1,
+                    user: { id: 2, name: "Duc anh" },
+                    title: "Help CSD nao cac tinh yeu",
+                    content: "sjahdkashdkjsahdkjsahdkjsahkd dhsakjdhksajhda",
+                    hashtag: ["#CSD", "#MAS"],
+                    commentCount: 12,
+                  }}
+                />
+              </RequireAuth>
             }
           />
           <Route
@@ -147,9 +149,39 @@ export default function AppRoutes() {
               />
             }
           />
-          <Route path={"/testTableList"} element={<ManagerUser />} />
-          <Route path={"/testUseLocalStorage"} element={<CreatePost />} />
-          <Route path={"/event-detail"} element={<EventDetail />} />
+
+          <Route
+            path={"/testUseLocalStorage"}
+            element={
+              <RequireAuth>
+                <CreatePost />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={"/event-detail"}
+            element={
+              <RequireAuth>
+                <EventDetail />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={"/event-list"}
+            element={
+              <RequireAuth>
+                <EventList />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={"/manager-user"}
+            element={
+              <RequireAuth>
+                <ManagerUser />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </Fragment>
     </Router>

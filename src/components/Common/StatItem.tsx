@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Box, Grid } from "@mui/material";
+import { Typography, Box, Grid, Tooltip } from "@mui/material";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 
 export const StatItem = (props: any) => {
@@ -21,17 +21,20 @@ export const StatItem = (props: any) => {
           {icon}
         </Grid>
         <Grid flexGrow={1} item>
-          <Box sx={{ display: "flex" }}>
-            <Typography color={"text.primary"} variant="subtitle2" align="left">
-              {title}:
-            </Typography>
-            <Typography ml={1} color={tab === "subjects" ? "primary.main" : "text.primary"} variant="subtitle2" noWrap>
-              {data}
-            </Typography>
-          </Box>
-          <Typography variant="caption" color={"text.primary"}>
-            {subTitle}
-          </Typography>
+          <Tooltip title={subTitle}>
+            <Box sx={{ display: "flex" }}>
+              <Typography color={"text.primary"} variant="subtitle2" align="left">
+                {title}:
+              </Typography>
+              <Typography
+                ml={1}
+                color={tab === "subjects" ? "primary.main" : "text.primary"}
+                variant="subtitle2"
+                noWrap>
+                {data}
+              </Typography>
+            </Box>
+          </Tooltip>
         </Grid>
         <Grid display={onHoverElem === tab ? "flex" : "none"} alignItems="center" item>
           <Box width="100%">

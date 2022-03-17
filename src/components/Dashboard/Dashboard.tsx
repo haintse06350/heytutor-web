@@ -26,17 +26,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+// import MailIcon from "@mui/icons-material/Mail";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CookieIcon from "@mui/icons-material/Cookie";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import EventIcon from "@mui/icons-material/Event";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Student } from "../../models/student";
 import { keys, map, filter, pick } from "lodash";
 import { TERMS } from "../../constants/terms";
 import { useStyles } from "./Dashboard.style";
 import { Admin } from "../../models/admin";
-
+import Collapse from "@mui/material/Collapse";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -93,6 +97,7 @@ const Dashboard = () => {
 
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [openTab, setOpenTab] = useState(false);
   const [activeTab, setActiveTab] = useState("Import Data");
   const [dataStudent, setDataStudent]: any = useState(null);
   const [term, setTerm] = useState("");
@@ -119,6 +124,11 @@ const Dashboard = () => {
 
   const onCloseDrawer = () => {
     setOpen(false);
+  };
+
+  const handleClick = (e: any) => {
+    setOpenTab(!openTab);
+    console.log(e.currentTarget.value);
   };
 
   const renderDemoData = () => {
@@ -346,12 +356,41 @@ const Dashboard = () => {
         </List>
         <Divider />
         <List>
-          {["Quản lí bài đăng", "Quản lí event", "Quản lí người dùng"].map((text, index) => (
-            <ListItem button key={text} onClick={() => onChangeTab(text)}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button onClick={() => onChangeTab("manager-post")}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Quản lí bài đăng" />
+          </ListItem>
+          <ListItem button onClick={() => onChangeTab("manager-event")}>
+            <ListItemIcon>
+              <EventIcon />
+            </ListItemIcon>
+            <ListItemText primary="Quản lí event" />
+          </ListItem>
+          <ListItem onClick={(e) => handleClick(e)}>
+            <ListItemIcon>
+              <ManageAccountsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Quản lí người dùng" />
+            {openTab ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openTab} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <ManageAccountsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quản lí cộng tác viên" />
+              </ListItem>
+              <ListItem sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <ManageAccountsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quản lí người bị report" />
+              </ListItem>
+            </List>
+          </Collapse>
         </List>
       </Drawer>
       <Main open={open}>
