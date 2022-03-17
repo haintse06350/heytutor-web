@@ -1,18 +1,21 @@
-import { Card, Grid } from "@mui/material";
+import { Divider, Paper, Box, Typography } from "@mui/material";
 import { map } from "lodash";
 import * as React from "react";
 import { useStyles } from "./ResultContent.style";
 
 export default function ResultContent(props: any) {
+  const { data } = props;
   const classes = useStyles();
 
   return (
-    <Grid container spacing={1} sx={{ mt: 2 }}>
+    <Paper elevation={2} sx={{ mt: 2, px: 2 }}>
+      <Typography sx={{ mt: 2, color: "#000" }}>Showing {data?.length} results: </Typography>
       {map([1, 2, 3, 4, 5, 6], (item: any) => (
-        <Grid item xs={12} sm={6} key={item}>
-          <Card className={classes.card}></Card>
-        </Grid>
+        <Box>
+          <div className={classes.item}></div>
+          <Divider />
+        </Box>
       ))}
-    </Grid>
+    </Paper>
   );
 }
