@@ -17,8 +17,8 @@ const EventDetail = () => {
   const classes = useStyles();
   const urlParams = new URLSearchParams(window.location.search);
   const eventid = urlParams.get("eventid");
-  console.log(eventid);
   const [dataDetail, setDataDetail]: any = useState(null);
+
   const getEventDetailByEventId = async () => {
     const data = await Event.getEventDetailByEventId(eventid);
     setDataDetail(data);
@@ -27,7 +27,6 @@ const EventDetail = () => {
   useEffect(() => {
     getEventDetailByEventId();
   }, [eventid]);
-  console.log(dataDetail, "event");
 
   if (!dataDetail) {
     return (
@@ -50,7 +49,6 @@ const EventDetail = () => {
           <Grid item className={classes.postTitle}>
             <Typography variant="h5">{dataDetail?.eventContent?.title}</Typography>
           </Grid>
-
           <div className={classes.mainContent}>
             <Typography variant="body1">{dataDetail?.eventContent?.description}</Typography>
           </div>
