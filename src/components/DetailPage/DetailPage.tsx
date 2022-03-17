@@ -23,9 +23,29 @@ export const DetailPage = () => {
   const [data, setData]: any = React.useState(null);
   const [tabValue, setTabValue] = React.useState("all");
   const [hashtagLabels, setHashtagLabels] = React.useState(null);
+  const [selectedHashtag, setSelectedHashtag]: any = React.useState([]);
 
   const onChangeTab = (event: React.SyntheticEvent, tab: string) => {
     setTabValue(tab);
+    setSelectedHashtag([]);
+  };
+
+  const isSelectedHashtag = (hashtag: string) => {
+    return selectedHashtag.includes(hashtag);
+  };
+
+  const onClickHashtag = (hashtag: string) => {
+    if (selectedHashtag.length === 0) {
+      setSelectedHashtag([hashtag]);
+    } else {
+      const isSelected = isSelectedHashtag(hashtag);
+      if (isSelected) {
+        const removeHashtag = selectedHashtag.filter((item: string) => item !== hashtag);
+        setSelectedHashtag(removeHashtag);
+      } else {
+        setSelectedHashtag([...selectedHashtag, hashtag]);
+      }
+    }
   };
 
   React.useEffect(() => {
@@ -79,8 +99,10 @@ export const DetailPage = () => {
         </Box>
         <Box sx={{ pb: 3, mr: 1 }}>
           <FilterAndSearch
+            isSelectedHashtag={isSelectedHashtag}
             tabValue={tabValue}
             onChangeTab={onChangeTab}
+            onClickHashtag={onClickHashtag}
             hashtagCount={hashtagLabels}
             postCount={postCount}
           />

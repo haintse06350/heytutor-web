@@ -11,6 +11,12 @@ export const useStyles: any = makeStyles(() => ({
       },
     },
   },
+
+  selectedHashtag: {
+    background: "#00AB55",
+    color: "#fff",
+  },
+
   tab: {
     display: "flex",
     alignItems: "center",

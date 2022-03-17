@@ -16,7 +16,7 @@ const timeOpts = [
 ];
 
 export default function FilterAndSearch(props: any) {
-  const { postCount, hashtagCount, tabValue, onChangeTab } = props;
+  const { postCount, hashtagCount, tabValue, onChangeTab, onClickHashtag, isSelectedHashtag } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   const [filters, setFilters]: any = React.useState({ status: "all" });
   // const [postStatus, setPostStatus] = React.useState("");
@@ -25,10 +25,6 @@ export default function FilterAndSearch(props: any) {
 
   const classes = useStyles();
   const hashtagLabels = keys(hashtagCount);
-
-  const onClickHashtag = (hashtag: string) => {
-    console.log(hashtag);
-  };
 
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
@@ -172,6 +168,7 @@ export default function FilterAndSearch(props: any) {
         {map(hashtagLabels, (label: any) => (
           <Grid key={label} item sx={{ mr: 0.5 }}>
             <Chip
+              className={isSelectedHashtag(label) && classes.selectedHashtag}
               classes={{ root: classes.deleteIcon }}
               label={`${label}(${hashtagCount[label]})`}
               variant="outlined"
