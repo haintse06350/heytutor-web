@@ -1,15 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useStyles } from "./UserProfile.style";
 import { stringAvatar } from "./helper";
-import { Grid, Avatar, Typography, Button } from "@mui/material";
+import { Grid, Avatar, Typography, Button, Rating, Tabs, Tab, Box } from "@mui/material";
 import { UserCtx } from "../../context/user/state";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import StarsIcon from "@mui/icons-material/Stars";
 import CreateIcon from "@mui/icons-material/Create";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import MessageIcon from "@mui/icons-material/Message";
 import ListPost from "./ListPost";
@@ -138,7 +134,7 @@ const UserProfile = () => {
                 {"K" + userProfile?.stdId.slice(2, 4) + "-" + userProfile?.major}
               </div>
               <div className={classes.userRanking}>
-                <StarsIcon /> Điểm uy tín hiện tại: {userProfile?.rateCount}/100
+                <Rating name="half-rating-read" defaultValue={2.5} precision={0.5} readOnly />
               </div>
               <div className={classes.userStory}>
                 <BorderColorIcon />
@@ -171,15 +167,6 @@ const UserProfile = () => {
                     variant="contained">
                     Chỉnh sửa
                   </Button>
-                  <Button
-                    onClick={() => {
-                      localStorage.removeItem("heytutor-user");
-                      window.location.reload();
-                    }}
-                    sx={{ color: "black", background: "white" }}
-                    variant="contained">
-                    Logout
-                  </Button>
                 </>
               )}
 
@@ -199,15 +186,15 @@ const UserProfile = () => {
             <Box sx={{ width: "100%" }}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                  <Tab label="Bài đăng" {...a11yProps(0)} />
-                  <Tab label="Đánh giá" {...a11yProps(1)} />
+                  <Tab label="Đánh giá" {...a11yProps(0)} />
+                  <Tab label="Bài đăng" {...a11yProps(1)} />
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                <ListPost userProfile={userProfile} />
+                Đánh giá
               </TabPanel>
               <TabPanel value={value} index={1}>
-                Đánh giá
+                <ListPost userProfile={userProfile} />
               </TabPanel>
             </Box>
           </div>

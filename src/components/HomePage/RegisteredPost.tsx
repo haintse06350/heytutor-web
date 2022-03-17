@@ -115,7 +115,7 @@ const RegisteredPost = (props: any) => {
                 color="inherit"
                 endIcon={openInformation ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 onClick={() => setOpenInformation(!openInformation)}>
-                {openInformation ? "Ẩn hiển thị" : "Hiển thị"}
+                {openInformation ? "Ẩn" : "Hiển thị"}
               </Button>
             </Box>
             {openInformation && (

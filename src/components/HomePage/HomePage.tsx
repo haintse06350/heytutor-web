@@ -35,7 +35,7 @@ const HomePage = () => {
             <Typography variant="h4">Xin chào, chào mừng bạn đã quay trở lại</Typography>
           </Box>
           <Grid container spacing={3}>
-            <Grid container spacing={2} item xs={4} md={4}>
+            <Grid container spacing={2} item xs={4} md={4} sx={{ height: "fit-content" }}>
               <Grid item xs={12} sm={12}>
                 <MyPost data={data?.myRequestStats} />
               </Grid>
@@ -43,7 +43,7 @@ const HomePage = () => {
                 <RegisteredPost data={data?.myRegisterStats} />
               </Grid>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={8} md={8}>
               <OnGoingEvent />
             </Grid>
             {/* <Grid item xs={12} md={12}>

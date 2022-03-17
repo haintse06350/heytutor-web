@@ -16,5 +16,16 @@ export const useStyles: any = makeStyles(() => ({
       top: 0,
       right: 0,
     },
+    "& > img": {
+      width: "100%",
+      height: "200px",
+      objectFit: "contain",
+    },
+  },
+  rootEventList: {
+    marginTop: 64,
+    "& > div": {
+      backgroundColor: "#fff",
+    },
   },
 }));

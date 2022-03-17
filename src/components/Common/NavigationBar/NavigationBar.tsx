@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 
 // material
 import { alpha, styled } from "@mui/material/styles";
-import { AppBar, Toolbar, Box, Stack, Typography } from "@mui/material";
+import { AppBar, Toolbar, Box, Stack, Typography, Button } from "@mui/material";
 
 //components
 import Searchbar from "./Searchbar";
@@ -11,6 +11,8 @@ import AccountPopover from "../../Header/AccountPopover";
 import MessagePopover from "../../Header/MessagePopover";
 
 import { useNavigate } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+import { PostCtx } from "../../../context/post/state";
 
 const DRAWER_WIDTH = 0;
 const APPBAR_MOBILE = 64;
@@ -39,6 +41,7 @@ const NavigationBar = () => {
   const handleClickHome = () => {
     navigate("/home");
   };
+  const { createPost } = useContext(PostCtx);
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -53,6 +56,13 @@ const NavigationBar = () => {
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+          <Button
+            sx={{ maxHeight: 36, width: 150 }}
+            onClick={() => createPost()}
+            variant="contained"
+            startIcon={<AddIcon sx={{ color: "#FFFFFF" }} />}>
+            Tạo bài viết
+          </Button>
           <MessagePopover />
           <NotificationsPopover />
           <AccountPopover />

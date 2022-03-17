@@ -33,7 +33,7 @@ const MyPost = (props: any) => {
     navigate(path);
   };
 
-  const [openInformation, setOpenInformation] = useState(false);
+  const [openInformation, setOpenInformation] = useState(true);
 
   const renderMyPostContent = () => {
     if (!data) {
@@ -41,7 +41,6 @@ const MyPost = (props: any) => {
         <Box
           sx={{
             display: "flex",
-
             alignItems: "center",
             justifyContent: "center",
           }}>
@@ -85,7 +84,7 @@ const MyPost = (props: any) => {
                 icon={<PendingActionsOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
                 data={data.nbOfPendingPost}
                 title="Vấn đề chưa có người đăng ký "
-                subTitle="Số lượng các vấn đề chưa có người đăng ký"
+                subTitle="Số lượng các vấn đề chưa có người đăng ký giúp đỡ"
                 onNavigate={() => onNavigate("/my-request?detail=pending")}
               />
               <StatItem
@@ -95,7 +94,7 @@ const MyPost = (props: any) => {
                 icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
                 data={data.nbOfActivePost}
                 title="Vấn đề đã có người đăng ký"
-                subTitle="Số lượng các vấn đề đã có người đăng ký"
+                subTitle="Số lượng các vấn đề đã có người đăng ký giúp đỡ"
                 onNavigate={() => onNavigate("/my-request?detail=active")}
               />
               <StatItem
@@ -128,7 +127,7 @@ const MyPost = (props: any) => {
                 color="inherit"
                 endIcon={openInformation ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 onClick={() => setOpenInformation(!openInformation)}>
-                {openInformation ? "Ẩn hiển thị" : "Hiển thị"}
+                {openInformation ? "Ẩn" : "Hiển thị"}
               </Button>
             </Box>
             {openInformation && (
