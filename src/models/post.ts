@@ -51,4 +51,10 @@ export class Post {
     await ErrorUtils.throwError(res);
     return res.json();
   };
+
+  static getListRegisteredPost = async () => {
+    const res = await FetchUtils.get(`/user-post/registered`);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
 }

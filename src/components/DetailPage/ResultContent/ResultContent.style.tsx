@@ -1,8 +1,8 @@
 import { makeStyles } from "@mui/styles";
 
 export const useStyles: any = makeStyles(() => ({
-  card: {
-    width: 550,
-    height: 280,
+  item: {
+    width: "100%",
+    height: 80,
   },
 }));

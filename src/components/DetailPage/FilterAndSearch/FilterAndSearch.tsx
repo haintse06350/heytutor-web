@@ -6,7 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Box, TextField, MenuItem, Grid, Chip, InputAdornment, Popover, Typography, Paper } from "@mui/material";
 import DateRangePicker from "../DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
-import { map } from "lodash";
+import { map, keys } from "lodash";
 import { useStyles } from "./FilterAndSearch.style";
 
 const timeOpts = [
@@ -15,43 +15,16 @@ const timeOpts = [
   { value: "Chọn ngày", label: "Chọn ngày" },
 ];
 
-const hashtagFilters = [
-  {
-    label: "SWD(2)",
-    value: "SWD",
-  },
-  {
-    label: "CSD(8)",
-    value: "CSD",
-  },
-  {
-    label: "PRJ(1)",
-    value: "PRJ",
-  },
-  {
-    label: "MAS(3)",
-    value: "MAS",
-  },
-  {
-    label: "SWT(6)",
-    value: "SWT",
-  },
-];
-
 export default function FilterAndSearch(props: any) {
-  const { data } = props;
-  const [value, setValue] = React.useState("all");
+  const { postCount, hashtagCount, tabValue, onChangeTab } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   const [filters, setFilters]: any = React.useState({ status: "all" });
-  const [postStatus, setPostStatus] = React.useState("");
+  // const [postStatus, setPostStatus] = React.useState("");
   const [openDatePicker, setOpenDatePicker] = React.useState(false);
-  const [finishPickDate, setFinishPickDate] = React.useState(false);
+  // const [finishPickDate, setFinishPickDate] = React.useState(false);
 
   const classes = useStyles();
-  console.log("count", data);
-  const onChangeTab = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  const hashtagLabels = keys(hashtagCount);
 
   const onClickHashtag = (hashtag: string) => {
     console.log(hashtag);
@@ -59,12 +32,12 @@ export default function FilterAndSearch(props: any) {
 
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
-    setFinishPickDate(true);
+    // setFinishPickDate(true);
   };
 
   const onChangeFilter = (event: any, type: string) => {
     if (type === "status") {
-      setPostStatus(event.target.value);
+      // setPostStatus(event.target.value);
     }
     if (type === "hashtag") {
       if (event.length === 0) {
@@ -100,27 +73,27 @@ export default function FilterAndSearch(props: any) {
 
     switch (label) {
       case "all": {
-        count = data.nbOfAllPost;
+        count = postCount?.nbOfAllPost;
         labelText = "Tất cả";
         break;
       }
       case "isActive": {
-        count = data.nbOfActivePost;
+        count = postCount?.nbOfActivePost;
         labelText = "Đang hoạt động";
         break;
       }
       case "isConfirmed": {
-        count = data.nbOfConfirmedPost;
+        count = postCount?.nbOfConfirmedPost;
         labelText = "Đã xác nhận";
         break;
       }
       case "isPending": {
-        count = data.nbOfPendingPost;
+        count = postCount?.nbOfPendingPost;
         labelText = "Đang chờ xác nhận";
         break;
       }
       case "isDone": {
-        count = data.nbOfDonePost;
+        count = postCount?.nbOfDonePost;
         labelText = "Đã xong";
         break;
       }
@@ -137,11 +110,11 @@ export default function FilterAndSearch(props: any) {
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <Paper elevation={2} sx={{ px: 2 }}>
-        <TabContext value={value}>
+        <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={onChangeTab} aria-label="lab API tabs example">
               <Tab label={renderTabLabel("all")} value="all" />
-              <Tab label={renderTabLabel("isActive")} value="isProcessing" />
+              <Tab label={renderTabLabel("isActive")} value="isActive" />
               <Tab label={renderTabLabel("isConfirmed")} value="isConfirmed" />
               <Tab label={renderTabLabel("isPending")} value="isPending" />
               <Tab label={renderTabLabel("isDone")} value="isDone" />
@@ -196,13 +169,13 @@ export default function FilterAndSearch(props: any) {
         </Grid>
       </Grid>
       <Grid container spacing={1} sx={{ mt: 1, width: "100%" }}>
-        {map(hashtagFilters, (item: any) => (
-          <Grid item sx={{ mr: 0.5 }}>
+        {map(hashtagLabels, (label: any) => (
+          <Grid key={label} item sx={{ mr: 0.5 }}>
             <Chip
               classes={{ root: classes.deleteIcon }}
-              label={item.label}
+              label={`${label}(${hashtagCount[label]})`}
               variant="outlined"
-              onClick={() => onClickHashtag(item.value)}
+              onClick={() => onClickHashtag(label)}
             />
           </Grid>
         ))}
