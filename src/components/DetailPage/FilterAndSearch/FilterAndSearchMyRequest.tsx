@@ -3,10 +3,9 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, TextField, MenuItem, Grid, Chip, InputAdornment, Popover, Typography, Paper } from "@mui/material";
+import { Box, TextField, MenuItem, Grid, InputAdornment, Popover, Typography, Paper } from "@mui/material";
 import DateRangePicker from "../DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
-import { map, keys } from "lodash";
 import { useStyles } from "./FilterAndSearch.style";
 
 const timeOpts = [
@@ -15,8 +14,8 @@ const timeOpts = [
   { value: "Chọn ngày", label: "Chọn ngày" },
 ];
 
-export default function FilterAndSearch(props: any) {
-  const { postCount, hashtagCount, tabValue, onChangeTab, onClickHashtag, isSelectedHashtag } = props;
+export default function FilterAndSearchMyRequest(props: any) {
+  const { postCount, tabValue, onChangeTab } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   const [filters, setFilters]: any = React.useState({ status: "all" });
   // const [postStatus, setPostStatus] = React.useState("");
@@ -24,7 +23,6 @@ export default function FilterAndSearch(props: any) {
   // const [finishPickDate, setFinishPickDate] = React.useState(false);
 
   const classes = useStyles();
-  const hashtagLabels = keys(hashtagCount);
 
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
@@ -80,12 +78,12 @@ export default function FilterAndSearch(props: any) {
       }
       case "isConfirmed": {
         count = postCount?.nbOfConfirmedPost;
-        labelText = "Đã được xác nhận làm supportor";
+        labelText = "Đã xác chọn người support";
         break;
       }
       case "isPending": {
         count = postCount?.nbOfPendingPost;
-        labelText = "Đang chờ xác nhận";
+        labelText = "Chưa có người đăng kí";
         break;
       }
       case "isDone": {
@@ -119,7 +117,7 @@ export default function FilterAndSearch(props: any) {
         </TabContext>
       </Paper>
       <Grid container item xs={12} spacing={1} sx={{ mt: 2, width: "100%" }}>
-        <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+        <Grid item xs={4} md={3} sx={{ minWidth: "20%" }}>
           <Box component="form" noValidate autoComplete="off">
             <TextField
               autoFocus
@@ -137,7 +135,7 @@ export default function FilterAndSearch(props: any) {
             />
           </Box>
         </Grid>
-        <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+        <Grid item xs={4} md={3} sx={{ minWidth: "20%" }}>
           <Box component="form" noValidate autoComplete="off">
             <TextField
               fullWidth
@@ -163,23 +161,49 @@ export default function FilterAndSearch(props: any) {
             <DateRangePicker setValue={setDateData} value={dateData} />
           </Popover>
         </Grid>
+        {/* <Grid item xs={4} md={3} sx={{ minWidth: "20%" }}>
+          <Box component="form" noValidate autoComplete="off">
+            <TextField
+              fullWidth
+              classes={{ root: classes.textField }}
+              id="outlined-select-currency"
+              select
+              label="Thời gian"
+              defaultValue="Tuần này"
+              value={filters.time}
+              onChange={(e: any) => onChangeFilter(e, "time")}>
+              {timeOpts.map((option: any) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+          <Popover
+            open={openDatePicker}
+            onClose={onCloseDatePicker}
+            anchorOrigin={{ vertical: "center", horizontal: "center" }}
+            transformOrigin={{ vertical: "center", horizontal: "center" }}>
+            <DateRangePicker setValue={setDateData} value={dateData} />
+          </Popover>
+        </Grid> */}
       </Grid>
-      <Typography variant="subtitle1" sx={{ mt: 2, mb: 2 }}>
-        Lọc theo môn học
+      {/* <Typography variant="subtitle1" sx={{ mt: 2, mb: 2 }}>
+        Lọc theo người đăng kí hỗ trợ
       </Typography>
       <Grid container spacing={1} sx={{ mt: 1, width: "100%" }}>
-        {map(hashtagLabels, (label: any) => (
+        {map(keys(userFilter), (label: any) => (
           <Grid key={label} item sx={{ mr: 0.5 }}>
             <Chip
               className={isSelectedHashtag(label) && classes.selectedHashtag}
               classes={{ root: classes.deleteIcon }}
-              label={`${label}(${hashtagCount[label]})`}
+              label={`${label}(${userFilter[label]})`}
               variant="outlined"
               onClick={() => onClickHashtag(label)}
             />
           </Grid>
         ))}
-      </Grid>
+      </Grid> */}
     </Box>
   );
 }

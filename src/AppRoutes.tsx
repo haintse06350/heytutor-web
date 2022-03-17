@@ -14,7 +14,7 @@ import CreateEvent from "./components/CreateEvent/CreatEvent";
 import Feedback from "./components/Feedback/Feedback";
 
 import UserProfile from "./components/UserProfile/UserProfile";
-// import { UserCtx } from "./context/user/state";
+import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/HomePage/PostItem";
@@ -25,7 +25,7 @@ import PostDetail from "./components/HomePage/PostDetail";
 import EventDetail from "./components/Event/EventDetail";
 import EventList from "./components/Event/EventList";
 export default function AppRoutes() {
-  // const { user }: any = React.useContext(UserCtx);
+  const { user }: any = React.useContext(UserCtx);
 
   return (
     <Router>
@@ -40,10 +40,10 @@ export default function AppRoutes() {
             }
           />
           {/** test */}
-          {/* <Route
+          <Route
             path={"/profile"}
             element={<RequireAuth>{user?.isAdmin ? <Dashboard /> : <UserProfile />}</RequireAuth>}
-          /> */}
+          />
           <Route
             path={"/home"}
             element={

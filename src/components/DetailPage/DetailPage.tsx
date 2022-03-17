@@ -6,8 +6,10 @@ import { Box } from "@mui/material";
 import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
 import FilterAndSearch from "./FilterAndSearch/FilterAndSearch";
 import { Post } from "../../models/post";
-import ResultContent from "./ResultContent/ResultContent";
+import RegisterContent from "./ResultContent/ResultContent";
+import MyRequestContent from "./ResultContent/MyRequestContent";
 import { keys, filter, countBy, flattenDeep, map } from "lodash";
+import FilterAndSearchMyRequest from "./FilterAndSearch/FilterAndSearchMyRequest";
 
 export const DetailPage = () => {
   const classes = useStyles();
@@ -98,15 +100,26 @@ export const DetailPage = () => {
           />
         </Box>
         <Box sx={{ pb: 3, mr: 1 }}>
-          <FilterAndSearch
-            isSelectedHashtag={isSelectedHashtag}
-            tabValue={tabValue}
-            onChangeTab={onChangeTab}
-            onClickHashtag={onClickHashtag}
-            hashtagCount={hashtagLabels}
-            postCount={postCount}
-          />
-          <ResultContent data={data} />
+          {isRegistered ? (
+            <FilterAndSearch
+              isSelectedHashtag={isSelectedHashtag}
+              tabValue={tabValue}
+              onChangeTab={onChangeTab}
+              onClickHashtag={onClickHashtag}
+              hashtagCount={hashtagLabels}
+              postCount={postCount}
+            />
+          ) : (
+            <FilterAndSearchMyRequest
+              isSelectedHashtag={isSelectedHashtag}
+              tabValue={tabValue}
+              onChangeTab={onChangeTab}
+              onClickHashtag={onClickHashtag}
+              hashtagCount={hashtagLabels}
+              postCount={postCount}
+            />
+          )}
+          {isRegistered ? <RegisterContent data={data} /> : <MyRequestContent data={data} />}
         </Box>
       </Page>
     </Box>

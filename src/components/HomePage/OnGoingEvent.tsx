@@ -197,7 +197,6 @@ const OnGoingEvent = () => {
         return { ...d, eventStats };
       })
     );
-    console.log(res);
     setData(res);
   };
 
@@ -234,8 +233,7 @@ const OnGoingEvent = () => {
     // getListEventLongTerm();
     // getListEventShortTerm();
     data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
-    console.log(data?.length);
-  }, [data?.length]);
+  }, [data]);
 
   return (
     <Card>
