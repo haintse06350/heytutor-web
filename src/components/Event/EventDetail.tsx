@@ -49,7 +49,6 @@ const EventDetail = () => {
           <Grid item className={classes.postTitle}>
             <Typography variant="h5">{dataDetail?.eventContent?.title}</Typography>
           </Grid>
-
           <div className={classes.mainContent}>
             <Typography variant="body1">{dataDetail?.eventContent?.description}</Typography>
           </div>
