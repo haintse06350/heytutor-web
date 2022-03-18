@@ -2,14 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Event } from "../../models/event";
 import { map } from "lodash";
 
-import { Box, Grid, Typography, Divider, Button, Tooltip, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Divider,
+  Button,
+  Tooltip,
+  CircularProgress,
+  Input,
+  InputAdornment,
+} from "@mui/material";
 import moment from "moment";
-import { useStyles } from "../HomePage/HomePage.style";
+import { useStyles } from "./EventList.style";
 import { useNavigate } from "react-router-dom";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SearchIcon from "@mui/icons-material/Search";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Page from "../../layout/Page";
 
@@ -25,7 +36,7 @@ export const EventList = () => {
         return { ...d, eventStats };
       })
     );
-    console.log(res);
+    console.log(res, "eventlist");
     setData(res);
   };
   const getNbUserOfEvent = async (eventId: number) => {
@@ -49,7 +60,7 @@ export const EventList = () => {
   }, []);
   if (!data) {
     return (
-      <Page className={classes.rootEventList}>
+      <Page>
         <Box
           sx={{
             display: "flex",
@@ -64,12 +75,29 @@ export const EventList = () => {
     return (
       <>
         <Page className={classes.rootEventList}>
+          <Typography variant="subtitle1">Event List</Typography>
+
+          <Input
+            autoFocus
+            fullWidth
+            disableUnderline
+            placeholder="Search…"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "text.disabled", width: 20, height: 20 }} />
+              </InputAdornment>
+            }
+            sx={{ mr: 1, fontWeight: "fontWeightBold" }}
+          />
+
+          <Button variant="contained">Search</Button>
+
           {data?.map((item: any, index: number) => (
             <Box key={index} sx={{ height: "fit-content" }}>
               <br />
               <Divider />
 
-              <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
+              <Grid sx={{ display: "flex", alignItems: "center", mt: 1 }} container>
                 {/* <img src={Image} alt="fuk" /> */}
                 <Typography variant="h6" sx={{ ml: 1 }}>
                   {item["Event.title"]}

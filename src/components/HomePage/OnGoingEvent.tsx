@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 //material
 import { Card, CardHeader, Box, Grid, Typography, Divider, Button, Tooltip, CircularProgress } from "@mui/material";
+
+//
+
 //lodash
-import { map } from "lodash";
+// import { map } from "lodash";
 
 //icons
-import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+// import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 // import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
@@ -14,13 +17,13 @@ import RecordVoiceOverOutlinedIcon from "@mui/icons-material/RecordVoiceOverOutl
 import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import SupervisedUserCircleOutlinedIcon from "@mui/icons-material/SupervisedUserCircleOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Event } from "../../models/event";
-import moment from "moment";
+// import moment from "moment";
 import { useStyles } from "./HomePage.style";
 // import Image from "../../assets/27366933.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -31,29 +34,28 @@ const OnGoingEvent = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [data, setData]: any = useState(null);
-  // const [dataEventLongTerm, setDataEventLongTerm]: any = useState(null);
+  // const [dataEventDuration, setDataEventDuration]: any = useState(null);
   // const [dataEventShortTerm, setDataEventShortTerm]: any = useState(null);
-  console.log(data);
+  console.log(data, "data list event");
 
-  const handleViewDetail = (eventId: any) => {
-    //navigate sang URL detail EVENT
-    navigate(`/event-detail?eventid=${eventId}`);
-  };
-  const handleEventList = () => {
-    navigate(`/event-list`);
-  };
+  // const handleViewDetail = (eventId: any) => {
+  //   //navigate sang URL detail EVENT
+  //   navigate(`/event-detail?eventid=${eventId}`);
+  // };
+  // const handleEventList = () => {
+  //   navigate(`/event-list`);
+  // };
 
-  const onClickShow = (id: any) => {
-    setCheckShowMore(!checkShowMore);
-    setItemCheck(id);
-  };
-  const [checkShowMore, setCheckShowMore] = useState(false);
-  const [itemCheck, setItemCheck] = useState();
-
-  const [showListEvent, setShowListEvent] = useState(false);
+  // const onClickShow = (id: any) => {
+  //   setCheckShowMore(!checkShowMore);
+  //   setItemCheck(id);
+  // };
+  // const [checkShowMore, setCheckShowMore] = useState(false);
+  // const [itemCheck, setItemCheck] = useState();
+  // const [showListEvent, setShowListEvent] = useState(false);
 
   const itemEvent = (data: any) => {
     if (!data) {
@@ -105,7 +107,7 @@ const OnGoingEvent = () => {
             </Tooltip>
           </Box>
           <Box dir="ltr">
-            {data?.slice(0, 3).map((item: any, index: number) => (
+            {data?.map((item: any, index: number) => (
               <Box key={index} sx={{ height: "fit-content" }}>
                 <br />
                 <Divider />
@@ -113,24 +115,25 @@ const OnGoingEvent = () => {
                 <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
                   {/* <img src={Image} alt="fuk" /> */}
                   <Typography variant="h6" sx={{ ml: 1 }}>
-                    {item["Event.title"]}
+                    {/* {item?.eventDetail?.title} */}
+                    event title
                   </Typography>
                   <Typography variant="body2" sx={{ position: "relative" }}>
-                    {checkShowMore && itemCheck === item["Event.id"]
-                      ? item["Event.description"]
-                      : item["Event.description"].slice(0, 300)}
-
-                    {item["Event.description"].length > 300 ? (
+                    {/* {checkShowMore && itemCheck === item?.eventDetail?.id
+                      ? item?.eventDetail?.description
+                      : item?.eventDetail?.description.slice(0, 300)} */}
+                    Event detail
+                    {/* {item?.eventDetail?.description.length > 300 ? (
                       <Button
                         variant="text"
                         color="inherit"
                         sx={{ ml: 1 }}
-                        onClick={() => onClickShow(item["Event.id"])}>
-                        {checkShowMore && itemCheck === item["Event.id"] ? "Ẩn đi" : "Đọc thêm"}
+                        onClick={() => onClickShow(item?.eventDetail?.id)}>
+                        {checkShowMore && itemCheck === item?.eventDetail?.id ? "Ẩn đi" : "Đọc thêm"}
                       </Button>
                     ) : (
                       ""
-                    )}
+                    )} */}
                   </Typography>
                 </Grid>
 
@@ -138,20 +141,24 @@ const OnGoingEvent = () => {
                   <Tooltip title="Số lượt xem">
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item["Event.viewCount"]}</Typography>
+                      <Typography style={{ fontSize: 14 }}>
+                        {/* {item?.eventDetail?.viewCount} */}
+                        view count
+                      </Typography>
                     </Box>
                   </Tooltip>
                   <Tooltip title="Số lượt đăng kí">
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item.eventStats.listEventUser.numberOfUser}</Typography>
+                      <Typography style={{ fontSize: 14 }}>Number Of user</Typography>
                     </Box>
                   </Tooltip>
                   <Tooltip title="Thời gian kết thúc sự kiện">
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                       <Typography style={{ fontSize: 14 }}>
-                        {moment(item["Event.endAt"]).lang("vi").format("LL")}
+                        {/* {moment(item?.eventDetail?.endAt).lang("vi").format("LL")} */}
+                        ket thuc
                       </Typography>
                     </Box>
                   </Tooltip>
@@ -160,7 +167,7 @@ const OnGoingEvent = () => {
                   <Button
                     size="small"
                     color="inherit"
-                    onClick={() => handleViewDetail(item["Event.id"])}
+                    // onClick={() => handleViewDetail(item?.eventDetail?.id)}
                     variant="outlined"
                     endIcon={<ArrowForwardIcon />}>
                     Xem chi tiết
@@ -171,7 +178,7 @@ const OnGoingEvent = () => {
           </Box>
           <br />
           <Divider />
-          {showListEvent && (
+          {/* {showListEvent && (
             <Box sx={{ p: 2, textAlign: "right" }}>
               <Typography sx={{ mb: 1 }}>Đăng hiển thị: 3/{data?.length}</Typography>
               <Button
@@ -183,7 +190,7 @@ const OnGoingEvent = () => {
                 Xem chi tiết
               </Button>
             </Box>
-          )}
+          )} */}
         </>
       );
     }
@@ -191,25 +198,20 @@ const OnGoingEvent = () => {
 
   const getListEventByUser = async () => {
     const data = await Event.getListEventByUser();
-    const res = await Promise.all(
-      map(data, async (d: any) => {
-        const eventStats = await getNbUserOfEvent(d["Event.id"]);
-        return { ...d, eventStats };
-      })
-    );
-    setData(res);
+    setData(data);
+    console.log(data, "list event by user");
   };
 
-  // const getListEventLongTerm = async () => {
-  //   const data = await Event.getEventLongTerm();
+  // const getListEventDuration = async () => {
+  //   const data = await Event.getEventDuration();
   //   const res = await Promise.all(
   //     map(data, async (d: any) => {
   //       const eventStats = await getNbUserOfEvent(d["Event.id"]);
   //       return { ...d, eventStats };
   //     })
   //   );
-  //   setDataEventLongTerm(res);
-  //   console.log(dataEventLongTerm);
+  //   setDataEventDuration(res);
+  //   console.log(dataEventDuration, "dataaaa", res, "resss");
   // };
   // const getListEventShortTerm = async () => {
   //   const data = await Event.getEventShortTerm();
@@ -223,17 +225,17 @@ const OnGoingEvent = () => {
   //   console.log(dataEventShortTerm);
   // };
 
-  const getNbUserOfEvent = async (eventId: number) => {
-    const stats = await Event.getEventStats(eventId);
-    return stats;
-  };
+  // const getNbUserOfEvent = async (eventId: number) => {
+  //   const stats = await Event.getEventStats(eventId);
+  //   return stats;
+  // };
 
   useEffect(() => {
     getListEventByUser();
-    // getListEventLongTerm();
+    // getListEventDuration();
     // getListEventShortTerm();
-    data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
-  }, [data]);
+    // data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
+  }, []);
 
   return (
     <Card>
@@ -250,8 +252,8 @@ const OnGoingEvent = () => {
             <Tab label="Sự kiện dài hạn" value="3" />
           </TabList>
         </Box>
-        <TabPanel value="1"> {itemEvent(data)}</TabPanel>
-        <TabPanel value="2">Sự kiện ngắn hạn</TabPanel>
+        <TabPanel value="1">{itemEvent(data)}</TabPanel>
+        <TabPanel value="2">ngan han</TabPanel>
         <TabPanel value="3">Sự kiện dài hạn</TabPanel>
       </TabContext>
     </Card>

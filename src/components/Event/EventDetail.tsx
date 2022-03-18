@@ -22,6 +22,7 @@ const EventDetail = () => {
   const getEventDetailByEventId = async () => {
     const data = await Event.getEventDetailByEventId(eventid);
     setDataDetail(data);
+    console.log("event ID", data);
   };
 
   useEffect(() => {

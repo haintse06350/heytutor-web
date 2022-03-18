@@ -19,14 +19,10 @@ export class Event {
         return res.json();
     }
 
-    static async getEventLongTerm(){
-        const res = await FetchUtils.get(`/get-long-term-event`);
+    static async getEventDuration(){
+        const res = await FetchUtils.get(`/get-event-by-duration`);
         await ErrorUtils.throwError(res);
         return res.json();
     }
-    static async getEventShortTerm(){
-        const res = await FetchUtils.get(`/get-short-term-event`);
-        await ErrorUtils.throwError(res);
-        return res.json();
-    }
+    
 }
