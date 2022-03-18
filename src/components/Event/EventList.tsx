@@ -74,7 +74,7 @@ export const EventList = () => {
       <>
         <Page className={classes.rootEventList}>
           <Grid className={classes.wrapEventHeader}>
-            <Typography variant="h3">Event List</Typography>
+            <Typography variant="h4">Event List</Typography>
             <Box className={classes.searchEvent}>
               <Input
                 autoFocus
@@ -112,9 +112,9 @@ export const EventList = () => {
             <Box className={classes.sortEvent}>
               <InputLabel id="sort-event">Sắp xếp</InputLabel>
               <Select labelId="sort-event" id="sort-event" label="term" value={10}>
-                <MenuItem value={10}>Người tham gia</MenuItem>
+                <MenuItem value={10}>Số người cần hỗ trợ</MenuItem>
                 <MenuItem value={20}>Lượt xem</MenuItem>
-                <MenuItem value={30}>Người đăng kí</MenuItem>
+                <MenuItem value={30}>Số người đăng kí hỗ trợ</MenuItem>
               </Select>
             </Box>
           </Grid>
