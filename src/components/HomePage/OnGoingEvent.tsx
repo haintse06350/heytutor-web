@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 //material
 import { Card, CardHeader, Box, Grid, Typography, Divider, Button, Tooltip, CircularProgress } from "@mui/material";
+
+//
+
 //lodash
-import { map } from "lodash";
+// import { map } from "lodash";
 
 //icons
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
@@ -34,9 +37,9 @@ const OnGoingEvent = () => {
   const navigate = useNavigate();
 
   const [data, setData]: any = useState(null);
-  // const [dataEventLongTerm, setDataEventLongTerm]: any = useState(null);
+  // const [dataEventDuration, setDataEventDuration]: any = useState(null);
   // const [dataEventShortTerm, setDataEventShortTerm]: any = useState(null);
-  console.log(data);
+  console.log(data, "data list event");
 
   const handleViewDetail = (eventId: any) => {
     //navigate sang URL detail EVENT
@@ -52,10 +55,9 @@ const OnGoingEvent = () => {
   };
   const [checkShowMore, setCheckShowMore] = useState(false);
   const [itemCheck, setItemCheck] = useState();
-
   const [showListEvent, setShowListEvent] = useState(false);
 
-  const itemEvent = (data: any) => {
+  const itemEvent = () => {
     if (!data) {
       return (
         <Box
@@ -105,7 +107,7 @@ const OnGoingEvent = () => {
             </Tooltip>
           </Box>
           <Box dir="ltr">
-            {data?.slice(0, 3).map((item: any, index: number) => (
+          {data?.map((item: any, index: number) => (
               <Box key={index} sx={{ height: "fit-content" }}>
                 <br />
                 <Divider />
@@ -113,20 +115,20 @@ const OnGoingEvent = () => {
                 <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
                   {/* <img src={Image} alt="fuk" /> */}
                   <Typography variant="h6" sx={{ ml: 1 }}>
-                    {item["Event.title"]}
+                    {item?.eventDetail?.title}
                   </Typography>
                   <Typography variant="body2" sx={{ position: "relative" }}>
-                    {checkShowMore && itemCheck === item["Event.id"]
-                      ? item["Event.description"]
-                      : item["Event.description"].slice(0, 300)}
+                    {checkShowMore && itemCheck === item?.eventDetail?.id
+                      ? item?.eventDetail?.description
+                      : item?.eventDetail?.description.slice(0, 300)}
 
-                    {item["Event.description"].length > 300 ? (
+                    {item?.eventDetail?.description.length > 300 ? (
                       <Button
                         variant="text"
                         color="inherit"
                         sx={{ ml: 1 }}
-                        onClick={() => onClickShow(item["Event.id"])}>
-                        {checkShowMore && itemCheck === item["Event.id"] ? "Ẩn đi" : "Đọc thêm"}
+                        onClick={() => onClickShow(item?.eventDetail?.id)}>
+                        {checkShowMore && itemCheck === item?.eventDetail?.id ? "Ẩn đi" : "Đọc thêm"}
                       </Button>
                     ) : (
                       ""
@@ -138,20 +140,20 @@ const OnGoingEvent = () => {
                   <Tooltip title="Số lượt xem">
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item["Event.viewCount"]}</Typography>
+                      <Typography style={{ fontSize: 14 }}>{item?.eventDetail?.viewCount}</Typography>
                     </Box>
                   </Tooltip>
                   <Tooltip title="Số lượt đăng kí">
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item.eventStats.listEventUser.numberOfUser}</Typography>
+                      <Typography style={{ fontSize: 14 }}>{item?.numberOfUser?.numberOfUser}</Typography>
                     </Box>
                   </Tooltip>
                   <Tooltip title="Thời gian kết thúc sự kiện">
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                       <Typography style={{ fontSize: 14 }}>
-                        {moment(item["Event.endAt"]).lang("vi").format("LL")}
+                        {moment(item?.eventDetail?.endAt).lang("vi").format("LL")}
                       </Typography>
                     </Box>
                   </Tooltip>
@@ -160,7 +162,7 @@ const OnGoingEvent = () => {
                   <Button
                     size="small"
                     color="inherit"
-                    onClick={() => handleViewDetail(item["Event.id"])}
+                    onClick={() => handleViewDetail(item?.eventDetail?.id)}
                     variant="outlined"
                     endIcon={<ArrowForwardIcon />}>
                     Xem chi tiết
@@ -191,49 +193,19 @@ const OnGoingEvent = () => {
 
   const getListEventByUser = async () => {
     const data = await Event.getListEventByUser();
-    const res = await Promise.all(
-      map(data, async (d: any) => {
-        const eventStats = await getNbUserOfEvent(d["Event.id"]);
-        return { ...d, eventStats };
-      })
-    );
-    setData(res);
+    setData(data.listEvent);
   };
 
-  // const getListEventLongTerm = async () => {
-  //   const data = await Event.getEventLongTerm();
-  //   const res = await Promise.all(
-  //     map(data, async (d: any) => {
-  //       const eventStats = await getNbUserOfEvent(d["Event.id"]);
-  //       return { ...d, eventStats };
-  //     })
-  //   );
-  //   setDataEventLongTerm(res);
-  //   console.log(dataEventLongTerm);
+  // const getNbUserOfEvent = async (eventId: number) => {
+  //   const stats = await Event.getEventStats(eventId);
+  //   return stats;
   // };
-  // const getListEventShortTerm = async () => {
-  //   const data = await Event.getEventShortTerm();
-  //   const res = await Promise.all(
-  //     map(data, async (d: any) => {
-  //       const eventStats = await getNbUserOfEvent(d["Event.id"]);
-  //       return { ...d, eventStats };
-  //     })
-  //   );
-  //   setDataEventShortTerm(res);
-  //   console.log(dataEventShortTerm);
-  // };
-
-  const getNbUserOfEvent = async (eventId: number) => {
-    const stats = await Event.getEventStats(eventId);
-    return stats;
-  };
 
   useEffect(() => {
     getListEventByUser();
-    // getListEventLongTerm();
-    // getListEventShortTerm();
+
     data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
-  }, [data]);
+  }, [data?.length]);
 
   return (
     <Card>
@@ -250,8 +222,8 @@ const OnGoingEvent = () => {
             <Tab label="Sự kiện dài hạn" value="3" />
           </TabList>
         </Box>
-        <TabPanel value="1"> {itemEvent(data)}</TabPanel>
-        <TabPanel value="2">Sự kiện ngắn hạn</TabPanel>
+        <TabPanel value="1">{itemEvent()}</TabPanel>
+        <TabPanel value="2">ngan han</TabPanel>
         <TabPanel value="3">Sự kiện dài hạn</TabPanel>
       </TabContext>
     </Card>
