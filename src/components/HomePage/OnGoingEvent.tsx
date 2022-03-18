@@ -57,7 +57,7 @@ const OnGoingEvent = () => {
   // const [itemCheck, setItemCheck] = useState();
   // const [showListEvent, setShowListEvent] = useState(false);
 
-  const itemEvent = (data: any) => {
+  const itemEvent = () => {
     if (!data) {
       return (
         <Box
@@ -198,8 +198,7 @@ const OnGoingEvent = () => {
 
   const getListEventByUser = async () => {
     const data = await Event.getListEventByUser();
-    setData(data);
-    console.log(data, "list event by user");
+    setData(data.listEvent);
   };
 
   // const getListEventDuration = async () => {
@@ -252,7 +251,7 @@ const OnGoingEvent = () => {
             <Tab label="Sự kiện dài hạn" value="3" />
           </TabList>
         </Box>
-        <TabPanel value="1">{itemEvent(data)}</TabPanel>
+        <TabPanel value="1">{itemEvent()}</TabPanel>
         <TabPanel value="2">ngan han</TabPanel>
         <TabPanel value="3">Sự kiện dài hạn</TabPanel>
       </TabContext>
