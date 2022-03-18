@@ -15,7 +15,7 @@ export default function MyRequestContent(props: any) {
       {map(data, (item: any, index: number) => (
         <Box sx={{ mt: 2 }}>
           <div>
-            <Typography variant="subtitle1">{item.postData.title.slice(0, 120)}</Typography>
+            <Typography variant="subtitle1"></Typography>
             <Typography variant="subtitle1">Số người đăng kí: {index * 5}</Typography>
           </div>
           <Divider />

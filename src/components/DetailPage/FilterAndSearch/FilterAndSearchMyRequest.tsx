@@ -15,7 +15,7 @@ const timeOpts = [
 ];
 
 export default function FilterAndSearchMyRequest(props: any) {
-  const { postCount, tabValue, onChangeTab } = props;
+  const { tabValue, onChangeTab, data } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   const [filters, setFilters]: any = React.useState({ status: "all" });
   // const [postStatus, setPostStatus] = React.useState("");
@@ -66,29 +66,24 @@ export default function FilterAndSearchMyRequest(props: any) {
     let labelText = "";
 
     switch (label) {
-      case "all": {
-        count = postCount?.nbOfAllPost;
-        labelText = "Tất cả";
-        break;
-      }
       case "isActive": {
-        count = postCount?.nbOfActivePost;
-        labelText = "Đang trao đổi";
-        break;
-      }
-      case "isConfirmed": {
-        count = postCount?.nbOfConfirmedPost;
-        labelText = "Đã xác chọn người support";
+        count = data?.postHasSupporter?.length;
+        labelText = "Yêu cầu đang được hỗ trợ";
         break;
       }
       case "isPending": {
-        count = postCount?.nbOfPendingPost;
-        labelText = "Chưa có người đăng kí";
+        count = data?.postHasRegister?.length;
+        labelText = "Yêu cầu chưa có người hỗ trợ";
         break;
       }
-      case "isDone": {
-        count = postCount?.nbOfDonePost;
-        labelText = "Đã xong";
+      case "isNew": {
+        count = data?.postHasNoRegister?.length;
+        labelText = "Yêu cầu chưa có người đăng kí";
+        break;
+      }
+      case "isOnEvent": {
+        count = data?.postOnEvent?.length;
+        labelText = "Yêu cầu đang trong sự kiện";
         break;
       }
     }
@@ -107,11 +102,10 @@ export default function FilterAndSearchMyRequest(props: any) {
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={onChangeTab} aria-label="lab API tabs example">
-              <Tab label={renderTabLabel("all")} value="all" />
               <Tab label={renderTabLabel("isActive")} value="isActive" />
-              <Tab label={renderTabLabel("isConfirmed")} value="isConfirmed" />
               <Tab label={renderTabLabel("isPending")} value="isPending" />
-              <Tab label={renderTabLabel("isDone")} value="isDone" />
+              <Tab label={renderTabLabel("isNew")} value="isNew" />
+              <Tab label={renderTabLabel("isOnEvent")} value="isOnEvent" />
             </TabList>
           </Box>
         </TabContext>

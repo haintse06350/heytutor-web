@@ -57,4 +57,10 @@ export class Post {
     await ErrorUtils.throwError(res);
     return res.json();
   };
+
+  static getListMyRequest = async () => {
+    const res = await FetchUtils.get(`/user-post/my-request`);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
 }

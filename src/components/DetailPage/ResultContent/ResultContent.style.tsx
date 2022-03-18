@@ -24,5 +24,14 @@ export const useStyles: any = makeStyles(() => ({
   },
   userPostAvatar: {
     marginTop: 8,
+    display: "flex",
+    alignItems: "center",
+  },
+  usernameAndRank: {
+    marginLeft: 4,
+  },
+  rank: {
+    display: "flex",
+    alignItems: "center",
   },
 }));
