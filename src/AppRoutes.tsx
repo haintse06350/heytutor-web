@@ -18,7 +18,7 @@ import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/HomePage/PostItem";
-import ManagerUser from "./components/ManagerUser/ManagerUser";
+import ManagerUser from "./components/Dashboard/ManagerUser/ManagerUser";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
 import { DetailPage } from "./components/DetailPage";
 import PostDetail from "./components/HomePage/PostDetail";

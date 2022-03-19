@@ -41,8 +41,14 @@ import { Admin } from "../../models/admin";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import ManagerUser from "./ManagerUser/ManagerUser";
+import Statistical from "./Statistical/Statistical";
+import FeedbackIcon from "@mui/icons-material/Feedback";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import PeopleIcon from "@mui/icons-material/People";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import FeedBackOfUser from "./ManagerUser/FeedbackOfUser";
 const drawerWidth = 240;
-
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
 }>(({ theme, open }) => ({
@@ -257,6 +263,15 @@ const Dashboard = () => {
       case "Quản lí người dùng": {
         return <div>Quản lí người dùng</div>;
       }
+      case "manager-ctv": {
+        return <ManagerUser />;
+      }
+      case "manager-statistical": {
+        return <Statistical />;
+      }
+      case "manager-feedback-user": {
+        return <FeedBackOfUser />;
+      }
     }
   };
 
@@ -368,7 +383,7 @@ const Dashboard = () => {
             </ListItemIcon>
             <ListItemText primary="Quản lí event" />
           </ListItem>
-          <ListItem onClick={(e) => handleClick(e)}>
+          <ListItem button onClick={(e) => handleClick(e)}>
             <ListItemIcon>
               <ManageAccountsIcon />
             </ListItemIcon>
@@ -377,17 +392,29 @@ const Dashboard = () => {
           </ListItem>
           <Collapse in={openTab} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem sx={{ pl: 4 }}>
+              <ListItem button sx={{ pl: 4 }} onClick={(e) => onChangeTab("manager-ctv")}>
                 <ListItemIcon>
-                  <ManageAccountsIcon />
+                  <PeopleAltIcon />
                 </ListItemIcon>
                 <ListItemText primary="Quản lí cộng tác viên" />
               </ListItem>
-              <ListItem sx={{ pl: 4 }}>
+              <ListItem button sx={{ pl: 4 }}>
                 <ListItemIcon>
-                  <ManageAccountsIcon />
+                  <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Quản lí người bị report" />
+                <ListItemText primary="Quản lí người dùng " />
+              </ListItem>
+              <ListItem button sx={{ pl: 4 }} onClick={(e) => onChangeTab("manager-statistical")}>
+                <ListItemIcon>
+                  <EqualizerIcon />
+                </ListItemIcon>
+                <ListItemText primary="Thống kê" />
+              </ListItem>
+              <ListItem button sx={{ pl: 4 }} onClick={(e) => onChangeTab("manager-feedback-user")}>
+                <ListItemIcon>
+                  <FeedbackIcon />
+                </ListItemIcon>
+                <ListItemText primary="Góp ý của người dùng" />
               </ListItem>
             </List>
           </Collapse>
