@@ -5,12 +5,26 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import SearchIcon from "@mui/icons-material/Search";
 import MoodBadIcon from "@mui/icons-material/MoodBad";
-import { TableCell, TableHead, TableRow, TableBody, Table, TableContainer, Paper } from "@mui/material";
+import {
+  TableCell,
+  TableHead,
+  TableRow,
+  TableBody,
+  Table,
+  TableContainer,
+  Paper,
+  Grid,
+  OutlinedInput,
+  InputAdornment,
+  Button,
+} from "@mui/material";
+import DialogAddCTV from "./DialogAddCTV";
 export const ManagerUser = () => {
   const classes = useStyles();
   const [orderById, setOrderById] = useState(true);
-
+  const [openDialog, setOpenDialog] = useState(false);
   function createData(id: number, name: string, status: number, position: string) {
     return {
       id,
@@ -21,11 +35,11 @@ export const ManagerUser = () => {
   }
 
   const rows = [
-    createData(1, "Cao Duc Anh", 1, "supporter"),
-    createData(2, "Cao Duc Anh", 2, "supporter"),
-    createData(3, "Nguyen Trung Hai", 1, "supporter"),
-    createData(4, "Le Huy Chuong", 1, "user"),
-    createData(5, "Nguyen DN Long", 2, "user"),
+    createData(1, "Cao Duc Anh", 1, "Cộng tác viên 4"),
+    createData(2, "Cao Duc Anh", 2, "Cộng tác viên 1"),
+    createData(3, "Nguyen Trung Hai", 1, "Cộng tác viên 3"),
+    createData(4, "Le Huy Chuong", 1, "Cộng tác viên 5"),
+    createData(5, "Nguyen DN Long", 2, "Cộng tác viên 1"),
   ];
 
   const handleClickSort = () => {
@@ -42,6 +56,28 @@ export const ManagerUser = () => {
   };
   return (
     <div className={classes.wrapTableManager}>
+      <Grid container className={classes.wrapHeader}>
+        <Grid item sx={{ display: "flex" }} lg={6} xs={12} className={classes.wrapSearchCTV}>
+          <OutlinedInput
+            autoFocus
+            fullWidth
+            placeholder="Nhập thông tin …"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "text.disabled", width: 20, height: 20 }} />
+              </InputAdornment>
+            }
+            sx={{ mr: 1, fontWeight: "fontWeightBold" }}
+          />
+          <Button variant="text">Tìm kiếm</Button>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" onClick={() => setOpenDialog(!openDialog)}>
+            Thêm cộng tác viên
+          </Button>
+          <DialogAddCTV open={openDialog} onClose={() => setOpenDialog(false)}></DialogAddCTV>
+        </Grid>
+      </Grid>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -67,7 +103,9 @@ export const ManagerUser = () => {
                   {row.id}
                 </TableCell>
                 <TableCell align="right">{row.name}</TableCell>
-                <TableCell align="right">{row.status}</TableCell>
+                <TableCell align="right" sx={{ color: row.status === 1 ? "green" : "red" }}>
+                  {row.status === 1 ? "active" : "inactive"}
+                </TableCell>
                 <TableCell align="right">{row.position}</TableCell>
                 <TableCell align="right" className={classes.iconMoreHoriz}>
                   <IconButton
