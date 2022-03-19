@@ -14,9 +14,9 @@ import FilterAndSearchMyRequest from "./FilterAndSearch/FilterAndSearchMyRequest
 export const DetailPage = () => {
   const classes = useStyles();
   // const navigate = useNavigate();
-  const urlParams = new URLSearchParams(window.location.search);
+  // const urlParams = new URLSearchParams(window.location.search);
   const pathname = window.location.pathname;
-  const detail = urlParams.get("detail");
+  // const detail = urlParams.get("detail");
 
   const isMyRequest = pathname.includes("my-request");
   const isRegistered = pathname.includes("registered-request");
@@ -62,9 +62,6 @@ export const DetailPage = () => {
 
   React.useEffect(() => {
     if (tabValue && registerData) {
-      const allHashtag = map(registerData, (item: any) => JSON.parse(item.postData.hashtag));
-      const hashTagGroup = countBy(flattenDeep(allHashtag));
-      setHashtagLabels(hashTagGroup);
       if (tabValue === "all") {
         setTabRegisterData(registerData);
       } else {
@@ -73,6 +70,12 @@ export const DetailPage = () => {
       }
     }
   }, [tabValue, registerData]);
+
+  React.useEffect(() => {
+    const allHashtag = map(tabRegisterData, (item: any) => JSON.parse(item.postData.hashtag));
+    const hashTagGroup = countBy(flattenDeep(allHashtag));
+    setHashtagLabels(hashTagGroup);
+  }, [tabRegisterData]);
 
   React.useEffect(() => {
     if (tabRequestValue && myRequestData) {
@@ -151,7 +154,11 @@ export const DetailPage = () => {
               data={myRequestData}
             />
           )}
-          {isRegistered ? <RegisterContent data={tabRegisterData} /> : <MyRequestContent data={tabRequestData} />}
+          {isRegistered ? (
+            <RegisterContent data={tabRegisterData} />
+          ) : (
+            <MyRequestContent tabValue={tabRequestValue} data={tabRequestData} />
+          )}
         </Box>
       </Page>
     </Box>

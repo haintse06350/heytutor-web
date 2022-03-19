@@ -63,4 +63,10 @@ export class Post {
     await ErrorUtils.throwError(res);
     return res.json();
   };
+
+  static getPostDetail = async (postId: any) => {
+    const res = await FetchUtils.get(`/get-post-detail/${postId}`);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
 }

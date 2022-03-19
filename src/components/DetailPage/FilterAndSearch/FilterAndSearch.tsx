@@ -15,10 +15,16 @@ const timeOpts = [
   { value: "Chọn ngày", label: "Chọn ngày" },
 ];
 
+const sortOpts = [
+  { value: "recent", label: "Gần đây nhất" },
+  { value: "newUpdate", label: "Cập nhất mới nhất" },
+];
+
 export default function FilterAndSearch(props: any) {
   const { postCount, hashtagCount, tabValue, onChangeTab, onClickHashtag, isSelectedHashtag } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   const [filters, setFilters]: any = React.useState({ status: "all" });
+  const [sortBy, setSortBy]: any = React.useState("recent");
   // const [postStatus, setPostStatus] = React.useState("");
   const [openDatePicker, setOpenDatePicker] = React.useState(false);
   // const [finishPickDate, setFinishPickDate] = React.useState(false);
@@ -149,6 +155,32 @@ export default function FilterAndSearch(props: any) {
               value={filters.time}
               onChange={(e: any) => onChangeFilter(e, "time")}>
               {timeOpts.map((option: any) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+          <Popover
+            open={openDatePicker}
+            onClose={onCloseDatePicker}
+            anchorOrigin={{ vertical: "center", horizontal: "center" }}
+            transformOrigin={{ vertical: "center", horizontal: "center" }}>
+            <DateRangePicker setValue={setDateData} value={dateData} />
+          </Popover>
+        </Grid>
+        <Grid item xs={4} md={3} sx={{ minWidth: "20%" }}>
+          <Box component="form" noValidate autoComplete="off">
+            <TextField
+              fullWidth
+              classes={{ root: classes.textField }}
+              id="outlined-select-currency"
+              select
+              label="Sắp xếp"
+              defaultValue="Gần đây nhất"
+              value={sortBy}
+              onChange={(e: any) => setSortBy(e.target.value)}>
+              {sortOpts.map((option: any) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

@@ -1,26 +1,115 @@
-import { Divider, Paper, Box, Typography } from "@mui/material";
-import { map } from "lodash";
+import { Divider, Typography, Grid, Card, AvatarGroup, Avatar, Popover, Box } from "@mui/material";
+import { map, countBy, isEmpty, keys } from "lodash";
 import * as React from "react";
-// import { useStyles } from "./ResultContent.style";
+import { useStyles } from "./ResultContent.style";
+import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
+import { stringAvatar } from "../../UserProfile/helper";
 // import moment from "moment";
 // import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 export default function MyRequestContent(props: any) {
-  const { data } = props;
-  // const classes = useStyles();
+  const { tabValue, data } = props;
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  const openMenu = Boolean(anchorEl);
+
+  const onOpenMenu = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const onCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const renderAvatar = (item: any) => {
+    const listUsers =
+      tabValue === "isActive" ? item.supporterUsers : tabValue === "isPending" ? item.registerUsers : [];
+    return (
+      <AvatarGroup max={3}>
+        {map(listUsers, (user: any, index: number) => (
+          <Avatar key={index} alt="user" {...stringAvatar(user?.username)} />
+        ))}
+      </AvatarGroup>
+    );
+  };
+
+  const renderStarCount = (listRegister: any) => {
+    const groupUserByRating = countBy(listRegister, (user: any) => Math.round(user.rankPoint));
+    const starCount = keys(groupUserByRating);
+
+    if (!isEmpty(starCount)) {
+      return (
+        <div className={classes.starCount}>
+          {map(starCount, (count: string) => {
+            return (
+              <div key={count} className={classes.starCountItem}>
+                {parseInt(count) === 0 && <StarBorderRoundedIcon sx={{ color: "#94a4c4", width: 16 }} />}
+                {map(Array.from(new Array(parseInt(count))), (o: number, index: number) => (
+                  <StarRoundedIcon key={`${o}-${index}`} sx={{ color: "#94a4c4", width: 16 }} />
+                ))}
+                <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 1 }}>
+                  : {groupUserByRating[count]}
+                </Typography>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+  };
 
   return (
-    <Paper elevation={2} sx={{ mt: 2, p: 2 }}>
+    <Box sx={{ mt: 2 }}>
       <Typography sx={{ mt: 2, color: "#000" }}>Showing {data?.length} results: </Typography>
-      {map(data, (item: any, index: number) => (
-        <Box sx={{ mt: 2 }}>
-          <div>
-            <Typography variant="subtitle1"></Typography>
-            <Typography variant="subtitle1">Số người đăng kí: {index * 5}</Typography>
-          </div>
-          <Divider />
-        </Box>
-      ))}
-    </Paper>
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        {map(data, (item: any, index: number) => (
+          <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
+            <Card className={classes.item}>
+              <div className={classes.cardHeader}>
+                <div className={classes.postTitle}>
+                  <Typography variant="subtitle1" noWrap>
+                    {item.postData.title}
+                  </Typography>
+                </div>
+                <div>
+                  <MoreHorizOutlinedIcon onClick={onOpenMenu} />
+                </div>
+              </div>
+              <div className={classes.cardContent}>
+                <div className={classes.dueDate}>
+                  <AccessTimeOutlinedIcon sx={{ color: "#94a4c4" }} />
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "#94a4c4", fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 1 }}>
+                    Due on Nov 3
+                  </Typography>
+                </div>
+                <Divider sx={{ mt: 8 }} />
+                <div className={classes.userPostAvatar}>
+                  {renderAvatar(item)} {tabValue === "isPending" && renderStarCount(item.registerUsers)}
+                </div>
+              </div>
+            </Card>
+          </Grid>
+        ))}
+        <Popover
+          open={openMenu}
+          anchorEl={anchorEl}
+          onClose={onCloseMenu}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}>
+          <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 2, px: 2.5 }}>
+            <Typography variant="button">Chỉnh sửa</Typography>
+            <Typography variant="button">Cập nhật trạng thái</Typography>
+            <Typography variant="button">Chi tiết</Typography>
+          </Box>
+        </Popover>
+      </Grid>
+    </Box>
   );
 }

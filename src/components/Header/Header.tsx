@@ -63,7 +63,6 @@ const Header = () => {
             HEYTUTOR
           </Typography>
           {openSearch && <Search searchQuery={searchQuery} open={openSearch} onClose={onCloseSearch} />}
-          {openDialog && <PostDetail onCloseDialog={onCloseDialog} openDialog={openDialog} />}
           <Grid item className={classes.searchDialog}>
             <TextField
               fullWidth
