@@ -37,7 +37,6 @@ const OnGoingEvent = () => {
   const navigate = useNavigate();
 
   const [data, setData]: any = useState(null);
-  console.log(data, "data list event");
 
   const handleViewDetail = (eventId: any) => {
     //navigate sang URL detail EVENT
@@ -198,9 +197,7 @@ const OnGoingEvent = () => {
     const data = await Event.getEventDuration();
     setDataEventDuration(data);
   };
-  console.log(data, "data data");
 
-  console.log(dataEventDuration, "data duration");
   useEffect(() => {
     getListEventByUser();
     getDataEventDuration();

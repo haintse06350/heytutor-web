@@ -23,6 +23,8 @@ const HomePage = () => {
     const data = await Home.getUserStats();
     setData(data);
   };
+  console.log(data, "dem");
+
   useEffect(() => {
     getUserStats();
   }, []);
