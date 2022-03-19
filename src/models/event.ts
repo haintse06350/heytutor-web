@@ -7,12 +7,7 @@ export class Event {
         await ErrorUtils.throwError(res);
         return res.json();
     }
-    static async getEventStats(params={}){
-        const eventId = params;
-        const res = await FetchUtils.get(`/get-event-stats/${eventId}`);
-        await ErrorUtils.throwError(res);
-        return res.json();
-    }
+    
     static async getEventDetailByEventId(eventId:any){
         const res = await FetchUtils.get(`/get-event-detail/${eventId}`);
         await ErrorUtils.throwError(res);

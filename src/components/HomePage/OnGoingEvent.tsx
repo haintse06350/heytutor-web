@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, Box, Grid, Typography, Divider, Button, Tooltip, CircularProgress } from "@mui/material";
 
 //
-
 //lodash
 // import { map } from "lodash";
 
@@ -27,6 +26,7 @@ import moment from "moment";
 import { useStyles } from "./HomePage.style";
 // import Image from "../../assets/27366933.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import EventDuration from "../Event/EventDuration";
 
 const OnGoingEvent = () => {
   const [value, setValue] = React.useState("1");
@@ -37,9 +37,6 @@ const OnGoingEvent = () => {
   const navigate = useNavigate();
 
   const [data, setData]: any = useState(null);
-  // const [dataEventDuration, setDataEventDuration]: any = useState(null);
-  // const [dataEventShortTerm, setDataEventShortTerm]: any = useState(null);
-  console.log(data, "data list event");
 
   const handleViewDetail = (eventId: any) => {
     //navigate sang URL detail EVENT
@@ -56,6 +53,7 @@ const OnGoingEvent = () => {
   const [checkShowMore, setCheckShowMore] = useState(false);
   const [itemCheck, setItemCheck] = useState();
   const [showListEvent, setShowListEvent] = useState(false);
+  const [dataEventDuration, setDataEventDuration]: any = useState(null);
 
   const itemEvent = () => {
     if (!data) {
@@ -107,7 +105,7 @@ const OnGoingEvent = () => {
             </Tooltip>
           </Box>
           <Box dir="ltr">
-          {data?.map((item: any, index: number) => (
+            {data?.map((item: any, index: number) => (
               <Box key={index} sx={{ height: "fit-content" }}>
                 <br />
                 <Divider />
@@ -195,15 +193,14 @@ const OnGoingEvent = () => {
     const data = await Event.getListEventByUser();
     setData(data.listEvent);
   };
-
-  // const getNbUserOfEvent = async (eventId: number) => {
-  //   const stats = await Event.getEventStats(eventId);
-  //   return stats;
-  // };
+  const getDataEventDuration = async () => {
+    const data = await Event.getEventDuration();
+    setDataEventDuration(data);
+  };
 
   useEffect(() => {
     getListEventByUser();
-
+    getDataEventDuration();
     data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
   }, [data?.length]);
 
@@ -223,7 +220,9 @@ const OnGoingEvent = () => {
           </TabList>
         </Box>
         <TabPanel value="1">{itemEvent()}</TabPanel>
-        <TabPanel value="2">ngan han</TabPanel>
+        <TabPanel value="2">
+          <EventDuration data={dataEventDuration?.shortTermEvents} />
+        </TabPanel>
         <TabPanel value="3">Sự kiện dài hạn</TabPanel>
       </TabContext>
     </Card>
