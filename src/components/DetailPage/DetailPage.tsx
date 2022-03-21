@@ -127,40 +127,38 @@ export const DetailPage = () => {
   }, [registerData]);
 
   return (
-    <Box sx={{ mt: 10 }}>
-      <Page className={classes.detailRoot}>
-        <Box sx={{ pb: 5 }}>
-          <BreadcrumbsTab
-            history={[{ title: "Home", href: "/" }]}
-            current={{ title: isMyRequest ? "My requests" : isRegistered ? "Registered Requests" : "" }}
+    <Page>
+      <Box sx={{ pb: 5 }}>
+        <BreadcrumbsTab
+          history={[{ title: "Home", href: "/" }]}
+          current={{ title: isMyRequest ? "My requests" : isRegistered ? "Registered Requests" : "" }}
+        />
+      </Box>
+      <Box sx={{ pb: 3, mr: 1 }}>
+        {isRegistered ? (
+          <FilterAndSearch
+            isSelectedHashtag={isSelectedHashtag}
+            tabValue={tabValue}
+            onChangeTab={onChangeTab}
+            onClickHashtag={onClickHashtag}
+            hashtagCount={hashtagLabels}
+            postCount={postCount}
           />
-        </Box>
-        <Box sx={{ pb: 3, mr: 1 }}>
-          {isRegistered ? (
-            <FilterAndSearch
-              isSelectedHashtag={isSelectedHashtag}
-              tabValue={tabValue}
-              onChangeTab={onChangeTab}
-              onClickHashtag={onClickHashtag}
-              hashtagCount={hashtagLabels}
-              postCount={postCount}
-            />
-          ) : (
-            <FilterAndSearchMyRequest
-              isSelectedHashtag={isSelectedHashtag}
-              tabValue={tabRequestValue}
-              onChangeTab={onChangeRequestTab}
-              onClickHashtag={onClickHashtag}
-              data={myRequestData}
-            />
-          )}
-          {isRegistered ? (
-            <RegisterContent data={tabRegisterData} />
-          ) : (
-            <MyRequestContent tabValue={tabRequestValue} data={tabRequestData} />
-          )}
-        </Box>
-      </Page>
-    </Box>
+        ) : (
+          <FilterAndSearchMyRequest
+            isSelectedHashtag={isSelectedHashtag}
+            tabValue={tabRequestValue}
+            onChangeTab={onChangeRequestTab}
+            onClickHashtag={onClickHashtag}
+            data={myRequestData}
+          />
+        )}
+        {isRegistered ? (
+          <RegisterContent data={tabRegisterData} />
+        ) : (
+          <MyRequestContent tabValue={tabRequestValue} data={tabRequestData} />
+        )}
+      </Box>
+    </Page>
   );
 };

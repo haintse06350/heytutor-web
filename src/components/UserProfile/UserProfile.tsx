@@ -8,7 +8,6 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import CreateIcon from "@mui/icons-material/Create";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import MessageIcon from "@mui/icons-material/Message";
-import ListPost from "./ListPost";
 import { User } from "../../models/users";
 import { useNavigate } from "react-router-dom";
 
@@ -193,9 +192,7 @@ const UserProfile = () => {
               <TabPanel value={value} index={0}>
                 Đánh giá
               </TabPanel>
-              <TabPanel value={value} index={1}>
-                <ListPost userProfile={userProfile} />
-              </TabPanel>
+              <TabPanel value={value} index={1}></TabPanel>
             </Box>
           </div>
         </Grid>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Post } from "../../models/post";
-import PostItem from "../HomePage/PostItem";
 import { map } from "lodash";
 
 const ListPost = (props: any) => {
@@ -21,9 +20,7 @@ const ListPost = (props: any) => {
   return (
     <>
       {listPostByUser?.map((post: any, index: number) => (
-        <div style={{ marginBottom: 30 }} key={index}>
-          <PostItem post={post} />
-        </div>
+        <div style={{ marginBottom: 30 }} key={index}></div>
       ))}
     </>
   );

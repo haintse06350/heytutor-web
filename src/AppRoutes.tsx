@@ -109,21 +109,10 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path={"/test"}
+            path={"/post-detail"}
             element={
               <RequireAuth>
-                <PostItem
-                  post={{
-                    id: 1,
-                    userId: 1,
-                    eventId: 1,
-                    user: { id: 2, name: "Duc anh" },
-                    title: "Help CSD nao cac tinh yeu",
-                    content: "sjahdkashdkjsahdkjsahdkjsahkd dhsakjdhksajhda",
-                    hashtag: ["#CSD", "#MAS"],
-                    commentCount: 12,
-                  }}
-                />
+                <PostItem />
               </RequireAuth>
             }
           />

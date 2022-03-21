@@ -9,6 +9,7 @@ export const useStyles: any = makeStyles(() => ({
   cardHeader: {
     display: "flex",
     width: "100%",
+    alignItems: "flex-start",
   },
   postTitle: {
     flexGrow: 1,
@@ -16,11 +17,23 @@ export const useStyles: any = makeStyles(() => ({
     overflow: "hidden",
     whiteSpace: "nowrap",
     marginRight: 8,
+    marginLeft: 16,
+    "& > h6": {
+      cursor: "pointer",
+      "&:hover": {
+        textDecoration: "underline",
+      },
+    },
   },
   cardContent: {},
   dueDate: {
     display: "flex",
     alignItems: "center",
+  },
+  shortContent: {
+    display: "flex",
+    alignItems: "center",
+    padding: "24px 0px",
   },
   userPostAvatar: {
     marginTop: 8,
@@ -47,6 +60,8 @@ export const useStyles: any = makeStyles(() => ({
     alignItems: "center",
   },
   dueDateAndNoti: {
+    marginTop: 4,
+    marginLeft: -2,
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -70,6 +85,7 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    minWidth: 30,
   },
   blink: {
     width: 10,
@@ -78,5 +94,23 @@ export const useStyles: any = makeStyles(() => ({
     animation: "$blinker 1s linear infinite",
     backgroundColor: "red",
     marginRight: 5,
+  },
+  cardImg: {
+    "& > img": {
+      width: 64,
+      height: 64,
+      minWidth: 64,
+      borderRadius: 8,
+      objectFit: "cover",
+    },
+  },
+  actions: {
+    "& > h6": {
+      borderRadius: 4,
+      cursor: "pointer",
+      "&:hover": {
+        background: "#e9ecef",
+      },
+    },
   },
 }));

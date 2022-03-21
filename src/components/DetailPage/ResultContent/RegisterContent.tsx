@@ -2,13 +2,15 @@ import { Box, Typography, Grid, Card, Popover, Divider, Avatar, Tooltip, Button 
 import { map } from "lodash";
 import * as React from "react";
 import { useStyles } from "./ResultContent.style";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import ConnectWithoutContactRoundedIcon from "@mui/icons-material/ConnectWithoutContactRounded";
 import LibraryAddCheckRoundedIcon from "@mui/icons-material/LibraryAddCheckRounded";
 import { stringAvatar } from "../../UserProfile/helper";
 import { useNavigate } from "react-router-dom";
+import NewMessageIcon from "../../../assets/new-message.svg";
+import { renderCardImg } from "../utils";
 
 export default function RegisterContent(props: any) {
   const { data } = props;
@@ -27,6 +29,10 @@ export default function RegisterContent(props: any) {
     setAnchorEl(null);
   };
 
+  const onClickPostDetail = (postId: number) => {
+    navigate(`/post-detail?postId=${postId}`);
+  };
+
   return (
     <Box sx={{ mt: 2 }}>
       <Typography variant="subtitle1" sx={{ mb: 2 }}>
@@ -37,37 +43,35 @@ export default function RegisterContent(props: any) {
           <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
             <Card className={classes.item}>
               <div className={classes.cardHeader}>
+                <div className={classes.cardImg}>
+                  <img src={renderCardImg(index)} alt="" />
+                </div>
                 <div className={classes.postTitle}>
-                  <Typography variant="subtitle1" noWrap>
+                  <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.postId)}>
                     {item.postData.title}
                   </Typography>
+                  <div className={classes.dueDateAndNoti}>
+                    <div className={classes.dueDate}>
+                      <AccessTimeOutlinedIcon sx={{ color: "#94a4c4" }} />
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ color: "#94a4c4", fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 1 }}>
+                        Due on March 20
+                      </Typography>
+                    </div>
+                  </div>
                 </div>
+                {(index === 0 || index === 2 || index === 3) && (
+                  <div className={classes.newMessage}>
+                    <i className={classes.blink}></i>
+                    <img src={NewMessageIcon} alt="" />
+                  </div>
+                )}
                 <div>
-                  <MoreHorizOutlinedIcon onClick={onOpenMenu} />
+                  <MoreVertRoundedIcon onClick={onOpenMenu} />
                 </div>
               </div>
               <div className={classes.cardContent}>
-                <div className={classes.dueDateAndNoti}>
-                  <div className={classes.dueDate}>
-                    <AccessTimeOutlinedIcon sx={{ color: "#94a4c4" }} />
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ color: "#94a4c4", fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 1 }}>
-                      Due on March 20
-                    </Typography>
-                  </div>
-                  {(index === 1 || index === 2) && (
-                    <div className={classes.newMessage}>
-                      <i className={classes.blink}></i>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ color: "#94a4c4", fontSize: 12, fontWeight: 500, lineHeight: 1.5 }}>
-                        New messages
-                      </Typography>
-                    </div>
-                  )}
-                </div>
-
                 <Box sx={{ my: 3 }}>
                   {/* <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                     <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 18, height: 18, color: "#94a4c4" }} />
@@ -132,10 +136,7 @@ export default function RegisterContent(props: any) {
                     </div>
                   </div>
                   <div className={classes.rightContent}>
-                    <Button
-                      onClick={() => navigate(`/post-detail?postId=${item.postId}`)}
-                      variant="outlined"
-                      color="primary">
+                    <Button onClick={() => onClickPostDetail(item.postId)} variant="outlined" color="primary">
                       Xem chi tiết
                     </Button>
                   </div>
@@ -152,9 +153,15 @@ export default function RegisterContent(props: any) {
             vertical: "bottom",
             horizontal: "left",
           }}>
-          <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 2, px: 2.5 }}>
-            <Typography variant="button">Huỷ đăng kí</Typography>
-            <Typography variant="button">Chi tiết</Typography>
+          <Box
+            className={classes.actions}
+            sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 1, px: 1 }}>
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
+              Huỷ đăng kí
+            </Typography>
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
+              Chi tiết
+            </Typography>
           </Box>
         </Popover>
       </Grid>

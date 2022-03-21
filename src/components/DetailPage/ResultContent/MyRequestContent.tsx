@@ -2,11 +2,12 @@ import { Divider, Typography, Grid, Card, AvatarGroup, Avatar, Popover, Box } fr
 import { map, countBy, isEmpty, keys } from "lodash";
 import * as React from "react";
 import { useStyles } from "./ResultContent.style";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { stringAvatar } from "../../UserProfile/helper";
+import { renderCardImg } from "../utils";
 // import moment from "moment";
 // import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
@@ -14,6 +15,7 @@ export default function MyRequestContent(props: any) {
   const { tabValue, data } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [toggleItem, setToggleItem]: any = React.useState(false);
 
   const openMenu = Boolean(anchorEl);
 
@@ -69,25 +71,47 @@ export default function MyRequestContent(props: any) {
           <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
             <Card className={classes.item}>
               <div className={classes.cardHeader}>
+                <div className={classes.cardImg}>
+                  <img src={renderCardImg(index)} alt="" />
+                </div>
                 <div className={classes.postTitle}>
                   <Typography variant="subtitle1" noWrap>
                     {item.postData.title}
                   </Typography>
+                  <div className={classes.dueDate}>
+                    <AccessTimeOutlinedIcon sx={{ color: "#94a4c4" }} />
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "#94a4c4", fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 1 }}>
+                      Due on Nov 3
+                    </Typography>
+                  </div>
                 </div>
                 <div>
-                  <MoreHorizOutlinedIcon onClick={onOpenMenu} />
+                  <MoreVertRoundedIcon onClick={onOpenMenu} />
                 </div>
               </div>
+
               <div className={classes.cardContent}>
-                <div className={classes.dueDate}>
-                  <AccessTimeOutlinedIcon sx={{ color: "#94a4c4" }} />
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ color: "#94a4c4", fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 1 }}>
-                    Due on Nov 3
-                  </Typography>
+                <div className={classes.shortContent}>
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 700, lineHeight: 1.5, ml: 0.5 }}>
+                      {toggleItem !== item.postId ? `${item.postData.content.slice(0, 100)}...` : item.postData.content}
+                      <span
+                        onClick={() => (toggleItem !== item.postId ? setToggleItem(item.postId) : setToggleItem(null))}
+                        style={{
+                          marginLeft: 8,
+                          textDecoration: "underline",
+                          fontWeight: 400,
+                          color: "#94a4c4",
+                          cursor: "pointer",
+                        }}>
+                        {item.postData.content.length > 100 && (toggleItem !== item.postId ? "Xem thêm" : "Thu gọn")}
+                      </span>
+                    </Typography>
+                  </Box>
                 </div>
-                <Divider sx={{ mt: 8 }} />
+                <Divider />
                 <div className={classes.userPostAvatar}>
                   {renderAvatar(item)} {tabValue === "isPending" && renderStarCount(item.registerUsers)}
                 </div>
@@ -103,10 +127,15 @@ export default function MyRequestContent(props: any) {
             vertical: "bottom",
             horizontal: "left",
           }}>
-          <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 2, px: 2.5 }}>
-            <Typography variant="button">Chỉnh sửa</Typography>
-            <Typography variant="button">Cập nhật trạng thái</Typography>
-            <Typography variant="button">Chi tiết</Typography>
+          <Box
+            className={classes.actions}
+            sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 1, px: 1 }}>
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
+              Chỉnh sửa
+            </Typography>
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
+              Cập nhật trạng thái
+            </Typography>
           </Box>
         </Popover>
       </Grid>

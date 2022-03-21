@@ -32,4 +32,8 @@ export const useStyles: any = makeStyles(() => ({
       borderRadius: 5,
     },
   },
+  postImage: {
+    width: "100%",
+    height: 300,
+  },
 }));
