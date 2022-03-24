@@ -17,6 +17,7 @@ import {
   Input,
   Select,
   MenuItem,
+  Avatar,
 } from "@mui/material";
 // import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -41,15 +42,24 @@ import { Admin } from "../../models/admin";
 import HomeManager from "./HomeDashBoard/HomeManager";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
 import ManagerUser from "./ManagerUser/ManagerUser";
-import Statistical from "./Statistical/Statistical";
-import FeedbackIcon from "@mui/icons-material/Feedback";
-import EqualizerIcon from "@mui/icons-material/Equalizer";
 import PeopleIcon from "@mui/icons-material/People";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import FeedBackOfUser from "./ManagerUser/FeedbackOfUser";
 import HomeIcon from "@mui/icons-material/Home";
+import ManagePost from "./ManagePost/MangePost";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { stringAvatar } from "../UserProfile/helper";
+import HomeManageCTV from "./HomeDashBoard/HomeManageCTV";
+
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import FlagIcon from "@mui/icons-material/Flag";
+import CoPresentIcon from "@mui/icons-material/CoPresent";
+import ReportIcon from "@mui/icons-material/Report";
+import BugReportIcon from "@mui/icons-material/BugReport";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import PushPinIcon from "@mui/icons-material/PushPin";
+
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -106,7 +116,7 @@ const Dashboard = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [openTab, setOpenTab] = useState(false);
-  const [activeTab, setActiveTab] = useState("Import Data");
+  const [activeTab, setActiveTab] = useState("manager-home");
   const [dataStudent, setDataStudent]: any = useState(null);
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -256,11 +266,12 @@ const Dashboard = () => {
       case "Export Data": {
         return renderDemoData();
       }
-      case "Quản lí bài đăng": {
-        return <div>Quản lí bài đăng</div>;
+      case "manager-post": {
+        return <ManagePost />;
       }
-      case "Quản lí event": {
-        return <div>Quản lí event</div>;
+
+      case "Quản lí sự kiện": {
+        return <div>Quản lí sự kiện</div>;
       }
       case "Quản lí người dùng": {
         return <div>Quản lí người dùng</div>;
@@ -268,14 +279,12 @@ const Dashboard = () => {
       case "manager-ctv": {
         return <ManagerUser />;
       }
-      case "manager-statistical": {
-        return <Statistical />;
-      }
-      case "manager-feedback-user": {
-        return <FeedBackOfUser />;
-      }
+
       case "manager-home": {
         return <HomeManager />;
+      }
+      case "home-manage-ctv": {
+        return <HomeManageCTV />;
       }
     }
   };
@@ -330,6 +339,72 @@ const Dashboard = () => {
     );
   };
 
+  const [filterName, setFilterName] = useState("manager-home");
+  const [nameTab, setNameTab] = useState("Trang chủ quản lí");
+  const handleClickChangeTab = (filterString: string, nameTabString: string) => {
+    onChangeTab(filterString);
+    setFilterName(filterString);
+    setNameTab(nameTabString);
+  };
+
+  // manager post
+
+  function task(id: number, name: string, newNofication: number, total: number) {
+    return {
+      id,
+      name,
+      newNofication,
+      total,
+    };
+  }
+
+  const listTask = [
+    task(0, "Đăng kí ghim", 20, 320),
+    task(1, "Chưa có người đăng kí", 4, 320),
+    task(2, "Đã người đăng kí", 4, 320),
+    task(3, "Trong quá tình hỗ trợ", 4, 320),
+    task(4, "Bị báo cáo", 1, 2),
+    task(5, "Đã hạn chế", 4, 12),
+    task(6, "Đã đóng", 4, 120),
+  ];
+
+  const renderIcon = (index: number) => {
+    switch (index) {
+      case 0: {
+        // ghim bai viet
+        return <PushPinIcon color="error" />;
+      }
+      case 1: {
+        // chua co nguoi dang ky
+        return <AccessTimeIcon color="secondary" />;
+      }
+      case 2: {
+        //da co nguoi dang ky
+        return <CoPresentIcon color="success" sx={{ opacity: 0.5 }} />;
+      }
+      case 3: {
+        // trong qua trinh ho tro
+        return <NewspaperIcon color="success" />;
+      }
+      case 4: {
+        // bi bao cao
+        return <FlagIcon color="warning" />;
+      }
+      case 5: {
+        // da  han che
+        return <ReportIcon color="error" />;
+      }
+
+      case 6: {
+        // đa dong
+        return <DoneAllIcon sx={{ color: "#7edfec" }} />;
+      }
+      default: {
+        return <BugReportIcon />;
+      }
+    }
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -343,9 +418,12 @@ const Dashboard = () => {
             sx={{ mr: 2, ...(open && { display: "none" }) }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Quản lí
-          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+            <Typography variant="h6" noWrap component="div">
+              {nameTab}
+            </Typography>
+            <Avatar {...stringAvatar("Đức Anh")}></Avatar>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -367,43 +445,92 @@ const Dashboard = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          {["Import Data", "Export Data"].map((text, index) => (
-            <ListItem button key={text} onClick={() => onChangeTab(text)}>
-              <ListItemIcon>{index === 0 ? <CloudDownloadIcon /> : <CloudUploadIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          <ListItem button onClick={() => onChangeTab("manager-home")}>
+          <ListItem
+            button
+            onClick={() => handleClickChangeTab("manager-home", "Trang chủ quản lí")}
+            className={filterName === "manager-home" ? classes.active : ""}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Trang chủ quản lí" />
+            {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
           </ListItem>
-          <ListItem button onClick={() => onChangeTab("manager-post")}>
+          <Collapse in={openTab} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                sx={{ pl: 4 }}
+                onClick={(e) => handleClickChangeTab("home-manage-ctv", "Trang chủ cộng tác viên")}>
+                <ListItemIcon>
+                  <PeopleAltIcon />
+                </ListItemIcon>
+                <ListItemText primary="Cộng tác viên" />
+              </ListItem>
+              <ListItem button sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Admin" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <ListItem
+            button
+            onClick={() => handleClickChangeTab("manager-post", "Quản lí bài đăng")}
+            className={filterName === "manager-post" ? classes.active : ""}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
             <ListItemText primary="Quản lí bài đăng" />
           </ListItem>
-          <ListItem button onClick={() => onChangeTab("manager-event")}>
+          <Collapse in={openTab} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {listTask.map((task, index) => (
+                <ListItem key={index} button sx={{ pl: 4 }} onClick={() => handleClickChangeTab(task.name, task.name)}>
+                  <ListItemIcon>{renderIcon(index)}</ListItemIcon>
+                  <ListItemText className={classes.itemText}>
+                    <Typography>{task.name}</Typography>
+                    <Typography
+                      color="red"
+                      sx={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                        ml: 1,
+                        backgroundColor: "#fbebeb",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}>
+                      {task.newNofication}
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </Collapse>
+
+          <ListItem
+            button
+            onClick={() => handleClickChangeTab("manager-event", "Quản lí sự kiện")}
+            className={filterName === "manager-event" && classes.active}>
             <ListItemIcon>
               <EventIcon />
             </ListItemIcon>
-            <ListItemText primary="Quản lí event" />
+            <ListItemText primary="Quản lí sự kiện" />
           </ListItem>
           <ListItem button onClick={(e) => handleClick(e)}>
             <ListItemIcon>
               <ManageAccountsIcon />
             </ListItemIcon>
             <ListItemText primary="Quản lí người dùng" />
-            {openTab ? <ExpandLess /> : <ExpandMore />}
+            {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
           </ListItem>
           <Collapse in={openTab} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button sx={{ pl: 4 }} onClick={(e) => onChangeTab("manager-ctv")}>
+              <ListItem
+                button
+                sx={{ pl: 4 }}
+                onClick={(e) => handleClickChangeTab("manager-ctv", "Quản lí cộng tác viên")}>
                 <ListItemIcon>
                   <PeopleAltIcon />
                 </ListItemIcon>
@@ -415,20 +542,18 @@ const Dashboard = () => {
                 </ListItemIcon>
                 <ListItemText primary="Quản lí người dùng " />
               </ListItem>
-              <ListItem button sx={{ pl: 4 }} onClick={(e) => onChangeTab("manager-statistical")}>
-                <ListItemIcon>
-                  <EqualizerIcon />
-                </ListItemIcon>
-                <ListItemText primary="Thống kê" />
-              </ListItem>
-              <ListItem button sx={{ pl: 4 }} onClick={(e) => onChangeTab("manager-feedback-user")}>
-                <ListItemIcon>
-                  <FeedbackIcon />
-                </ListItemIcon>
-                <ListItemText primary="Góp ý của người dùng" />
-              </ListItem>
             </List>
           </Collapse>
+        </List>
+        <Divider />
+
+        <List>
+          {["Import Data", "Export Data"].map((text, index) => (
+            <ListItem button key={text} onClick={() => handleClick(text)}>
+              <ListItemIcon>{index === 0 ? <CloudDownloadIcon /> : <CloudUploadIcon />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
         </List>
       </Drawer>
       <Main open={open}>
