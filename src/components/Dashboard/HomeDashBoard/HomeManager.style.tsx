@@ -17,13 +17,8 @@ export const useStyles = makeStyles(() => ({
     padding: 16,
     alignItems: "center",
   },
-  interactiveUser: {
-    backgroundColor: "#fff",
-    borderRadius: "16px",
-    boxShadow: "0 1px 2px 0 rgb(145 158 171 / 24%)",
-    boxSizing: "inherit",
-  },
-  topRegister: {
+
+  borderBoxSizing: {
     backgroundColor: "#fff",
     borderRadius: "16px",
     boxShadow: "0 1px 2px 0 rgb(145 158 171 / 24%)",
@@ -37,5 +32,32 @@ export const useStyles = makeStyles(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#f9fafb",
+  },
+  cardHeader: {
+    display: "flex",
+    width: "100%",
+    alignItems: "flex-start",
+  },
+  cardImg: {
+    "& > img": {
+      width: 64,
+      height: 64,
+      minWidth: 64,
+      borderRadius: 8,
+      objectFit: "cover",
+    },
+  },
+  postTitle: {
+    flexGrow: 1,
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    marginRight: 8,
+    marginLeft: 16,
+  },
+  dueDate: {
+    display: "flex",
+    alignItems: "center",
   },
 }));

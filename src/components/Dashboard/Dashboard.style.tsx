@@ -14,4 +14,18 @@ export const useStyles: any = makeStyles(() => ({
   buttonFetch: {
     marginTop: "20px !important",
   },
+
+  active: {
+    backgroundColor: "#4d545c",
+    borderRadius: 8,
+    color: "#fff",
+    "&:hover": {
+      color: "#000",
+    },
+  },
+  itemText: {
+    "& > span": {
+      display: "flex",
+    },
+  },
 }));

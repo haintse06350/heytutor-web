@@ -62,10 +62,11 @@ export default function MyRequestContent(props: any) {
       );
     }
   };
+  console.log(data);
 
   return (
     <Box sx={{ mt: 2 }}>
-      <Typography sx={{ mt: 2, color: "#000" }}>Showing {data?.length} results: </Typography>
+      <Typography sx={{ mt: 2, color: "#000" }}>Hiển thị {data?.length} kết quả: </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {map(data, (item: any, index: number) => (
           <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
