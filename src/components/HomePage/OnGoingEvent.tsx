@@ -7,14 +7,15 @@ import { Card, CardHeader, Box, Grid, Typography, Divider, Button, Tooltip, Circ
 // import { map } from "lodash";
 
 //icons
-import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 // import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import RecordVoiceOverOutlinedIcon from "@mui/icons-material/RecordVoiceOverOutlined";
-import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
-import SupervisedUserCircleOutlinedIcon from "@mui/icons-material/SupervisedUserCircleOutlined";
+// import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+// import RecordVoiceOverOutlinedIcon from "@mui/icons-material/RecordVoiceOverOutlined";
+// import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
+// import SupervisedUserCircleOutlinedIcon from "@mui/icons-material/SupervisedUserCircleOutlined";
+import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
+import PostAddRoundedIcon from "@mui/icons-material/PostAddRounded";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useNavigate } from "react-router-dom";
 import Tab from "@mui/material/Tab";
@@ -25,8 +26,9 @@ import { Event } from "../../models/event";
 import moment from "moment";
 import { useStyles } from "./HomePage.style";
 // import Image from "../../assets/27366933.jpg";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EventDuration from "../Event/EventDuration";
+
+import demoImg6 from "../../assets/default_images/6.jpg";
 
 const OnGoingEvent = () => {
   const [value, setValue] = React.useState("1");
@@ -42,9 +44,6 @@ const OnGoingEvent = () => {
     //navigate sang URL detail EVENT
     navigate(`/event-detail?eventid=${eventId}`);
   };
-  const handleEventList = () => {
-    navigate(`/event-list`);
-  };
 
   const onClickShow = (id: any) => {
     setCheckShowMore(!checkShowMore);
@@ -52,7 +51,6 @@ const OnGoingEvent = () => {
   };
   const [checkShowMore, setCheckShowMore] = useState(false);
   const [itemCheck, setItemCheck] = useState();
-  const [showListEvent, setShowListEvent] = useState(false);
   const [dataEventDuration, setDataEventDuration]: any = useState(null);
 
   const itemEvent = () => {
@@ -70,7 +68,7 @@ const OnGoingEvent = () => {
     } else {
       return (
         <>
-          <Box sx={{ display: "flex", alignItems: "center", px: 3, pt: 1 }}>
+          {/* <Box sx={{ display: "flex", alignItems: "center", px: 3, pt: 1 }}>
             <Tooltip title="Số lượt xem">
               <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                 <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
@@ -103,16 +101,13 @@ const OnGoingEvent = () => {
                 </Typography>
               </Box>
             </Tooltip>
-          </Box>
-          <Box dir="ltr">
+          </Box> */}
+          <Box sx={{ display: "flex", overflowX: "scroll" }} dir="ltr">
             {data?.map((item: any, index: number) => (
-              <Box key={index} sx={{ height: "fit-content" }}>
-                <br />
-                <Divider />
-
+              <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4 }}>
                 <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
-                  {/* <img src={Image} alt="fuk" /> */}
-                  <Typography variant="h6" sx={{ ml: 1 }}>
+                  <img src={demoImg6} alt="" />
+                  <Typography variant="h6" sx={{ ml: 1 }} onClick={() => handleViewDetail(item?.eventDetail?.id)}>
                     {item?.eventDetail?.title}
                   </Typography>
                   <Typography variant="body2" sx={{ position: "relative" }}>
@@ -133,57 +128,64 @@ const OnGoingEvent = () => {
                     )}
                   </Typography>
                 </Grid>
-
-                <Box sx={{ display: "flex", ml: 1, mt: 1, mb: 1 }}>
-                  <Tooltip title="Số lượt xem">
+                <Box sx={{ display: "flex", background: "#d8dfe6", flexDirection: "column", p: 2, borderRadius: 1 }}>
+                  <Box sx={{ display: "flex" }}>
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item?.eventDetail?.viewCount}</Typography>
+                      <Typography variant="subtitle2">Bạn có 1 vấn đề sắp hết hạn</Typography>
                     </Box>
-                  </Tooltip>
-                  <Tooltip title="Số lượt đăng kí">
-                    <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 3 }}>
                       <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{item?.numberOfUser?.numberOfUser}</Typography>
+                      <Typography variant="subtitle2">Số lượt đăng kí</Typography>
+                      <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.numberOfUser?.numberOfUser + 50}</Typography>
                     </Box>
-                  </Tooltip>
-                  <Tooltip title="Thời gian kết thúc sự kiện">
+                  </Box>
+                  <Box sx={{ display: "flex" }}>
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                      <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                      <Typography variant="subtitle2">Số lượt xem</Typography>
+                      <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.eventDetail?.viewCount + 100}</Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 3 }}>
+                      <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                      <Typography variant="subtitle2">Số lượt đăng kí</Typography>
+                      <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.numberOfUser?.numberOfUser + 50}</Typography>
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex", mt: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                      <EventBusyRoundedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                      <Typography variant="subtitle2">Yêu cầu chưa có người giải quyết</Typography>
+                      <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.eventDetail?.viewCount}</Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 3 }}>
+                      <PostAddRoundedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                      <Typography variant="subtitle2">Yêu cầu mới</Typography>
+                      <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.numberOfUser?.numberOfUser}</Typography>
+                    </Box>
+                  </Box>
+
+                  <Tooltip title="Thời gian kết thúc sự kiện">
+                    <Box sx={{ display: "flex", alignItems: "center", mr: 1, mt: 1 }}>
                       <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                       <Typography style={{ fontSize: 14 }}>
-                        {moment(item?.eventDetail?.endAt).lang("vi").format("LL")}
+                        Từ{" "}
+                        <span style={{ fontWeight: 600 }}>
+                          {moment(item?.eventDetail?.createdAt).lang("vi").format("LL")}
+                        </span>{" "}
+                        tới ngày{" "}
+                        <span style={{ fontWeight: 600 }}>
+                          {moment(item?.eventDetail?.endAt).lang("vi").format("LL")}
+                        </span>
                       </Typography>
                     </Box>
                   </Tooltip>
                 </Box>
-                <Grid item>
-                  <Button
-                    size="small"
-                    color="inherit"
-                    onClick={() => handleViewDetail(item?.eventDetail?.id)}
-                    variant="outlined"
-                    endIcon={<ArrowForwardIcon />}>
-                    Xem chi tiết
-                  </Button>
-                </Grid>
               </Box>
             ))}
           </Box>
           <br />
           <Divider />
-          {showListEvent && (
-            <Box sx={{ p: 2, textAlign: "right" }}>
-              <Typography sx={{ mb: 1 }}>Đăng hiển thị: 3/{data?.length}</Typography>
-              <Button
-                variant="contained"
-                size="small"
-                color="inherit"
-                onClick={handleEventList}
-                endIcon={<ArrowForwardIosOutlinedIcon />}>
-                Xem chi tiết
-              </Button>
-            </Box>
-          )}
         </>
       );
     }
@@ -201,7 +203,6 @@ const OnGoingEvent = () => {
   useEffect(() => {
     getListEventByUser();
     getDataEventDuration();
-    data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
   }, [data?.length]);
 
   return (

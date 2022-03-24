@@ -11,7 +11,12 @@ export const useStyles: any = makeStyles(() => ({
       },
     },
   },
-
+  moreFilter: {
+    background: "#fff",
+    "& > span": {
+      fontWeight: 700,
+    },
+  },
   selectedHashtag: {
     background: "#00AB55",
     color: "#fff",

@@ -6,14 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import NotificationProvider from "./context/notification/state";
 import UserProvider from "./context/user/state";
 import PostProvider from "./context/post/state";
+import MsgProvider from "./context/message/message";
 
 ReactDOM.render(
   <React.StrictMode>
     <NotificationProvider>
       <UserProvider>
-        <PostProvider>
-          <App />
-        </PostProvider>
+        <MsgProvider>
+          <PostProvider>
+            <App />
+          </PostProvider>
+        </MsgProvider>
       </UserProvider>
     </NotificationProvider>
   </React.StrictMode>,

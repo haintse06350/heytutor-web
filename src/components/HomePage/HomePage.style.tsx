@@ -9,17 +9,11 @@ export const useStyles: any = makeStyles(() => ({
     },
   },
   headerEvent: {
-    position: "relative",
-    marginTop: 20,
-    "& > div:nth-child(2)": {
-      position: "absolute",
-      top: 0,
-      right: 0,
-    },
     "& > img": {
       width: "100%",
       height: "200px",
-      objectFit: "contain",
+      objectFit: "cover",
+      borderRadius: 8,
     },
   },
   rootEventList: {

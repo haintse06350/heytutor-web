@@ -1,4 +1,5 @@
 import { makeStyles } from "@mui/styles";
+import demoImg3 from "../../assets/default_images/3.jpg";
 
 export const useStyles: any = makeStyles(() => ({
   wrapPostItem: {
@@ -16,10 +17,19 @@ export const useStyles: any = makeStyles(() => ({
 
   userPanel: {
     display: "flex",
-    justifyContent: "flex-end",
-    position: "absolute",
+    justifyContent: "space-between",
+    marginTop: 16,
   },
-
+  postTitleAndAction: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  userNameAndAvatar: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
   isResolve: {
     display: "flex",
   },
@@ -34,6 +44,51 @@ export const useStyles: any = makeStyles(() => ({
   },
   postImage: {
     width: "100%",
-    height: 300,
+    height: 200,
+    "& > img": {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    },
+  },
+  slideImage: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    height: 200,
+  },
+  deadline: {
+    display: "flex",
+    alignItems: "center",
+    marginTop: 8,
+  },
+  postContent: {
+    marginTop: 20,
+    backgroundImage: `url(${demoImg3})`,
+    width: "100%",
+    height: 400,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    borderRadius: 8,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  userAvatar: {
+    border: "2px solid #94a4c4",
+    borderRadius: "50%",
+  },
+  userStats: {
+    display: "flex",
+    padding: 16,
+    background: "#edf2fa",
+    borderRadius: 8,
+  },
+  userPostDetail: {
+    display: "flex",
+    flexDirection: "column",
   },
 }));

@@ -197,10 +197,10 @@ export default function FilterAndSearch(props: any) {
         </Grid>
       </Grid>
       <Typography variant="subtitle1" sx={{ mt: 2, mb: 2 }}>
-        Lọc theo môn học
+        Lọc theo hashtag
       </Typography>
       <Grid container spacing={1} sx={{ mt: 1, width: "100%" }}>
-        {map(hashtagLabels, (label: any) => (
+        {map(hashtagLabels.slice(0, 3), (label: any) => (
           <Grid key={label} item sx={{ mr: 0.5 }}>
             <Chip
               className={isSelectedHashtag(label) && classes.selectedHashtag}
@@ -211,6 +211,9 @@ export default function FilterAndSearch(props: any) {
             />
           </Grid>
         ))}
+        <Grid item sx={{ mr: 0.5 }}>
+          <Chip classes={{ root: classes.moreFilter }} label={`${hashtagLabels.length - 3}+`} variant="outlined" />
+        </Grid>
       </Grid>
     </Box>
   );

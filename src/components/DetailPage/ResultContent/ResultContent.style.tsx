@@ -17,7 +17,6 @@ export const useStyles: any = makeStyles(() => ({
     overflow: "hidden",
     whiteSpace: "nowrap",
     marginRight: 8,
-    marginLeft: 16,
     "& > h6": {
       cursor: "pointer",
       "&:hover": {
@@ -26,6 +25,19 @@ export const useStyles: any = makeStyles(() => ({
     },
   },
   cardContent: {},
+  resultCountAndDisplayOption: {
+    padding: "12px 0px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  optionItem: { display: "flex", alignItems: "center" },
+  options: { display: "flex", alignItems: "center" },
+  activeGrid: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: "#94a4c4",
+  },
   dueDate: {
     display: "flex",
     alignItems: "center",
@@ -112,5 +124,19 @@ export const useStyles: any = makeStyles(() => ({
         background: "#e9ecef",
       },
     },
+  },
+  userAvatar: {
+    border: "2px solid #94a4c4",
+    borderRadius: "50%",
+  },
+  deadline: {
+    color: "#94a4c4",
+    fontSize: 12,
+    fontWeight: 700,
+    lineHeight: 1.5,
+    marginLeft: 1,
+  },
+  nearDeadline: {
+    color: "#d32f2f",
   },
 }));

@@ -4,3 +4,5 @@ declare module "*.svg" {
   export default content;
 }
 declare module "*.jpg";
+
+declare module "react-slideshow-image";
