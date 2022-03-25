@@ -11,13 +11,13 @@ const BreadcrumbsTab = (props: any) => {
 
   const renderIcon = (title: string) => {
     switch (title) {
-      case "Home": {
+      case "Trang chủ": {
         return <HomeOutlinedIcon />;
       }
-      case "My requests": {
+      case "Vấn đề của tôi": {
         return <ArticleOutlinedIcon />;
       }
-      case "Registered Requests": {
+      case "Vấn đề tôi đăng kí hỗ trợ": {
         return <AppRegistrationOutlinedIcon />;
       }
     }

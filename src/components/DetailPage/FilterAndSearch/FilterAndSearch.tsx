@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -18,6 +18,8 @@ const timeOpts = [
 const sortOpts = [
   { value: "recent", label: "Gần đây nhất" },
   { value: "newUpdate", label: "Cập nhất mới nhất" },
+  { value: "deadlineTime", label: "Thời gian của vấn đề" },
+  { value: "rankingUser", label: "Xếp hạng của người dùng" },
 ];
 
 export default function FilterAndSearch(props: any) {
@@ -99,6 +101,11 @@ export default function FilterAndSearch(props: any) {
         labelText = "Đã xong";
         break;
       }
+      case "historyActive": {
+        count = 999;
+        labelText = "Tương tác gần đây";
+        break;
+      }
     }
 
     return (
@@ -107,6 +114,12 @@ export default function FilterAndSearch(props: any) {
         <span>{count}</span>
       </div>
     );
+  };
+
+  const [viewMoreHashtag, setViewMoreHashtag] = useState(3);
+
+  const handleViewMoreHashtag = () => {
+    setViewMoreHashtag(viewMoreHashtag + 3);
   };
 
   return (
@@ -120,6 +133,7 @@ export default function FilterAndSearch(props: any) {
               <Tab label={renderTabLabel("isConfirmed")} value="isConfirmed" />
               <Tab label={renderTabLabel("isPending")} value="isPending" />
               <Tab label={renderTabLabel("isDone")} value="isDone" />
+              <Tab label={renderTabLabel("historyActive")} value="historyActive" />
             </TabList>
           </Box>
         </TabContext>
@@ -150,7 +164,7 @@ export default function FilterAndSearch(props: any) {
               classes={{ root: classes.textField }}
               id="outlined-select-currency"
               select
-              label="Thời gian"
+              label="Hiển thị theo"
               defaultValue="Tuần này"
               value={filters.time}
               onChange={(e: any) => onChangeFilter(e, "time")}>
@@ -200,7 +214,7 @@ export default function FilterAndSearch(props: any) {
         Lọc theo hashtag
       </Typography>
       <Grid container spacing={1} sx={{ mt: 1, width: "100%" }}>
-        {map(hashtagLabels.slice(0, 3), (label: any) => (
+        {map(hashtagLabels.slice(0, viewMoreHashtag), (label: any) => (
           <Grid key={label} item sx={{ mr: 0.5 }}>
             <Chip
               className={isSelectedHashtag(label) && classes.selectedHashtag}
@@ -212,7 +226,12 @@ export default function FilterAndSearch(props: any) {
           </Grid>
         ))}
         <Grid item sx={{ mr: 0.5 }}>
-          <Chip classes={{ root: classes.moreFilter }} label={`${hashtagLabels.length - 3}+`} variant="outlined" />
+          <Chip
+            classes={{ root: classes.moreFilter }}
+            label={`${hashtagLabels.length - 3}+`}
+            variant="outlined"
+            onClick={handleViewMoreHashtag}
+          />
         </Grid>
       </Grid>
     </Box>

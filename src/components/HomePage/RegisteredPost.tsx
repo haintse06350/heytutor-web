@@ -29,6 +29,7 @@ const RegisteredPost = (props: any) => {
   const onNavigate = (path: string) => {
     navigate(path, { state: { data } });
   };
+  console.log(data, "llll");
 
   const [openInformation, setOpenInformation] = useState(true);
 
@@ -80,7 +81,7 @@ const RegisteredPost = (props: any) => {
                 setOnHoverElem={setOnHoverElem}
                 tab="pending"
                 icon={<AppRegistrationOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfPendingPost}
+                data={data.nbOfActivePost}
                 title="Vấn đề đã đăng ký"
                 subTitle="Số vấn đề tôi đã đăng ký hỗ trợ"
                 onNavigate={() => onNavigate("/registered-request?detail=registered")}
