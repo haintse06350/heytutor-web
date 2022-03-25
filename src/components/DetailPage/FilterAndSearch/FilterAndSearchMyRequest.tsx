@@ -17,6 +17,8 @@ const timeOpts = [
 const sortOpts = [
   { value: "recent", label: "Gần đây nhất" },
   { value: "newUpdate", label: "Cập nhất mới nhất" },
+  { value: "numberRegister", label: "Số lượng người đăng kí hỗ trợ" },
+  { value: "deadline", label: "Thời gian hết hạn của các vấn đề" },
 ];
 
 export default function FilterAndSearchMyRequest(props: any) {
@@ -92,6 +94,11 @@ export default function FilterAndSearchMyRequest(props: any) {
         labelText = "Yêu cầu đang trong sự kiện";
         break;
       }
+      case "historyActive": {
+        count = 999;
+        labelText = "Hoạt động gần đây";
+        break;
+      }
     }
 
     return (
@@ -142,7 +149,7 @@ export default function FilterAndSearchMyRequest(props: any) {
               classes={{ root: classes.textField }}
               id="outlined-select-currency"
               select
-              label="Thời gian"
+              label="Hiển thị theo"
               defaultValue="Tuần này"
               value={filters.time}
               onChange={(e: any) => onChangeFilter(e, "time")}>

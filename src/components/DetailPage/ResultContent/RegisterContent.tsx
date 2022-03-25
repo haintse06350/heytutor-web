@@ -1,6 +1,6 @@
 import { Box, Typography, Grid, Card, Popover, Divider, Avatar, Tooltip } from "@mui/material";
 import { map } from "lodash";
-import * as React from "react";
+import React from "react";
 import { useStyles } from "./ResultContent.style";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
@@ -18,13 +18,14 @@ import { MsgCtx } from "../../../context/message/message";
 import { MessageBox } from "../../MessageBox/MessageBox";
 import ViewComfyRoundedIcon from "@mui/icons-material/ViewComfyRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
+// import CancelRegistedDialog from "../OptionPost/CancelRegistedDialog";
 
 export default function RegisterContent(props: any) {
   const { data } = props;
   const classes = useStyles();
   const [openPostMenu, setOpenPostMenu] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [toggleItem, setToggleItem]: any = React.useState(false);
+  // const [toggleItem, setToggleItem]: any = React.useState(false);
   const [listPost, setListPost]: any = React.useState(null);
   const { onOpenMsgBox, onCloseMsgBox } = React.useContext(MsgCtx);
   const [itemClicked, setItemClicked]: any = React.useState(null);
@@ -94,12 +95,12 @@ export default function RegisterContent(props: any) {
                 </div>
               </div>
             </div>
-            {(index === 0 || index === 2 || index === 3) && (
-              <div className={classes.newMessage} onClick={() => onClickDeadlineIcon(item)}>
-                <i className={classes.blink}></i>
-                <img src={NewMessageIcon} alt="" />
-              </div>
-            )}
+
+            <div className={classes.newMessage} onClick={() => onClickDeadlineIcon(item)}>
+              {(index === 0 || index === 2 || index === 3) && <i className={classes.blink}></i>}
+
+              <img src={NewMessageIcon} alt="" />
+            </div>
             <div>
               <MoreVertRoundedIcon onClick={onOpenMenu} />
             </div>
@@ -119,8 +120,8 @@ export default function RegisterContent(props: any) {
                 <Typography
                   variant="subtitle2"
                   sx={{ fontSize: 12, fontWeight: 700, lineHeight: 1.5, ml: 0.5, minHeight: 54 }}>
-                  {toggleItem !== item.postId ? `${item.postData.content.slice(0, 100)}...` : item.postData.content}
-                  <span
+                  {/* {toggleItem !== item.postId ? `${item.postData.content.slice(0, 100)}...` : item.postData.content} */}
+                  {/* <span
                     onClick={() => (toggleItem !== item.postId ? setToggleItem(item.postId) : setToggleItem(null))}
                     style={{
                       marginLeft: 8,
@@ -130,7 +131,7 @@ export default function RegisterContent(props: any) {
                       cursor: "pointer",
                     }}>
                     {item.postData.content.length > 100 && (toggleItem !== item.postId ? "Xem thêm" : "Thu gọn")}
-                  </span>
+                  </span> */}
                 </Typography>
               </Box>
             </Box>
@@ -144,20 +145,29 @@ export default function RegisterContent(props: any) {
                     {item.userData.name}
                   </Typography>
                   <div className={classes.rank}>
-                    <Tooltip title={`${item.userData.rankPoint} sao trên ${item.userData.voteCount} lượt vote`}>
-                      <StarRoundedIcon sx={{ color: "#94a4c4", width: 18 }} />
+                    <Tooltip
+                      title={
+                        item.userData.rankPoint === undefined
+                          ? `Người dùng chưa được đánh giá`
+                          : `${item.userData.rankPoint} sao trên ${item.userData.voteCount} lượt vote`
+                      }>
+                      {item.userData.rankPoint > 0 ? (
+                        <StarRoundedIcon sx={{ color: "gold", width: 18 }} />
+                      ) : (
+                        <StarRoundedIcon sx={{ color: "#94a4c4", width: 18 }} />
+                      )}
                     </Tooltip>
                     <Typography sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5 }}>
                       {item.userData.rankPoint}
                     </Typography>
-                    <Tooltip title="Giao dịch thành công">
-                      <LibraryAddCheckRoundedIcon sx={{ color: "#94a4c4", width: 18, ml: 1 }} />
+                    <Tooltip title="Nhận được hỗ trợ thành công">
+                      <LibraryAddCheckRoundedIcon sx={{ color: "green", width: 18, ml: 1 }} />
                     </Tooltip>
                     <Typography sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5 }}>3</Typography>
                     {(index === 4 || index === 2) && (
                       <>
                         <Tooltip title="Liên lạc gần đây">
-                          <ConnectWithoutContactRoundedIcon sx={{ color: "#94a4c4", width: 18, ml: 1 }} />
+                          <ConnectWithoutContactRoundedIcon sx={{ color: "blue", width: 18, ml: 1 }} />
                         </Tooltip>
                         <Typography sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5 }}></Typography>
                       </>
@@ -218,6 +228,8 @@ export default function RegisterContent(props: any) {
     ));
   };
 
+  // const [onClickOpenCancelRegisted, setOnClickOpenCancelRegisted] = useState(false);
+
   return (
     <Box sx={{ mt: 2 }}>
       <div className={classes.resultCountAndDisplayOption}>
@@ -252,11 +264,18 @@ export default function RegisterContent(props: any) {
           <Box
             className={classes.actions}
             sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 1, px: 1 }}>
-            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
+            {/* hủy đăng kí */}
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
               Huỷ đăng kí
             </Typography>
-            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
-              Chi tiết
+            {/* <CancelRegistedDialog
+              open={onClickOpenCancelRegisted}
+              onClose={() => setOnClickOpenCancelRegisted(false)}></CancelRegistedDialog> */}
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
+              Ghim bài đăng
+            </Typography>
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
+              Bái cáo bài đăng
             </Typography>
           </Box>
         </Popover>

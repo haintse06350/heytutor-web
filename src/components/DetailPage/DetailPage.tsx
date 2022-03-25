@@ -130,8 +130,8 @@ export const DetailPage = () => {
     <Page>
       <Box sx={{ pb: 5 }}>
         <BreadcrumbsTab
-          history={[{ title: "Home", href: "/" }]}
-          current={{ title: isMyRequest ? "My requests" : isRegistered ? "Registered Requests" : "" }}
+          history={[{ title: "Trang chủ", href: "/" }]}
+          current={{ title: isMyRequest ? "Vấn đề của tôi" : isRegistered ? "Vấn đề tôi đăng kí hỗ trợ" : "" }}
         />
       </Box>
       <Box sx={{ pb: 3, mr: 1 }}>

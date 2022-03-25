@@ -205,6 +205,8 @@ const OnGoingEvent = () => {
     getDataEventDuration();
   }, [data?.length]);
 
+  console.log(dataEventDuration, "duration");
+
   return (
     <Card>
       <Grid container>

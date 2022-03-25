@@ -97,7 +97,8 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    minWidth: 30,
+    justifyContent: "flex-end",
+    minWidth: 35,
   },
   blink: {
     width: 10,

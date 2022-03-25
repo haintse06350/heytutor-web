@@ -16,18 +16,18 @@ import moment from "moment";
 const EventDetail = () => {
   const classes = useStyles();
   const urlParams = new URLSearchParams(window.location.search);
-  const eventid = urlParams.get("eventid");
+  const eventId = urlParams.get("eventid");
   const [dataDetail, setDataDetail]: any = useState(null);
 
   const getEventDetailByEventId = async () => {
-    const data = await Event.getEventDetailByEventId(eventid);
+    const data = await Event.getEventDetailByEventId(eventId);
     setDataDetail(data);
-    console.log("event ID", data);
+    console.log("event ID", eventId);
   };
 
   useEffect(() => {
     getEventDetailByEventId();
-  }, [eventid]);
+  }, [eventId]);
 
   if (!dataDetail) {
     return (
