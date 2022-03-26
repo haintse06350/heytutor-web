@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { useStyles } from "./DetailPage.style";
+// import { useStyles } from "./DetailPage.style";
 import Page from "../../layout/Page";
 import { Box } from "@mui/material";
 import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
@@ -12,7 +12,7 @@ import { filter, countBy, flattenDeep, map } from "lodash";
 import FilterAndSearchMyRequest from "./FilterAndSearch/FilterAndSearchMyRequest";
 
 export const DetailPage = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   // const navigate = useNavigate();
   // const urlParams = new URLSearchParams(window.location.search);
   const pathname = window.location.pathname;
