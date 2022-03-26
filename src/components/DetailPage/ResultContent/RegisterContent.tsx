@@ -18,10 +18,11 @@ import { MsgCtx } from "../../../context/message/message";
 import { MessageBox } from "../../MessageBox/MessageBox";
 import ViewComfyRoundedIcon from "@mui/icons-material/ViewComfyRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
-// import CancelRegistedDialog from "../OptionPost/CancelRegistedDialog";
+import CancelRegistedDialog from "../OptionPost/CancelRegistedDialog";
+import EmptyIllustrations from "../../../assets/illustrations/library.svg";
 
 export default function RegisterContent(props: any) {
-  const { data } = props;
+  const { data, tab } = props;
   const classes = useStyles();
   const [openPostMenu, setOpenPostMenu] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -30,6 +31,7 @@ export default function RegisterContent(props: any) {
   const { onOpenMsgBox, onCloseMsgBox } = React.useContext(MsgCtx);
   const [itemClicked, setItemClicked]: any = React.useState(null);
   const [selectedOption, setSelectedOption] = React.useState("grid");
+  const [onClickOpenCancelRegisted, setOnClickOpenCancelRegisted] = React.useState(false);
 
   const navigate = useNavigate();
   moment.locale("vi");
@@ -43,7 +45,7 @@ export default function RegisterContent(props: any) {
   };
 
   const onClickPostDetail = (postId: number) => {
-    navigate(`/post-detail?postId=${postId}`);
+    navigate(`/post-detail?postId=${postId}&tab=${tab}`);
   };
 
   const onClickDeadlineIcon = (item: any) => {
@@ -64,8 +66,22 @@ export default function RegisterContent(props: any) {
     }
   };
 
+  const renderEmptyText = () => {
+    switch (tab) {
+      case "all":
+        return "Không có bài đăng nào";
+      case "isActive":
+        return "Những yêu cầu đang trong quá trình trao đổi sẽ xuất hiện ở đây";
+      case "isConfirmed":
+        return "Những bài đăng này đã được xác nhận";
+      case "isPending":
+        return "Những bài đăng đã đăng kí chờ người dùng xác nhận";
+      case "isDone":
+        return "Những bài đăng đã được hoàn thành";
+    }
+  };
   const gridView = () => {
-    return map(listPost?.slice(3, 20), (item: any, index: number) => (
+    return map(listPost, (item: any, index: number) => (
       <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
         <Card className={classes.item}>
           <div className={classes.cardHeader}>
@@ -183,7 +199,7 @@ export default function RegisterContent(props: any) {
   };
 
   const listView = () => {
-    return map(listPost?.slice(2, 20), (item: any, index: number) => (
+    return map(listPost, (item: any, index: number) => (
       <Grid key={index} item xs={12}>
         <Card className={classes.item}>
           <div className={classes.cardHeader}>
@@ -228,31 +244,51 @@ export default function RegisterContent(props: any) {
     ));
   };
 
-  // const [onClickOpenCancelRegisted, setOnClickOpenCancelRegisted] = useState(false);
+  const renderEmptyData = () => {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+        <img style={{ height: 350 }} src={EmptyIllustrations} alt="" />
+        <Typography variant="subtitle1" sx={{ fontWeight: 400, lineHeight: "20px" }}>
+          {renderEmptyText()}
+        </Typography>
+      </Box>
+    );
+  };
 
   return (
     <Box sx={{ mt: 2 }}>
-      <div className={classes.resultCountAndDisplayOption}>
-        <Typography variant="subtitle1">Đang hiển thị {data?.length} yêu cầu đã đăng kí:</Typography>
-        <div className={classes.options}>
-          <Tooltip title={"Hiển thị dạng lưới"}>
-            <div
-              className={clsx(classes.optionItem, selectedOption === "grid" && classes.activeGrid)}
-              onClick={() => setSelectedOption("grid")}>
-              <ViewComfyRoundedIcon />
-            </div>
-          </Tooltip>
-          <Tooltip title={"Hiển thị dạng hàng"}>
-            <div
-              className={clsx(classes.optionItem, selectedOption === "row" && classes.activeGrid)}
-              onClick={() => setSelectedOption("row")}>
-              <HorizontalSplitRoundedIcon />
-            </div>
-          </Tooltip>
+      {data?.length !== 0 && (
+        <div className={classes.resultCountAndDisplayOption}>
+          <Typography variant="subtitle1">
+            Đang hiển thị <b style={{ fontSize: "1.25rem" }}>{data?.length}</b> yêu cầu đã đăng kí
+          </Typography>
+          <div className={classes.options}>
+            <Tooltip title={"Hiển thị dạng lưới"}>
+              <div
+                className={clsx(classes.optionItem, selectedOption === "grid" && classes.activeGrid)}
+                onClick={() => setSelectedOption("grid")}>
+                <ViewComfyRoundedIcon sx={{ color: selectedOption === "grid" ? "#fff" : "#000" }} />
+              </div>
+            </Tooltip>
+            <Tooltip title={"Hiển thị dạng hàng"}>
+              <div
+                className={clsx(classes.optionItem, selectedOption === "row" && classes.activeGrid)}
+                onClick={() => setSelectedOption("row")}>
+                <HorizontalSplitRoundedIcon sx={{ color: selectedOption === "row" ? "#fff" : "#000" }} />
+              </div>
+            </Tooltip>
+          </div>
         </div>
-      </div>
-      <Grid container spacing={2}>
-        {selectedOption === "grid" ? gridView() : listView()}
+      )}
+      <Grid container spacing={2} sx={{ mt: 1 }}>
+        {data?.length === 0 ? renderEmptyData() : selectedOption === "grid" ? gridView() : listView()}
         <Popover
           open={openPostMenu}
           anchorEl={anchorEl}
@@ -265,12 +301,12 @@ export default function RegisterContent(props: any) {
             className={classes.actions}
             sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 1, px: 1 }}>
             {/* hủy đăng kí */}
-            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
+            <Typography
+              variant="subtitle2"
+              sx={{ py: 0.5, px: 2, width: "100%" }}
+              onClick={() => setOnClickOpenCancelRegisted(true)}>
               Huỷ đăng kí
             </Typography>
-            {/* <CancelRegistedDialog
-              open={onClickOpenCancelRegisted}
-              onClose={() => setOnClickOpenCancelRegisted(false)}></CancelRegistedDialog> */}
             <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
               Ghim bài đăng
             </Typography>
@@ -280,6 +316,9 @@ export default function RegisterContent(props: any) {
           </Box>
         </Popover>
       </Grid>
+      <CancelRegistedDialog
+        open={onClickOpenCancelRegisted}
+        onClose={() => setOnClickOpenCancelRegisted(false)}></CancelRegistedDialog>
       <MessageBox
         onCloseMsgBox={onCloseMsgBox}
         postId={itemClicked?.id}

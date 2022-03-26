@@ -154,7 +154,7 @@ export const DetailPage = () => {
           />
         )}
         {isRegistered ? (
-          <RegisterContent data={tabRegisterData} />
+          <RegisterContent data={tabRegisterData} tab={tabValue} />
         ) : (
           <MyRequestContent tabValue={tabRequestValue} data={tabRequestData} />
         )}

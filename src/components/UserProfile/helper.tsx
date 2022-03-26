@@ -1,4 +1,3 @@
-// begin set avatar
 export const stringToColor = (string: string) => {
   let hash = 0;
   let i;
@@ -23,7 +22,8 @@ export const stringAvatar = (name: string) => {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: nameSplit.length > 1 ? `${nameSplit[0][0]}${nameSplit[1][0]}` : nameSplit[0][0],
+    children:
+      nameSplit.length > 1 ? `${nameSplit[0][0]}${nameSplit[1][0]}`.toUpperCase() : nameSplit[0][0].toUpperCase(),
   };
 };
 // end set avatar

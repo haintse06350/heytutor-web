@@ -2,7 +2,7 @@ import { Box, Button, Dialog, Typography } from "@mui/material";
 import React from "react";
 
 const CancelRegistedDialog = (props: any) => {
-  const [open, isClose] = props;
+  const { open, isClose } = props;
   return (
     <Dialog open={open} onClose={isClose}>
       {/* chưa accept support */}

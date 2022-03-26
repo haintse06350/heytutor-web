@@ -2,6 +2,11 @@ import { makeStyles } from "@mui/styles";
 
 export const useStyles: any = makeStyles(() => ({
   detailRoot: {},
+  searchAndFilter: {
+    background: "#ffffff",
+    padding: 16,
+    borderRadius: 12,
+  },
   deleteIcon: {
     background: "#fff",
     "& > .MuiChip-deleteIcon": {

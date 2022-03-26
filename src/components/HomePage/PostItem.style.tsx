@@ -16,8 +16,6 @@ export const useStyles: any = makeStyles(() => ({
   },
 
   userPanel: {
-    display: "flex",
-    justifyContent: "space-between",
     marginTop: 16,
   },
   postTitleAndAction: {
@@ -26,6 +24,7 @@ export const useStyles: any = makeStyles(() => ({
     alignItems: "center",
   },
   userNameAndAvatar: {
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
@@ -62,7 +61,11 @@ export const useStyles: any = makeStyles(() => ({
   deadline: {
     display: "flex",
     alignItems: "center",
-    marginTop: 8,
+    justifyContent: "space-between",
+    padding: "10px 0",
+    "& > div": {
+      display: "flex",
+    },
   },
   postContent: {
     marginTop: 20,
@@ -81,7 +84,14 @@ export const useStyles: any = makeStyles(() => ({
     border: "2px solid #94a4c4",
     borderRadius: "50%",
   },
+  senderAvatar: {
+    borderRadius: "50%",
+    width: 28,
+    fontSize: 14,
+    height: 28,
+  },
   userStats: {
+    width: "100%",
     display: "flex",
     padding: 16,
     background: "#edf2fa",
@@ -90,5 +100,51 @@ export const useStyles: any = makeStyles(() => ({
   userPostDetail: {
     display: "flex",
     flexDirection: "column",
+  },
+  postStatus: {
+    padding: "2px 10px",
+    color: "#fff",
+    borderRadius: 8,
+    "&.isActive": {
+      background: "#FF6B6B",
+    },
+    "&.isConfirmed": {
+      background: "#4D96FF",
+    },
+    "&.isPending": {
+      background: "#FFC107",
+    },
+    "&.isDone": {
+      background: "#4CAF50",
+    },
+  },
+  messageBox: {
+    position: "fixed",
+    minWidth: 375,
+  },
+  noConversation: {
+    "& > img": {
+      width: 250,
+      height: 250,
+    },
+    height: 375,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  messageContent: {
+    maxHeight: 350,
+    overflowY: "scroll",
+  },
+  messageRow: {
+    padding: "8px 0",
+    alignItems: "flex-start",
+  },
+  message: {
+    padding: 16,
+    maxWidth: 250,
+    borderRadius: "0px 8px 8px",
+    backgroundColor: "#eceff5",
   },
 }));

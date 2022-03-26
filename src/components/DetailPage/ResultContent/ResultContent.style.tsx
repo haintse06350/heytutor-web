@@ -26,17 +26,19 @@ export const useStyles: any = makeStyles(() => ({
   },
   cardContent: {},
   resultCountAndDisplayOption: {
-    padding: "12px 0px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    background: "#ffffff",
+    borderRadius: 12,
+    padding: 16,
   },
   optionItem: { display: "flex", alignItems: "center" },
   options: { display: "flex", alignItems: "center" },
   activeGrid: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "#94a4c4",
+    backgroundColor: "#00AB55",
   },
   dueDate: {
     display: "flex",

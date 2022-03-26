@@ -123,7 +123,7 @@ export default function FilterAndSearch(props: any) {
   };
 
   return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
+    <Box className={classes.searchAndFilter} sx={{ width: "100%", typography: "body1" }}>
       <Paper elevation={2} sx={{ px: 2 }}>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -225,14 +225,26 @@ export default function FilterAndSearch(props: any) {
             />
           </Grid>
         ))}
-        <Grid item sx={{ mr: 0.5 }}>
-          <Chip
-            classes={{ root: classes.moreFilter }}
-            label={`${hashtagLabels.length - 3}+`}
-            variant="outlined"
-            onClick={handleViewMoreHashtag}
-          />
-        </Grid>
+        {viewMoreHashtag < hashtagLabels.length && (
+          <Grid item sx={{ mr: 0.5 }}>
+            <Chip
+              classes={{ root: classes.moreFilter }}
+              label={`${hashtagLabels.length - viewMoreHashtag}+`}
+              variant="outlined"
+              onClick={handleViewMoreHashtag}
+            />
+          </Grid>
+        )}
+        {viewMoreHashtag === hashtagLabels.length && (
+          <Grid item sx={{ mr: 0.5 }}>
+            <Chip
+              classes={{ root: classes.moreFilter }}
+              label="Thu gọn"
+              variant="outlined"
+              onClick={() => setViewMoreHashtag(3)}
+            />
+          </Grid>
+        )}
       </Grid>
     </Box>
   );
