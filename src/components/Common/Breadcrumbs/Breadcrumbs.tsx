@@ -4,7 +4,7 @@ import { map } from "lodash";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 const BreadcrumbsTab = (props: any) => {
   const { history, current } = props;
@@ -36,7 +36,9 @@ const BreadcrumbsTab = (props: any) => {
       boxShadow: "none",
       backdropFilter: "blur(6px)",
       WebkitBackdropFilter: "blur(6px)", // Fix on Mobile
-      backgroundColor: alpha(theme.palette.background.default, 0.72),
+      backgroundColor: "white",
+      borderRadius: 8,
+      padding: 8,
     },
   }));
 

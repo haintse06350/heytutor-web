@@ -11,6 +11,7 @@ import RegisteredPost from "./RegisteredPost";
 import MyPost from "./MyPost";
 // import RecentPost from "./RecentPost";
 import { Home } from "../../models/home";
+import ImageEvent from "./ImageEvent/ImageEvent";
 
 //utils
 // import { fShortenNumber } from "../../utils/formatNumber";
@@ -30,21 +31,24 @@ const HomePage = () => {
 
   return (
     <>
-      <Box sx={{ mt: 10 }}>
+      <Box sx={{ mt: 1 }}>
         <Page>
           <Box sx={{ pb: 5 }}>
             <Typography variant="h4">Xin chào, chào mừng bạn đã quay trở lại</Typography>
           </Box>
           <Grid container spacing={3}>
-            <Grid container spacing={2} item xs={4} md={4} sx={{ height: "fit-content" }}>
+            <Grid container spacing={2} item xs={12} md={4} sx={{ height: "fit-content" }}>
               <Grid item xs={12} sm={12}>
                 <MyPost data={data?.myRequestStats} />
               </Grid>
               <Grid item xs={12} sm={12}>
                 <RegisteredPost data={data?.myRegisterStats} />
               </Grid>
+              <Grid item xs={12} sm={12}>
+                <ImageEvent />
+              </Grid>
             </Grid>
-            <Grid item xs={8} md={8}>
+            <Grid item xs={12} md={8}>
               <OnGoingEvent />
             </Grid>
             {/* <Grid item xs={12} md={12}>

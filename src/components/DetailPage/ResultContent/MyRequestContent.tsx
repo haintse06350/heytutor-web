@@ -7,7 +7,7 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { stringAvatar } from "../../UserProfile/helper";
-import { renderCardImg } from "../utils";
+// import { renderCardImg } from "../utils";
 // import moment from "moment";
 // import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
@@ -15,7 +15,7 @@ export default function MyRequestContent(props: any) {
   const { tabValue, data } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [toggleItem, setToggleItem]: any = React.useState(false);
+  // const [toggleItem, setToggleItem]: any = React.useState(false);
 
   const openMenu = Boolean(anchorEl);
 
@@ -72,9 +72,9 @@ export default function MyRequestContent(props: any) {
           <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
             <Card className={classes.item}>
               <div className={classes.cardHeader}>
-                <div className={classes.cardImg}>
+                {/* <div className={classes.cardImg}>
                   <img src={renderCardImg(index)} alt="" />
-                </div>
+                </div> */}
                 <div className={classes.postTitle}>
                   <Typography variant="subtitle1" noWrap>
                     {item.postData.title}
@@ -94,7 +94,7 @@ export default function MyRequestContent(props: any) {
               </div>
 
               <div className={classes.cardContent}>
-                <div className={classes.shortContent}>
+                {/* <div className={classes.shortContent}>
                   <Box>
                     <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 700, lineHeight: 1.5, ml: 0.5 }}>
                       {toggleItem !== item.postId ? `${item.postData.content.slice(0, 100)}...` : item.postData.content}
@@ -111,7 +111,7 @@ export default function MyRequestContent(props: any) {
                       </span>
                     </Typography>
                   </Box>
-                </div>
+                </div> */}
                 <Divider />
                 <div className={classes.userPostAvatar}>
                   {renderAvatar(item)} {tabValue === "isPending" && renderStarCount(item.registerUsers)}

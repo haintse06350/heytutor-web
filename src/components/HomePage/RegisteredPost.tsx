@@ -6,7 +6,6 @@ import { useTheme } from "@mui/material/styles";
 import MainTabLayout from "../../layout/MainTabLayout";
 import { StatItem } from "../Common/StatItem";
 //library
-// import { isEmpty } from "lodash";
 import { useNavigate } from "react-router-dom";
 //icons
 import FactCheckIcon from "@mui/icons-material/FactCheck";
@@ -29,7 +28,6 @@ const RegisteredPost = (props: any) => {
   const onNavigate = (path: string) => {
     navigate(path, { state: { data } });
   };
-  console.log(data, "llll");
 
   const [openInformation, setOpenInformation] = useState(true);
 
