@@ -43,6 +43,7 @@ export const useStyles: any = makeStyles(() => ({
   dueDate: {
     display: "flex",
     alignItems: "center",
+    padding: "4px 0",
   },
   shortContent: {
     display: "flex",
@@ -74,8 +75,8 @@ export const useStyles: any = makeStyles(() => ({
     alignItems: "center",
   },
   dueDateAndNoti: {
-    marginTop: 4,
     marginLeft: -2,
+    padding: "4px 0",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -141,5 +142,16 @@ export const useStyles: any = makeStyles(() => ({
   },
   nearDeadline: {
     color: "#d32f2f",
+  },
+  listSupporter: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    "& > h6:nth-child(2)": {
+      color: "red",
+      "&::before": {
+        content: " ,",
+      },
+    },
   },
 }));

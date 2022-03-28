@@ -147,4 +147,13 @@ export const useStyles: any = makeStyles(() => ({
     borderRadius: "0px 8px 8px",
     backgroundColor: "#eceff5",
   },
+  messageInput: {
+    display: "flex",
+    alignItems: "center",
+    padding: "16px 0px 8px 0px",
+  },
+  inputBase: {
+    padding: "0px 8px",
+    flexGrow: 1,
+  },
 }));

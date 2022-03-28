@@ -24,7 +24,7 @@ export const useStyles: any = makeStyles((theme) => ({
   header: {
     width: "100%",
     height: "10%",
-    padding: 8,
+    padding: "8px 12px",
   },
   postTitleAndUserName: {
     display: "flex",
@@ -44,12 +44,32 @@ export const useStyles: any = makeStyles((theme) => ({
     height: "15%",
     padding: 8,
   },
-  messageInput: {
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-  },
   minimize: {
     marginRight: 8,
+  },
+  messageContent: {
+    padding: "0 12px",
+    minHeight: 350,
+    maxHeight: 350,
+    overflowY: "scroll",
+  },
+  messageRow: {
+    padding: "8px 0",
+    alignItems: "flex-start",
+  },
+  message: {
+    padding: 16,
+    maxWidth: 250,
+    borderRadius: "0px 8px 8px",
+    backgroundColor: "#eceff5",
+  },
+  messageInput: {
+    display: "flex",
+    alignItems: "center",
+    padding: "8px 0px 8px 8px",
+  },
+  inputBase: {
+    padding: "0px 8px",
+    flexGrow: 1,
   },
 }));

@@ -1,16 +1,42 @@
 import React from "react";
-import { Box, Typography, Divider, TextField } from "@mui/material";
+import { Box, Typography, Divider, Avatar, InputBase, Button } from "@mui/material";
 import { useStyles } from "./MessageBox.style";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { MsgCtx } from "../../context/message/message";
+import { Message } from "../../models/message";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import SendIcon from "@mui/icons-material/Send";
+import { stringAvatar } from "../UserProfile/helper";
+import { map } from "lodash";
+import { UserCtx } from "../../context/user/state";
 
 export const MessageBox = (props: any) => {
   const { postId, postTitle, userId, userName } = props;
   const { openMsgBox, onOpenMsgBox, onCloseMsgBox, onMinimizeMsgBox, isMinimize } = React.useContext(MsgCtx);
-  console.log(postId, postTitle, userId);
-
+  const [messages, setMessages]: any = React.useState(null);
+  const { user } = React.useContext(UserCtx);
+  const [msg, setMsg] = React.useState("");
+  console.log(postTitle);
   const classes = useStyles();
+
+  const onChangeInput = (event: any) => {
+    setMsg(event.target.value);
+  };
+
+  const sendMessage = async () => {
+    const input = {
+      senderId: user?.id,
+      senderName: user?.name,
+      receiverId: userId,
+      receiverName: userName,
+      postId,
+      message: msg,
+    };
+    setMsg("");
+    setMessages([...messages, input]);
+    await Message.sendMessage(input);
+  };
 
   const minimizeWindow = () => {
     return (
@@ -23,6 +49,22 @@ export const MessageBox = (props: any) => {
       </Box>
     );
   };
+
+  const getPostConversation = async (postId: string, userId: number) => {
+    const conversation = await Message.getPostConversation(postId, userId);
+    if (conversation) {
+      const listMessages = await Message.listMessages({ limit: 100, offset: 0, conversationId: conversation.id });
+      setMessages(listMessages.rows);
+    } else {
+      setMessages([]);
+    }
+  };
+
+  React.useEffect(() => {
+    if (postId && userId) {
+      getPostConversation(postId, userId);
+    }
+  }, [postId, userId]);
 
   return (
     <>
@@ -41,13 +83,37 @@ export const MessageBox = (props: any) => {
               </div>
             </div>
           </div>
-          <Divider variant="middle" />
-          <div className={classes.body}></div>
-          <div className={classes.messageBox}>
-            <div className={classes.messageInput}>
-              <TextField id="outlined-size-small" size="small" sx={{ width: "70%" }} />
-            </div>
-          </div>
+          <Box id="messageBox" className={classes.messageContent}>
+            {map(messages, (message: any) => (
+              <Box
+                className={classes.messageRow}
+                display="flex"
+                alignItems="center"
+                justifyContent={message.senderId === user?.id ? "flex-end" : "flex-start"}>
+                {message.senderId !== user?.id && (
+                  <Avatar {...stringAvatar(message.senderName)} className={classes.senderAvatar} />
+                )}
+                <Box className={classes.message} display="flex" flexDirection="column" sx={{ ml: 1 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {message.message}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+          <Divider sx={{ mt: 1 }} variant="fullWidth" />
+          <Box className={classes.messageInput}>
+            <InsertLinkIcon color="secondary" />
+            <InputBase
+              className={classes.inputBase}
+              placeholder="Tin nhắn văn bản"
+              value={msg}
+              onChange={onChangeInput}
+            />
+            <Button disabled={msg === ""} sx={{ p: 0 }}>
+              <SendIcon color={msg ? "primary" : "secondary"} onClick={sendMessage} />
+            </Button>
+          </Box>
         </Box>
       ) : isMinimize ? (
         minimizeWindow()

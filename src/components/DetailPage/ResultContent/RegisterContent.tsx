@@ -267,7 +267,7 @@ export default function RegisterContent(props: any) {
       {data?.length !== 0 && (
         <div className={classes.resultCountAndDisplayOption}>
           <Typography variant="subtitle1">
-            Đang hiển thị <b style={{ fontSize: "1.25rem" }}>{data?.length}</b> yêu cầu đã đăng kí
+            Đang hiển thị <b style={{ fontSize: "1.25rem", padding: "0 3px" }}>{data?.length}</b> yêu cầu đã đăng kí
           </Typography>
           <div className={classes.options}>
             <Tooltip title={"Hiển thị dạng lưới"}>

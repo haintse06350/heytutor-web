@@ -76,22 +76,22 @@ export default function FilterAndSearchMyRequest(props: any) {
     switch (label) {
       case "isActive": {
         count = data?.postHasSupporter?.length;
-        labelText = "Yêu cầu đang được hỗ trợ";
+        labelText = "Đang được hỗ trợ";
         break;
       }
       case "isPending": {
         count = data?.postHasRegister?.length;
-        labelText = "Yêu cầu chưa có người hỗ trợ";
+        labelText = "Chưa có người hỗ trợ";
         break;
       }
       case "isNew": {
         count = data?.postHasNoRegister?.length;
-        labelText = "Yêu cầu chưa có người đăng kí";
+        labelText = "Chưa có người đăng kí";
         break;
       }
       case "isOnEvent": {
         count = data?.postOnEvent?.length;
-        labelText = "Yêu cầu đang trong sự kiện";
+        labelText = "Đang trong sự kiện";
         break;
       }
       case "historyActive": {
