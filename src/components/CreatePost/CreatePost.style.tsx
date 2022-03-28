@@ -7,6 +7,7 @@ export const useStyles: any = makeStyles(() => ({
     width: "100%",
     height: "calc(100vh - 62px)",
     justifyContent: "center",
+    marginTop: "64px",
   },
   listImg: {
     width: "100%",
@@ -148,7 +149,6 @@ export const useStyles: any = makeStyles(() => ({
   },
   addOptionPostL: {
     display: "flex",
-    padding: "0px 16px",
   },
   textIcon: {
     marginLeft: 20,
@@ -193,6 +193,9 @@ export const useStyles: any = makeStyles(() => ({
     margin: "10px 0",
     padding: 15,
     fontSize: 16,
+    "&:active": {
+      border: "1px solid green",
+    },
   },
   button: {
     display: "flex",

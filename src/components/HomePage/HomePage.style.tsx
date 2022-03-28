@@ -22,4 +22,28 @@ export const useStyles: any = makeStyles(() => ({
       backgroundColor: "#fff",
     },
   },
+  titleEvent: {
+    cursor: "pointer",
+    textDecoration: "underline",
+    lineHeight: "40px",
+  },
+  wrapHomePage: { position: "relative" },
+  wrapWarningUser: {
+    position: "fixed",
+    top: 70,
+    right: 10,
+
+    "& > div": {
+      border: "1px solid black",
+      borderRadius: "8px 8px 50% 50% ",
+      backgroundColor: "black",
+      color: "#fff",
+      width: "140px",
+      height: 100,
+      "& > p": {
+        alignItems: "center",
+        textAlign: "center",
+      },
+    },
+  },
 }));

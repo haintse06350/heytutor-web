@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
+// import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -80,7 +80,7 @@ const RegisteredPost = (props: any) => {
                 tab="pending"
                 icon={<AppRegistrationOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
                 data={data.nbOfActivePost}
-                title="Vấn đề đã đăng ký"
+                title="Đã đăng ký"
                 subTitle="Số vấn đề tôi đã đăng ký hỗ trợ"
                 onNavigate={() => onNavigate("/registered-request?detail=registered")}
               />
@@ -90,20 +90,20 @@ const RegisteredPost = (props: any) => {
                 tab="confirmed"
                 icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
                 data={data.nbOfConfirmedPost}
-                title="Vấn đề tôi đang hỗ trợ"
+                title="Đang hỗ trợ"
                 subTitle="Số vấn đề tôi đang trong quá trình hỗ trợ"
                 onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
               />
-              <StatItem
+              {/* <StatItem
                 onHoverElem={onHoverElem}
                 setOnHoverElem={setOnHoverElem}
                 tab="onEvent"
                 icon={<ConfirmationNumberOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfPostOnEvent}
-                title="Vấn đề tôi đang hỗ trợ trong các sự kiện"
-                subTitle="Số vấn đề tôi đang hỗ trợ trong các sự kiện"
+                data={data.nbOfPendingPost}
+                title="Chưa được xác nhận"
+                subTitle="Số vấn đề đăng kí hỗ trợ nhưng chưa được xác nhận"
                 onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
-              />
+              /> */}
             </Box>
           )}
           <Divider />

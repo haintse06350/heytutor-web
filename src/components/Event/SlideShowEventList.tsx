@@ -2,19 +2,18 @@ import React from "react";
 import { Card } from "@mui/material";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import slImgHome1 from "../../../assets/home_event_images/1.png";
-import slImgHome2 from "../../../assets/home_event_images/2.png";
-import slImgHome3 from "../../../assets/home_event_images/3.png";
-import slImgHome4 from "../../../assets/home_event_images/4.png";
-import { useStyles } from "./ImageEvent.style";
-const ImageEvent = () => {
+import slImgHome1 from "../../assets/home_event_images/New folder/4.png";
+import slImgHome2 from "../../assets/home_event_images/New folder/2.png";
+import slImgHome3 from "../../assets/home_event_images/New folder/1.jpg";
+import { useStyles } from "./SlideShowEventList.style";
+const SlideShowEventList = () => {
   const classes = useStyles();
-  const imagesSlide = [{ url: slImgHome1 }, { url: slImgHome2 }, { url: slImgHome3 }, { url: slImgHome4 }];
+  const imagesSlide = [{ url: slImgHome1 }, { url: slImgHome2 }, { url: slImgHome3 }];
 
   return (
-    <Card>
+    <Card sx={{ p: 2 }}>
       <div className="slide-container">
-        <Slide duration={3000} indicators={false} arrows={true}>
+        <Slide duration={5000} indicators={false} arrows={true}>
           {imagesSlide.map((imageSlide: any, index: number) => (
             <div className="each-slide" key={index}>
               <div className={classes.slideImage} style={{ backgroundImage: `url(${imageSlide.url})` }}></div>
@@ -26,4 +25,4 @@ const ImageEvent = () => {
   );
 };
 
-export default ImageEvent;
+export default SlideShowEventList;

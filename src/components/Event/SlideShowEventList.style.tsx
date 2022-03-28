@@ -7,7 +7,8 @@ export const useStyles = makeStyles(() => ({
     justifyContent: "center",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    height: 500,
-    objectFit: "fill",
+    height: 300,
+    backgroundRepeat: "repeat",
+    // objectFit: "cover",
   },
 }));

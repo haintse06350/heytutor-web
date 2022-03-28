@@ -48,7 +48,7 @@ export default function RegisterContent(props: any) {
     navigate(`/post-detail?postId=${postId}&tab=${tab}`);
   };
 
-  const onClickDeadlineIcon = (item: any) => {
+  const   onClickDeadlineIcon = (item: any) => {
     setItemClicked(item);
     onOpenMsgBox();
   };

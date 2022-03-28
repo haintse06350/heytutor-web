@@ -83,6 +83,16 @@ export default function AppRoutes() {
             }
           />
           <Route path={"/createEvent"} element={<CreateEvent />} />
+
+          <Route
+            path={"/create-post"}
+            element={
+              <RequireAuth>
+                <CreatePost />
+              </RequireAuth>
+            }
+          />
+
           <Route path={"/feedback"} element={<Feedback />} />
           <Route
             path={"/chat"}
@@ -120,7 +130,7 @@ export default function AppRoutes() {
             path={"/post-detail"}
             element={
               <RequireAuth>
-                <PostDetail />{" "}
+                <PostDetail />
               </RequireAuth>
             }
           />
