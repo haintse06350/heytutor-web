@@ -78,8 +78,6 @@ const PostItem = () => {
     setMessages(listMessages.rows);
   };
 
-  console.log("isMyPost", isMyPost);
-
   const onChangeInput = (event: any) => {
     setMsg(event.target.value);
   };
@@ -129,7 +127,7 @@ const PostItem = () => {
     await Message.sendMessage(input);
   };
 
-  console.log(post, userProfile);
+  console.log(post, userProfile, isMyPost);
 
   return (
     <Page>
@@ -158,7 +156,7 @@ const PostItem = () => {
               <Box sx={{ mt: 2 }}>
                 <img src={demoImg6} alt="" />
               </Box>
-              {!isMyPost && (
+              {!isMyPost && userProfile && (
                 <div className={classes.userPanel}>
                   <div className={classes.userNameAndAvatar}>
                     <div className={classes.userStats}>
