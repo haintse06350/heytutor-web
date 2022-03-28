@@ -48,7 +48,6 @@ const MainTabLayout = (props: any) => {
 
   const CardHeaderStyle = styled("div")(({ theme }: any) => ({
     margin: "0",
-    padding: "5px 0px",
     display: "flex",
     alignItems: "center",
     width: "100%",
@@ -59,7 +58,7 @@ const MainTabLayout = (props: any) => {
 
   return (
     <RootStyle>
-      <CardHeaderStyle>
+      <CardHeaderStyle sx={{ height: "fit-content" }}>
         {icon}
         <CardHeader title={title} sx={{ mb: 3 }} />
       </CardHeaderStyle>

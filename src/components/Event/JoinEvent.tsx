@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { Dialog, DialogTitle, Typography, InputLabel, Select, MenuItem, SelectChangeEvent, Grid } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  Typography,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  Grid,
+  Button,
+} from "@mui/material";
 const JoinEvent = (props: any) => {
   const { onClose, open } = props;
-  const [rollUser, setRollUser] = useState("");
+  const [rollUser, setRollUser] = useState("1");
   const handleChange = (event: SelectChangeEvent) => {
     setRollUser(event.target.value as string);
   };
@@ -20,6 +30,9 @@ const JoinEvent = (props: any) => {
           <MenuItem value={2}>Tham gia cần hỗ trợ</MenuItem>
         </Select>
       </Grid>
+      <Button onClick={handleClickClose} variant="contained" sx={{ m: 2 }}>
+        Đăng kí
+      </Button>
     </Dialog>
   );
 };

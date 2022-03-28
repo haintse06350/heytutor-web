@@ -13,7 +13,7 @@ import PendingActionsOutlinedIcon from "@mui/icons-material/PendingActionsOutlin
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import EventNoteIcon from "@mui/icons-material/EventNote";
+// import EventNoteIcon from "@mui/icons-material/EventNote";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 //lodash
@@ -58,7 +58,7 @@ const MyPost = (props: any) => {
             flexGrow: 1,
           }}>
           <Typography variant="subtitle2" sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-            Tạo bài viết ngay để tìm người giải quyết vấn đề của bạn
+            Tạo bài viết ngay để tìm người giải quyết của bạn
           </Typography>
           <Button variant="contained" color="primary" onClick={() => createPost()}>
             Tạo bài viết
@@ -71,7 +71,7 @@ const MyPost = (props: any) => {
           {openInformation && (
             <Box
               sx={{
-                padding: "5px 0px",
+                // padding: "5px 0px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-start",
@@ -82,8 +82,8 @@ const MyPost = (props: any) => {
                 setOnHoverElem={setOnHoverElem}
                 tab="pendingPost"
                 icon={<PendingActionsOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfPendingPost}
-                title="Vấn đề chưa có người đăng ký "
+                data={data.nbOfPostHasNoRegister}
+                title="Chưa có người đăng ký "
                 subTitle="Số lượng các vấn đề chưa có người đăng ký giúp đỡ"
                 onNavigate={() => onNavigate("/my-request?detail=pending")}
               />
@@ -92,8 +92,8 @@ const MyPost = (props: any) => {
                 setOnHoverElem={setOnHoverElem}
                 tab="activePost"
                 icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfActivePost}
-                title="Vấn đề đã có người đăng ký"
+                data={data.nbOfPostHasRegister}
+                title="Đã có người đăng ký"
                 subTitle="Số lượng các vấn đề đã có người đăng ký giúp đỡ"
                 onNavigate={() => onNavigate("/my-request?detail=active")}
               />
@@ -103,20 +103,20 @@ const MyPost = (props: any) => {
                 tab="processSupportPost"
                 icon={<FactCheckOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
                 data={data.nbOfConfirmedPost}
-                title="Vấn đề đang được hỗ trợ"
-                subTitle="Số lượng các vấn đề  đang trong quá trình hỗ trợ"
+                title="Đang được hỗ trợ"
+                subTitle="Đang trong quá trình hỗ trợ"
                 onNavigate={() => onNavigate("/my-request?detail=processing")}
               />
-              <StatItem
+              {/* <StatItem
                 onHoverElem={onHoverElem}
                 setOnHoverElem={setOnHoverElem}
                 tab="onEventPost"
                 icon={<EventNoteIcon sx={{ color: theme.palette.grey[500] }} />}
                 data={data.nbOfPostOnEvent}
-                title="Vấn đề đang tham gia trong các event"
-                subTitle="Số lượng các vấn đề  đang tham gia của các event"
+                title="Đang tham gia trong các event"
+                subTitle="Các vấn đề đang được tìm kiếm người giúp đỡ trong các event"
                 onNavigate={() => onNavigate("/my-request?detail=onEvent")}
-              />
+              /> */}
             </Box>
           )}
           <Divider />
@@ -149,7 +149,7 @@ const MyPost = (props: any) => {
   };
   return (
     <MainTabLayout
-      title={"Vấn đề hiện tại tôi cần hỗ trợ"}
+      title={"Vấn đề tôi cần hỗ trợ"}
       content={renderMyPostContent()}
       type="myPost"
       icon={<ArticleIcon />}
