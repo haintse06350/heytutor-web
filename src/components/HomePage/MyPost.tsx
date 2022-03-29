@@ -83,7 +83,7 @@ const MyPost = (props: any) => {
                 setOnHoverElem={setOnHoverElem}
                 tab="pendingPost"
                 icon={<PendingActionsOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfPostHasNoRegister}
+                data={data.nbOfPostHasNoRegister + "/" + data.nbOfAllPost}
                 title="Chưa có người đăng ký "
                 subTitle="Số lượng các vấn đề chưa có người đăng ký giúp đỡ"
                 onNavigate={() => onNavigate("/my-request?detail=pending")}
@@ -93,7 +93,7 @@ const MyPost = (props: any) => {
                 setOnHoverElem={setOnHoverElem}
                 tab="activePost"
                 icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfPostHasRegister}
+                data={data.nbOfPostHasRegister + "/" + data.nbOfAllPost}
                 title="Đã có người đăng ký"
                 subTitle="Số lượng các vấn đề đã có người đăng ký giúp đỡ"
                 onNavigate={() => onNavigate("/my-request?detail=active")}
@@ -103,7 +103,7 @@ const MyPost = (props: any) => {
                 setOnHoverElem={setOnHoverElem}
                 tab="processSupportPost"
                 icon={<FactCheckOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfConfirmedPost}
+                data={data.nbOfConfirmedPost + "/" + data.nbOfAllPost}
                 title="Đang được hỗ trợ"
                 subTitle="Đang trong quá trình hỗ trợ"
                 onNavigate={() => onNavigate("/my-request?detail=processing")}

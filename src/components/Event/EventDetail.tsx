@@ -13,6 +13,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Event } from "../../models/event";
 import SlideShowEventList from "./SlideShowEventList";
 import img1 from "../../assets/home_event_images/14.png";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment";
 const EventDetail = () => {
@@ -70,10 +71,16 @@ const EventDetail = () => {
                     <Typography style={{ fontSize: 14 }}>{dataDetail?.eventContent?.viewCount}</Typography>
                   </Box>
                 </Tooltip>
-                <Tooltip title="Số lượt đăng kí">
+                <Tooltip title="Số lượt đăng kí hỗ trợ">
                   <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
                     <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography style={{ fontSize: 14 }}>5</Typography>
+                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listNonRegisterPost}</Typography>
+                  </Box>
+                </Tooltip>
+                <Tooltip title="Số vấn đề đăng kí">
+                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                    <EventNoteIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listUserRequestor}</Typography>
                   </Box>
                 </Tooltip>
                 <Tooltip title="Thời gian kết thúc đăng kí">
@@ -85,6 +92,9 @@ const EventDetail = () => {
                   </Box>
                 </Tooltip>
               </Box>
+            </Grid>
+            <Grid item>
+              <Typography>{dataDetail?.eventContent?.content}</Typography>
             </Grid>
             <Grid sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
               <Tooltip title="Danh sách số vấn đề có trong sự kiện">

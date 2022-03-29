@@ -14,8 +14,8 @@ export class Event {
         return res.json();
     }
 
-    static async getEventDuration(){
-        const res = await FetchUtils.get(`/get-event-by-duration`);
+    static async getEventNotEnroll(){
+        const res = await FetchUtils.get(`/getListEventNotEnroll`);
         await ErrorUtils.throwError(res);
         return res.json();
     }

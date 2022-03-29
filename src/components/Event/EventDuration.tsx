@@ -56,7 +56,7 @@ const EventDuration = (data: any) => {
               {item?.eventDetail?.title}
             </Typography>
             <Typography variant="body1" sx={{ ml: 2 }}>
-              Bạn có đủ tự tin kiến thức của mình sẽ pass môn CSD với điểm tuyệt đối
+              {item?.eventDetail?.description}
             </Typography>
           </Grid>
           <Box sx={{ display: "flex", background: "#d8dfe6", flexDirection: "column", p: 2, borderRadius: 1 }}>
@@ -77,16 +77,16 @@ const EventDuration = (data: any) => {
               <Grid container>
                 <Grid item md={12} lg={6} xs={12}>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon sx={{ mr: 0.5, width: 20, height: 20, color: "#fd5050" }} />
+                    <PersonIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                     <Typography variant="subtitle2">Số người tham gia: </Typography>
-                    <Typography sx={{ fontSize: 14, ml: 1 }}>999</Typography>
+                    <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.eventUser?.numberOfUser}</Typography>
                   </Box>
                 </Grid>
                 <Grid item md={12} lg={6} xs={12}>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <HowToRegIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography variant="subtitle2">Số người tham gia tích cực: </Typography>
-                    <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>999</Typography>
+                    <Typography variant="subtitle2">Số người tham gia hỗ trợ: </Typography>
+                    <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>{item?.eventUser?.numberOfSP}</Typography>
                   </Box>
                 </Grid>
               </Grid>
@@ -97,14 +97,14 @@ const EventDuration = (data: any) => {
                   <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                     <GppGoodIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                     <Typography variant="subtitle2">Số vấn đề hỗ trợ thành công: </Typography>
-                    <Typography sx={{ fontSize: 14, ml: 1 }}>999</Typography>
+                    <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.listPostDone}</Typography>
                   </Box>
                 </Grid>
                 <Grid item md={12} lg={6} xs={12}>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <GppMaybeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                     <Typography variant="subtitle2">Số vấn đề đăng kí: </Typography>
-                    <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>999</Typography>
+                    <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>{item?.listPost}</Typography>
                   </Box>
                 </Grid>
               </Grid>
