@@ -47,7 +47,7 @@ const OnGoingEvent = () => {
   // };
   // const [checkShowMore, setCheckShowMore] = useState(false);
   // const [itemCheck, setItemCheck] = useState();
-  const [dataEventDuration, setDataEventDuration]: any = useState(null);
+  const [dataEventNotEnroll, setDataEventNotEnroll]: any = useState(null);
 
   const itemEvent = () => {
     if (!data) {
@@ -71,17 +71,17 @@ const OnGoingEvent = () => {
                 <Typography
                   className={classes.titleEvent}
                   variant="h5"
-                  onClick={() => handleViewDetail(item?.eventDetail?.id)}>
-                  {item?.eventDetail?.title}
+                  onClick={() => handleViewDetail(item?.eventContent?.id)}>
+                  {item?.eventContent?.title}
                 </Typography>
                 <Typography variant="body1" sx={{ ml: 2 }}>
-                  Bạn có đủ tự tin kiến thức của mình sẽ pass môn CSD với điểm tuyệt đối
+                  {item?.eventContent?.description}
                 </Typography>
               </Grid>
               <Box sx={{ display: "flex", background: "#d8dfe6", flexDirection: "column", p: 2, borderRadius: 1 }}>
                 <Tooltip title="Thời gian kết thúc sự kiện">
                   <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                    {checkDeadline(item?.eventDetail?.endAt)}
+                    {checkDeadline(item?.eventContent?.endAt)}
                   </Box>
                 </Tooltip>
                 <Box sx={{ display: "flex" }}>
@@ -90,14 +90,14 @@ const OnGoingEvent = () => {
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         <NotificationsActiveIcon sx={{ mr: 0.5, width: 20, height: 20, color: "#fd5050" }} />
                         <Typography variant="subtitle2">Vấn đề sắp hết hạn: </Typography>
-                        <Typography sx={{ fontSize: 14, ml: 1 }}>999</Typography>
+                        <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.listPostNearDeadline}</Typography>
                       </Box>
                     </Grid>
                     <Grid item md={12} lg={6} xs={12}>
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         <EventNoteIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                         <Typography variant="subtitle2">Số vấn đề đăng kí: </Typography>
-                        <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>999</Typography>
+                        <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>{item?.listPostInEventOfUser}</Typography>
                       </Box>
                     </Grid>
                   </Grid>
@@ -108,14 +108,14 @@ const OnGoingEvent = () => {
                       <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                         <PersonOffIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                         <Typography variant="subtitle2">Chưa có người nhận hỗ trợ: </Typography>
-                        <Typography sx={{ fontSize: 14, ml: 1 }}>999</Typography>
+                        <Typography sx={{ fontSize: 14, ml: 1 }}>{item?.listNonRegisterPost}</Typography>
                       </Box>
                     </Grid>
                     <Grid item md={12} lg={6} xs={12}>
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         <BuildIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                         <Typography variant="subtitle2">Số lượt đăng kí hỗ trợ: </Typography>
-                        <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>999</Typography>
+                        <Typography sx={{ fontSize: 14, ml: 0.5, mr: 1 }}>{item?.listUserRequestor}</Typography>
                       </Box>
                     </Grid>
                   </Grid>
@@ -141,17 +141,19 @@ const OnGoingEvent = () => {
     const data = await Event.getListEventByUser();
     setData(data.listEvent);
   };
-  const getDataEventDuration = async () => {
-    const data = await Event.getEventDuration();
-    setDataEventDuration(data);
+
+  const getListEventNotEnroll = async () => {
+    const data = await Event.getEventNotEnroll();
+    setDataEventNotEnroll(data);
   };
+
   const handleEventList = () => {
     navigate(`/event-list`);
   };
   useEffect(() => {
     getListEventByUser();
-    getDataEventDuration();
-  }, [data?.length]);
+    getListEventNotEnroll();
+  }, []);
   return (
     <Card>
       <TabContext value={value}>
@@ -163,7 +165,7 @@ const OnGoingEvent = () => {
         </Box>
         <TabPanel value="1">{itemEvent()}</TabPanel>
         <TabPanel value="2">
-          <EventDuration data={dataEventDuration?.shortTermEvents} />
+          <EventDuration data={dataEventNotEnroll} />
         </TabPanel>
       </TabContext>
     </Card>

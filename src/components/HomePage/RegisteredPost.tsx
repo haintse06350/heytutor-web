@@ -16,6 +16,7 @@ import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link as RouterLink } from "react-router-dom";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import { useStyles } from "./HomePage.style";
 
 const RegisteredPost = (props: any) => {
@@ -79,19 +80,29 @@ const RegisteredPost = (props: any) => {
                 setOnHoverElem={setOnHoverElem}
                 tab="pending"
                 icon={<AppRegistrationOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfActivePost}
-                title="Đã đăng ký"
-                subTitle="Số vấn đề tôi đã đăng ký hỗ trợ"
+                data={data.nbOfActivePost + "/" + (data.nbOfTotalRegisteredPost - data.nbOfDonePost)}
+                title="Đang trao đổi"
+                subTitle="Số vấn đề tôi đang trao đổi để được xác nhận làm người hỗ trợ"
                 onNavigate={() => onNavigate("/registered-request?detail=registered")}
               />
               <StatItem
                 onHoverElem={onHoverElem}
                 setOnHoverElem={setOnHoverElem}
                 tab="confirmed"
-                icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfConfirmedPost}
+                icon={<FactCheckOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
+                data={data.nbOfConfirmedPost + "/" + (data.nbOfTotalRegisteredPost - data.nbOfDonePost)}
                 title="Đang hỗ trợ"
                 subTitle="Số vấn đề tôi đang trong quá trình hỗ trợ"
+                onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
+              />
+              <StatItem
+                onHoverElem={onHoverElem}
+                setOnHoverElem={setOnHoverElem}
+                tab="confirmed"
+                icon={<AssignmentOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
+                data={data.nbOfPendingPost + "/" + (data.nbOfTotalRegisteredPost - data.nbOfDonePost)}
+                title="Đang chờ xác nhận"
+                subTitle="Số vấn đề tôi đã đăng kí nhưng chưa được xác nhận"
                 onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
               />
               {/* <StatItem
