@@ -65,11 +65,11 @@ const EventDuration = (data: any) => {
                 <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
                 <Typography style={{ fontSize: 14 }}>
                   Từ{" "}
-                  <span style={{ fontWeight: 600 }}>
+                  <span style={{ fontWeight: 500 }}>
                     {moment(item?.eventDetail?.createdAt).lang("vi").format("LL")}
                   </span>{" "}
                   tới ngày{" "}
-                  <span style={{ fontWeight: 600 }}>{moment(item?.eventDetail?.endAt).lang("vi").format("LL")}</span>
+                  <span style={{ fontWeight: 500 }}>{moment(item?.eventDetail?.endAt).lang("vi").format("LL")}</span>
                 </Typography>
               </Box>
             </Tooltip>

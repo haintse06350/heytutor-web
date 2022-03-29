@@ -136,7 +136,7 @@ export const useStyles: any = makeStyles(() => ({
   deadline: {
     color: "#94a4c4",
     fontSize: 12,
-    fontWeight: 700,
+    fontWeight: 600,
     lineHeight: 1.5,
     marginLeft: 1,
   },
@@ -147,11 +147,9 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
-    "& > h6:nth-child(2)": {
-      color: "red",
-      "&::before": {
-        content: " ,",
-      },
-    },
+    width: "100%",
+  },
+  listSupporterTitle: {
+    flexGrow: 1,
   },
 }));

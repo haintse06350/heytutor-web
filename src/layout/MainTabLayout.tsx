@@ -58,9 +58,9 @@ const MainTabLayout = (props: any) => {
 
   return (
     <RootStyle>
-      <CardHeaderStyle sx={{ height: "fit-content" }}>
+      <CardHeaderStyle sx={{ height: "fit-content", display: "flex", alignItems: "center", py: 2, px: 1 }}>
         {icon}
-        <CardHeader title={title} sx={{ mb: 3 }} />
+        <CardHeader title={title} sx={{ p: 0, ml: 1 }} />
       </CardHeaderStyle>
       <Divider />
       {content}

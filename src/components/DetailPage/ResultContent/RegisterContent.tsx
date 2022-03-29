@@ -26,7 +26,7 @@ export default function RegisterContent(props: any) {
   const classes = useStyles();
   const [openPostMenu, setOpenPostMenu] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  // const [toggleItem, setToggleItem]: any = React.useState(false);
+  const [toggleItem, setToggleItem]: any = React.useState(false);
   const [listPost, setListPost]: any = React.useState(null);
   const { onOpenMsgBox, onCloseMsgBox } = React.useContext(MsgCtx);
   const [itemClicked, setItemClicked]: any = React.useState(null);
@@ -48,7 +48,7 @@ export default function RegisterContent(props: any) {
     navigate(`/post-detail?postId=${postId}&tab=${tab}`);
   };
 
-  const   onClickDeadlineIcon = (item: any) => {
+  const onClickDeadlineIcon = (item: any) => {
     setItemClicked(item);
     onOpenMsgBox();
   };
@@ -135,9 +135,9 @@ export default function RegisterContent(props: any) {
               <Box sx={{ mt: 1 }}>
                 <Typography
                   variant="subtitle2"
-                  sx={{ fontSize: 12, fontWeight: 700, lineHeight: 1.5, ml: 0.5, minHeight: 54 }}>
-                  {/* {toggleItem !== item.postId ? `${item.postData.content.slice(0, 100)}...` : item.postData.content} */}
-                  {/* <span
+                  sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 0.5, minHeight: 54 }}>
+                  {toggleItem !== item.postId ? `${item.postData.content.slice(0, 100)}...` : item.postData.content}
+                  <span
                     onClick={() => (toggleItem !== item.postId ? setToggleItem(item.postId) : setToggleItem(null))}
                     style={{
                       marginLeft: 8,
@@ -147,7 +147,7 @@ export default function RegisterContent(props: any) {
                       cursor: "pointer",
                     }}>
                     {item.postData.content.length > 100 && (toggleItem !== item.postId ? "Xem thêm" : "Thu gọn")}
-                  </span> */}
+                  </span>
                 </Typography>
               </Box>
             </Box>
@@ -157,7 +157,7 @@ export default function RegisterContent(props: any) {
               <div className={classes.leftContent}>
                 <Avatar {...stringAvatar(item.userData.name)} className={classes.userAvatar} />
                 <div className={classes.usernameAndRank}>
-                  <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 700, lineHeight: 1.5, ml: 0.5 }}>
+                  <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 600, lineHeight: 1.5, ml: 0.5 }}>
                     {item.userData.name}
                   </Typography>
                   <div className={classes.rank}>

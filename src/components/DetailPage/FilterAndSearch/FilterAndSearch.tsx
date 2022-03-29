@@ -101,11 +101,6 @@ export default function FilterAndSearch(props: any) {
         labelText = "Đã xong";
         break;
       }
-      case "historyActive": {
-        count = 999;
-        labelText = "Tương tác gần đây";
-        break;
-      }
     }
 
     return (
@@ -133,7 +128,6 @@ export default function FilterAndSearch(props: any) {
               <Tab label={renderTabLabel("isConfirmed")} value="isConfirmed" />
               <Tab label={renderTabLabel("isPending")} value="isPending" />
               <Tab label={renderTabLabel("isDone")} value="isDone" />
-              <Tab label={renderTabLabel("historyActive")} value="historyActive" />
             </TabList>
           </Box>
         </TabContext>

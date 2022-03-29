@@ -19,7 +19,7 @@ export const useStyles: any = makeStyles(() => ({
   moreFilter: {
     background: "#fff",
     "& > span": {
-      fontWeight: 700,
+      fontWeight: 600,
     },
   },
   selectedHashtag: {

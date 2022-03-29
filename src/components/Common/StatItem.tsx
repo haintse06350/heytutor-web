@@ -17,12 +17,10 @@ export const StatItem = (props: any) => {
         cursor: "pointer",
       }}>
       <Grid container spacing={1}>
-        <Grid display="flex" alignItems="center" item>
-          {icon}
-        </Grid>
+        <Grid item>{icon}</Grid>
         <Grid flexGrow={1} item>
           <Tooltip title={subTitle}>
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography color={"text.primary"} variant="subtitle2" align="left">
                 {title}:
               </Typography>

@@ -40,6 +40,7 @@ const MyPost = (props: any) => {
       return (
         <Box
           sx={{
+            height: 150,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

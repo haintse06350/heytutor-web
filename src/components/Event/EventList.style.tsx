@@ -73,7 +73,7 @@ export const useStyles = makeStyles(() => ({
   moreFilter: {
     background: "#fff",
     "& > span": {
-      fontWeight: 700,
+      fontWeight: 600,
     },
   },
   selectedHashtag: {

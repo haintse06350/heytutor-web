@@ -139,7 +139,7 @@ const PostItem = () => {
               <div className={classes.deadline}>
                 <div>
                   <AccessTimeOutlinedIcon sx={{ color: "#d32f2f" }} />
-                  <Typography sx={{ ml: 1, color: "#d32f2f", fontWeight: 700 }} variant="body2">
+                  <Typography sx={{ ml: 1, color: "#d32f2f", fontWeight: 600 }} variant="body2">
                     Deadline trong{" "}
                     {moment(post.postDetails["Post.deadline"]).endOf("hours").fromNow() || "Cần xử lí trong hôm nay"}
                   </Typography>
@@ -163,7 +163,7 @@ const PostItem = () => {
                       <Avatar {...stringAvatar(userProfile.name)} className={classes.userAvatar} />
                       <div style={{ marginLeft: 16 }}>
                         <Typography sx={{ fontWeight: 600 }}>{userProfile.name}</Typography>
-                        <Typography sx={{ fontWeight: 600, fontSize: 14 }}>
+                        <Typography sx={{ fontWeight: 500, fontSize: 14 }}>
                           Được đánh giá: {userProfile.voteCount} lượt
                         </Typography>
                         <Rating name="read-only" value={userProfile.rankPoint} readOnly />
@@ -205,7 +205,7 @@ const PostItem = () => {
                             <Avatar {...stringAvatar(message.senderName)} className={classes.senderAvatar} />
                           )}
                           <Box className={classes.message} display="flex" flexDirection="column" sx={{ ml: 1 }}>
-                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
                               {message.message}
                             </Typography>
                           </Box>

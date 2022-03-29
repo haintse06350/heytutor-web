@@ -94,7 +94,7 @@ export const MessageBox = (props: any) => {
                   <Avatar {...stringAvatar(message.senderName)} className={classes.senderAvatar} />
                 )}
                 <Box className={classes.message} display="flex" flexDirection="column" sx={{ ml: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 500 }}>
                     {message.message}
                   </Typography>
                 </Box>
