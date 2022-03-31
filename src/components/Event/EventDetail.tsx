@@ -55,7 +55,7 @@ const EventDetail = () => {
         <Page className={classes.root}>
           <Grid item xs={12} md={8} lg={8} className={classes.postContent}>
             <Grid item>
-              <img src={img1} alt="img event detail" />
+              <img src={img1} alt="img event detail" /> 
             </Grid>
             <Grid item className={classes.postTitle}>
               <Typography variant="h5">{dataDetail?.eventContent?.title}</Typography>
@@ -71,18 +71,18 @@ const EventDetail = () => {
                     <Typography style={{ fontSize: 14 }}>{dataDetail?.eventContent?.viewCount}</Typography>
                   </Box>
                 </Tooltip>
-                <Tooltip title="Số lượt đăng kí hỗ trợ">
-                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                    <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listNonRegisterPost}</Typography>
-                  </Box>
-                </Tooltip>
-                <Tooltip title="Số vấn đề đăng kí">
-                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                    <EventNoteIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listUserRequestor}</Typography>
-                  </Box>
-                </Tooltip>
+                  <Tooltip title="Số lượt đăng kí hỗ trợ">
+                    <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                      <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                      <Typography style={{ fontSize: 14 }}>{dataDetail?.listNonRegisterPost}</Typography>
+                    </Box>
+                  </Tooltip>
+                  <Tooltip title="Số vấn đề đăng kí">
+                    <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                      <EventNoteIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                      <Typography style={{ fontSize: 14 }}>{dataDetail?.listUserRequestor}</Typography>
+                    </Box>
+                  </Tooltip>
                 <Tooltip title="Thời gian kết thúc đăng kí">
                   <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
                     <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />

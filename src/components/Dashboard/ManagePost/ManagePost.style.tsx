@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles";
 
 export const useStyles = makeStyles(() => ({
   header: { display: "flex", justifyContent: "flex-end" },
-  wrapListTask: { overflow: "hidden" },
+  wrapListTask: {},
   listTask: {
     display: "flex",
     padding: 16,
@@ -41,14 +41,11 @@ export const useStyles = makeStyles(() => ({
     },
   },
   filter: {
-    marginTop: 16,
-
     "& > div:last-child": {},
   },
   listPost: {
     backgroundColor: "#fff",
     width: "100%",
-    marginTop: 16,
     borderRadius: 16,
   },
   iconMoreHoriz: {},
@@ -90,7 +87,6 @@ export const useStyles = makeStyles(() => ({
     overflow: "hidden",
     whiteSpace: "nowrap",
     marginRight: 8,
-    marginLeft: 16,
     "& > h6": {
       cursor: "pointer",
       "&:hover": {

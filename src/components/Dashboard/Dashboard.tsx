@@ -51,14 +51,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { stringAvatar } from "../UserProfile/helper";
 import HomeManageCTV from "./HomeDashBoard/HomeManageCTV";
 
-import NewspaperIcon from "@mui/icons-material/Newspaper";
-import DoneAllIcon from "@mui/icons-material/DoneAll";
-import FlagIcon from "@mui/icons-material/Flag";
-import CoPresentIcon from "@mui/icons-material/CoPresent";
-import ReportIcon from "@mui/icons-material/Report";
-import BugReportIcon from "@mui/icons-material/BugReport";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import PushPinIcon from "@mui/icons-material/PushPin";
+import ManagerCTV from "./ManagerCTV/ManagerCTV";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -277,6 +270,10 @@ const Dashboard = () => {
         return <div>Quản lí người dùng</div>;
       }
       case "manager-ctv": {
+        return <ManagerCTV />;
+      }
+
+      case "manager-user": {
         return <ManagerUser />;
       }
 
@@ -345,64 +342,6 @@ const Dashboard = () => {
     onChangeTab(filterString);
     setFilterName(filterString);
     setNameTab(nameTabString);
-  };
-
-  // manager post
-
-  function task(id: number, name: string, newNofication: number, total: number) {
-    return {
-      id,
-      name,
-      newNofication,
-      total,
-    };
-  }
-
-  const listTask = [
-    task(0, "Đăng kí ghim", 20, 320),
-    task(1, "Chưa có người đăng kí", 4, 320),
-    task(2, "Đã người đăng kí", 4, 320),
-    task(3, "Trong quá tình hỗ trợ", 4, 320),
-    task(4, "Bị báo cáo", 1, 2),
-    task(5, "Đã hạn chế", 4, 12),
-    task(6, "Đã đóng", 4, 120),
-  ];
-
-  const renderIcon = (index: number) => {
-    switch (index) {
-      case 0: {
-        // ghim bai viet
-        return <PushPinIcon color="error" />;
-      }
-      case 1: {
-        // chua co nguoi dang ky
-        return <AccessTimeIcon color="secondary" />;
-      }
-      case 2: {
-        //da co nguoi dang ky
-        return <CoPresentIcon color="success" sx={{ opacity: 0.5 }} />;
-      }
-      case 3: {
-        // trong qua trinh ho tro
-        return <NewspaperIcon color="success" />;
-      }
-      case 4: {
-        // bi bao cao
-        return <FlagIcon color="warning" />;
-      }
-      case 5: {
-        // da  han che
-        return <ReportIcon color="error" />;
-      }
-
-      case 6: {
-        // đa dong
-        return <DoneAllIcon sx={{ color: "#7edfec" }} />;
-      }
-      default: {
-        return <BugReportIcon />;
-      }
-    }
   };
 
   return (
@@ -483,32 +422,6 @@ const Dashboard = () => {
             </ListItemIcon>
             <ListItemText primary="Quản lí bài đăng" />
           </ListItem>
-          <Collapse in={openTab} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {listTask.map((task, index) => (
-                <ListItem key={index} button sx={{ pl: 4 }} onClick={() => handleClickChangeTab(task.name, task.name)}>
-                  <ListItemIcon>{renderIcon(index)}</ListItemIcon>
-                  <ListItemText className={classes.itemText}>
-                    <Typography>{task.name}</Typography>
-                    <Typography
-                      color="red"
-                      sx={{
-                        width: "20px",
-                        height: "20px",
-                        borderRadius: "50%",
-                        ml: 1,
-                        backgroundColor: "#fbebeb",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}>
-                      {task.newNofication}
-                    </Typography>
-                  </ListItemText>
-                </ListItem>
-              ))}
-            </List>
-          </Collapse>
-
           <ListItem
             button
             onClick={() => handleClickChangeTab("manager-event", "Quản lí sự kiện")}
@@ -536,7 +449,10 @@ const Dashboard = () => {
                 </ListItemIcon>
                 <ListItemText primary="Quản lí cộng tác viên" />
               </ListItem>
-              <ListItem button sx={{ pl: 4 }}>
+              <ListItem
+                button
+                sx={{ pl: 4 }}
+                onClick={(e) => handleClickChangeTab("manager-user", "Quản lí người dùng hệ thống")}>
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
