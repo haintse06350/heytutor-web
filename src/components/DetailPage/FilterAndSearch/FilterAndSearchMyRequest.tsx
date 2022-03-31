@@ -15,7 +15,6 @@ const timeOpts = [
 ];
 
 const sortOpts = [
-  { value: "recent", label: "Gần đây nhất" },
   { value: "newUpdate", label: "Cập nhất mới nhất" },
   { value: "numberRegister", label: "Số lượng người đăng kí hỗ trợ" },
   { value: "deadline", label: "Thời gian hết hạn của các vấn đề" },
@@ -176,7 +175,7 @@ export default function FilterAndSearchMyRequest(props: any) {
               id="outlined-select-currency"
               select
               label="Sắp xếp"
-              defaultValue="Gần đây nhất"
+              defaultValue="Cập nhất mới nhất"
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}>
               {sortOpts.map((option: any) => (

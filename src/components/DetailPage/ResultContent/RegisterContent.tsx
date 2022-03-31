@@ -45,7 +45,7 @@ export default function RegisterContent(props: any) {
   };
 
   const onClickPostDetail = (postId: number) => {
-    navigate(`/post-detail?postId=${postId}&tab=${tab}`);
+    navigate(`/post-detail?postId=${postId}&tab=${tab}&from=register`);
   };
 
   const onClickDeadlineIcon = (item: any) => {

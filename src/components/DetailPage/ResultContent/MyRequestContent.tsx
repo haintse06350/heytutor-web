@@ -13,7 +13,11 @@ import {
   Tooltip,
   DialogContentText,
   DialogActions,
+  FormControl,
+  InputLabel,
+  MenuItem,
 } from "@mui/material";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { map } from "lodash";
 import * as React from "react";
 import { useStyles } from "./ResultContent.style";
@@ -24,7 +28,7 @@ import { stringAvatar } from "../../UserProfile/helper";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import CloseIcon from "@mui/icons-material/Close";
 // import { renderCardImg } from "../utils";
 // import moment from "moment";
 // import SendRoundedIcon from "@mui/icons-material/SendRounded";
@@ -36,6 +40,21 @@ import { MsgCtx } from "../../../context/message/message";
 import { useNavigate } from "react-router-dom";
 import { NotificationCtx } from "../../../context/notification/state";
 
+const FILTER_REGISTER = [
+  {
+    label: "Thời gian đăng kí",
+    value: "registerTime",
+  },
+  {
+    label: "Số lượng sao",
+    value: "vote",
+  },
+  {
+    label: "Tên",
+    value: "name",
+  },
+];
+
 export default function MyRequestContent(props: any) {
   const { tabValue, data } = props;
   const classes = useStyles();
@@ -45,14 +64,15 @@ export default function MyRequestContent(props: any) {
   const [userSelected, setUserSelected]: any = React.useState(null);
   const [openRemoveDialog, setOpenRemoveDialog] = React.useState(false);
   const [selectedRegister, setSelectedRegister]: any = React.useState(null);
+  const [sortListRegister, setSortListRegister] = React.useState("registerTime");
   const { onOpenMsgBox } = React.useContext(MsgCtx);
   const { setNotificationSuccess } = React.useContext(NotificationCtx);
-
+  console.log(selectItem);
   const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
 
   const onClickPostDetail = (postId: number) => {
-    navigate(`/post-detail?postId=${postId}&tab=${tabValue}`);
+    navigate(`/post-detail?postId=${postId}&tab=${tabValue}&from=my-request`);
   };
 
   const onCloseRemoveDialog = () => {
@@ -74,15 +94,19 @@ export default function MyRequestContent(props: any) {
   };
 
   const onClickOpenListRegister = (item: any) => {
-    setOpenDialog(tabValue === "isActive" ? "listSupport" : "listRegister");
+    setOpenDialog(true);
     setSelectItem(item);
   };
 
   const onOpenMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
-  const onCloseMenu = () => {
+  const onCloseMenu = (event: SelectChangeEvent) => {
     setAnchorEl(null);
+  };
+
+  const onChangeSort = (event: SelectChangeEvent) => {
+    setSortListRegister(event.target.value as string);
   };
 
   const isNearDeadline = (deadline: string) => {
@@ -94,6 +118,7 @@ export default function MyRequestContent(props: any) {
   const onOpenMsg = (user: any) => {
     onOpenMsgBox();
     setOpenDialog(false);
+    setOpenRemoveDialog(false);
     setUserSelected(user);
   };
 
@@ -133,7 +158,7 @@ export default function MyRequestContent(props: any) {
                       {username} {index === 0 ? ", " : ""}
                     </span>
                   ))}
-                  <span style={{ fontWeight: 600 }}>và {listUsers.length - 2} người khác </span>
+                  <span style={{ fontWeight: 600 }}>và {listUsers?.length - 2} người khác </span>
                   {tabValue === "isActive" ? "hỗ trợ bạn vấn đề này" : tabValue === "isPending" ? "đăng ký hỗ trợ" : ""}
                 </Typography>
               }
@@ -150,12 +175,79 @@ export default function MyRequestContent(props: any) {
     );
   };
 
-  const renderSupporterUserDialog = () => {
+  const renderDialogData = () => {
+    switch (tabValue) {
+      case "isActive":
+        return { dialogTitle: "Danh sách người hỗ trợ", dialogData: selectItem?.supporterUsers };
+      case "isPending":
+        return { dialogTitle: "Danh sách người đăng ký", dialogData: selectItem?.registerUsers };
+      default:
+        return { dialogTitle: "", dialogData: [] };
+    }
+  };
+
+  const renderButton = (user: any) => {
+    if (tabValue === "isActive") {
+      return (
+        <Button onClick={() => onOpenMsg(user)}>
+          <ChatRoundedIcon />
+        </Button>
+      );
+    } else if (tabValue === "isPending") {
+      return (
+        <Box>
+          <Tooltip title="Loại người này khỏi danh sách đăng kí">
+            <Button color="secondary" onClick={() => onClickRemoveRegisterUser()}>
+              <PersonRemoveIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Chọn người này làm supporter">
+            <Button
+              onClick={() => (selectedRegister?.id === user.id ? onOpenMsg(user) : onClickAcceptRegisterUser(user))}>
+              {selectedRegister?.id === user.id ? <ChatRoundedIcon /> : <AddTaskIcon />}
+            </Button>
+          </Tooltip>
+        </Box>
+      );
+    }
+  };
+
+  const renderSupporterRegisterDialog = () => {
+    const { dialogTitle, dialogData } = renderDialogData();
+
     return (
-      <Dialog maxWidth="sm" fullWidth open={openDialog === "listSupport"} onClose={onCloseDialog}>
-        <DialogTitle>Danh sách người hỗ trợ</DialogTitle>
-        <DialogContent>
-          {map(selectItem?.supporterUsers, (user: any, idx: number) => (
+      <Dialog maxWidth="sm" fullWidth open={openDialog} onClose={onCloseDialog}>
+        <DialogTitle classes={{ root: classes.dialogTitle }}>
+          {dialogTitle}
+          <CloseIcon onClick={onCloseDialog} />
+        </DialogTitle>
+        <Typography className={classes.postTitleOnDialog} noWrap onClick={() => onClickPostDetail(selectItem?.id)}>
+          {selectItem?.postData.title}
+        </Typography>
+
+        <DialogContent sx={{ px: 3, pt: 1, pb: 3 }} dividers>
+          <Box className={classes.topRegister}>
+            <Typography variant="subtitle2" sx={{ fontSize: 14, fontWeight: 500 }}>
+              Top 5
+            </Typography>
+            <FormControl sx={{ width: 1 / 3 }}>
+              <InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
+              <Select
+                classes={{ select: classes.selectRoot }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={sortListRegister}
+                defaultValue="Thời gian đăng kí"
+                onChange={onChangeSort}>
+                {FILTER_REGISTER.map((filter: any, index: number) => (
+                  <MenuItem sx={{ fontSize: 12 }} key={index} value={filter.value}>
+                    {filter.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          {map(dialogData?.slice(0, 5), (user: any, idx: number) => (
             <Box display="flex" key={idx} sx={{ py: 1, cursor: "pointer" }}>
               <Avatar {...stringAvatar(user.username)} alt="" />
               <Box sx={{ ml: 1, flexGrow: 1 }}>
@@ -177,58 +269,15 @@ export default function MyRequestContent(props: any) {
                   </Typography>
                 </Box>
               </Box>
-              <Button onClick={() => onOpenMsg(user)}>
-                <ChatRoundedIcon />
-              </Button>
+              {renderButton(user)}
             </Box>
           ))}
         </DialogContent>
-      </Dialog>
-    );
-  };
-
-  const renderRegisterUserDialog = () => {
-    return (
-      <Dialog maxWidth="sm" fullWidth open={openDialog === "listRegister"} onClose={onCloseDialog}>
-        <DialogTitle>Danh sách người đăng kí hỗ trợ</DialogTitle>
-        <DialogContent>
-          {map(selectItem?.registerUsers, (user: any, idx: number) => (
-            <Box display="flex" key={idx} sx={{ py: 1, cursor: "pointer" }}>
-              <Avatar {...stringAvatar(user.username)} alt="" />
-              <Box sx={{ ml: 1, flexGrow: 1 }}>
-                <Typography variant="subtitle2" sx={{ fontSize: 14, lineHeight: 1.5 }}>
-                  {user.username}
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <Typography variant="subtitle2" sx={{ fontSize: 14, lineHeight: 1.5, fontWeight: 500 }}>
-                    {user.rankPoint}
-                  </Typography>
-                  <StarRoundedIcon sx={{ color: "gold", width: 16 }} />
-                  <Typography variant="subtitle2" sx={{ fontSize: 14, lineHeight: 1.5, fontWeight: 500 }}>
-                    / {user.voteCount} votes &nbsp;
-                  </Typography>
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ fontSize: 12, lineHeight: 1.5, fontWeight: 500, color: "secondary" }}>
-                    | đã hoàn thành {Math.floor(Math.random() * 6) + 1} lần hỗ trợ
-                  </Typography>
-                </Box>
-              </Box>
-              <Box>
-                <Tooltip title="Loại người này khỏi danh sách đăng kí">
-                  <Button color="secondary" onClick={() => onClickRemoveRegisterUser()}>
-                    <PersonRemoveIcon />
-                  </Button>
-                </Tooltip>
-                <Tooltip title="Chọn người này làm supporter">
-                  <Button onClick={() => onClickAcceptRegisterUser(user)}>
-                    {selectedRegister?.id === user.id ? <AddTaskIcon /> : <PersonAddAlt1Icon />}
-                  </Button>
-                </Tooltip>
-              </Box>
-            </Box>
-          ))}
-        </DialogContent>
+        {dialogData?.length > 5 && (
+          <DialogActions>
+            <Button autoFocus>Xem tất cả {dialogData?.length} người</Button>
+          </DialogActions>
+        )}
       </Dialog>
     );
   };
@@ -258,8 +307,7 @@ export default function MyRequestContent(props: any) {
 
   return (
     <Box sx={{ mt: 2 }}>
-      {renderSupporterUserDialog()}
-      {renderRegisterUserDialog()}
+      {renderSupporterRegisterDialog()}
       {renderConfirmRemoveDialog()}
       <div className={classes.resultCountAndDisplayOption}>
         <Typography variant="subtitle1">
@@ -269,7 +317,7 @@ export default function MyRequestContent(props: any) {
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {map(data, (item: any, index: number) => (
           <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
-            <Card className={classes.item}>
+            <Card className={clsx(classes.item, selectItem?.id === item.id && classes.activeCard)}>
               <div className={classes.cardHeader}>
                 <div className={classes.postTitle}>
                   <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.postData.id)}>

@@ -152,4 +152,32 @@ export const useStyles: any = makeStyles(() => ({
   listSupporterTitle: {
     flexGrow: 1,
   },
+  dialogTitle: {
+    padding: "16px 24px 0px 24px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    "& > svg": {
+      cursor: "pointer",
+    },
+  },
+  activeCard: {
+    border: "1px solid #00AB55",
+  },
+  topRegister: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  postTitleOnDialog: {
+    fontSize: 14,
+    padding: "0px 24px 16px",
+    textDecoration: "underline",
+    width: "100%",
+    cursor: "pointer",
+  },
+  selectRoot: {
+    padding: "8px 12px",
+    fontSize: 12,
+  },
 }));

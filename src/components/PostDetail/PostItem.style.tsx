@@ -118,9 +118,19 @@ export const useStyles: any = makeStyles(() => ({
       background: "#4CAF50",
     },
   },
-  messageBox: {
+  positionFixed: {
     position: "fixed",
-    minWidth: 375,
+    maxWidth: "33%",
+  },
+  exchangeBox: {
+    width: "100%",
+    padding: "24px 24px 0px 24px",
+  },
+  messageBox: {
+    width: "100%",
+    "& > div": {
+      padding: 16,
+    },
   },
   noConversation: {
     "& > img": {
@@ -134,7 +144,7 @@ export const useStyles: any = makeStyles(() => ({
     justifyContent: "center",
   },
   messageContent: {
-    maxHeight: 350,
+    maxHeight: 250,
     overflowY: "scroll",
   },
   messageRow: {
@@ -150,10 +160,36 @@ export const useStyles: any = makeStyles(() => ({
   messageInput: {
     display: "flex",
     alignItems: "center",
-    padding: "16px 0px 8px 0px",
+    padding: "12px 0px 0px 0px",
   },
   inputBase: {
     padding: "0px 8px",
     flexGrow: 1,
+  },
+  timeLineRoot: {
+    position: "relative",
+    maxHeight: 300,
+    overflowY: "scroll",
+    display: "flex",
+    flexDirection: "column",
+  },
+  actions: {},
+  listRoot: {
+    listStyle: "none",
+    margin: 0,
+    padding: "8px 0px",
+    width: "100%",
+  },
+  exchangeInfo: {
+    width: 20,
+    height: 20,
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    border: "2px solid #94a4c4",
+    fontSize: 14,
+    fontWeight: 700,
+    cursor: "pointer",
   },
 }));
