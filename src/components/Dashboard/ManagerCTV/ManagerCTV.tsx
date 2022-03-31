@@ -20,17 +20,28 @@ import {
   Chip,
   TablePagination,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Container,
+  DialogActions,
+  Autocomplete,
 } from "@mui/material";
 // icon
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ChatIcon from "@mui/icons-material/Chat";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 // help
 import { stringAvatar } from "../../UserProfile/helper";
 // component
 import DialogDetailCTV from "./DialogDetailCTV";
 import DialogEditManageCTV from "./DialogEditManageCTV";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { NotificationCtx } from "../../../context/notification/state";
+
 const ManagerCTV = () => {
   const classes = useStyles();
   function createData(
@@ -65,6 +76,29 @@ const ManagerCTV = () => {
   ];
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const { setNotificationError } = React.useContext(NotificationCtx);
+
+  const roleProps = {
+    options: [
+      { id: 1, title: "CTV1" },
+      { id: 2, title: "CTV2" },
+      { id: 3, title: "CTV3" },
+      { id: 4, title: "Admin1" },
+      { id: 5, title: "Admin2" },
+    ],
+    getOptionLabel: (option: any) => option.title,
+  };
+
+  const permissionsProps = {
+    options: [
+      { id: 1, title: "Quản lí event" },
+      { id: 2, title: "Quản lí người dùng" },
+      { id: 3, title: "Quản lí bài viết" },
+    ],
+    getOptionLabel: (option: any) => option.title,
+  };
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -90,10 +124,115 @@ const ManagerCTV = () => {
     setOpenDialogEdit(false);
   };
 
+  const onCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      role: "",
+      permissions: "",
+    },
+    validationSchema: Yup.object({
+      username: Yup.string().email("Must not be null").max(255).required("Username is required"),
+      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+      role: Yup.string().email("Must not be null").max(255).required("Role is required"),
+      permissions: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+    }),
+    onSubmit: () => {
+      try {
+        console.log(formik.values.email);
+        if (formik.values.email.includes("Admin")) {
+          setNotificationError("Email này đã tồn tại");
+        }
+        console.log("on submit");
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  });
+
+  const onSubmitDialog = () => {
+    console.log(formik.values.email);
+    if (formik.values.email.includes("admin")) {
+      setNotificationError("Email này đã tồn tại");
+    }
+    console.log("on submit");
+  };
+
+  const renderDialog = () => {
+    return (
+      <Dialog onClose={onCloseDialog} open={openDialog}>
+        <DialogTitle>Thêm cộng tác viên</DialogTitle>
+        <DialogContent>
+          <Container maxWidth="xs">
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+                fullWidth
+                label="Username"
+                margin="normal"
+                name="username"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="username"
+                value={formik.values.username}
+                variant="outlined"
+                disabled={formik.isSubmitting}
+              />
+              <TextField
+                error={Boolean(formik.touched.email && formik.errors.email)}
+                fullWidth
+                helperText={formik.touched.email && formik.errors.email}
+                label="Email"
+                margin="normal"
+                name="email"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="email"
+                value={formik.values.email}
+                variant="outlined"
+                disabled={formik.isSubmitting}
+              />
+              <Autocomplete
+                sx={{ mt: 2 }}
+                {...roleProps}
+                id="disable-close-on-select"
+                disableCloseOnSelect
+                renderInput={(params) => <TextField {...params} label="Choose role" variant="standard" />}
+              />
+              <Autocomplete
+                sx={{ mt: 2 }}
+                {...permissionsProps}
+                id="disable-close-on-select"
+                disableCloseOnSelect
+                renderInput={(params) => <TextField {...params} label="Add permissions" variant="standard" />}
+              />
+            </form>
+          </Container>
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}>
+          <Button onClick={onCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={onSubmitDialog}
+            variant="outlined"
+            color="primary"
+            disabled={Boolean(formik.touched.email && formik.errors.email)}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
   return (
     <div className={classes.root}>
+      {renderDialog()}
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Box sx={{ mr: 2 }}>
             <TextField
               id="outlined-search"
@@ -159,6 +298,15 @@ const ManagerCTV = () => {
               <MenuItem value={3}>Cả hai</MenuItem>
             </TextField>
           </Box>
+          <Box>
+            <Button
+              startIcon={<AddCircleOutlineRoundedIcon />}
+              variant="outlined"
+              color="primary"
+              onClick={() => setOpenDialog(true)}>
+              Add user
+            </Button>
+          </Box>
         </Box>
       </Box>
       <Grid container>
@@ -188,21 +336,35 @@ const ManagerCTV = () => {
                           <Avatar {...stringAvatar(row.name)}></Avatar>
                         </Box>
                         <Box>
-                          <Typography variant="subtitle1">{row.name}</Typography>
-                          <Typography variant="subtitle2">{row.gmail}</Typography>
+                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                            {row.name}
+                          </Typography>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 400 }}>
+                            {row.gmail}
+                          </Typography>
                         </Box>
                       </Box>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">Đang quản lí : {row.nbOfEventManager}</Typography>
-                      <Typography variant="subtitle1">Chờ phê duyệt : {row.nbOfEventManager}</Typography>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                        Đang quản lí : {row.nbOfEventManager}
+                      </Typography>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                        Chờ phê duyệt : {row.nbOfEventManager}
+                      </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">Người dùng : {row.nbOfEventManager}</Typography>
-                      <Typography variant="subtitle1">Bài đăng : {row.nbOfEventManager}</Typography>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                        Người dùng : {row.nbOfEventManager}
+                      </Typography>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                        Bài đăng : {row.nbOfEventManager}
+                      </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">{row.approvedBy}</Typography>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                        {row.approvedBy}
+                      </Typography>
                     </TableCell>
 
                     <TableCell sx={{ color: row.status === 1 ? "green" : "red" }}>
