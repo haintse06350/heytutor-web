@@ -118,10 +118,7 @@ export const useStyles: any = makeStyles(() => ({
       background: "#4CAF50",
     },
   },
-  positionFixed: {
-    position: "fixed",
-    maxWidth: "33%",
-  },
+  positionFixed: {},
   exchangeBox: {
     width: "100%",
     padding: "24px 24px 0px 24px",

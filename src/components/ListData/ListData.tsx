@@ -6,12 +6,12 @@ import { Box } from "@mui/material";
 import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
 import FilterAndSearch from "./FilterAndSearch/FilterAndSearch";
 import { Post } from "../../models/post";
-import RegisterContent from "./ResultContent/RegisterContent";
-import MyRequestContent from "./ResultContent/MyRequestContent";
+import RegisterContent from "./ListRequest/RegisterContent";
+import MyRequestContent from "./ListRequest/MyRequestContent";
 import { filter, countBy, flattenDeep, map } from "lodash";
 import FilterAndSearchMyRequest from "./FilterAndSearch/FilterAndSearchMyRequest";
 
-export const DetailPage = () => {
+export const ListData = () => {
   // const classes = useStyles();
   // const navigate = useNavigate();
   // const urlParams = new URLSearchParams(window.location.search);
@@ -20,6 +20,7 @@ export const DetailPage = () => {
 
   const isMyRequest = pathname.includes("my-request");
   const isRegistered = pathname.includes("registered-request");
+
   const [postCount, setPostCount]: any = React.useState(null);
 
   const [registerData, setRegisterData]: any = React.useState(null);
@@ -28,10 +29,18 @@ export const DetailPage = () => {
   const [tabRegisterData, setTabRegisterData]: any = React.useState(null);
   const [tabRequestData, setTabRequestData]: any = React.useState(null);
 
+  const [registerDataFilter, setRegisterDataFilter] = React.useState(tabRegisterData);
+
   const [tabValue, setTabValue] = React.useState("all");
   const [tabRequestValue, setTabRequestValue] = React.useState("isActive");
   const [hashtagLabels, setHashtagLabels] = React.useState(null);
   const [selectedHashtag, setSelectedHashtag]: any = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [sortDataBy, setSortDataBy] = React.useState("deadline");
+
+  console.log("sortBy", sortDataBy);
+
+  const [filters, setFilters]: any = React.useState({ time: "week" });
 
   const onChangeTab = (event: React.SyntheticEvent, tab: string) => {
     setTabValue(tab);
@@ -63,19 +72,19 @@ export const DetailPage = () => {
   React.useEffect(() => {
     if (tabValue && registerData) {
       if (tabValue === "all") {
-        setTabRegisterData(registerData);
+        setRegisterDataFilter(registerData);
       } else {
         const filterDataByTab = filter(registerData, (o: any) => o[tabValue] === 1);
-        setTabRegisterData(filterDataByTab);
+        setRegisterDataFilter(filterDataByTab);
       }
     }
   }, [tabValue, registerData]);
 
   React.useEffect(() => {
-    const allHashtag = map(tabRegisterData, (item: any) => JSON.parse(item.postData.hashtag));
+    const allHashtag = map(registerDataFilter, (item: any) => JSON.parse(item.hashtag));
     const hashTagGroup = countBy(flattenDeep(allHashtag));
     setHashtagLabels(hashTagGroup);
-  }, [tabRegisterData]);
+  }, [registerDataFilter]);
 
   React.useEffect(() => {
     if (tabRequestValue && myRequestData) {
@@ -100,8 +109,9 @@ export const DetailPage = () => {
     }
   }, [tabRequestValue, myRequestData]);
 
-  const getRegisteredData = async () => {
-    const res = await Post.getListRegisteredPost();
+  const getRegisteredData = async (filters: any) => {
+    setLoading(true);
+    const res = await Post.getListRegisteredPost(filters);
     setRegisterData(res.attachPostData);
     const nbOfAllPost = res.attachPostData.length;
     const nbOfActivePost = res.attachPostData.filter((item: any) => item.isActive === 1).length;
@@ -110,6 +120,7 @@ export const DetailPage = () => {
     const nbOfDonePost = res.attachPostData.filter((item: any) => item.isDone === 1).length;
     setPostCount({ nbOfAllPost, nbOfActivePost, nbOfConfirmedPost, nbOfPendingPost, nbOfDonePost });
     setHashtagLabels(res?.hashTagGroup);
+    setLoading(false);
   };
 
   const getListMyRequestData = async () => {
@@ -118,13 +129,19 @@ export const DetailPage = () => {
   };
 
   React.useEffect(() => {
-    getRegisteredData();
-    getListMyRequestData();
-  }, []);
+    isRegistered && getRegisteredData(filters);
+    isMyRequest && getListMyRequestData();
+  }, [isMyRequest, isRegistered, filters]);
+
+  React.useEffect(() => {
+    registerData && setRegisterDataFilter(registerData);
+  }, [registerData]);
 
   React.useEffect(() => {
     registerData && setTabRegisterData(registerData);
   }, [registerData]);
+
+  console.log("filters", filters);
 
   return (
     <Page>
@@ -141,6 +158,12 @@ export const DetailPage = () => {
             tabValue={tabValue}
             onChangeTab={onChangeTab}
             onClickHashtag={onClickHashtag}
+            setRegisterDataFilter={setRegisterDataFilter}
+            setSortBy={setSortDataBy}
+            sortBy={sortDataBy}
+            setFilters={setFilters}
+            filters={filters}
+            registerData={tabRegisterData}
             hashtagCount={hashtagLabels}
             postCount={postCount}
           />
@@ -154,9 +177,9 @@ export const DetailPage = () => {
           />
         )}
         {isRegistered ? (
-          <RegisterContent data={tabRegisterData} tab={tabValue} />
+          <RegisterContent loading={loading} data={registerDataFilter} tab={tabValue} />
         ) : (
-          <MyRequestContent tabValue={tabRequestValue} data={tabRequestData} />
+          <MyRequestContent loading={loading} tabValue={tabRequestValue} data={tabRequestData} />
         )}
       </Box>
     </Page>

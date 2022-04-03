@@ -11,7 +11,6 @@ import {
   Avatar,
   Button,
   Tooltip,
-  DialogContentText,
   DialogActions,
   FormControl,
   InputLabel,
@@ -39,6 +38,7 @@ import { MessageBox } from "../../MessageBox/MessageBox";
 import { MsgCtx } from "../../../context/message/message";
 import { useNavigate } from "react-router-dom";
 import { NotificationCtx } from "../../../context/notification/state";
+import { ConfirmDialog } from "../../Common/ConfirmDialog/ConfirmDialog";
 
 const FILTER_REGISTER = [
   {
@@ -222,7 +222,7 @@ export default function MyRequestContent(props: any) {
           <CloseIcon onClick={onCloseDialog} />
         </DialogTitle>
         <Typography className={classes.postTitleOnDialog} noWrap onClick={() => onClickPostDetail(selectItem?.id)}>
-          {selectItem?.postData.title}
+          {selectItem?.title}
         </Typography>
 
         <DialogContent sx={{ px: 3, pt: 1, pb: 3 }} dividers>
@@ -282,33 +282,17 @@ export default function MyRequestContent(props: any) {
     );
   };
 
-  const renderConfirmRemoveDialog = () => {
-    return (
-      <Dialog
-        open={openRemoveDialog}
-        onClose={onCloseRemoveDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description">
-        <DialogTitle id="alert-dialog-title">Xoá khỏi danh sách người đăng kí</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Bạn có chắc chắn muốn loại người này khỏi danh sách đăng kí?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onCloseRemoveDialog}>Đóng</Button>
-          <Button onClick={onConfirmRemoveRegister} autoFocus>
-            Chắc chắn
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
   return (
     <Box sx={{ mt: 2 }}>
       {renderSupporterRegisterDialog()}
-      {renderConfirmRemoveDialog()}
+      <ConfirmDialog
+        dialogTitle="Xoá khỏi danh sách người đăng kí"
+        dialogContent="Bạn có chắc chắn muốn loại người này khỏi danh sách đăng kí?"
+        confirmAction={onConfirmRemoveRegister}
+        cancelAction={onCloseRemoveDialog}
+        open={openRemoveDialog}
+        onClose={onCloseRemoveDialog}
+      />
       <div className={classes.resultCountAndDisplayOption}>
         <Typography variant="subtitle1">
           Hiển thị <b style={{ fontSize: "1.25rem", padding: "0 3px" }}>{data?.length}</b> kết quả
@@ -320,27 +304,25 @@ export default function MyRequestContent(props: any) {
             <Card className={clsx(classes.item, selectItem?.id === item.id && classes.activeCard)}>
               <div className={classes.cardHeader}>
                 <div className={classes.postTitle}>
-                  <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.postData.id)}>
-                    {item.postData.title}
+                  <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.id)}>
+                    {item.title}
                   </Typography>
                   <Typography variant="caption" noWrap>
-                    {moment(item.postData.createdAt).format("DD/MM")}
+                    {moment(item.createdAt).format("DD/MM")}
                   </Typography>
                   <div className={classes.dueDate}>
                     <AccessTimeOutlinedIcon
                       sx={{
-                        color: isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow())
-                          ? "#d32f2f"
-                          : "#94a4c4",
+                        color: isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) ? "#d32f2f" : "#94a4c4",
                       }}
                     />
                     <Typography
                       variant="subtitle2"
                       className={clsx(
                         classes.deadline,
-                        isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow()) && classes.nearDeadline
+                        isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) && classes.nearDeadline
                       )}>
-                      Đến hạn cần giải quyết trong {moment(item.postData.deadline).endOf("hours").fromNow()}
+                      Đến hạn cần giải quyết trong {moment(item.deadline).endOf("hours").fromNow()}
                     </Typography>
                   </div>
                 </div>
@@ -376,7 +358,7 @@ export default function MyRequestContent(props: any) {
         </Popover>
         <MessageBox
           postId={selectItem?.postId}
-          postTitle={selectItem?.postData.title}
+          postTitle={selectItem?.title}
           userId={userSelected?.id}
           userName={userSelected?.username}
         />

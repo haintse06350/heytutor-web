@@ -28,7 +28,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { renderCardImg } from "../../DetailPage/utils";
+import { renderCardImg } from "../../ListData/utils";
 import { stringAvatar } from "../../UserProfile/helper";
 // import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { useStyles } from "./HomeManager.style";

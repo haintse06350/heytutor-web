@@ -52,8 +52,8 @@ export class Post {
     return res.json();
   };
 
-  static getListRegisteredPost = async () => {
-    const res = await FetchUtils.get(`/user-post/registered`);
+  static getListRegisteredPost = async (filters: any) => {
+    const res = await FetchUtils.get(`/user-post/registered?filters=${JSON.stringify(filters)}`);
     await ErrorUtils.throwError(res);
     return res.json();
   };

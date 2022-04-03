@@ -11,6 +11,7 @@ import {
   Container,
   Divider,
   InputBase,
+  Popover,
 } from "@mui/material";
 import { useStyles } from "./PostItem.style";
 import { stringAvatar } from "../UserProfile/helper";
@@ -50,12 +51,20 @@ const PostItem = () => {
   const [messages, setMessages]: any = useState(null);
   const [userProfile, setUserProfile]: any = useState(null);
   const [isMyPost, setIsMyPost]: any = useState(false);
-  const [openExchangeInfo, setOpenExchangeInfo] = useState(false);
   const [msg, setMsg] = useState("");
   const { onOpenMsgBox } = React.useContext(MsgCtx);
   const { user } = React.useContext(UserCtx);
   moment.locale("vi");
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const open = Boolean(anchorEl);
 
+  const onClickInfo = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   // const navigate = useNavigate();
 
   const getPostStatus = () => {
@@ -134,8 +143,29 @@ const PostItem = () => {
     await Message.sendMessage(input);
   };
 
+  const howToUsePopup = () => {
+    return (
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}>
+        <Typography sx={{ maxWidth: 300, p: 2 }}>
+          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
+          sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies
+          nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
+          aliquet nec, vulputate eget, arcu.
+        </Typography>
+      </Popover>
+    );
+  };
+
   return (
     <Page>
+      {howToUsePopup()}
       {/* no images just text*/}
       <Container fixed>
         <Grid container spacing={2}>
@@ -193,10 +223,7 @@ const PostItem = () => {
                 <CardContent classes={{ root: classes.exchangeBox }}>
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Typography variant="h6">Quá trình trao đổi</Typography>
-                    <Box
-                      className={classes.exchangeInfo}
-                      onMouseEnter={() => setOpenExchangeInfo(true)}
-                      onMouseLeave={() => setOpenExchangeInfo(false)}>
+                    <Box className={classes.exchangeInfo} onClick={(e: any) => onClickInfo(e)}>
                       i
                     </Box>
                   </Box>

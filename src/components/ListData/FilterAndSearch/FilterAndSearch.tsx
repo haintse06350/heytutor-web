@@ -4,44 +4,61 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, TextField, MenuItem, Grid, Chip, InputAdornment, Popover, Typography, Paper } from "@mui/material";
-import DateRangePicker from "../DateRangePicker";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+
+import DateRangePicker from "../DateTimePicker/DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
 import { map, keys } from "lodash";
 import { useStyles } from "./FilterAndSearch.style";
+import moment from "moment";
 
 const timeOpts = [
-  { value: "Tuần này", label: "Tuần này" },
-  { value: "Tháng này", label: "Tháng này" },
-  { value: "Chọn ngày", label: "Chọn ngày" },
+  { value: "week", label: "Tuần này" },
+  { value: "month", label: "Tháng này" },
+  { value: "day", label: "Chọn ngày" },
 ];
 
 const sortOpts = [
-  { value: "recent", label: "Gần tới deadline nhất" },
-  { value: "newUpdate", label: "Cập nhất mới nhất" },
-  { value: "deadlineTime", label: "Thời gian của vấn đề" },
+  { value: "deadline", label: "Gần tới deadline nhất" },
+  { value: "rate", label: "Rate của người dùng" },
+  { value: "contact", label: "Trao đổi gần đây" },
 ];
 
 export default function FilterAndSearch(props: any) {
-  const { postCount, hashtagCount, tabValue, onChangeTab, onClickHashtag, isSelectedHashtag } = props;
+  const {
+    postCount,
+    hashtagCount,
+    tabValue,
+    onChangeTab,
+    onClickHashtag,
+    isSelectedHashtag,
+    setRegisterDataFilter,
+    registerData,
+    filters,
+    setFilters,
+    setSortBy,
+    sortBy,
+  } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
-  const [filters, setFilters]: any = React.useState({ status: "all" });
-  const [sortBy, setSortBy]: any = React.useState("recent");
   // const [postStatus, setPostStatus] = React.useState("");
   const [openDatePicker, setOpenDatePicker] = React.useState(false);
-  // const [finishPickDate, setFinishPickDate] = React.useState(false);
+  const [finishPickDate, setFinishPickDate] = React.useState(false);
+  const [searchBy, setSearchBy] = React.useState("title");
+  const [query, setQuery] = React.useState("");
+
+  const onChangeSearchBy = (e: SelectChangeEvent) => {
+    setSearchBy(e.target.value);
+  };
 
   const classes = useStyles();
   const hashtagLabels = keys(hashtagCount);
 
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
-    // setFinishPickDate(true);
+    setFinishPickDate(true);
   };
 
   const onChangeFilter = (event: any, type: string) => {
-    if (type === "status") {
-      // setPostStatus(event.target.value);
-    }
     if (type === "hashtag") {
       if (event.length === 0) {
         delete filters["hashtag"];
@@ -53,7 +70,7 @@ export default function FilterAndSearch(props: any) {
         setFilters({ ...filters, ...newFilter });
       }
     } else if (type === "time") {
-      if (event.target.value === "Chọn ngày") {
+      if (event.target.value === "day") {
         delete filters["time"];
         setOpenDatePicker(true);
       } else {
@@ -62,11 +79,6 @@ export default function FilterAndSearch(props: any) {
         };
         setFilters({ ...filters, ...newFilter });
       }
-    } else {
-      const newFilter = {
-        status: event.target.value,
-      };
-      setFilters({ ...filters, ...newFilter });
     }
   };
 
@@ -116,6 +128,42 @@ export default function FilterAndSearch(props: any) {
     setViewMoreHashtag(viewMoreHashtag + 3);
   };
 
+  React.useEffect(() => {
+    if (query === "") {
+      setRegisterDataFilter(registerData);
+    } else {
+      let filterData;
+      if (searchBy === "title") {
+        filterData = registerData.filter((item: any) => {
+          return item.title.toLowerCase().includes(query.toLowerCase());
+        });
+      }
+
+      if (searchBy === "content") {
+        filterData = registerData.filter((item: any) => {
+          return item.content.toLowerCase().includes(query.toLowerCase());
+        });
+      }
+
+      if (searchBy === "user") {
+        filterData = registerData.filter((item: any) => {
+          return item.name.toLowerCase().includes(query.toLowerCase());
+        });
+      }
+
+      setRegisterDataFilter(filterData);
+    }
+  }, [query, searchBy]);
+
+  React.useEffect(() => {
+    if (finishPickDate) {
+      const date = {
+        time: `BETWEEN '${moment(dateData[0]).format("YYYY-MM-DD")}' AND '${moment(dateData[1]).format("YYYY-MM-DD")}'`,
+      };
+      setFilters({ ...filters, ...date });
+    }
+  }, [finishPickDate]);
+
   return (
     <Box className={classes.searchAndFilter} sx={{ width: "100%", typography: "body1" }}>
       <Paper elevation={2} sx={{ px: 2 }}>
@@ -132,20 +180,37 @@ export default function FilterAndSearch(props: any) {
         </TabContext>
       </Paper>
       <Grid container item xs={12} spacing={1} sx={{ mt: 2, width: "100%" }}>
-        <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
-          <Box component="form" noValidate autoComplete="off">
+        <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
+          <Box component="form" autoComplete="off">
             <TextField
               autoFocus
               classes={{ root: classes.textField }}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <SearchIcon />
                   </InputAdornment>
                 ),
+                endAdornment: (
+                  <Select
+                    className={classes.select}
+                    value={searchBy}
+                    defaultValue="title"
+                    onChange={onChangeSearchBy}
+                    inputProps={{
+                      name: "departmentValue",
+                      id: "departmentValue",
+                    }}>
+                    <MenuItem value="title">Tiêu đề</MenuItem>
+                    <MenuItem value="user">Người đăng yêu cầu</MenuItem>
+                    <MenuItem value="content">Nội dung yêu cầu</MenuItem>
+                  </Select>
+                ),
               }}
               id="outlined-basic"
-              placeholder="Search here..."
+              placeholder="Tìm kiếm yêu cầu theo..."
               variant="outlined"
             />
           </Box>
@@ -159,7 +224,7 @@ export default function FilterAndSearch(props: any) {
               select
               label="Hiển thị theo"
               defaultValue="Tuần này"
-              value={filters.time}
+              value={filters?.time?.includes("BETWEEN") ? "day" : filters.time}
               onChange={(e: any) => onChangeFilter(e, "time")}>
               {timeOpts.map((option: any) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -184,7 +249,7 @@ export default function FilterAndSearch(props: any) {
               id="outlined-select-currency"
               select
               label="Sắp xếp"
-              defaultValue="Gần tới deadline nhất"
+              defaultValue="recent"
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}>
               {sortOpts.map((option: any) => (

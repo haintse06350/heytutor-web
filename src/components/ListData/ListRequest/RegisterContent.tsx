@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Card, Popover, Divider, Avatar, Tooltip } from "@mui/material";
+import { Box, Typography, Grid, Card, Popover, Divider, Avatar, Tooltip, CircularProgress } from "@mui/material";
 import { map } from "lodash";
 import React from "react";
 import { useStyles } from "./ResultContent.style";
@@ -12,33 +12,41 @@ import { useNavigate } from "react-router-dom";
 import NewMessageIcon from "../../../assets/new-message.svg";
 import moment from "moment";
 import "moment/locale/vi";
-import { sortBy } from "lodash";
+// import { sortBy } from "lodash";
 import clsx from "classnames";
 import { MsgCtx } from "../../../context/message/message";
 import { MessageBox } from "../../MessageBox/MessageBox";
 import ViewComfyRoundedIcon from "@mui/icons-material/ViewComfyRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
-import CancelRegistedDialog from "../OptionPost/CancelRegistedDialog";
 import EmptyIllustrations from "../../../assets/illustrations/library.svg";
+import { ConfirmDialog } from "../../Common/ConfirmDialog/ConfirmDialog";
+import { UserPost } from "../../../models/user-post";
+import { NotificationCtx } from "../../../context/notification/state";
 
 export default function RegisterContent(props: any) {
-  const { data, tab } = props;
+  const { data, tab, loading } = props;
   const classes = useStyles();
   const [openPostMenu, setOpenPostMenu] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [toggleItem, setToggleItem]: any = React.useState(false);
   const [listPost, setListPost]: any = React.useState(null);
   const { onOpenMsgBox, onCloseMsgBox } = React.useContext(MsgCtx);
+  const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
+
   const [itemClicked, setItemClicked]: any = React.useState(null);
   const [selectedOption, setSelectedOption] = React.useState("grid");
-  const [onClickOpenCancelRegisted, setOnClickOpenCancelRegisted] = React.useState(false);
+  const [openConfirmUnregister, setOpenConfirmUnregister] = React.useState(false);
+  const [loadingConfirm, setLoadingConfirm] = React.useState(false);
 
   const navigate = useNavigate();
   moment.locale("vi");
-  const onOpenMenu = (event: any) => {
+
+  const onOpenMenu = (event: any, item: any) => {
     setOpenPostMenu(true);
     setAnchorEl(event.currentTarget);
+    setItemClicked(item);
   };
+
   const onCloseMenu = () => {
     setOpenPostMenu(false);
     setAnchorEl(null);
@@ -53,10 +61,30 @@ export default function RegisterContent(props: any) {
     onOpenMsgBox();
   };
 
+  const onConfirmUnregister = async () => {
+    setLoadingConfirm(true);
+    const res = await UserPost.unregister({ postId: itemClicked?.postId });
+    if (res.status === 200) {
+      setNotificationSuccess("Đã huỷ đăng kí thành công");
+    } else {
+      setNotificationError("Đã có lỗi xảy ra");
+    }
+
+    const newListPost = listPost.filter((item: any) => item.postId !== itemClicked?.postId);
+    setListPost(newListPost);
+    setLoadingConfirm(false);
+    setOpenConfirmUnregister(false);
+    setItemClicked(null);
+    onCloseMenu();
+  };
+
+  const onCloseRemoveDialog = () => {
+    setOpenConfirmUnregister(false);
+  };
+
   React.useEffect(() => {
     if (data) {
-      const sortByDeadline = sortBy(data, (d: any) => d.postData.deadline);
-      setListPost(sortByDeadline);
+      setListPost(data);
     }
   }, [data]);
 
@@ -80,33 +108,32 @@ export default function RegisterContent(props: any) {
         return "Những bài đăng đã được hoàn thành";
     }
   };
+
   const gridView = () => {
     return map(listPost, (item: any, index: number) => (
       <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
         <Card className={classes.item}>
           <div className={classes.cardHeader}>
             <div className={classes.postTitle}>
-              <Tooltip title={item.postData.title}>
+              <Tooltip title={item.title}>
                 <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.postId)}>
-                  {item.postData.title}
+                  {item.title}
                 </Typography>
               </Tooltip>
               <div className={classes.dueDateAndNoti}>
                 <div className={classes.dueDate}>
                   <AccessTimeOutlinedIcon
                     sx={{
-                      color: isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow())
-                        ? "#d32f2f"
-                        : "#94a4c4",
+                      color: isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) ? "#d32f2f" : "#94a4c4",
                     }}
                   />
                   <Typography
                     variant="subtitle2"
                     className={clsx(
                       classes.deadline,
-                      isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow()) && classes.nearDeadline
+                      isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) && classes.nearDeadline
                     )}>
-                    Đến hạn cần giải quyết trong {moment(item.postData.deadline).endOf("hours").fromNow()}
+                    Đến hạn cần giải quyết trong {moment(item.deadline).endOf("hours").fromNow()}
                   </Typography>
                 </div>
               </div>
@@ -118,7 +145,7 @@ export default function RegisterContent(props: any) {
               <img src={NewMessageIcon} alt="" />
             </div>
             <div>
-              <MoreVertRoundedIcon onClick={onOpenMenu} />
+              <MoreVertRoundedIcon onClick={(e) => onOpenMenu(e, item)} />
             </div>
           </div>
           <div className={classes.cardContent}>
@@ -136,7 +163,7 @@ export default function RegisterContent(props: any) {
                 <Typography
                   variant="subtitle2"
                   sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5, ml: 0.5, minHeight: 54 }}>
-                  {toggleItem !== item.postId ? `${item.postData.content.slice(0, 100)}...` : item.postData.content}
+                  {toggleItem !== item.postId ? `${item.content.slice(0, 100)}...` : item.content}
                   <span
                     onClick={() => (toggleItem !== item.postId ? setToggleItem(item.postId) : setToggleItem(null))}
                     style={{
@@ -146,7 +173,7 @@ export default function RegisterContent(props: any) {
                       color: "#94a4c4",
                       cursor: "pointer",
                     }}>
-                    {item.postData.content.length > 100 && (toggleItem !== item.postId ? "Xem thêm" : "Thu gọn")}
+                    {item.content.length > 100 && (toggleItem !== item.postId ? "Xem thêm" : "Thu gọn")}
                   </span>
                 </Typography>
               </Box>
@@ -155,27 +182,25 @@ export default function RegisterContent(props: any) {
             <Divider />
             <div className={classes.userPostAvatarRegister}>
               <div className={classes.leftContent}>
-                <Avatar {...stringAvatar(item.userData.name)} className={classes.userAvatar} />
+                <Avatar {...stringAvatar(item.name)} className={classes.userAvatar} />
                 <div className={classes.usernameAndRank}>
                   <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 600, lineHeight: 1.5, ml: 0.5 }}>
-                    {item.userData.name}
+                    {item.name}
                   </Typography>
                   <div className={classes.rank}>
                     <Tooltip
                       title={
-                        item.userData.rankPoint === undefined
+                        item.rankPoint === undefined
                           ? `Người dùng chưa được đánh giá`
-                          : `${item.userData.rankPoint} sao trên ${item.userData.voteCount} lượt vote`
+                          : `${item.rankPoint} sao trên ${item.voteCount} lượt vote`
                       }>
-                      {item.userData.rankPoint > 0 ? (
+                      {item.rankPoint > 0 ? (
                         <StarRoundedIcon sx={{ color: "gold", width: 18 }} />
                       ) : (
                         <StarRoundedIcon sx={{ color: "#94a4c4", width: 18 }} />
                       )}
                     </Tooltip>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5 }}>
-                      {item.userData.rankPoint}
-                    </Typography>
+                    <Typography sx={{ fontSize: 12, fontWeight: 500, lineHeight: 1.5 }}>{item.rankPoint}</Typography>
                     <Tooltip title="Nhận được hỗ trợ thành công">
                       <LibraryAddCheckRoundedIcon sx={{ color: "green", width: 18, ml: 1 }} />
                     </Tooltip>
@@ -204,27 +229,25 @@ export default function RegisterContent(props: any) {
         <Card className={classes.item}>
           <div className={classes.cardHeader}>
             <div className={classes.postTitle}>
-              <Tooltip title={item.postData.title}>
+              <Tooltip title={item.title}>
                 <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.postId)}>
-                  {item.postData.title}
+                  {item.title}
                 </Typography>
               </Tooltip>
               <div className={classes.dueDateAndNoti}>
                 <div className={classes.dueDate}>
                   <AccessTimeOutlinedIcon
                     sx={{
-                      color: isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow())
-                        ? "#d32f2f"
-                        : "#94a4c4",
+                      color: isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) ? "#d32f2f" : "#94a4c4",
                     }}
                   />
                   <Typography
                     variant="subtitle2"
                     className={clsx(
                       classes.deadline,
-                      isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow()) && classes.nearDeadline
+                      isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) && classes.nearDeadline
                     )}>
-                    Đến hạn cần giải quyết trong {moment(item.postData.deadline).endOf("hours").fromNow()}
+                    Đến hạn cần giải quyết trong {moment(item.deadline).endOf("hours").fromNow()}
                   </Typography>
                 </div>
               </div>
@@ -236,7 +259,7 @@ export default function RegisterContent(props: any) {
               </div>
             )}
             <div>
-              <MoreVertRoundedIcon onClick={onOpenMenu} />
+              <MoreVertRoundedIcon onClick={(e) => onOpenMenu(e, item)} />
             </div>
           </div>
         </Card>
@@ -262,12 +285,39 @@ export default function RegisterContent(props: any) {
     );
   };
 
+  if (loading) {
+    return (
+      <Box sx={{ height: 400 }} display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+        <CircularProgress size={50} />
+        <Typography variant="subtitle1" sx={{ mt: 2, fontWeight: 500, lineHeight: "30px" }}>
+          Đang tải dữ liệu
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ mt: 2 }}>
-      {data?.length !== 0 && (
+      <ConfirmDialog
+        dialogTitle={
+          <Box>
+            <Typography variant="h6">Huỷ đăng kí hỗ trợ cho</Typography>
+            <Typography variant="subtitle1" sx={{ fontWeight: 500 }} noWrap>
+              {itemClicked?.title}
+            </Typography>
+          </Box>
+        }
+        dialogContent="Bạn có chắc chắn muốn huỷ đăng kí hỗ trợ vấn đề này nữa không?"
+        confirmAction={onConfirmUnregister}
+        cancelAction={onCloseRemoveDialog}
+        open={openConfirmUnregister}
+        loadingConfirm={loadingConfirm}
+        onClose={onCloseRemoveDialog}
+      />
+      {listPost?.length !== 0 && (
         <div className={classes.resultCountAndDisplayOption}>
           <Typography variant="subtitle1">
-            Đang hiển thị <b style={{ fontSize: "1.25rem", padding: "0 3px" }}>{data?.length}</b> yêu cầu đã đăng kí
+            Đang hiển thị <b style={{ fontSize: "1.25rem", padding: "0 3px" }}>{listPost?.length}</b> yêu cầu đã đăng kí
           </Typography>
           <div className={classes.options}>
             <Tooltip title={"Hiển thị dạng lưới"}>
@@ -288,7 +338,7 @@ export default function RegisterContent(props: any) {
         </div>
       )}
       <Grid container spacing={2} sx={{ mt: 1 }}>
-        {data?.length === 0 ? renderEmptyData() : selectedOption === "grid" ? gridView() : listView()}
+        {listPost?.length === 0 ? renderEmptyData() : selectedOption === "grid" ? gridView() : listView()}
         <Popover
           open={openPostMenu}
           anchorEl={anchorEl}
@@ -304,11 +354,8 @@ export default function RegisterContent(props: any) {
             <Typography
               variant="subtitle2"
               sx={{ py: 0.5, px: 2, width: "100%" }}
-              onClick={() => setOnClickOpenCancelRegisted(true)}>
+              onClick={() => setOpenConfirmUnregister(true)}>
               Huỷ đăng kí
-            </Typography>
-            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
-              Ghim bài đăng
             </Typography>
             <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
               Bái cáo bài đăng
@@ -316,15 +363,11 @@ export default function RegisterContent(props: any) {
           </Box>
         </Popover>
       </Grid>
-      <CancelRegistedDialog
-        open={onClickOpenCancelRegisted}
-        onClose={() => setOnClickOpenCancelRegisted(false)}></CancelRegistedDialog>
       <MessageBox
         onCloseMsgBox={onCloseMsgBox}
         postId={itemClicked?.id}
-        postTitle={itemClicked?.postData.title}
         userId={itemClicked?.userId}
-        userName={itemClicked?.userData.name}
+        userName={itemClicked?.name}
       />
     </Box>
   );

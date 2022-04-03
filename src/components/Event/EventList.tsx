@@ -33,7 +33,7 @@ import TabContext from "@mui/lab/TabContext";
 import demoImg6 from "../../assets/home_event_images/New folder/1.jpg";
 import { useNavigate } from "react-router-dom";
 import TabList from "@mui/lab/TabList";
-import DateRangePicker from "../DetailPage/DateRangePicker";
+import DateRangePicker from "../ListData/DateTimePicker/DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
 import checkDeadline from "../Common/CheckDeadline";
 

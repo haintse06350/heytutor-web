@@ -4,7 +4,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, TextField, MenuItem, Grid, InputAdornment, Popover, Typography, Paper } from "@mui/material";
-import DateRangePicker from "../DateRangePicker";
+import DateRangePicker from "../DateTimePicker/DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
 import { useStyles } from "./FilterAndSearch.style";
 
@@ -136,7 +136,7 @@ export default function FilterAndSearchMyRequest(props: any) {
                 ),
               }}
               id="outlined-basic"
-              placeholder="Search here..."
+              placeholder="Tìm kiếm yêu cầu..."
               variant="outlined"
             />
           </Box>

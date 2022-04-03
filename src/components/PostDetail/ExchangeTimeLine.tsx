@@ -7,8 +7,10 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-// import FilePresentRoundedIcon from "@mui/icons-material/FilePresentRounded";
+import FilePresentRoundedIcon from "@mui/icons-material/FilePresentRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import DownloadForOfflineOutlinedIcon from "@mui/icons-material/DownloadForOfflineOutlined";
 import { styled } from "@mui/material/styles";
 
 import {
@@ -23,8 +25,10 @@ import {
   TextField,
   DialogActions,
   Button,
+  Popover,
 } from "@mui/material";
 import { useStyles } from "./PostItem.style";
+import { NotificationCtx } from "../../context/notification/state";
 
 const DEMO_EXCHANGE_DATA = [
   {
@@ -39,18 +43,18 @@ const DEMO_EXCHANGE_DATA = [
     createdAt: "at 10/30/2021 03:21",
   },
   {
-    id: 1,
+    id: 2,
     userId: 2,
     postId: 2,
     conversationId: 1,
     title: "Đây mình gửi tài liệu cho câu 1 nhé",
-    attachFile: "https://www.drive.com/",
+    attachFile: null,
     isAccept: true,
     status: "close",
     createdAt: "at 10/30/2021 03:21",
   },
   {
-    id: 1,
+    id: 3,
     userId: 2,
     postId: 2,
     conversationId: 1,
@@ -61,12 +65,12 @@ const DEMO_EXCHANGE_DATA = [
     createdAt: "at 10/30/2021 03:21",
   },
   {
-    id: 1,
+    id: 4,
     userId: 2,
     postId: 2,
     conversationId: 1,
     title: "File doc câu 2",
-    attachFile: null,
+    attachFile: "https://www.drive.com/",
     isAccept: false,
     status: "open",
     createdAt: "at 10/30/2021 03:21",
@@ -82,6 +86,20 @@ export const ExchangeTimeLine = (props: any) => {
   const classes = useStyles();
   const [exchangeData, setExchangeData] = React.useState(DEMO_EXCHANGE_DATA);
   const [openAnswerDialog, setOpenAnswerDialog] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [updateItem, setUpdateItem]: any = React.useState();
+  const [isConfirmed, setIsConfirmed] = React.useState(false);
+  const [isRejected, setIsRejected] = React.useState(false);
+  const { setNotificationSuccess } = React.useContext(NotificationCtx);
+
+  const onClickQuestion = (event: React.MouseEvent<HTMLButtonElement>, item: number) => {
+    setUpdateItem(item);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const addExchange = () => {
     const exchange = {
@@ -105,6 +123,51 @@ export const ExchangeTimeLine = (props: any) => {
 
   const onCloseDialog = () => {
     setOpenAnswerDialog(false);
+  };
+
+  const onConfirm = () => {
+    setIsConfirmed(true);
+    setAnchorEl(null);
+    setNotificationSuccess("Đã xác nhận câu trả lời này");
+  };
+
+  const onSetIsRejected = () => {
+    setIsRejected(true);
+    setAnchorEl(null);
+    setNotificationSuccess("Đã từ trối câu trả lời này");
+  };
+
+  const open = Boolean(anchorEl);
+
+  const renderPopover = () => {
+    return (
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}>
+        <Box sx={{ p: 2 }} display="flex" flexDirection="column">
+          {updateItem?.attachFile && (
+            <Button color="info" startIcon={<DownloadForOfflineOutlinedIcon color="info" />} sx={{ p: 1 }}>
+              Download file
+            </Button>
+          )}
+          <Button
+            color="error"
+            startIcon={<HighlightOffRoundedIcon color="error" />}
+            sx={{ p: 1 }}
+            onClick={onSetIsRejected}>
+            Reject the answer
+          </Button>
+          <Button variant="contained" sx={{ p: 1, mt: 1.5 }} onClick={onConfirm}>
+            Confirm the answer
+          </Button>
+        </Box>
+      </Popover>
+    );
   };
 
   const renderUploadAnswerDialog = () => {
@@ -136,6 +199,7 @@ export const ExchangeTimeLine = (props: any) => {
 
   return (
     <>
+      {renderPopover()}
       {renderUploadAnswerDialog()}
       <Box className={classes.timeLineRoot}>
         <Timeline position="right">
@@ -153,8 +217,14 @@ export const ExchangeTimeLine = (props: any) => {
                   <Tooltip title="Upload câu trả lời">
                     <HelpOutlineRoundedIcon color="secondary" onClick={openUploadAnswerDialog} />
                   </Tooltip>
+                ) : updateItem?.id === item.id && isConfirmed ? (
+                  <CheckCircleOutlineRoundedIcon color="success" />
+                ) : item.attachFile ? (
+                  <FilePresentRoundedIcon onClick={(e: any) => onClickQuestion(e, item)} />
+                ) : updateItem?.id === item.id && isRejected ? (
+                  <HighlightOffRoundedIcon color="error" />
                 ) : (
-                  <HelpOutlineRoundedIcon color="secondary" />
+                  <HelpOutlineRoundedIcon color="secondary" onClick={(e: any) => onClickQuestion(e, item)} />
                 )}
                 <TimelineConnector />
               </TimelineSeparator>

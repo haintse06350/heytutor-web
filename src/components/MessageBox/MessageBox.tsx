@@ -12,12 +12,12 @@ import { map } from "lodash";
 import { UserCtx } from "../../context/user/state";
 
 export const MessageBox = (props: any) => {
-  const { postId, postTitle, userId, userName } = props;
+  const { postId, userId, userName } = props;
   const { openMsgBox, onOpenMsgBox, onCloseMsgBox, onMinimizeMsgBox, isMinimize } = React.useContext(MsgCtx);
   const [messages, setMessages]: any = React.useState(null);
   const { user } = React.useContext(UserCtx);
   const [msg, setMsg] = React.useState("");
-  console.log(postTitle);
+
   const classes = useStyles();
 
   const onChangeInput = (event: any) => {

@@ -251,7 +251,6 @@ const Dashboard = () => {
   // }, []);
 
   const renderContent = () => {
-    console.log(activeTab);
     switch (activeTab) {
       case "Import Data": {
         return renderImportDataUI();

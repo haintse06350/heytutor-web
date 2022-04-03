@@ -20,7 +20,7 @@ import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/PostDetail/PostItem";
 import ManagerUser from "./components/Dashboard/ManagerUser/ManagerUser";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
-import { DetailPage } from "./components/DetailPage";
+import { ListData } from "./components/ListData";
 import PostDetail from "./components/HomePage/PostDetail";
 import EventDetail from "./components/Event/EventDetail";
 import EventList from "./components/Event/EventList";
@@ -56,7 +56,7 @@ export default function AppRoutes() {
             path={"/my-request"}
             element={
               <RequireAuth>
-                <DetailPage />
+                <ListData />
               </RequireAuth>
             }
           />
@@ -64,7 +64,7 @@ export default function AppRoutes() {
             path={"/registered-request"}
             element={
               <RequireAuth>
-                <DetailPage />
+                <ListData />
               </RequireAuth>
             }
           />
