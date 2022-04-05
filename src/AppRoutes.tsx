@@ -18,12 +18,21 @@ import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/PostDetail/PostItem";
-import ManagerUser from "./components/Dashboard/ManagerUser/ManagerUser";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
 import { ListData } from "./components/ListData";
 import PostDetail from "./components/HomePage/PostDetail";
 import EventDetail from "./components/Event/EventDetail";
 import EventList from "./components/Event/EventList";
+import DashBoardLayout from "./components/Dashboard/DashBoardLayout";
+import ManagerUserDetail from "./components/Dashboard/ManagerUser/ManageUserDetail";
+import ManagePost from "./components/Dashboard/ManagePost/ManagePost";
+import ManagerUser from "./components/Dashboard/ManagerUser/ManagerUser";
+import ManagerCTV from "./components/Dashboard/ManagerCTV/ManagerCTV";
+import HomeManager from "./components/Dashboard/HomeDashBoard/HomeManager";
+import HomeManageCTV from "./components/Dashboard/HomeDashBoard/HomeManageCTV";
+import ManageEvent from "./components/Dashboard/ManagerEvent/ManageEvent";
+import ManagerProfileUser from "./components/Dashboard/ManagerUser/ManagerProfileUser";
+
 export default function AppRoutes() {
   const { user }: any = React.useContext(UserCtx);
 
@@ -160,11 +169,67 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path={"/manager-user"}
+            path={"/dashboard/manage-user"}
             element={
-              <RequireAuth>
+              <DashBoardLayout>
                 <ManagerUser />
-              </RequireAuth>
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/manage-user/detail"}
+            element={
+              <DashBoardLayout>
+                <ManagerUserDetail />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/manage-post"}
+            element={
+              <DashBoardLayout>
+                <ManagePost />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/manage-ctv"}
+            element={
+              <DashBoardLayout>
+                <ManagerCTV />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/home-ctv"}
+            element={
+              <DashBoardLayout>
+                <HomeManageCTV />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/home-manager"}
+            element={
+              <DashBoardLayout>
+                <HomeManager />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/manage-event"}
+            element={
+              <DashBoardLayout>
+                <ManageEvent />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/manage-user/profile"}
+            element={
+              <DashBoardLayout>
+                <ManagerProfileUser />
+              </DashBoardLayout>
             }
           />
         </Routes>

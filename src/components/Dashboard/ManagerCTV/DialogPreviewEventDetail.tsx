@@ -28,7 +28,8 @@ const DialogPreviewEventDetail = (props: any) => {
       onClose={handleClose}
       scroll={scroll}
       aria-labelledby="scroll-dialog-title"
-      aria-describedby="scroll-dialog-description">
+      aria-describedby="scroll-dialog-description"
+      maxWidth="md">
       <DialogTitle id="scroll-dialog-title">Title name</DialogTitle>
       <DialogContent dividers={scroll === "paper"}>
         <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1}>

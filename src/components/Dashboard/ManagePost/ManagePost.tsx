@@ -271,6 +271,7 @@ const ManagePost = () => {
             borderColor: "divider",
             alignItem: "center",
             justifyContent: "center",
+            overflow: "unset !important",
           }}>
           {listTask.map((task, index) => (
             <Tab key={index} icon={renderIcon(index)} {...a11yProps(index)} sx={{ display: "block" }}></Tab>

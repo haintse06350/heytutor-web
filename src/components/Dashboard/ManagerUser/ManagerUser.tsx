@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStyles } from "./ManagerUser.style";
+import { useNavigate } from "react-router-dom";
 
 import {
   TableCell,
@@ -17,17 +18,27 @@ import {
   TextField,
   MenuItem,
   InputAdornment,
-  Divider,
+  IconButton,
+  Grid,
+  Popover,
 } from "@mui/material";
-// import DialogAddCTV from "../ManagerCTV/DialogAddCTV";
+
+import DateRangePicker from "../../DetailPage/DateRangePicker";
+import { DateRange } from "@mui/lab/DateRangePicker";
 // icon
 import SearchIcon from "@mui/icons-material/Search";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import BlockIcon from "@mui/icons-material/Block";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 import StarIcon from "@mui/icons-material/Star";
+import DialogManagerUser from "./DialogManageUser";
+// import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 export const ManagerUser = () => {
   const classes = useStyles();
-  // const [openDialog, setOpenDialog] = useState(false);
+  const navigate = useNavigate();
+  const [openDatePicker, setOpenDatePicker] = useState(false);
+  const [filters, setFilters]: any = useState({ status: "joined" });
+  const [sortBy, setSortBy]: any = useState("deadlineTime");
+  const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
+  const [dataPick, setDataPick] = useState(null);
   function createData(
     id: number,
     name: string,
@@ -38,7 +49,8 @@ export const ManagerUser = () => {
     nbOfRequested: number,
     nbOfReport: number,
     ratePoint: number,
-    status: number
+    nbOfRate: number,
+    status: Array<string>
   ) {
     return {
       id,
@@ -50,6 +62,7 @@ export const ManagerUser = () => {
       nbOfRequested,
       nbOfReport,
       ratePoint,
+      nbOfRate,
       status,
     };
   }
@@ -65,7 +78,8 @@ export const ManagerUser = () => {
       4,
       1,
       4.7,
-      1
+      120,
+      ["Hoạt động"]
     ),
     createData(
       2,
@@ -77,7 +91,8 @@ export const ManagerUser = () => {
       4,
       0,
       4,
-      1
+      120,
+      ["Hạn chế đăng bài 3 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
     createData(
       3,
@@ -89,7 +104,8 @@ export const ManagerUser = () => {
       4,
       0,
       4.7,
-      2
+      120,
+      ["Hạn chế đăng bài 3 ngày", "Hạn chế đăng kí 7 ngày"]
     ),
     createData(
       4,
@@ -101,7 +117,8 @@ export const ManagerUser = () => {
       4,
       0,
       3.7,
-      1
+      120,
+      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
     createData(
       5,
@@ -113,7 +130,8 @@ export const ManagerUser = () => {
       4,
       0,
       2.7,
-      2
+      120,
+      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
     createData(
       6,
@@ -125,7 +143,8 @@ export const ManagerUser = () => {
       4,
       0,
       1.7,
-      2
+      120,
+      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
     createData(
       7,
@@ -137,7 +156,8 @@ export const ManagerUser = () => {
       4,
       0,
       1.7,
-      1
+      120,
+      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
     createData(
       8,
@@ -149,7 +169,8 @@ export const ManagerUser = () => {
       4,
       0,
       1.7,
-      1
+      120,
+      ["Hạn chế đăng bài 3 ngày", "Hạn chế đăng kí 7 ngày"]
     ),
     createData(
       9,
@@ -161,7 +182,8 @@ export const ManagerUser = () => {
       4,
       0,
       1.7,
-      1
+      120,
+      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
     createData(
       10,
@@ -173,7 +195,8 @@ export const ManagerUser = () => {
       4,
       0,
       1.7,
-      1
+      120,
+      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
     createData(
       11,
@@ -185,11 +208,12 @@ export const ManagerUser = () => {
       4,
       0,
       1.7,
-      1
+      120,
+      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
     ),
   ];
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -199,91 +223,181 @@ export const ManagerUser = () => {
     setPage(0);
   };
 
+  const renderStatus = (status: any) => {
+    return status.map((item: any) => (
+      <Box key={item} sx={{ mt: 1 }}>
+        <Chip
+          label={item}
+          variant="outlined"
+          sx={{
+            color:
+              item === "Hoạt động"
+                ? "#00AB55"
+                : item === "Hạn chế đăng bài 1 ngày" ||
+                  item === "Hạn chế đăng bài 3 ngày" ||
+                  item === "Hạn chế đăng bài 7 ngày"
+                ? "#ff3a16"
+                : "#5ab4ec",
+          }}
+        />
+      </Box>
+    ));
+  };
+  const renderTime = (status: any) => {
+    return status.map((item: any) => (
+      <Typography key={item}>{item !== "Hoạt động" ? "Còn 1 ngày" : "Thanh niên nghiêm túc"}</Typography>
+    ));
+  };
+
+  const handleLink = (props: any) => {
+    navigate(`/dashboard/manage-user/${props}`);
+  };
+  const [openDialogManageUser, setOpenDialogManageUser] = useState(false);
+  const closeDialog = () => {
+    setOpenDialogManageUser(false);
+  };
+  const handleDialogManageUser = (row: any) => {
+    setOpenDialogManageUser(true);
+    setDataPick(row);
+  };
+
+  const onCloseDatePicker = () => {
+    setOpenDatePicker(false);
+    // setFinishPickDate(true);
+  };
+  const onChangeFilter = (event: any, type: string) => {
+    if (type === "status") {
+      // setPostStatus(event.target.value);
+    }
+    if (type === "hashtag") {
+      if (event.length === 0) {
+        delete filters["hashtag"];
+        setFilters({ ...filters });
+      } else {
+        const newFilter = {
+          hashtag: event,
+        };
+        setFilters({ ...filters, ...newFilter });
+      }
+    } else if (type === "time") {
+      if (event.target.value === "Chọn ngày") {
+        delete filters["time"];
+        setOpenDatePicker(true);
+      } else {
+        const newFilter = {
+          time: event.target.value,
+        };
+        setFilters({ ...filters, ...newFilter });
+      }
+    } else {
+      const newFilter = {
+        status: event.target.value,
+      };
+      setFilters({ ...filters, ...newFilter });
+    }
+  };
+  const timeOpts = [
+    { value: "Tuần này", label: "Tuần này" },
+    { value: "Tháng này", label: "Tháng này" },
+    { value: "Chọn ngày", label: "Chọn ngày" },
+  ];
+
+  const sortOpts = [
+    { value: "deadlineTime", label: "Thời gian của vấn đề" },
+    { value: "reviewsPoint", label: "Xếp hạng đánh giá" },
+    { value: "isNotResolve", label: "Chưa xử lí" },
+  ];
   return (
     <div className={classes.wrapTableManager}>
       <Box sx={{ mb: 2 }}>
         <Box sx={{ display: "flex" }}>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-search"
-              label="Tìm kiếm"
-              sx={{ backgroundColor: "white" }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              variant="outlined"
-            />
-          </Box>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-status"
-              select
-              label="Trạng thái"
-              defaultValue={1}
-              sx={{ backgroundColor: "white" }}>
-              <MenuItem value={1}>Tất cả</MenuItem>
-              <MenuItem value={2}>Có hiệu lực</MenuItem>
-              <MenuItem value={3}>Đã khóa</MenuItem>
-            </TextField>
-          </Box>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-event"
-              select
-              label="Sự kiện tham gia"
-              defaultValue={1}
-              sx={{ backgroundColor: "white", minWidth: "150px" }}>
-              <MenuItem value={1}>Tăng dần</MenuItem>
-              <MenuItem value={2}>Giảm dần</MenuItem>
-            </TextField>
-          </Box>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-user"
-              select
-              label="Đã đăng"
-              defaultValue={1}
-              sx={{ backgroundColor: "white", minWidth: "150px" }}>
-              <MenuItem value={1}>Đăng kí tăng dần</MenuItem>
-              <MenuItem value={2}>Đăng kí giảm dần</MenuItem>
-              <MenuItem value={3}>Bị báo cáo tăng dần</MenuItem>
-              <MenuItem value={4}>Bị báo cáo giảm dần</MenuItem>
-            </TextField>
-          </Box>
+          <Grid container item xs={12} spacing={1} sx={{ mt: 2, width: "100%" }}>
+            <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  autoFocus
+                  classes={{ root: classes.textField }}
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  id="outlined-basic"
+                  placeholder="Tìm kiếm..."
+                  variant="outlined"
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  fullWidth
+                  classes={{ root: classes.textField }}
+                  id="outlined-select-currency"
+                  select
+                  label="Hiển thị theo"
+                  defaultValue="Tuần này"
+                  value={filters.time}
+                  onChange={(e: any) => onChangeFilter(e, "time")}>
+                  {timeOpts.map((option: any) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+              <Popover
+                open={openDatePicker}
+                onClose={onCloseDatePicker}
+                anchorOrigin={{ vertical: "center", horizontal: "center" }}
+                transformOrigin={{ vertical: "center", horizontal: "center" }}>
+                <DateRangePicker setValue={setDateData} value={dateData} />
+              </Popover>
+            </Grid>
+            <Grid item xs={4} md={3} sx={{ minWidth: "20%" }}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  fullWidth
+                  classes={{ root: classes.textField }}
+                  id="outlined-select-currency"
+                  select
+                  label="Sắp xếp"
+                  defaultValue="Thời gian của vấn đề"
+                  value={sortBy}
+                  onChange={(e: any) => setSortBy(e.target.value)}>
+                  {sortOpts.map((option: any) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+              <Popover
+                open={openDatePicker}
+                onClose={onCloseDatePicker}
+                anchorOrigin={{ vertical: "center", horizontal: "center" }}
+                transformOrigin={{ vertical: "center", horizontal: "center" }}>
+                <DateRangePicker setValue={setDateData} value={dateData} />
+              </Popover>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
       <TableContainer component={Paper}>
-        <Typography variant="h6">Thống kê đang diễn ra</Typography>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
               <TableCell>Tên</TableCell>
-              <TableCell>Sự kiện</TableCell>
-              <TableCell>Vấn đề</TableCell>
-              <TableCell>Hỗ trợ vấn đề</TableCell>
-              <TableCell>Bị báo cáo</TableCell>
-              <TableCell>
-                <Box>Điểm đánh giá</Box>
-
-                <Box sx={{ display: "flex" }}>
-                  <Typography variant="subtitle2" sx={{ color: "#5ab4ec" }}>
-                    Cần hỗ trợ
-                  </Typography>
-
-                  <Divider orientation="vertical" flexItem sx={{ mr: 1, ml: 1 }} />
-
-                  <Typography variant="subtitle2" sx={{ color: "#b244ee" }}>
-                    Đi hỗ trợ
-                  </Typography>
-                </Box>
-              </TableCell>
+              <TableCell>Báo cáo xấu</TableCell>
+              <TableCell>Đánh giá hỗ trợ</TableCell>
+              <TableCell>Đánh giá yêu cầu hỗ trợ</TableCell>
               <TableCell>Trạng thái</TableCell>
-              <TableCell>Hành động</TableCell>
+              <TableCell>Thời gian hiệu lực</TableCell>
+              <TableCell>Quản lí</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -293,44 +407,42 @@ export const ManagerUser = () => {
                   {row.id}
                 </TableCell>
                 <TableCell>
-                  <Typography variant="subtitle1">{row.name}</Typography>
+                  <Typography variant="subtitle1" className={classes.nameUser} onClick={() => handleLink("profile")}>
+                    {row.name}
+                  </Typography>
                   <Typography variant="subtitle2">{row.gmail}</Typography>
                 </TableCell>
-                <TableCell>{row.nbOfEventJoined + Math.floor(Math.random() * 10) + 1}</TableCell>
-                <TableCell>{row.nbOfRegisted + Math.floor(Math.random() * 10) + 1}</TableCell>
-                <TableCell>{row.nbOfRequested + Math.floor(Math.random() * 10) + 1}</TableCell>
                 <TableCell>
-                  <Typography variant="subtitle2">
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ textDecoration: "underline", cursor: "pointer" }}
+                    onClick={() => handleLink("detail")}>
                     Chưa giải quyết:{row.nbOfReport + Math.floor(Math.random() * 10) + 1}/
                     {row.nbOfReport + Math.floor(Math.random() * 10) + 2}
                   </Typography>
+                  Thuộc 4 sự kiện
                 </TableCell>
-                <TableCell sx={{ display: "flex", alignItem: "center", justifyContent: "center" }}>
-                  <Typography sx={{ color: "#5ab4ec" }}>
-                    {row.ratePoint} <StarIcon />
-                  </Typography>
-                  <Typography sx={{ color: "#b244ee" }}>
-                    {" "}
-                    {row.ratePoint}
-                    <StarIcon />
-                  </Typography>
+                <TableCell sx={{ color: "#5ab4ec" }}>
+                  {row.ratePoint} <StarIcon color="warning" /> {" / (" + row.nbOfRate + " lượt)"}
                 </TableCell>
-                <TableCell sx={{ color: row.status === 1 ? "green" : "red" }}>
-                  {row.status === 1 ? (
-                    <Chip label="Có hiệu lực" variant="outlined" color="primary" />
-                  ) : (
-                    <Chip label="Bị khóa" variant="outlined" color="error" />
-                  )}
+                <TableCell sx={{ color: "#ff3a16" }}>
+                  {row.ratePoint} <StarIcon color="warning" /> {" / (" + row.nbOfRate + " lượt)"}
                 </TableCell>
-
+                <TableCell>
+                  {/* render status */}
+                  {renderStatus(row.status)}
+                </TableCell>
+                <TableCell>{renderTime(row.status)}</TableCell>
                 <TableCell className={classes.iconMoreHoriz}>
-                  <Tooltip title="Xem chi tiết">
-                    <VisibilityIcon color="primary" />
+                  <Tooltip title="Quản lí trạng thái">
+                    <IconButton aria-label="Xem chi tiết" onClick={() => handleDialogManageUser(row)}>
+                      <BorderColorIcon color="error" />
+                    </IconButton>
                   </Tooltip>
-                  <BlockIcon color="error" />
                 </TableCell>
               </TableRow>
             ))}
+            <DialogManagerUser open={openDialogManageUser} closeDialog={closeDialog} data={dataPick} />;
           </TableBody>
         </Table>
         <TablePagination
