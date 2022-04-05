@@ -37,7 +37,7 @@ const HomePage = () => {
             <Typography variant="h4">Xin chào, chào mừng bạn đã quay trở lại</Typography>
           </Box>
           <Grid container spacing={3}>
-            <Grid container spacing={2} item xs={12} md={3.7} lg={3.7} sx={{ height: "fit-content" }}>
+            <Grid container item spacing={2} xs={12} md={3.7} lg={3.7} sx={{ height: "fit-content" }}>
               <Grid item xs={12} sm={12}>
                 <MyPost data={data?.myRequestStats} />
               </Grid>

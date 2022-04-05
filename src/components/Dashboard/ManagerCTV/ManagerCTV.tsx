@@ -164,7 +164,7 @@ const ManagerCTV = () => {
 
   const renderDialog = () => {
     return (
-      <Dialog onClose={onCloseDialog} open={openDialog}>
+      <Dialog open={openDialog} onClose={onCloseDialog}>
         <DialogTitle>Thêm cộng tác viên</DialogTitle>
         <DialogContent>
           <Container maxWidth="xs">
@@ -380,7 +380,6 @@ const ManagerCTV = () => {
                         <Tooltip title="Xem chi tiết">
                           <VisibilityIcon color="primary" />
                         </Tooltip>
-                        <DialogDetailCTV open={openDialogViewDetail} onClose={closeDialogViewDetail} />
                       </IconButton>
 
                       {/* Trao đổi với CTV */}
@@ -394,11 +393,12 @@ const ManagerCTV = () => {
                       <Button endIcon={<EditIcon />} onClick={handleOpenEdit}>
                         Chỉnh sửa
                       </Button>
-                      <DialogEditManageCTV open={openDialogEdit} onClose={closeDialogEdit} />
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
+              <DialogDetailCTV open={openDialogViewDetail} onClose={closeDialogViewDetail} />
+              <DialogEditManageCTV open={openDialogEdit} onClose={closeDialogEdit} />
             </Table>
           </TableContainer>
           <TablePagination

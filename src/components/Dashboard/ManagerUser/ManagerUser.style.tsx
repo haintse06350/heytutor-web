@@ -31,4 +31,18 @@ export const useStyles = makeStyles(() => ({
     },
   },
   fillterFeedBack: {},
+  nameUser: {
+    textDecoration: "underline",
+    cursor: "pointer",
+  },
+  textField: {
+    "& > div": {
+      background: "#fff",
+    },
+  },
+  eventTitle: {
+    textDecoration: "underline",
+
+    cursor: "pointer",
+  },
 }));

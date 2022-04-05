@@ -46,7 +46,7 @@ import ManagerUser from "./ManagerUser/ManagerUser";
 import PeopleIcon from "@mui/icons-material/People";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import HomeIcon from "@mui/icons-material/Home";
-import ManagePost from "./ManagePost/MangePost";
+import ManagePost from "./ManagePost/ManagePost";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { stringAvatar } from "../UserProfile/helper";
 import HomeManageCTV from "./HomeDashBoard/HomeManageCTV";
@@ -218,10 +218,6 @@ const Dashboard = () => {
   //   );
   // };
 
-  useEffect(() => {
-    getStudentData();
-  }, []);
-
   // useEffect(() => {
   //   const timer = setInterval(() => {
   //     setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 0.1));
@@ -344,6 +340,9 @@ const Dashboard = () => {
     setNameTab(nameTabString);
   };
 
+  useEffect(() => {
+    getStudentData();
+  }, []);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -443,7 +442,8 @@ const Dashboard = () => {
               <ListItem
                 button
                 sx={{ pl: 4 }}
-                onClick={(e) => handleClickChangeTab("manager-ctv", "Quản lí cộng tác viên")}>
+                onClick={(e) => handleClickChangeTab("manager-ctv", "Quản lí cộng tác viên")}
+                className={filterName === "manager-ctv" && classes.active}>
                 <ListItemIcon>
                   <PeopleAltIcon />
                 </ListItemIcon>
@@ -452,11 +452,12 @@ const Dashboard = () => {
               <ListItem
                 button
                 sx={{ pl: 4 }}
-                onClick={(e) => handleClickChangeTab("manager-user", "Quản lí người dùng hệ thống")}>
+                onClick={(e) => handleClickChangeTab("manager-user", "Quản lí người dùng hệ thống")}
+                className={filterName === "manager-user" && classes.active}>
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Quản lí người dùng " />
+                <ListItemText primary="Quản lí người dùng hệ thống" />
               </ListItem>
             </List>
           </Collapse>
