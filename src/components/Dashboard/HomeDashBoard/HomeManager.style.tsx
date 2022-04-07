@@ -60,4 +60,15 @@ export const useStyles = makeStyles(() => ({
     display: "flex",
     alignItems: "center",
   },
+  imageCup: {
+    width: "50px",
+    height: "50px",
+  },
+  timeLine: {},
+  infoHome: {
+    "& > img": {
+      width: "30px",
+      height: "auto",
+    },
+  },
 }));

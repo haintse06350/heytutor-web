@@ -70,7 +70,7 @@ const ManageUserDetail = (props: any) => {
       <TabPanel value={value} index={0}>
         <Box>
           <Grid container>
-            <Grid item xs={12} md={4} lg={4}>
+            <Grid item xs={12} md={6} lg={6}>
               <Card sx={{ p: 2 }}>
                 <Typography variant="h6">Người báo cáo xấu</Typography>
                 <Grid container>
@@ -106,7 +106,10 @@ const ManageUserDetail = (props: any) => {
                   <Typography variant="subtitle1">28/4/2022</Typography>
                 </Box>
                 <Typography variant="subtitle1">Lí do báo cáo xấu :</Typography>
-                <Chip label="Lừa đảo" />
+                <Box sx={{ display: "flex" }}>
+                  <Chip label="Giả mạo" />
+                  <Chip label="Lừa đảo" />
+                </Box>
 
                 <Typography variant="subtitle1">Nội dung báo cáo xấu : </Typography>
                 <Typography>

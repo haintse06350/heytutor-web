@@ -304,8 +304,9 @@ export const ManagerUser = () => {
 
   const sortOpts = [
     { value: "deadlineTime", label: "Thời gian của vấn đề" },
-    { value: "reviewsPoint", label: "Xếp hạng đánh giá" },
-    { value: "isNotResolve", label: "Chưa xử lí" },
+    { value: "reviewRegisterPoint", label: "Xếp hạng yêu cầu hỗ trợ" },
+    { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
+    { value: "isNotResolve", label: "Chưa giải quyết" },
   ];
   return (
     <div className={classes.wrapTableManager}>
