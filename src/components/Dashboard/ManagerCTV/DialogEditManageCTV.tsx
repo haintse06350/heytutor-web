@@ -10,7 +10,6 @@ const DialogEditManageCTV = (props: any) => {
         <Typography>Tên: Cao Duc Anh</Typography>
         <Typography>Gmail: anhcd1@gmail.com</Typography>
         <Typography>Thêm bởi: anhcdh4</Typography>
-        <Typography>Thêm bởi: anhcdh4</Typography>
         <Typography>Trạng thái: Có hiệu lực</Typography>
       </DialogContent>
     </Dialog>

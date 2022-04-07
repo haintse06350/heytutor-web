@@ -23,7 +23,7 @@ import {
   Popover,
 } from "@mui/material";
 
-import DateRangePicker from "../../DetailPage/DateRangePicker";
+import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
 // icon
 import SearchIcon from "@mui/icons-material/Search";
@@ -407,15 +407,17 @@ export const ManagerUser = () => {
                   {row.id}
                 </TableCell>
                 <TableCell>
-                  <Typography variant="subtitle1" className={classes.nameUser} onClick={() => handleLink("profile")}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
                     {row.name}
                   </Typography>
-                  <Typography variant="subtitle2">{row.gmail}</Typography>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 400 }}>
+                    {row.gmail}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography
                     variant="subtitle1"
-                    sx={{ textDecoration: "underline", cursor: "pointer" }}
+                    sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
                     onClick={() => handleLink("detail")}>
                     Chưa giải quyết:{row.nbOfReport + Math.floor(Math.random() * 10) + 1}/
                     {row.nbOfReport + Math.floor(Math.random() * 10) + 2}
