@@ -51,7 +51,7 @@ const DialogManagerUser = (props: any) => {
   };
 
   return (
-    <Dialog open={open} onClose={closeDialog} maxWidth="lg" fullWidth>
+    <Dialog open={open} onClose={closeDialog} maxWidth="md" fullWidth>
       <Box sx={{ p: 2 }}>
         <DialogTitle>Quản lí</DialogTitle>
         {/* xu li */}

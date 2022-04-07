@@ -8,7 +8,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import img1 from "../../../assets/home_event_images/14.png";
+import img1 from "../../../../assets/home_event_images/14.png";
 
 const DialogPreviewEventDetail = (props: any) => {
   const { open, handleClose, scroll } = props;
@@ -34,6 +34,7 @@ const DialogPreviewEventDetail = (props: any) => {
       <DialogContent dividers={scroll === "paper"}>
         <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1}>
           <img src={img1} alt="img1" />
+          <Typography variant="subtitle1">Thời gian từ 24/3/2022 đến 4/5/2022</Typography>
           <Typography variant="h5"> Để có một cuối kỳ thật hoàn hảo với PRJ </Typography>
           <Typography variant="body1">
             Một môn học hoàn hảo là sau thi PE phải PASSED. Tham gia ngay để có một kỳ thật hoàn hảo với SSG102 nào.

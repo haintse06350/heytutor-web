@@ -30,8 +30,10 @@ import ManagerUser from "./components/Dashboard/ManagerUser/ManagerUser";
 import ManagerCTV from "./components/Dashboard/ManagerCTV/ManagerCTV";
 import HomeManager from "./components/Dashboard/HomeDashBoard/HomeManager";
 import HomeManageCTV from "./components/Dashboard/HomeDashBoard/HomeManageCTV";
-import ManageEvent from "./components/Dashboard/ManagerEvent/ManageEvent";
-import ManagerProfileUser from "./components/Dashboard/ManagerUser/ManagerProfileUser";
+import ManageEvent from "./components/Dashboard/ManagerEvent/Admin/ManageEvent";
+// import ManagerProfileUser from "./components/Dashboard/ManagerUser/ManagerProfileUser";
+import ManagerDetailCTV from "./components/Dashboard/ManagerCTV/ManagerDetailCTV";
+import ManagerEventDetail from "./components/Dashboard/ManagerEvent/Admin/ManageEventDetail";
 
 export default function AppRoutes() {
   const { user }: any = React.useContext(UserCtx);
@@ -217,18 +219,27 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path={"/dashboard/manage-event"}
+            path={"/dashboard/admin/manage-event"}
             element={
               <DashBoardLayout>
                 <ManageEvent />
               </DashBoardLayout>
             }
           />
+
           <Route
-            path={"/dashboard/manage-user/profile"}
+            path={"/dashboard/manage-ctv/profile"}
             element={
               <DashBoardLayout>
-                <ManagerProfileUser />
+                <ManagerDetailCTV />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/admin/manage-event/detail"}
+            element={
+              <DashBoardLayout>
+                <ManagerEventDetail />
               </DashBoardLayout>
             }
           />

@@ -119,7 +119,7 @@ const DashBoardLayout = ({ children }: any) => {
         return "Quản lí cộng tác viên";
       case "/dashboard/manage-post":
         return "Quản lí bài đăng";
-      case "/dashboard/manage-event":
+      case "/dashboard/admin/manage-event":
         return "Quản lí sự kiện";
       default:
         return "";
@@ -230,7 +230,7 @@ const DashBoardLayout = ({ children }: any) => {
           </ListItem>
           <ListItem
             button
-            onClick={() => handleChangePage("manage-event")}
+            onClick={() => handleChangePage("admin/manage-event")}
             className={renderTabCurrent() === "manage-event" ? classes.active : ""}>
             <ListItemIcon>
               <EventIcon />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStyles } from "./ManagerCTV.style";
 import {
   Grid,
@@ -13,7 +13,7 @@ import {
   IconButton,
   Tooltip,
   Typography,
-  Avatar,
+  // Avatar,
   TextField,
   InputAdornment,
   MenuItem,
@@ -26,24 +26,29 @@ import {
   Container,
   DialogActions,
   Autocomplete,
+  Popover,
 } from "@mui/material";
 // icon
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import ChatIcon from "@mui/icons-material/Chat";
+// import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 // help
-import { stringAvatar } from "../../UserProfile/helper";
+
+// import { stringAvatar } from "../../UserProfile/helper";
 // component
-import DialogDetailCTV from "./DialogDetailCTV";
+
 import DialogEditManageCTV from "./DialogEditManageCTV";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { NotificationCtx } from "../../../context/notification/state";
-
+import { useNavigate } from "react-router-dom";
+import { DateRange } from "@mui/lab/DateRangePicker";
+import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
 const ManagerCTV = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   function createData(
     id: number,
     name: string,
@@ -59,26 +64,30 @@ const ManagerCTV = () => {
 
   const data = [
     createData(1, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(2, "Cao Duc Anh", "anhcd5@gmail.com", 2, 2, 2, "anhcdh4", 2),
+    createData(2, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2),
     createData(3, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1),
     createData(4, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(5, "Nguyen DN Long", "longndn1@gmail.com", 2, 2, 2, "anhcdh4", 2),
+    createData(5, "Nguyen DN Long", "longndn1@gmail.com", 0, 2, 2, "anhcdh4", 2),
     createData(6, "Nguyen DN Long", "longndn1@gmail.com", 2, 2, 2, "anhcdh4", 2),
     createData(7, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1),
     createData(8, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(9, "Cao Duc Anh", "anhcd5@gmail.com", 2, 2, 2, "anhcdh4", 2),
+    createData(9, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2),
     createData(10, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1),
     createData(11, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(12, "Cao Duc Anh", "anhcd5@gmail.com", 2, 2, 2, "anhcdh4", 2),
+    createData(12, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2),
     createData(13, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1),
     createData(14, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(15, "Nguyen DN Long", "longndn1@gmail.com", 2, 2, 2, "anhcdh4", 2),
+    createData(15, "Nguyen DN Long", "longndn1@gmail.com", 0, 2, 2, "anhcdh4", 2),
   ];
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openDialog, setOpenDialog] = React.useState(false);
   const { setNotificationError } = React.useContext(NotificationCtx);
-
+  const [openDatePicker, setOpenDatePicker] = useState(false);
+  // const [filters, setFilters]: any = useState({ status: "joined" });
+  const [sortBy, setSortBy]: any = useState("deadlineTime");
+  const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
+  // const [dataPick, setDataPick] = useState(null);
   const roleProps = {
     options: [
       { id: 1, title: "CTV1" },
@@ -107,14 +116,6 @@ const ManagerCTV = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const [openDialogViewDetail, setOpenDialogViewDetail] = React.useState(false);
-  const handleOpenViewDetail = () => {
-    setOpenDialogViewDetail(true);
-  };
-
-  const closeDialogViewDetail = () => {
-    setOpenDialogViewDetail(false);
-  };
 
   const [openDialogEdit, setOpenDialogEdit] = React.useState(false);
   const handleOpenEdit = () => {
@@ -127,6 +128,15 @@ const ManagerCTV = () => {
   const onCloseDialog = () => {
     setOpenDialog(false);
   };
+
+  const handleChangeTab = (path: string, id: number) => {
+    navigate(`/dashboard/manage-ctv/${path}?id=${id}`);
+  };
+
+  const sortOpts = [
+    { value: "currentManager", label: "Sự kiện đang quản lí" },
+    { value: "pendingManager", label: "Sự kiện chờ phê duyệt" },
+  ];
 
   const formik = useFormik({
     initialValues: {
@@ -161,7 +171,10 @@ const ManagerCTV = () => {
     }
     console.log("on submit");
   };
-
+  const onCloseDatePicker = () => {
+    setOpenDatePicker(false);
+    // setFinishPickDate(true);
+  };
   const renderDialog = () => {
     return (
       <Dialog open={openDialog} onClose={onCloseDialog}>
@@ -232,81 +245,65 @@ const ManagerCTV = () => {
     <div className={classes.root}>
       {renderDialog()}
       <Box sx={{ mb: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            startIcon={<AddCircleOutlineRoundedIcon />}
+            variant="contained"
+            color="primary"
+            // onClick={() => setOpenDialog(true)}
+          >
+            Add user
+          </Button>
+        </Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-search"
-              label="Tìm kiếm"
-              sx={{ backgroundColor: "white" }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              variant="outlined"
-            />
-          </Box>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-status"
-              select
-              label="Trạng thái"
-              defaultValue={1}
-              sx={{ backgroundColor: "white" }}>
-              <MenuItem value={1}>Tất cả</MenuItem>
-              <MenuItem value={2}>Có hiệu lực</MenuItem>
-              <MenuItem value={3}>Đã khóa</MenuItem>
-            </TextField>
-          </Box>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-event"
-              select
-              label="Sự kiện"
-              defaultValue={1}
-              sx={{ backgroundColor: "white", minWidth: "150px" }}>
-              <MenuItem value={1}>Đang quản lí tăng dần</MenuItem>
-              <MenuItem value={2}>Đang quản lí giảm dần</MenuItem>
-              <MenuItem value={3}>Tạo mới tăng dần</MenuItem>
-              <MenuItem value={4}>Tạo mới giảm dần</MenuItem>
-            </TextField>
-          </Box>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-user"
-              select
-              label="Người dùng"
-              defaultValue={1}
-              sx={{ backgroundColor: "white", minWidth: "150px" }}>
-              <MenuItem value={1}>Người dùng bị báo cáo tăng dần</MenuItem>
-              <MenuItem value={2}>Người dùng bị báo cáo giảm dần</MenuItem>
-              <MenuItem value={3}>Bài đăng báo cáo tăng dần</MenuItem>
-              <MenuItem value={4}>Bài đăng báo cáo giảm dần</MenuItem>
-            </TextField>
-          </Box>
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              id="outlined-view"
-              select
-              label="Hiển thị"
-              defaultValue={1}
-              sx={{ backgroundColor: "white", minWidth: "150px" }}>
-              <MenuItem value={1}>Thông số sự kiện</MenuItem>
-              <MenuItem value={2}>Thông số người</MenuItem>
-              <MenuItem value={3}>Cả hai</MenuItem>
-            </TextField>
-          </Box>
-          <Box>
-            <Button
-              startIcon={<AddCircleOutlineRoundedIcon />}
-              variant="outlined"
-              color="primary"
-              onClick={() => setOpenDialog(true)}>
-              Add user
-            </Button>
-          </Box>
+          <Grid container item xs={12} spacing={1} sx={{ mt: 1, width: "100%" }}>
+            <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  autoFocus
+                  classes={{ root: classes.textField }}
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  id="outlined-basic"
+                  placeholder="Tìm kiếm..."
+                  variant="outlined"
+                />
+              </Box>
+            </Grid>
+
+            <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  fullWidth
+                  classes={{ root: classes.textField }}
+                  id="outlined-select-currency"
+                  select
+                  label="Sắp xếp"
+                  defaultValue="currentManager"
+                  value={sortBy}
+                  onChange={(e: any) => setSortBy(e.target.value)}>
+                  {sortOpts.map((option: any) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+              <Popover
+                open={openDatePicker}
+                onClose={onCloseDatePicker}
+                anchorOrigin={{ vertical: "center", horizontal: "center" }}
+                transformOrigin={{ vertical: "center", horizontal: "center" }}>
+                <DateRangePicker setValue={setDateData} value={dateData} />
+              </Popover>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
       <Grid container>
@@ -318,10 +315,9 @@ const ManagerCTV = () => {
                   <TableCell>ID</TableCell>
                   <TableCell>Tên</TableCell>
                   <TableCell>Thông số sự kiện</TableCell>
-                  <TableCell>Thông số báo cáo</TableCell>
-                  <TableCell>Thêm bởi</TableCell>
+                  <TableCell>Quản lí bởi</TableCell>
                   <TableCell>Trạng thái</TableCell>
-                  <TableCell>Hành động</TableCell>
+                  <TableCell>Quản lí</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -332,11 +328,11 @@ const ManagerCTV = () => {
                     </TableCell>
                     <TableCell>
                       <Box sx={{ display: "flex" }}>
-                        <Box sx={{ mr: 1 }}>
-                          <Avatar {...stringAvatar(row.name)}></Avatar>
-                        </Box>
                         <Box>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
+                            onClick={() => handleChangeTab("profile", row.id)}>
                             {row.name}
                           </Typography>
                           <Typography variant="subtitle2" sx={{ fontWeight: 400 }}>
@@ -355,49 +351,29 @@ const ManagerCTV = () => {
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        Người dùng : {row.nbOfEventManager}
-                      </Typography>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        Bài đăng : {row.nbOfEventManager}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
                         {row.approvedBy}
                       </Typography>
                     </TableCell>
 
                     <TableCell sx={{ color: row.status === 1 ? "green" : "red" }}>
                       {row.status === 1 ? (
-                        <Chip label="Có hiệu lực" variant="outlined" color="primary" />
+                        <Chip label="Hoạt động" variant="outlined" color="primary" />
                       ) : (
                         <Chip label="Bị khóa" variant="outlined" color="error" />
                       )}
                     </TableCell>
                     <TableCell>
-                      {/* xem chi tiết */}
-                      <IconButton aria-label="Xem chi tiết" onClick={handleOpenViewDetail}>
-                        <Tooltip title="Xem chi tiết">
-                          <VisibilityIcon color="primary" />
-                        </Tooltip>
-                      </IconButton>
-
-                      {/* Trao đổi với CTV */}
-                      <IconButton aria-label="Trao đổi với CTV">
-                        <Tooltip title="Trao đổi">
-                          <ChatIcon sx={{ color: "#1172f4" }} />
-                        </Tooltip>
-                      </IconButton>
                       {/* Ban cộng tác viên */}
-
-                      <Button endIcon={<EditIcon />} onClick={handleOpenEdit}>
-                        Chỉnh sửa
-                      </Button>
+                      <IconButton aria-label="Quản lí cộng tác viên" onClick={handleOpenEdit}>
+                        <Tooltip title="Quản lí cộng tác viên">
+                          <EditIcon color="error" />
+                        </Tooltip>
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
-              <DialogDetailCTV open={openDialogViewDetail} onClose={closeDialogViewDetail} />
+
               <DialogEditManageCTV open={openDialogEdit} onClose={closeDialogEdit} />
             </Table>
           </TableContainer>
