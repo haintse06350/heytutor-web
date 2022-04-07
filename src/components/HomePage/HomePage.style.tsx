@@ -46,4 +46,11 @@ export const useStyles: any = makeStyles(() => ({
       },
     },
   },
+  quickNoti: {
+    width: "100%",
+    padding: "8px 12px",
+    borderRadius: 8,
+    background: "#ffffff",
+    marginBottom: 8,
+  },
 }));

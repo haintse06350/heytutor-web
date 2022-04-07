@@ -49,6 +49,7 @@ import { map } from "lodash";
 import { ConfirmDialog } from "../Common/ConfirmDialog/ConfirmDialog";
 import { UserPost } from "../../models/user-post";
 import { NotificationCtx } from "../../context/notification/state";
+import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
 
 // const slideImages = [{ url: demoImg5 }, { url: demoImg6 }, { url: demoImg4 }];
 
@@ -188,6 +189,31 @@ const PostItem = () => {
     navigate(`/profile?userId=${userId}`);
   };
 
+  const PostOwner = () => {
+    return (
+      <Box>
+        <Typography variant="subtitle1">Bạn đang hỗ trợ cho</Typography>
+        <Box sx={{ mt: 1 }}>
+          <Box sx={{ p: 0.5 }} display="flex">
+            <Avatar {...stringAvatar(post?.postDetails.user.name)} style={{ width: 30, height: 30, fontSize: 14 }} />
+            <Box display="flex" flexDirection="column" flexGrow={1} sx={{ ml: 1 }}>
+              <Typography variant="subtitle1" onClick={() => onClickProfile(post?.user.id)}>
+                {post?.postDetails.user.name}
+              </Typography>
+              <Typography variant="caption">Đã hoàn thành 4/5 giao dịch</Typography>
+              <Typography display="flex" variant="caption">
+                4.5 <StarRoundedIcon sx={{ color: "gold" }} /> / 5 votes
+              </Typography>
+            </Box>
+            <Tooltip title="Trao đổi">
+              <MessageRoundedIcon color="primary" onClick={() => onClickContactSupporter(post?.postDetails.user)} />
+            </Tooltip>
+          </Box>
+        </Box>
+      </Box>
+    );
+  };
+
   const ListSupporter = () => {
     return (
       <Box>
@@ -227,7 +253,7 @@ const PostItem = () => {
   const ListRegister = () => {
     return (
       <>
-        <Box sx={{ position: "fixed" }}>
+        <Box>
           <Typography variant="subtitle1" noWrap>
             Danh sách người đăng kí hỗ trợ
           </Typography>
@@ -236,7 +262,7 @@ const PostItem = () => {
           </Typography>
         </Box>
         {listRegister.length > 0 ? (
-          <Box sx={{ mt: 6, pb: 2, maxHeight: 450, overflowY: "scroll" }}>
+          <Box sx={{ mt: 1, pb: 2, maxHeight: 450, overflowY: "scroll" }}>
             {map(listRegister, (sp: any, idx: number) => (
               <Box sx={{ p: 0.5 }} display="flex" key={idx}>
                 <Avatar {...stringAvatar(sp.name)} style={{ width: 30, height: 30, fontSize: 14 }} />
@@ -244,20 +270,24 @@ const PostItem = () => {
                   <Typography className={classes.userName} variant="subtitle1" onClick={() => onClickProfile(sp.id)}>
                     {sp.name}
                   </Typography>
-                  <Typography display="flex" variant="subtitle1">
+                  <Typography display="flex" variant="caption">
                     {sp.rankPoint} <StarRoundedIcon sx={{ color: "gold" }} />
                   </Typography>
                 </Box>
-                <Tooltip title="Loại khỏi danh sách đăng kí">
-                  <PersonRemoveRoundedIcon color="error" onClick={() => onClickRemoveRegisterUser(sp)} />
-                </Tooltip>
-                <Tooltip title="Chọn người hỗ trợ">
-                  <PersonAddAltRoundedIcon
-                    sx={{ ml: 0.5 }}
-                    color="primary"
-                    onClick={() => onClickConfirmRegister(sp)}
-                  />
-                </Tooltip>
+                {isMyPost && (
+                  <Box>
+                    <Tooltip title="Loại khỏi danh sách đăng kí">
+                      <PersonRemoveRoundedIcon color="error" onClick={() => onClickRemoveRegisterUser(sp)} />
+                    </Tooltip>
+                    <Tooltip title="Chọn người hỗ trợ">
+                      <PersonAddAltRoundedIcon
+                        sx={{ ml: 0.5 }}
+                        color="primary"
+                        onClick={() => onClickConfirmRegister(sp)}
+                      />
+                    </Tooltip>
+                  </Box>
+                )}
               </Box>
             ))}
           </Box>
@@ -345,11 +375,10 @@ const PostItem = () => {
       />
       {/* no images just text*/}
       <Container fixed>
+        <BreadcrumbsTab history={[{ title: "Vấn đề của tôi", href: "/my-request" }]} current={{ title: "Chi tiết" }} />
         <Grid container spacing={2}>
           <Grid item xs={12} md={3}>
-            <Card sx={{ mt: 6, p: 2 }}>
-              <ListSupporter />
-            </Card>
+            <Card sx={{ mt: 6, p: 2 }}>{from === "my-request" ? <ListSupporter /> : <PostOwner />}</Card>
             <Card sx={{ mt: 2, px: 2, pt: 2 }}>
               <ListRegister />
             </Card>
@@ -367,7 +396,7 @@ const PostItem = () => {
                 <div className={clsx(classes.postStatus, `${tab}`)}>
                   <Typography variant="caption">{getPostStatus()}</Typography>
                 </div>
-                {isMyPost && <Button>Chỉnh sửa</Button>}
+                {isMyPost ? <Button>Chỉnh sửa</Button> : <Button color="error">Huỷ hỗ trợ</Button>}
               </div>
               <div className={classes.postTitleAndAction}>
                 <Typography variant="h5">[ {post.postDetails["Post.title"]} ]</Typography>

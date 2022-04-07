@@ -68,7 +68,6 @@ export const ListData = () => {
   };
 
   React.useEffect(() => {
-    console.log("tabValue", tabValue);
     if (tabValue && registerData) {
       if (tabValue === "all") {
         setRegisterDataFilter([...registerData.registerData, ...registerData.supportData]);

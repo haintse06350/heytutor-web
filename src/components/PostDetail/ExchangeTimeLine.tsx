@@ -255,8 +255,10 @@ export const ExchangeTimeLine = (props: any) => {
           <Box>
             <img src={Study1} alt="" />
             <Typography variant="subtitle1" sx={{ fontWeight: 400 }} color="textSecondary">
-              Quá trình trao đổi giữa bạn và người hỗ trợ bạn sẽ diễn ra ở đây. Bạn có thể đặt câu hỏi sau đó người hỗ
-              trợ của bạn sẽ trả lời bằng cách đăng tải tài liệu hoặc đường dẫn tới tài liệu.
+              {role === "my-request"
+                ? `Quá trình trao đổi giữa bạn và người hỗ trợ bạn sẽ diễn ra ở đây. Bạn có thể đặt câu hỏi sau đó người hỗ
+              trợ của bạn sẽ trả lời bằng cách đăng tải tài liệu hoặc đường dẫn tới tài liệu.`
+                : `Bạn sẽ nhận được cầu hỏi yêu cầu hỗ trợ và đây sẽ là nơi bạn gửi câu trả lời bằng cách đăng tải hình ảnh, tài liệu hoặc link đến tài liệu`}
             </Typography>
           </Box>
         )}
