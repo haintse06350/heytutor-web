@@ -180,4 +180,15 @@ export const useStyles: any = makeStyles(() => ({
     padding: "8px 12px",
     fontSize: 12,
   },
+  formLabel: {
+    fontWeight: 500,
+  },
+  inputBaseReason: {
+    marginTop: 10,
+    padding: 20,
+    width: "100%",
+    height: 150,
+    border: "1px solid #e9ecef",
+    borderRadius: 4,
+  },
 }));

@@ -5,14 +5,15 @@ import PriceCheckRoundedIcon from "@mui/icons-material/PriceCheckRounded";
 import { useStyles } from "./PostItem.style";
 interface IProps {
   role?: string | null;
+  selectedSupporter?: any;
 }
 export const RenderExchangeActions = (props: IProps) => {
-  const { role } = props;
-  console.log(role);
+  const { role, selectedSupporter } = props;
+
   const classes = useStyles();
   return (
     <>
-      {role === "my-request" ? (
+      {role === "my-request" && selectedSupporter ? (
         <List classes={{ root: classes.listRoot }}>
           <ListItem>
             <ListItemButton>

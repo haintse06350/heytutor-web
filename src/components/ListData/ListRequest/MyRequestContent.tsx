@@ -39,6 +39,7 @@ import { MsgCtx } from "../../../context/message/message";
 import { useNavigate } from "react-router-dom";
 import { NotificationCtx } from "../../../context/notification/state";
 import { ConfirmDialog } from "../../Common/ConfirmDialog/ConfirmDialog";
+import { UserPost } from "../../../models/user-post";
 
 const FILTER_REGISTER = [
   {
@@ -59,15 +60,18 @@ export default function MyRequestContent(props: any) {
   const { tabValue, data } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [openDialog, setOpenDialog]: any = React.useState(null);
+  const [openListRegisterDialog, setOpenListRegisterDialog]: any = React.useState(null);
   const [selectItem, setSelectItem] = React.useState<any>(null);
   const [userSelected, setUserSelected]: any = React.useState(null);
   const [openRemoveDialog, setOpenRemoveDialog] = React.useState(false);
+  const [openConfirmRegister, setOpenConfirmRegister] = React.useState(false);
   const [selectedRegister, setSelectedRegister]: any = React.useState(null);
   const [sortListRegister, setSortListRegister] = React.useState("registerTime");
+  const [loading, setLoading] = React.useState(false);
+
   const { onOpenMsgBox } = React.useContext(MsgCtx);
-  const { setNotificationSuccess } = React.useContext(NotificationCtx);
-  console.log(selectItem);
+  const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
+
   const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
 
@@ -79,22 +83,33 @@ export default function MyRequestContent(props: any) {
     setOpenRemoveDialog(false);
   };
 
+  const onCloseConfirmRegister = () => {
+    setUserSelected(null);
+    setOpenConfirmRegister(false);
+  };
+
   const onConfirmRemoveRegister = () => {
     setNotificationSuccess(`Đã xoá ${selectedRegister?.username} khỏi danh sách người đăng kí`);
     setOpenRemoveDialog(false);
   };
 
-  const onClickRemoveRegisterUser = () => {
+  const onClickRemoveRegisterUser = (user: any) => {
+    setUserSelected(user);
     setOpenRemoveDialog(true);
   };
 
+  const onClickConfirmRegister = (user: any) => {
+    setUserSelected(user);
+    setOpenConfirmRegister(true);
+  };
+
   const onCloseDialog = () => {
-    setOpenDialog(false);
+    setOpenListRegisterDialog(false);
     setSelectItem(null);
   };
 
   const onClickOpenListRegister = (item: any) => {
-    setOpenDialog(true);
+    setOpenListRegisterDialog(true);
     setSelectItem(item);
   };
 
@@ -110,30 +125,39 @@ export default function MyRequestContent(props: any) {
   };
 
   const isNearDeadline = (deadline: string) => {
-    if (deadline.includes("giờ")) {
+    if (deadline.includes("giờ") || deadline.includes("phút")) {
       return true;
     }
   };
 
   const onOpenMsg = (user: any) => {
     onOpenMsgBox();
-    setOpenDialog(false);
+    setOpenListRegisterDialog(false);
     setOpenRemoveDialog(false);
     setUserSelected(user);
   };
 
-  const onClickAcceptRegisterUser = (user: any) => {
-    setSelectedRegister(user);
-    setNotificationSuccess(`Đã chọn ${user.username} làm supporter cho vấn đề này`);
+  const onConfirmSupporter = async () => {
+    try {
+      setLoading(true);
+      await UserPost.addSupporter({ postId: selectItem.id, registerId: userSelected.id });
+      setOpenConfirmRegister(false);
+      setOpenListRegisterDialog(false);
+      setSelectedRegister(userSelected);
+      setNotificationSuccess(`Đã chọn ${userSelected?.username} làm supporter cho vấn đề này`);
+    } catch (error) {
+      setNotificationError("Có lỗi xảy ra, vui lòng thử lại sau");
+    }
+    setLoading(false);
   };
 
   const renderRegisterAndSupporter = (item: any) => {
     let listUsers = [];
-    if (tabValue === "isActive") {
+    if (tabValue === "isConfirmed") {
       listUsers = map(item.supporterUsers, (user: any) => {
         return user.username;
       });
-    } else if (tabValue === "isPending") {
+    } else if (tabValue === "isActive" || tabValue === "isPending") {
       listUsers = map(item.registerUsers, (user: any) => {
         return user.username;
       });
@@ -177,9 +201,9 @@ export default function MyRequestContent(props: any) {
 
   const renderDialogData = () => {
     switch (tabValue) {
-      case "isActive":
+      case "isConfirmed":
         return { dialogTitle: "Danh sách người hỗ trợ", dialogData: selectItem?.supporterUsers };
-      case "isPending":
+      case "isActive":
         return { dialogTitle: "Danh sách người đăng ký", dialogData: selectItem?.registerUsers };
       default:
         return { dialogTitle: "", dialogData: [] };
@@ -187,23 +211,22 @@ export default function MyRequestContent(props: any) {
   };
 
   const renderButton = (user: any) => {
-    if (tabValue === "isActive") {
+    if (tabValue === "isConfirmed") {
       return (
         <Button onClick={() => onOpenMsg(user)}>
           <ChatRoundedIcon />
         </Button>
       );
-    } else if (tabValue === "isPending") {
+    } else if (tabValue === "isActive") {
       return (
         <Box>
           <Tooltip title="Loại người này khỏi danh sách đăng kí">
-            <Button color="secondary" onClick={() => onClickRemoveRegisterUser()}>
+            <Button color="secondary" onClick={() => onClickRemoveRegisterUser(user)}>
               <PersonRemoveIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Chọn người này làm supporter">
-            <Button
-              onClick={() => (selectedRegister?.id === user.id ? onOpenMsg(user) : onClickAcceptRegisterUser(user))}>
+            <Button onClick={() => (selectedRegister?.id === user.id ? onOpenMsg(user) : onClickConfirmRegister(user))}>
               {selectedRegister?.id === user.id ? <ChatRoundedIcon /> : <AddTaskIcon />}
             </Button>
           </Tooltip>
@@ -216,13 +239,13 @@ export default function MyRequestContent(props: any) {
     const { dialogTitle, dialogData } = renderDialogData();
 
     return (
-      <Dialog maxWidth="sm" fullWidth open={openDialog} onClose={onCloseDialog}>
+      <Dialog maxWidth="sm" fullWidth open={openListRegisterDialog} onClose={onCloseDialog}>
         <DialogTitle classes={{ root: classes.dialogTitle }}>
           {dialogTitle}
           <CloseIcon onClick={onCloseDialog} />
         </DialogTitle>
         <Typography className={classes.postTitleOnDialog} noWrap onClick={() => onClickPostDetail(selectItem?.id)}>
-          {selectItem?.title}
+          {selectItem?.postData.title}
         </Typography>
 
         <DialogContent sx={{ px: 3, pt: 1, pb: 3 }} dividers>
@@ -293,6 +316,15 @@ export default function MyRequestContent(props: any) {
         open={openRemoveDialog}
         onClose={onCloseRemoveDialog}
       />
+      <ConfirmDialog
+        dialogTitle="Xác nhận chọn supporter"
+        dialogContent={`Bạn có chắc chắn muốn chọn ${userSelected?.username} làm supporter cho vấn đề này?`}
+        confirmAction={onConfirmSupporter}
+        cancelAction={onCloseConfirmRegister}
+        open={openConfirmRegister}
+        onClose={onCloseConfirmRegister}
+        loadingConfirm={loading}
+      />
       <div className={classes.resultCountAndDisplayOption}>
         <Typography variant="subtitle1">
           Hiển thị <b style={{ fontSize: "1.25rem", padding: "0 3px" }}>{data?.length}</b> kết quả
@@ -305,24 +337,26 @@ export default function MyRequestContent(props: any) {
               <div className={classes.cardHeader}>
                 <div className={classes.postTitle}>
                   <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.id)}>
-                    {item.title}
+                    {item.postData.title}
                   </Typography>
                   <Typography variant="caption" noWrap>
-                    {moment(item.createdAt).format("DD/MM")}
+                    Bài đăng từ {moment(item.createdAt).format("DD/MM")}
                   </Typography>
                   <div className={classes.dueDate}>
                     <AccessTimeOutlinedIcon
                       sx={{
-                        color: isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) ? "#d32f2f" : "#94a4c4",
+                        color: isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow())
+                          ? "#d32f2f"
+                          : "#94a4c4",
                       }}
                     />
                     <Typography
                       variant="subtitle2"
                       className={clsx(
                         classes.deadline,
-                        isNearDeadline(moment(item.deadline).endOf("hours").fromNow()) && classes.nearDeadline
+                        isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow()) && classes.nearDeadline
                       )}>
-                      Đến hạn cần giải quyết trong {moment(item.deadline).endOf("hours").fromNow()}
+                      Đến hạn cần giải quyết trong {moment(item.postData.deadline).endOf("hours").fromNow()}
                     </Typography>
                   </div>
                 </div>
@@ -356,12 +390,7 @@ export default function MyRequestContent(props: any) {
             </Typography>
           </Box>
         </Popover>
-        <MessageBox
-          postId={selectItem?.postId}
-          postTitle={selectItem?.title}
-          userId={userSelected?.id}
-          userName={userSelected?.username}
-        />
+        <MessageBox postId={selectItem?.postId} userId={userSelected?.id} userName={userSelected?.username} />
       </Grid>
     </Box>
   );

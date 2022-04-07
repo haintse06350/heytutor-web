@@ -102,7 +102,7 @@ export const useStyles: any = makeStyles(() => ({
     flexDirection: "column",
   },
   postStatus: {
-    padding: "2px 10px",
+    padding: "1px 4px",
     color: "#fff",
     borderRadius: 8,
     "&.isActive": {
@@ -165,7 +165,6 @@ export const useStyles: any = makeStyles(() => ({
   },
   timeLineRoot: {
     position: "relative",
-    maxHeight: 300,
     overflowY: "scroll",
     display: "flex",
     flexDirection: "column",
@@ -188,5 +187,11 @@ export const useStyles: any = makeStyles(() => ({
     fontSize: 14,
     fontWeight: 700,
     cursor: "pointer",
+  },
+  userName: {
+    "&:hover": {
+      cursor: "pointer",
+      textDecoration: "underline",
+    },
   },
 }));

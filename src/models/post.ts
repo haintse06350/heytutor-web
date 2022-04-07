@@ -58,8 +58,8 @@ export class Post {
     return res.json();
   };
 
-  static getListMyRequest = async () => {
-    const res = await FetchUtils.get(`/user-post/my-request`);
+  static getListMyRequest = async (filters: string) => {
+    const res = await FetchUtils.get(`/user-post/my-request?filters=${JSON.stringify(filters)}`);
     await ErrorUtils.throwError(res);
     return res.json();
   };

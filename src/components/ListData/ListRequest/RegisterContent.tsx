@@ -22,9 +22,11 @@ import EmptyIllustrations from "../../../assets/illustrations/library.svg";
 import { ConfirmDialog } from "../../Common/ConfirmDialog/ConfirmDialog";
 import { UserPost } from "../../../models/user-post";
 import { NotificationCtx } from "../../../context/notification/state";
+import { ReportDialog } from "./ReportDialog";
 
 export default function RegisterContent(props: any) {
   const { data, tab, loading } = props;
+  console.log(data);
   const classes = useStyles();
   const [openPostMenu, setOpenPostMenu] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -37,6 +39,8 @@ export default function RegisterContent(props: any) {
   const [selectedOption, setSelectedOption] = React.useState("grid");
   const [openConfirmUnregister, setOpenConfirmUnregister] = React.useState(false);
   const [loadingConfirm, setLoadingConfirm] = React.useState(false);
+  const [openReportType, setOpenReportType] = React.useState("");
+  const [otherReason, setOtherReason] = React.useState("");
 
   const navigate = useNavigate();
   moment.locale("vi");
@@ -80,6 +84,28 @@ export default function RegisterContent(props: any) {
 
   const onCloseRemoveDialog = () => {
     setOpenConfirmUnregister(false);
+    setOpenPostMenu(false);
+  };
+
+  const onChangeOtherReason = (e: any) => {
+    setOtherReason(e.target.value);
+  };
+
+  const onClickUnregister = () => {
+    setOpenConfirmUnregister(true);
+    setOpenReportType(tab === "isActive" || tab === "isConfirmed" ? "unregister-confirm" : "unregister");
+  };
+
+  const onClickReport = () => {
+    setOpenReportType("report");
+  };
+
+  //TODO:
+  const onConfirmReport = async () => {};
+
+  const onCloseReportDialog = () => {
+    setOpenReportType("");
+    setOpenPostMenu(false);
   };
 
   React.useEffect(() => {
@@ -109,6 +135,7 @@ export default function RegisterContent(props: any) {
     }
   };
 
+  console.log("listPost", listPost);
   const gridView = () => {
     return map(listPost, (item: any, index: number) => (
       <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
@@ -298,6 +325,15 @@ export default function RegisterContent(props: any) {
 
   return (
     <Box sx={{ mt: 2 }}>
+      <ReportDialog
+        type={openReportType}
+        itemClicked={itemClicked}
+        loadingConfirm={loadingConfirm}
+        otherReason={otherReason}
+        onChangeOtherReason={onChangeOtherReason}
+        confirmAction={onConfirmReport}
+        onCloseReportDialog={onCloseReportDialog}
+      />
       <ConfirmDialog
         dialogTitle={
           <Box>
@@ -310,10 +346,11 @@ export default function RegisterContent(props: any) {
         dialogContent="Bạn có chắc chắn muốn huỷ đăng kí hỗ trợ vấn đề này nữa không?"
         confirmAction={onConfirmUnregister}
         cancelAction={onCloseRemoveDialog}
-        open={openConfirmUnregister}
+        open={openReportType === "unregister" && openConfirmUnregister}
         loadingConfirm={loadingConfirm}
         onClose={onCloseRemoveDialog}
       />
+
       {listPost?.length !== 0 && (
         <div className={classes.resultCountAndDisplayOption}>
           <Typography variant="subtitle1">
@@ -351,14 +388,11 @@ export default function RegisterContent(props: any) {
             className={classes.actions}
             sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 1, px: 1 }}>
             {/* hủy đăng kí */}
-            <Typography
-              variant="subtitle2"
-              sx={{ py: 0.5, px: 2, width: "100%" }}
-              onClick={() => setOpenConfirmUnregister(true)}>
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }} onClick={onClickUnregister}>
               Huỷ đăng kí
             </Typography>
-            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }}>
-              Bái cáo bài đăng
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2, width: "100%" }} onClick={onClickReport}>
+              Báo cáo bài đăng
             </Typography>
           </Box>
         </Popover>

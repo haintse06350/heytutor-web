@@ -11,12 +11,13 @@ import FilePresentRoundedIcon from "@mui/icons-material/FilePresentRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import DownloadForOfflineOutlinedIcon from "@mui/icons-material/DownloadForOfflineOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { styled } from "@mui/material/styles";
+import Study1 from "../../assets/illustrations/study1.svg";
 
 import {
   Typography,
   Box,
-  Divider,
   Tooltip,
   Dialog,
   DialogTitle,
@@ -36,7 +37,7 @@ const DEMO_EXCHANGE_DATA = [
     userId: 2,
     postId: 2,
     conversationId: 1,
-    title: "Cậu ơi cái câu thứ nhất cậu gửi tớ tài liệu được không",
+    title: "Câu hỏi 1",
     attachFile: null,
     isAccept: false,
     status: "open",
@@ -47,7 +48,7 @@ const DEMO_EXCHANGE_DATA = [
     userId: 2,
     postId: 2,
     conversationId: 1,
-    title: "Đây mình gửi tài liệu cho câu 1 nhé",
+    title: "Câu hỏi 2",
     attachFile: null,
     isAccept: true,
     status: "close",
@@ -58,7 +59,7 @@ const DEMO_EXCHANGE_DATA = [
     userId: 2,
     postId: 2,
     conversationId: 1,
-    title: "Ok câu 1 xong r gửi mình nốt file tài liệu câu 2",
+    title: "Câu hỏi 3",
     attachFile: null,
     isAccept: true,
     status: "open",
@@ -82,7 +83,7 @@ const Input = styled("input")({
 });
 
 export const ExchangeTimeLine = (props: any) => {
-  const { role } = props;
+  const { role, selectedSupporter } = props;
   const classes = useStyles();
   const [exchangeData, setExchangeData] = React.useState(DEMO_EXCHANGE_DATA);
   const [openAnswerDialog, setOpenAnswerDialog] = React.useState(false);
@@ -150,6 +151,9 @@ export const ExchangeTimeLine = (props: any) => {
           horizontal: "left",
         }}>
         <Box sx={{ p: 2 }} display="flex" flexDirection="column">
+          <Button color="primary" startIcon={<VisibilityOutlinedIcon color="primary" />} sx={{ p: 1 }}>
+            Xem chi tiết
+          </Button>
           {updateItem?.attachFile && (
             <Button color="info" startIcon={<DownloadForOfflineOutlinedIcon color="info" />} sx={{ p: 1 }}>
               Download file
@@ -202,52 +206,61 @@ export const ExchangeTimeLine = (props: any) => {
       {renderPopover()}
       {renderUploadAnswerDialog()}
       <Box className={classes.timeLineRoot}>
-        <Timeline position="right">
-          {exchangeData.map((item: any, index: number) => (
-            <TimelineItem key={index}>
-              <TimelineOppositeContent sx={{ flex: 0.1, py: 0.5, px: 0.75, width: 90, minWidth: 90, maxWidth: 90 }}>
-                <Typography variant="caption" color="textSecondary">
-                  {item.createdAt}
-                </Typography>
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                {item.isAccept ? (
-                  <CheckCircleOutlineRoundedIcon color="success" />
-                ) : role === "register" ? (
-                  <Tooltip title="Upload câu trả lời">
-                    <HelpOutlineRoundedIcon color="secondary" onClick={openUploadAnswerDialog} />
-                  </Tooltip>
-                ) : updateItem?.id === item.id && isConfirmed ? (
-                  <CheckCircleOutlineRoundedIcon color="success" />
-                ) : item.attachFile ? (
-                  <FilePresentRoundedIcon onClick={(e: any) => onClickQuestion(e, item)} />
-                ) : updateItem?.id === item.id && isRejected ? (
-                  <HighlightOffRoundedIcon color="error" />
-                ) : (
-                  <HelpOutlineRoundedIcon color="secondary" onClick={(e: any) => onClickQuestion(e, item)} />
-                )}
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent>
-                <Typography variant="subtitle1">{item.title}</Typography>
-              </TimelineContent>
-            </TimelineItem>
-          ))}
-          {role === "my-request" && (
-            <TimelineItem>
-              <TimelineOppositeContent
-                sx={{ flex: 0.1, p: 0, width: 90, minWidth: 90, maxWidth: 90 }}></TimelineOppositeContent>
-              <TimelineSeparator>
-                <AddCircleOutlineRoundedIcon color="secondary" onClick={addExchange} />
-              </TimelineSeparator>
-              <TimelineContent>
-                <Typography variant="subtitle1">Đặt thêm câu hỏi</Typography>
-              </TimelineContent>
-            </TimelineItem>
-          )}
-        </Timeline>
+        {selectedSupporter ? (
+          <Timeline position="right">
+            {exchangeData.map((item: any, index: number) => (
+              <TimelineItem key={index}>
+                <TimelineOppositeContent sx={{ flex: 0.1, py: 0.5, px: 0.75, width: 90, minWidth: 90, maxWidth: 90 }}>
+                  <Typography variant="caption" color="textSecondary">
+                    {item.createdAt}
+                  </Typography>
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  {item.isAccept ? (
+                    <CheckCircleOutlineRoundedIcon color="success" />
+                  ) : role === "register" ? (
+                    <Tooltip title="Upload câu trả lời">
+                      <HelpOutlineRoundedIcon color="secondary" onClick={openUploadAnswerDialog} />
+                    </Tooltip>
+                  ) : updateItem?.id === item.id && isConfirmed ? (
+                    <CheckCircleOutlineRoundedIcon color="success" />
+                  ) : item.attachFile ? (
+                    <FilePresentRoundedIcon onClick={(e: any) => onClickQuestion(e, item)} />
+                  ) : updateItem?.id === item.id && isRejected ? (
+                    <HighlightOffRoundedIcon color="error" />
+                  ) : (
+                    <HelpOutlineRoundedIcon color="secondary" onClick={(e: any) => onClickQuestion(e, item)} />
+                  )}
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Typography variant="subtitle1">{item.title}</Typography>
+                </TimelineContent>
+              </TimelineItem>
+            ))}
+            {role === "my-request" && (
+              <TimelineItem>
+                <TimelineOppositeContent
+                  sx={{ flex: 0.1, p: 0, width: 90, minWidth: 90, maxWidth: 90 }}></TimelineOppositeContent>
+                <TimelineSeparator>
+                  <AddCircleOutlineRoundedIcon color="secondary" onClick={addExchange} />
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Typography variant="subtitle1">Đặt thêm câu hỏi</Typography>
+                </TimelineContent>
+              </TimelineItem>
+            )}
+          </Timeline>
+        ) : (
+          <Box>
+            <img src={Study1} alt="" />
+            <Typography variant="subtitle1" sx={{ fontWeight: 400 }} color="textSecondary">
+              Quá trình trao đổi giữa bạn và người hỗ trợ bạn sẽ diễn ra ở đây. Bạn có thể đặt câu hỏi sau đó người hỗ
+              trợ của bạn sẽ trả lời bằng cách đăng tải tài liệu hoặc đường dẫn tới tài liệu.
+            </Typography>
+          </Box>
+        )}
       </Box>
-      <Divider />
     </>
   );
 };

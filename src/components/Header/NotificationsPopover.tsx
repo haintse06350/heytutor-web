@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { set, sub, formatDistanceToNow } from "date-fns";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
 // material
 import { alpha } from "@mui/material/styles";
 import {
@@ -23,158 +23,58 @@ import Scrollbar from "./Scrollbar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import { Notification as NotiModel } from "../../models/notification";
+import { stringAvatar } from "../UserProfile/helper";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import { map } from "lodash";
 
 // ----------------------------------------------------------------------
 
-const NOTIFICATIONS = [
-  {
-    id: 1,
-    title: "Your order is placed",
-    description: "waiting for shipping",
-    avatar: null,
-    type: "order_placed",
-    createdAt: set(new Date(), { hours: 10, minutes: 30 }),
-    isUnRead: true,
-  },
-  {
-    id: 2,
-    title: "Henry",
-    description: "answered to your comment on the Minimal",
-    avatar: null,
-    type: "friend_interactive",
-    createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
-    isUnRead: true,
-  },
-  {
-    id: 3,
-    title: "You have new message",
-    description: "5 unread messages",
-    avatar: null,
-    type: "chat_message",
-    createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: 4,
-    title: "You have new mail",
-    description: "sent from Guido Padberg",
-    avatar: null,
-    type: "mail",
-    createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: 5,
-    title: "Delivery processing",
-    description: "Your order is being shipped",
-    avatar: null,
-    type: "order_shipped",
-    createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
-    isUnRead: true,
-  },
-  {
-    id: 6,
-    title: "Delivery processing",
-    description: "Your order is being shipped",
-    avatar: null,
-    type: "order_shipped",
-    createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: 7,
-    title: "Delivery processing",
-    description: "Your order is being shipped",
-    avatar: null,
-    type: "order_shipped",
-    createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
-    isUnRead: true,
-  },
-];
+const translateDescription = (type: string) => {
+  switch (type) {
+    case "accept_register":
+      return "đã chấp nhận yêu cầu hỗ trợ của bạn";
+  }
+};
 
 const renderContent = (notification: any) => {
   const title = (
     <Typography variant="subtitle2">
-      {notification.title}
+      {notification.fromUsername}
       <Typography component="span" variant="body2" sx={{ color: "text.secondary" }}>
-        &nbsp; {notification.description}
+        &nbsp; {translateDescription(notification.notificationType)}
       </Typography>
     </Typography>
   );
 
-  if (notification.type === "order_placed") {
+  if (notification.notificationType === "accept_register") {
     return {
-      avatar: <Avatar src="" />,
+      icon: <CheckOutlinedIcon />,
       title,
     };
   }
-  if (notification.type === "order_shipped") {
+  if (notification.notificationType === "order_shipped") {
     return {
-      avatar: <Avatar src="" />,
+      icon: <AccessTimeOutlinedIcon />,
       title,
     };
   }
-  if (notification.type === "mail") {
-    return {
-      avatar: <Avatar src="" />,
-      title,
-    };
-  }
-  if (notification.type === "chat_message") {
-    return {
-      avatar: <Avatar src="" />,
-      title,
-    };
-  }
+
   return {
     avatar: <Avatar src="" />,
     title,
+    icon: <NotificationsNoneOutlinedIcon />,
   };
-};
-
-const NotificationItem = ({ notification }: any) => {
-  const { avatar, title } = renderContent(notification);
-
-  return (
-    <ListItemButton
-      to="#"
-      disableGutters
-      component={RouterLink}
-      sx={{
-        py: 1.5,
-        px: 2.5,
-        mt: "1px",
-        ...(notification.isUnRead && {
-          bgcolor: "action.selected",
-        }),
-      }}>
-      <ListItemAvatar>
-        <Avatar sx={{ bgcolor: "background.neutral" }}>{avatar}</Avatar>
-      </ListItemAvatar>
-      <ListItemText
-        primary={title}
-        secondary={
-          <Typography
-            variant="caption"
-            sx={{
-              mt: 0.5,
-              display: "flex",
-              alignItems: "center",
-              color: "text.disabled",
-            }}>
-            <AccessTimeOutlinedIcon /> {formatDistanceToNow(new Date(notification.createdAt))}
-          </Typography>
-        }
-      />
-    </ListItemButton>
-  );
 };
 
 export default function NotificationsPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [notifications, setNotifications] = useState(NOTIFICATIONS);
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  const [notifications, setNotifications]: any = useState(null);
+  const navigate = useNavigate();
+
+  const totalUnRead = notifications?.filter((item: any) => item.status === "unread").length;
 
   const handleOpen = () => {
     setOpen(true);
@@ -184,14 +84,81 @@ export default function NotificationsPopover() {
     setOpen(false);
   };
 
-  const handleMarkAllAsRead = () => {
+  const handleMarkAllAsRead = async () => {
     setNotifications(
-      notifications.map((notification) => ({
+      notifications.map((notification: any) => ({
         ...notification,
-        isUnRead: false,
+        status: "read",
       }))
     );
+
+    const unreadNoti = notifications.filter((notification: any) => notification.status === "unread");
+
+    await Promise.all(
+      map(unreadNoti, async (n: any) => {
+        return NotiModel.readNotification({ notiId: n.id });
+      })
+    );
   };
+
+  const listNotifications = async () => {
+    const res = await NotiModel.listNotification();
+    setNotifications(res);
+  };
+
+  const onClickNotification = async (notiId: number, postId: number) => {
+    const updatedNoti = map(notifications, (n: any) => {
+      if (n.id === notiId) {
+        n.status = "read";
+      }
+      return n;
+    });
+    setNotifications(updatedNoti);
+    setOpen(false);
+    NotiModel.readNotification({ notiId });
+    navigate(`/post-detail?postId=${postId}`);
+  };
+
+  const NotificationItem = ({ notification }: any) => {
+    return (
+      <ListItemButton
+        disableGutters
+        sx={{
+          py: 1.5,
+          px: 2.5,
+          mt: "1px",
+          ...(notification.status === "unread" && {
+            bgcolor: "action.selected",
+          }),
+        }}
+        onClick={() => onClickNotification(notification.id, notification.postId)}>
+        <ListItemAvatar>
+          <Avatar {...stringAvatar(notification.fromUsername)} />
+        </ListItemAvatar>
+        <ListItemText
+          primary={renderContent(notification).title}
+          secondary={
+            <Typography
+              variant="caption"
+              sx={{
+                mt: 0.5,
+                display: "flex",
+                alignItems: "center",
+                color: "text.disabled",
+              }}>
+              {renderContent(notification).icon} {formatDistanceToNow(new Date(notification.createdAt))}
+            </Typography>
+          }
+        />
+      </ListItemButton>
+    );
+  };
+
+  React.useEffect(() => {
+    // setInterval(() => {
+    listNotifications();
+    // }, 2000);
+  }, []);
 
   return (
     <>
@@ -238,22 +205,24 @@ export default function NotificationsPopover() {
                 New
               </ListSubheader>
             }>
-            {notifications.slice(0, 2).map((notification) => (
+            {notifications?.slice(0, 2).map((notification: any) => (
               <NotificationItem key={notification.id} notification={notification} />
             ))}
           </List>
 
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: "overline" }}>
-                Before that
-              </ListSubheader>
-            }>
-            {notifications.slice(2, 4).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
-            ))}
-          </List>
+          {notifications?.length > 0 && (
+            <List
+              disablePadding
+              subheader={
+                <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: "overline" }}>
+                  Before that
+                </ListSubheader>
+              }>
+              {notifications?.slice(2, 4).map((notification: any) => (
+                <NotificationItem key={notification.id} notification={notification} />
+              ))}
+            </List>
+          )}
         </Scrollbar>
 
         <Divider />

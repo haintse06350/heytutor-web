@@ -26,6 +26,7 @@ const sortOpts = [
 
 export default function FilterAndSearch(props: any) {
   const {
+    isMyRequest,
     postCount,
     hashtagCount,
     tabValue,
@@ -33,7 +34,7 @@ export default function FilterAndSearch(props: any) {
     onClickHashtag,
     isSelectedHashtag,
     setRegisterDataFilter,
-    registerData,
+    data,
     filters,
     setFilters,
     setSortBy,
@@ -92,14 +93,9 @@ export default function FilterAndSearch(props: any) {
         labelText = "Tất cả";
         break;
       }
-      case "isActive": {
-        count = postCount?.nbOfActivePost;
-        labelText = "Đang trao đổi";
-        break;
-      }
       case "isConfirmed": {
         count = postCount?.nbOfConfirmedPost;
-        labelText = "Đã được xác nhận làm supportor";
+        labelText = "Đang hỗ trợ";
         break;
       }
       case "isPending": {
@@ -122,6 +118,46 @@ export default function FilterAndSearch(props: any) {
     );
   };
 
+  const renderTabMyRequestLabel = (label: string) => {
+    let count = 0;
+    let labelText = "";
+
+    switch (label) {
+      case "isConfirmed": {
+        count = data?.postHasSupporter.length;
+        labelText = "Đã có supporter";
+        break;
+      }
+      case "isActive": {
+        count = data?.postHasRegister.length;
+        labelText = "Chưa chọn supporter";
+        break;
+      }
+      case "isPending": {
+        count = data?.postHasNoRegister.length;
+        labelText = "Chưa có người đăng kí";
+        break;
+      }
+      case "isOnEvent": {
+        count = data?.postOnEvent.length;
+        labelText = "Đang trong sự kiện";
+        break;
+      }
+      case "isDone": {
+        count = data?.postDone.length;
+        labelText = "Đã xong";
+        break;
+      }
+    }
+
+    return (
+      <div className={classes.tab}>
+        <Typography>{labelText}</Typography>
+        <span>{count}</span>
+      </div>
+    );
+  };
+
   const [viewMoreHashtag, setViewMoreHashtag] = useState(3);
 
   const handleViewMoreHashtag = () => {
@@ -130,23 +166,23 @@ export default function FilterAndSearch(props: any) {
 
   React.useEffect(() => {
     if (query === "") {
-      setRegisterDataFilter(registerData);
+      setRegisterDataFilter(data);
     } else {
       let filterData;
       if (searchBy === "title") {
-        filterData = registerData.filter((item: any) => {
+        filterData = data.filter((item: any) => {
           return item.title.toLowerCase().includes(query.toLowerCase());
         });
       }
 
       if (searchBy === "content") {
-        filterData = registerData.filter((item: any) => {
+        filterData = data.filter((item: any) => {
           return item.content.toLowerCase().includes(query.toLowerCase());
         });
       }
 
       if (searchBy === "user") {
-        filterData = registerData.filter((item: any) => {
+        filterData = data.filter((item: any) => {
           return item.name.toLowerCase().includes(query.toLowerCase());
         });
       }
@@ -164,18 +200,35 @@ export default function FilterAndSearch(props: any) {
     }
   }, [finishPickDate]);
 
+  const TabBar = () => {
+    if (isMyRequest) {
+      return (
+        <TabList onChange={onChangeTab} aria-label="lab API tabs example">
+          <Tab label={renderTabMyRequestLabel("isConfirmed")} value="isConfirmed" />
+          <Tab label={renderTabMyRequestLabel("isActive")} value="isActive" />
+          <Tab label={renderTabMyRequestLabel("isPending")} value="isPending" />
+          <Tab label={renderTabMyRequestLabel("isOnEvent")} value="isOnEvent" />
+          <Tab label={renderTabMyRequestLabel("isDone")} value="isDone" />
+        </TabList>
+      );
+    } else {
+      return (
+        <TabList onChange={onChangeTab} aria-label="lab API tabs example">
+          <Tab label={renderTabLabel("all")} value="all" />
+          <Tab label={renderTabLabel("isConfirmed")} value="isConfirmed" />
+          <Tab label={renderTabLabel("isPending")} value="isPending" />
+          <Tab label={renderTabLabel("isDone")} value="isDone" />
+        </TabList>
+      );
+    }
+  };
+
   return (
     <Box className={classes.searchAndFilter} sx={{ width: "100%", typography: "body1" }}>
       <Paper elevation={2} sx={{ px: 2 }}>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={onChangeTab} aria-label="lab API tabs example">
-              <Tab label={renderTabLabel("all")} value="all" />
-              <Tab label={renderTabLabel("isActive")} value="isActive" />
-              <Tab label={renderTabLabel("isConfirmed")} value="isConfirmed" />
-              <Tab label={renderTabLabel("isPending")} value="isPending" />
-              <Tab label={renderTabLabel("isDone")} value="isDone" />
-            </TabList>
+            <TabBar />
           </Box>
         </TabContext>
       </Paper>
