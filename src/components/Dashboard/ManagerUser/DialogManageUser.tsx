@@ -116,7 +116,9 @@ const DialogManagerUser = (props: any) => {
           />
         </Box>
         <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-          <Button onClick={closeDialog}>Hủy bỏ</Button>
+          <Button onClick={closeDialog} color="inherit">
+            Hủy bỏ
+          </Button>
           <Button>Áp dụng</Button>
         </Box>
       </Box>

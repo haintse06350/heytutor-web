@@ -126,7 +126,17 @@ const ManageUserDetail = (props: any) => {
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        List item được hiển thị kiểu như bên màn người dùng list post
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6} lg={6}>
+            <Card sx={{ p: 2 }}>
+              <Typography variant="subtitle1">Người báo cáo xấu : Cao Duc Anh</Typography>
+              <Typography variant="subtitle1">Hòm thư : anhcdhe130977@fpt.edu.vn</Typography>
+              <Typography variant="subtitle1">Người quản lí : </Typography>
+              <Typography variant="subtitle1">Đã thực hiện xử lí : </Typography>
+              <Typography variant="subtitle1">Thời gian xử lí : </Typography>
+            </Card>
+          </Grid>
+        </Grid>
       </TabPanel>
     </Box>
   );
