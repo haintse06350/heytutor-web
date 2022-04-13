@@ -45,6 +45,10 @@ import { NotificationCtx } from "../../../context/notification/state";
 import { useNavigate } from "react-router-dom";
 import { DateRange } from "@mui/lab/DateRangePicker";
 import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+
 const ManagerCTV = () => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -62,7 +66,7 @@ const ManagerCTV = () => {
     return { id, name, gmail, nbOfEventManager, nbOfEventDone, nbOfEventReported, approvedBy, status };
   }
 
-  const data = [
+  const dataUser = [
     createData(1, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1),
     createData(2, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2),
     createData(3, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1),
@@ -85,7 +89,7 @@ const ManagerCTV = () => {
   const { setNotificationError } = React.useContext(NotificationCtx);
   const [openDatePicker, setOpenDatePicker] = useState(false);
   // const [filters, setFilters]: any = useState({ status: "joined" });
-  const [sortBy, setSortBy]: any = useState("deadlineTime");
+  const [sortBy, setSortBy]: any = useState("");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
   // const [dataPick, setDataPick] = useState(null);
   const roleProps = {
@@ -132,11 +136,28 @@ const ManagerCTV = () => {
   const handleChangeTab = (path: string, id: number) => {
     navigate(`/dashboard/manage-ctv/${path}?id=${id}`);
   };
-
-  const sortOpts = [
-    { value: "currentManager", label: "Sự kiện đang quản lí" },
-    { value: "pendingManager", label: "Sự kiện chờ phê duyệt" },
-  ];
+  const [visible, setVisible] = useState("");
+  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(null);
+  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(null);
+  const [
+    data = {
+      selected: [],
+      open: false,
+      sortByOpts: [
+        { value: "asc", label: "Tăng dần" },
+        { value: "desc", label: "Giảm dần" },
+      ],
+      sortOpts: [
+        { value: "isActive", label: "Đang quản lí" },
+        { value: "isPending", label: "Đang chờ phê duyệt" },
+      ],
+      timeOpts: [
+        { value: "currentWeek", label: "Tuần này" },
+        { value: "currentMonth", label: "Tháng này" },
+      ],
+    },
+  ]: // setData,
+  any = useState();
 
   const formik = useFormik({
     initialValues: {
@@ -257,7 +278,54 @@ const ManagerCTV = () => {
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Grid container item xs={12} spacing={1} sx={{ mt: 1, width: "100%" }}>
-            <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
+            <Grid item xs={12} lg={4} md={4}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  fullWidth
+                  classes={{ root: classes.textField }}
+                  id="outlined-select-currency"
+                  select
+                  label="Thời gian"
+                  defaultValue="currentWeek"
+                  // value={filters.time}
+                  // onChange={(e: any) => onChangeFilter(e, "time")}
+                >
+                  {data.timeOpts.map((option: any) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={4} md={4}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Ngày bắt đầu"
+                  inputFormat="dd/MM/yyyy"
+                  value={valueFilterStartDate}
+                  onChange={(newValue) => {
+                    setValueFilterStartDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} lg={4} md={4}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Ngày kết thúc"
+                  inputFormat="dd/MM/yyyy"
+                  value={valueFilterEndDate}
+                  onChange={(newValue) => {
+                    setValueFilterEndDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+
+            <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   autoFocus
@@ -276,8 +344,26 @@ const ManagerCTV = () => {
                 />
               </Box>
             </Grid>
-
-            <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+            <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  fullWidth
+                  classes={{ root: classes.textField }}
+                  id="outlined-select-currency"
+                  select
+                  label="Hiển thị theo"
+                  defaultValue="isNotResolve"
+                  value={visible}
+                  onChange={(e: any) => setVisible(e.target.value)}>
+                  {data.sortOpts.map((option: any) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </Grid>
+            <Grid item xs={4} md={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   fullWidth
@@ -285,10 +371,10 @@ const ManagerCTV = () => {
                   id="outlined-select-currency"
                   select
                   label="Sắp xếp"
-                  defaultValue="currentManager"
+                  defaultValue="desc"
                   value={sortBy}
                   onChange={(e: any) => setSortBy(e.target.value)}>
-                  {sortOpts.map((option: any) => (
+                  {data.sortByOpts.map((option: any) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -315,13 +401,13 @@ const ManagerCTV = () => {
                   <TableCell>ID</TableCell>
                   <TableCell>Tên</TableCell>
                   <TableCell>Thông số sự kiện</TableCell>
-                  <TableCell>Quản lí bởi</TableCell>
+                  <TableCell>Cập nhật bởi</TableCell>
                   <TableCell>Trạng thái</TableCell>
                   <TableCell>Quản lí</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                {dataUser?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row">
                       {row.id}
@@ -380,7 +466,7 @@ const ManagerCTV = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 20]}
             component="div"
-            count={data.length}
+            count={dataUser.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
