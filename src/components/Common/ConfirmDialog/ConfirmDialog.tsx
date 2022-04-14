@@ -10,9 +10,11 @@ import {
 import React from "react";
 
 export const ConfirmDialog = (props: any) => {
-  const { dialogTitle, dialogContent, confirmAction, cancelAction, open, onClose, loadingConfirm } = props;
+  const { dialogTitle, dialogContent, confirmAction, cancelAction, open, onClose, loadingConfirm, maxWidth } = props;
   return (
     <Dialog
+      maxWidth={maxWidth}
+      fullWidth
       open={open}
       onClose={onClose}
       aria-labelledby="alert-dialog-title"
@@ -25,13 +27,15 @@ export const ConfirmDialog = (props: any) => {
         <Button onClick={cancelAction} color="secondary">
           Huỷ
         </Button>
-        <Button
-          sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-          disabled={loadingConfirm}
-          onClick={confirmAction}
-          autoFocus>
-          {loadingConfirm ? <CircularProgress size={20} /> : "Xác nhận"}
-        </Button>
+        {confirmAction && (
+          <Button
+            sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+            disabled={loadingConfirm}
+            onClick={confirmAction}
+            autoFocus>
+            {loadingConfirm ? <CircularProgress size={20} /> : "Xác nhận"}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

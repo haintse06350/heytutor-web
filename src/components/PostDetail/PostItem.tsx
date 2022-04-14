@@ -29,11 +29,10 @@ import demoImg6 from "../../assets/default_images/6.jpg";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
-import PersonRemoveRoundedIcon from "@mui/icons-material/PersonRemoveRounded";
-import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import BlockIcon from "@mui/icons-material/Block";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { User } from "../../models/users";
 // import { Slide } from "react-slideshow-image";
 // import "react-slideshow-image/dist/styles.css";
@@ -56,8 +55,15 @@ import { ConfirmDialog } from "../Common/ConfirmDialog/ConfirmDialog";
 import { UserPost } from "../../models/user-post";
 import { NotificationCtx } from "../../context/notification/state";
 import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
+import JpgFile from "../../assets/file/jpg.svg";
+import PdfFile from "../../assets/file/pdf.svg";
+import ZipFile from "../../assets/file/zip.svg";
+import RawFile from "../../assets/file/raw.svg";
+import { styled } from "@mui/styles";
 
-// const slideImages = [{ url: demoImg5 }, { url: demoImg6 }, { url: demoImg4 }];
+const Input = styled("input")({
+  display: "none",
+});
 
 const PostItem = () => {
   const classes = useStyles();
@@ -65,6 +71,8 @@ const PostItem = () => {
   const postId = urlParams.get("postId");
   const tab = urlParams.get("tab");
   const from = urlParams.get("from");
+  const isMyRequest = from === "my-request";
+
   const [post, setPost]: any = useState(null);
   const [messages, setMessages]: any = useState(null);
   const [userProfile, setUserProfile]: any = useState(null);
@@ -74,11 +82,13 @@ const PostItem = () => {
   const [openConfirmRegister, setOpenConfirmRegister] = React.useState(false);
   const [openRemoveDialog, setOpenRemoveDialog] = React.useState(false);
   const [openCancelSupportDialog, setOpenCancelSupportDialog] = React.useState(false);
+  const [openDialogListRegister, setOpenDialogListRegister] = React.useState(false);
+  const [openExpandExchangeBox, setOpenExpandExchangeBox] = React.useState(false);
 
+  console.log(openDialogListRegister);
   const [loading, setLoading] = React.useState(false);
 
   const [selectedSupporter, setSelectedSupporter]: any = React.useState(null);
-  const [selectedRegister, setSelectedRegister]: any = React.useState(null);
 
   const [listRegister, setListRegister]: any = React.useState([]);
   const [listSupporter, setListSupporter]: any = React.useState([]);
@@ -91,25 +101,15 @@ const PostItem = () => {
 
   moment.locale("vi");
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [anchorElMenu, setAnchorElMenu] = React.useState<HTMLButtonElement | null>(null);
 
   const open = Boolean(anchorEl);
-  const openMenu = Boolean(anchorElMenu);
 
   const onOpenPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const onOpenRegisterPopover = (event: React.MouseEvent<HTMLButtonElement>, register: any) => {
-    setAnchorElMenu(event.currentTarget);
-    setSelectedRegister(register);
-  };
-
-  console.log(anchorEl, anchorElMenu);
-
   const onClosePopover = () => {
     setAnchorEl(null);
-    setAnchorElMenu(null);
   };
 
   const getPostStatus = () => {
@@ -217,33 +217,6 @@ const PostItem = () => {
     );
   };
 
-  const RegisterActionPopup = () => {
-    return (
-      <Popover
-        open={openMenu}
-        keepMounted
-        anchorEl={anchorElMenu}
-        onClose={onClosePopover}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}>
-        <Box>
-          <Tooltip title="Loại khỏi danh sách đăng kí">
-            <PersonRemoveRoundedIcon color="error" onClick={() => onClickRemoveRegisterUser(selectedRegister)} />
-          </Tooltip>
-          <Tooltip title="Chọn người hỗ trợ">
-            <PersonAddAltRoundedIcon
-              sx={{ ml: 0.5 }}
-              color="primary"
-              onClick={() => onClickConfirmRegister(selectedRegister)}
-            />
-          </Tooltip>
-        </Box>
-      </Popover>
-    );
-  };
-
   const onClickProfile = (userId: number) => {
     navigate(`/profile?userId=${userId}`);
   };
@@ -265,7 +238,7 @@ const PostItem = () => {
               </Typography>
             </Box>
             <Tooltip title="Trao đổi">
-              <MessageRoundedIcon color="primary" onClick={() => onClickContactSupporter(post?.postDetails.user)} />
+              <QuestionAnswerIcon color="primary" onClick={() => onClickContactSupporter(post?.postDetails.user)} />
             </Tooltip>
           </Box>
         </Box>
@@ -291,7 +264,7 @@ const PostItem = () => {
                   </Typography>
                 </Box>
                 <Tooltip title="Trao đổi">
-                  <MessageRoundedIcon color="primary" onClick={() => onClickContactSupporter(sp)} />
+                  <QuestionAnswerIcon color="primary" onClick={() => onClickContactSupporter(sp)} />
                 </Tooltip>
               </Box>
             ))}
@@ -317,12 +290,12 @@ const PostItem = () => {
             Danh sách người đăng kí hỗ trợ
           </Typography>
           <Typography variant="subtitle2" sx={{ fontWeight: 400 }}>
-            {listRegister.length} người đăng kí
+            {listRegister.slice(0, 5).length} / {listRegister.length} người đăng kí
           </Typography>
         </Box>
         {listRegister.length > 0 ? (
           <Box sx={{ mt: 1, pb: 2, maxHeight: 450, overflowY: "scroll" }}>
-            {map(listRegister, (register: any, idx: number) => (
+            {map(listRegister.slice(0, 5), (register: any, idx: number) => (
               <Box sx={{ p: 0.5 }} display="flex" key={idx}>
                 <Avatar {...stringAvatar(register.name)} style={{ width: 30, height: 30, fontSize: 14 }} />
                 <Box display="flex" flexDirection="column" flexGrow={1} sx={{ ml: 1 }}>
@@ -337,11 +310,27 @@ const PostItem = () => {
                     <StarRoundedIcon sx={{ width: 20, color: !register.rankPoint ? "gray" : "gold" }} />
                   </Typography>
                 </Box>
-                <Box onClick={(e: any) => onOpenRegisterPopover(e, register)}>
-                  <MoreHorizIcon key={idx} color="primary" />
-                </Box>
+                {isMyPost && (
+                  <Box>
+                    <Tooltip title="Loại khỏi danh sách đăng kí">
+                      <BlockIcon color="error" onClick={() => onClickRemoveRegisterUser(register)} />
+                    </Tooltip>
+                    <Tooltip title="Chọn người hỗ trợ">
+                      <PersonAddAltRoundedIcon
+                        sx={{ ml: 0.5 }}
+                        color="primary"
+                        onClick={() => onClickConfirmRegister(register)}
+                      />
+                    </Tooltip>
+                  </Box>
+                )}
               </Box>
             ))}
+            {listRegister.length > 5 && (
+              <Button variant="outlined" sx={{ float: "right" }} onClick={() => setOpenDialogListRegister(true)}>
+                Xem thêm
+              </Button>
+            )}
           </Box>
         ) : (
           <Box sx={{ mt: 1 }}>
@@ -460,6 +449,120 @@ const PostItem = () => {
         onClose={onCloseConfirmRegister}
         loadingConfirm={loading}
       />
+      <ConfirmDialog
+        dialogTitle="Quá trình trao đổi"
+        maxWidth="lg"
+        dialogContent={
+          <Box>
+            <Box display="flex" justifyContent="space-around" sx={{ maxHeight: 400, overflowY: "scroll" }}>
+              <ExchangeTimeLine selectedSupporter={selectedSupporter} isMyRequest={isMyRequest} />
+              <div style={{ width: "1px", height: "100%" }} />
+              {isMyRequest ? (
+                <Box>
+                  <TextField multiline fullWidth rows={4} placeholder="Nội dung yêu cầu" />
+                  <Button variant="contained" sx={{ mt: 1, float: "right" }}>
+                    Gửi
+                  </Button>
+                </Box>
+              ) : (
+                <Box>
+                  <Typography>Upload câu trả lời</Typography>
+                  <Box>
+                    <Typography>
+                      {
+                        "Bạn có thể upload file ảnh định dang jpg, png hoặc tài liệu định dạng docx, pdf với dung lượng < 1MB"
+                      }
+                    </Typography>
+                    <TextField
+                      margin="dense"
+                      id="link"
+                      label="Link tài liệu"
+                      type="link"
+                      fullWidth
+                      variant="standard"
+                    />
+                    <Box sx={{ mt: 2 }} display="flex" alignItems="center" justifyContent="flex-start">
+                      <Typography variant="subtitle1">Hoặc</Typography>
+                      <Input accept="*" id="contained-button-file" multiple type="file" />
+                      <Button sx={{ ml: 2 }} variant="contained" component="span">
+                        Upload file
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
+            </Box>
+            <Divider />
+            <Box sx={{ mt: 1 }}>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                Tệp đính kèm
+              </Typography>
+              <Grid sx={{ mt: 1 }} container spacing={2}>
+                <Grid display="flex" alignItems="center" item xs={12} sm={6} md={3}>
+                  <Box display="flex" alignItems="center">
+                    <img style={{ width: 40 }} src={JpgFile} alt="" />
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontSize: 12 }}>
+                        Tài liệu câu 1
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontSize: 12 }}>
+                        100Kb - 1 ngày trước
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <MoreHorizIcon sx={{ ml: 1 }} />
+                </Grid>
+                <Grid display="flex" alignItems="center" item xs={12} sm={6} md={3}>
+                  <Box display="flex" alignItems="center">
+                    <img style={{ width: 40 }} src={ZipFile} alt="" />
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontSize: 12 }}>
+                        Tài liệu câu 2
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontSize: 12 }}>
+                        100Kb - 1 ngày trước
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <MoreHorizIcon sx={{ ml: 1 }} />
+                </Grid>
+                <Grid display="flex" alignItems="center" item xs={12} sm={6} md={3}>
+                  <Box display="flex" alignItems="center">
+                    <img style={{ width: 40 }} src={PdfFile} alt="" />
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontSize: 12 }}>
+                        Tài liệu câu 3
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontSize: 12 }}>
+                        100Kb - 1 ngày trước
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <MoreHorizIcon sx={{ ml: 1 }} />
+                </Grid>
+                <Grid display="flex" alignItems="center" item xs={12} sm={6} md={3}>
+                  <Box display="flex" alignItems="center">
+                    <img style={{ width: 40 }} src={RawFile} alt="" />
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontSize: 12 }}>
+                        Tài liệu câu 4
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontSize: 12 }}>
+                        100Kb - 1 ngày trước
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <MoreHorizIcon sx={{ ml: 1 }} />
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        }
+        cancelAction={() => setOpenExpandExchangeBox(false)}
+        open={openExpandExchangeBox}
+        onClose={() => setOpenExpandExchangeBox(false)}
+        loadingConfirm={loading}
+      />
       {/* no images just text*/}
       <>
         <BreadcrumbsTab
@@ -471,7 +574,6 @@ const PostItem = () => {
           ]}
           current={{ title: "Chi tiết" }}
         />
-        <RegisterActionPopup />
         <Grid container spacing={2}>
           <Grid item xs={12} md={3}>
             <Card sx={{ mt: 2, p: 2 }}>{from === "my-request" ? <ListSupporter /> : <PostOwner />}</Card>
@@ -549,12 +651,12 @@ const PostItem = () => {
                     </Box>
                     <Box display="flex" alignItems="center">
                       <Tooltip title="Mở rộng">
-                        <OpenInFullIcon sx={{ width: 18, height: 18 }} />
+                        <OpenInFullIcon sx={{ width: 18, height: 18 }} onClick={() => setOpenExpandExchangeBox(true)} />
                       </Tooltip>
                     </Box>
                   </Box>
                   <Divider sx={{ mt: 1 }} variant="fullWidth" />
-                  <ExchangeTimeLine selectedSupporter={selectedSupporter} role={from} />
+                  <ExchangeTimeLine selectedSupporter={selectedSupporter} isMyRequest={isMyRequest} />
                 </CardContent>
                 <Box className={classes.actions}>
                   <RenderExchangeActions selectedSupporter={selectedSupporter} role={from} />

@@ -83,7 +83,7 @@ const Input = styled("input")({
 });
 
 export const ExchangeTimeLine = (props: any) => {
-  const { role, selectedSupporter } = props;
+  const { isMyRequest, selectedSupporter } = props;
   const classes = useStyles();
   const [exchangeData, setExchangeData] = React.useState(DEMO_EXCHANGE_DATA);
   const [openAnswerDialog, setOpenAnswerDialog] = React.useState(false);
@@ -218,7 +218,7 @@ export const ExchangeTimeLine = (props: any) => {
                 <TimelineSeparator>
                   {item.isAccept ? (
                     <CheckCircleOutlineRoundedIcon color="success" />
-                  ) : role === "register" ? (
+                  ) : !isMyRequest ? (
                     <Tooltip title="Upload câu trả lời">
                       <HelpOutlineRoundedIcon color="secondary" onClick={openUploadAnswerDialog} />
                     </Tooltip>
@@ -238,7 +238,7 @@ export const ExchangeTimeLine = (props: any) => {
                 </TimelineContent>
               </TimelineItem>
             ))}
-            {role === "my-request" && (
+            {isMyRequest && (
               <TimelineItem>
                 <TimelineOppositeContent
                   sx={{ flex: 0.1, p: 0, width: 90, minWidth: 90, maxWidth: 90 }}></TimelineOppositeContent>
@@ -246,16 +246,16 @@ export const ExchangeTimeLine = (props: any) => {
                   <AddCircleOutlineRoundedIcon color="secondary" onClick={addExchange} />
                 </TimelineSeparator>
                 <TimelineContent>
-                  <Typography variant="subtitle1">Đặt thêm câu hỏi</Typography>
+                  <Typography variant="subtitle1">Gửi yêu cầu</Typography>
                 </TimelineContent>
               </TimelineItem>
             )}
           </Timeline>
         ) : (
-          <Box>
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
             <img src={Study1} alt="" />
             <Typography variant="subtitle1" sx={{ fontWeight: 400 }} color="textSecondary">
-              {role === "my-request"
+              {isMyRequest
                 ? `Quá trình trao đổi giữa bạn và người hỗ trợ bạn sẽ diễn ra ở đây. Bạn có thể đặt câu hỏi sau đó người hỗ
               trợ của bạn sẽ trả lời bằng cách đăng tải tài liệu hoặc đường dẫn tới tài liệu.`
                 : `Bạn sẽ nhận được cầu hỏi yêu cầu hỗ trợ và đây sẽ là nơi bạn gửi câu trả lời bằng cách đăng tải hình ảnh, tài liệu hoặc link đến tài liệu`}
