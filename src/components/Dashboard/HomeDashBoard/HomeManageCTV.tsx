@@ -14,69 +14,14 @@ const HomeManageCTV = () => {
         {/* header */}
 
         {/* thong tin event can xu li */}
-        <Grid item xs={12} md={4} lg={4}>
-          <Card sx={{ p: 2 }}>
-            <Typography variant="subtitle1">Người dùng bị báo cáo xấu</Typography>
-            <Typography variant="subtitle2">Báo cáo mới: 5/12</Typography>
-            <Box sx={{ display: "flex", overFlow: "scroll" }}>
-              <Card sx={{ width: "fit-content", mr: 1, display: "flex", p: 1 }}>
-                <Typography variant="subtitle2">#hashTagEvent</Typography>
-                <Typography variant="subtitle2" sx={{ color: "red", ml: 0.5 }}>
-                  2
-                </Typography>
-              </Card>
-              <Card sx={{ width: "fit-content", mr: 1, display: "flex", p: 1 }}>
-                <Typography variant="subtitle2">#hashTagEvent</Typography>
-                <Typography variant="subtitle2" sx={{ color: "red", ml: 0.5 }}>
-                  2
-                </Typography>
-              </Card>
-              <Card sx={{ width: "fit-content", mr: 1, display: "flex", p: 1 }}>
-                <Typography variant="subtitle2">#PRJ</Typography>
-                <Typography variant="subtitle2" sx={{ color: "red", ml: 0.5 }}>
-                  1
-                </Typography>
-              </Card>
-            </Box>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4} lg={4}>
-          <Card sx={{ p: 2 }}>
-            <Typography variant="subtitle1">Bài đăng bị báo cáo xấu</Typography>
-            <Typography variant="subtitle2">Báo cáo mới: 5/12</Typography>
 
-            <Box sx={{ display: "flex", overFlow: "scroll" }}>
-              <Card sx={{ width: "fit-content", mr: 1, display: "flex", p: 1 }}>
-                <Typography variant="subtitle2">#hashTagEvent</Typography>
-                <Typography variant="subtitle2" sx={{ color: "red", ml: 0.5 }}>
-                  2
-                </Typography>
-              </Card>
-              <Card sx={{ width: "fit-content", mr: 1, display: "flex", p: 1 }}>
-                <Typography variant="subtitle2">#hashTagEvent</Typography>
-                <Typography variant="subtitle2" sx={{ color: "red", ml: 0.5 }}>
-                  2
-                </Typography>
-              </Card>
-              <Card sx={{ width: "fit-content", mr: 1, display: "flex", p: 1 }}>
-                <Typography variant="subtitle2">#PRJ</Typography>
-                <Typography variant="subtitle2" sx={{ color: "red", ml: 0.5 }}>
-                  1
-                </Typography>
-              </Card>
-            </Box>
-          </Card>
-        </Grid>
         <Grid item xs={12} md={4} lg={4}>
-          <Card sx={{ p: 2, height: "100%" }}>
+          <Card sx={{ p: 2 }}>
             <Typography variant="subtitle1">Sự kiện được giao quản lí</Typography>
             <Typography variant="subtitle2">Sự kiện được giao mới: 1</Typography>
             <Typography variant="subtitle2">Sự kiện đang quản lí: 3</Typography>
           </Card>
-        </Grid>
-        {/* content */}
-        <Grid item xs={12} md={6} lg={6}>
-          <Card sx={{ p: 2 }}>
+          <Card sx={{ p: 2, mt: 2 }}>
             <Typography>
               <b>Thông báo hoạt động</b>
             </Typography>
@@ -146,7 +91,8 @@ const HomeManageCTV = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        {/* content */}
+        <Grid item xs={12} md={8} lg={8}>
           <Card sx={{ p: 2 }}></Card>
         </Grid>
       </Grid>

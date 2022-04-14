@@ -8,6 +8,10 @@ import {
   Divider,
   LinearProgress,
   LinearProgressProps,
+  // Button,
+  IconButton,
+  Tooltip,
+  // IconButton,
 } from "@mui/material";
 //icon
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -21,6 +25,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import BreadcrumbsTab from "../../Common/Breadcrumbs/Breadcrumbs";
+import Visibility from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -37,11 +43,15 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
 
 const DialogDetailCTV = (props: any) => {
   const [value, setValue] = useState("1");
+  const navigate = useNavigate();
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
+  const handleChangeTab = (link: string) => {
+    navigate(`/dashboard/${link}`);
+  };
   return (
     <Box sx={{ width: "100" }}>
       <BreadcrumbsTab
@@ -110,19 +120,40 @@ const DialogDetailCTV = (props: any) => {
                     </Grid>
                   </Grid>
                   <Box>
-                    <Box sx={{ display: "flex" }}>
-                      <Typography variant="subtitle1">Sự kiện đang quản lí : </Typography>
-                      <Typography>&nbsp;&nbsp;2</Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <Box sx={{ display: "flex" }}>
+                        <Typography variant="subtitle1">Sự kiện đang quản lí : </Typography>
+                        <Typography>&nbsp;&nbsp;2</Typography>
+                      </Box>
+                      <IconButton onClick={() => handleChangeTab("admin/manage-event")}>
+                        <Tooltip title="Xem chi tiết">
+                          <Visibility />
+                        </Tooltip>
+                      </IconButton>
                     </Box>
-                    <Box sx={{ display: "flex" }}>
-                      <Typography variant="subtitle1">Sự kiện đang đăng kí : </Typography>
-                      <Typography>&nbsp;&nbsp;2</Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <Box sx={{ display: "flex" }}>
+                        <Typography variant="subtitle1">Sự kiện đang đăng kí :&nbsp;&nbsp; </Typography>
+                        <Typography>2</Typography>
+                      </Box>
+                      <IconButton>
+                        <Tooltip title="Xem chi tiết">
+                          <Visibility />
+                        </Tooltip>
+                      </IconButton>
                     </Box>
-                    <Box sx={{ display: "flex" }}>
-                      <Typography variant="subtitle1">Sự kiện đã kết thúc : </Typography>
-                      <Typography>&nbsp;&nbsp;2</Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <Box sx={{ display: "flex" }}>
+                        <Typography variant="subtitle1">Sự kiện đã kết thúc : </Typography>
+                        <Typography>&nbsp;&nbsp;2</Typography>
+                      </Box>
+                      <IconButton>
+                        <Tooltip title="Xem chi tiết">
+                          <Visibility />
+                        </Tooltip>
+                      </IconButton>
                     </Box>
-                    <Box sx={{ display: "flex" }}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Typography variant="subtitle1">Vấn đề đã được giúp đỡ xong : </Typography>
                       <Typography>&nbsp;&nbsp;200</Typography>
                     </Box>
@@ -157,14 +188,14 @@ const DialogDetailCTV = (props: any) => {
                       <Typography>&nbsp;09999999999 , 0988888888 </Typography>
                     </Grid>
                     <Grid item xs={6} md={3} lg={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography variant="subtitle1">Email</Typography>
+                      <Typography variant="subtitle1">Hòm thư</Typography>
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={6} md={9} lg={9}>
                       <Typography>&nbsp;anhcd@gmail.com </Typography>
                     </Grid>
                     <Grid item xs={6} md={3} lg={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography variant="subtitle1">Website</Typography>
+                      <Typography variant="subtitle1">Facebook</Typography>
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={6} md={9} lg={9}>

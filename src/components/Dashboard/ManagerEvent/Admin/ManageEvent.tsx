@@ -8,19 +8,24 @@ import {
   IconButton,
   Tooltip,
   DialogProps,
-  Button,
+  // Button,
   TextField,
   InputAdornment,
   MenuItem,
   Popover,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Button,
+  Chip,
 } from "@mui/material";
 //icon
-// import EventNoteIcon from "@mui/icons-material/EventNote";
-// import { LineStatistical } from "../../HomeDashBoard/LineStatistical";
-import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import EditIcon from "@mui/icons-material/Edit";
-import FlagIcon from "@mui/icons-material/Flag";
+
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import BlockIcon from "@mui/icons-material/Block";
@@ -29,10 +34,12 @@ import { useStyles } from "./ManageEvent.style";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+
 import TabPanel from "@mui/lab/TabPanel";
 import DialogPreviewEventDetail from "./DialogPreviewEventDetail";
 import img1 from "../../../../assets/home_event_images/14.png";
 import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import DateRangePicker from "../../../ListData/DateTimePicker/DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
@@ -46,6 +53,8 @@ const ManageEvent = () => {
   const [filters, setFilters]: any = useState({ status: "joined" });
   const [sortBy, setSortBy]: any = useState("deadlineTime");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
+  const navigate = useNavigate();
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -60,23 +69,6 @@ const ManageEvent = () => {
     setOpenPreview(false);
   };
 
-  function data(id: number, title: string, dateTime: string, joined: number, reported: number, managerCurrent: string) {
-    return {
-      id,
-      title,
-      dateTime,
-      joined,
-      reported,
-      managerCurrent,
-    };
-  }
-
-  const data1 = [
-    data(1, "Thử nghiệm", "12/12/2020", 212, 1, "Cao Duc Anh"),
-    data(2, "Thử nghiệm Thử nghiệm Thử nghiệm Thử nghiệm Thử nghiệm", "12/12/2020", 120, 12, "Nguyen Van A"),
-    data(3, "Thử nghiệm", "12/12/2020", 134, 2, "Le Thi B"),
-    data(4, "Thử  nghiệmnghiệmnghiệmnghiệm nghiệmnghiệm nghiệm nghiệm", "12/12/2020", 0, 0, "Le Huy Chuong"),
-  ];
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
@@ -123,19 +115,46 @@ const ManageEvent = () => {
     { value: "nbOfJoined", label: "Số người tham gia" },
     { value: "nbOfReported", label: "Số báo cáo xấu" },
   ];
-  const navigate = useNavigate();
 
-  const handleOpenDetail = (item: any) => {
-    navigate(`/dashboard/admin/manage-event/detail?${item.id}`);
+  const dataFake = [
+    {
+      id: 1,
+      title: "Sự kiện 1",
+      time: "25/4/2022",
+      status: "Đang diễn ra",
+      nbOfJoined: "10",
+      nbOfReported: "2",
+      manager: "anhcd",
+    },
+    {
+      id: 2,
+      title: "Sự kiện 2",
+      time: "20/10/2020",
+      status: "Đã kết thúc",
+      nbOfJoined: "10",
+      nbOfReported: "2",
+      manager: "anhcd",
+    },
+  ];
+  // const navigate = useNavigate();
+
+  // const handleOpenDetail = (item: any) => {
+  //   navigate(`/dashboard/admin/manage-event/detail?${item.id}`);
+  // };
+  const handleCreateEvent = () => {
+    navigate(`/dashboard/admin/manage-event/create-event`);
   };
   return (
     <div className={classes.wrapManageEvent}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button startIcon={<AddCircleOutlineIcon />} variant="contained" sx={{ mb: 2 }} onClick={handleCreateEvent}>
+          Tạo sự kiện
+        </Button>
+      </Box>
+
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList
-            onChange={handleChange}
-            aria-label="lab API tabs example"
-            sx={{ backgroundColor: "#fff", borderRadius: "8px" }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="Sự kiện đang diễn ra" value="1" />
             <Tab label="Sự kiện đăng kí" value="2" />
           </TabList>
@@ -220,82 +239,52 @@ const ManageEvent = () => {
             </Grid>
           </Box>
 
-          <Grid container spacing={2}>
-            {data1.map((item, index) => (
-              <Grid item xs={12} md={6} lg={6} key={index}>
-                <Card sx={{ p: 2 }}>
-                  {/* title sự kiện đagn quản lí */}
-
-                  <Grid container>
-                    <Grid item xs={2}>
-                      <Typography variant="subtitle1">Tiêu đề : </Typography>
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Typography
-                        noWrap
-                        onClick={() => handleOpenDetail(item)}
-                        sx={{ textDecoration: "underline", cursor: "pointer" }}>
-                        {item.title}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <div className={classes.newMessage}>{index === 3 && <i className={classes.blink}></i>}</div>
-                    </Grid>
-                  </Grid>
-                  <Grid container>
-                    <Grid item xs={1}>
-                      <AccessTimeIcon />
-                    </Grid>
-                    <Grid item xs={11}>
-                      <Typography variant="subtitle1">Từ 12 tháng 3 năm 2022 đến 21 tháng 4 năm 2022 </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container>
-                    <Grid item xs={1}>
-                      <HowToRegOutlinedIcon />
-                    </Grid>
-                    <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography variant="subtitle1">Số lượng người tham gia </Typography>
-                      <Typography variant="subtitle1">:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography> &nbsp; {item.joined}</Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container>
-                    <Grid item xs={1}>
-                      <FlagIcon />
-                    </Grid>
-                    <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography variant="subtitle1">Số báo cáo xấu</Typography>
-                      <Typography variant="subtitle1">:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography> &nbsp; {item.reported}</Typography>
-                    </Grid>
-                  </Grid>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography variant="subtitle1">Quản lí: {item.managerCurrent}</Typography>
-                    {/* Ban cộng tác viên */}
-                    <IconButton aria-label="Chỉnh sửa cộng tác viên">
-                      <Tooltip title="Chỉnh sửa">
-                        <EditIcon color="primary" />
+          {/* title / time-deadline / nbOfJoined / nbOfReported / manager */}
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell>Tiêu đề</TableCell>
+                  <TableCell>Thời gian hết hạn</TableCell>
+                  <TableCell>Số người tham gia</TableCell>
+                  <TableCell>Số báo cáo xấu</TableCell>
+                  <TableCell>Quản lí sự kiện</TableCell>
+                  <TableCell>Trạng thái</TableCell>
+                  <TableCell>Quản lí</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dataFake.map((row: any) => (
+                  <TableRow key={row} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      {row.id}
+                    </TableCell>
+                    <TableCell>
+                      {row.title}
+                      {row.title}
+                      {row.title}
+                      {row.title}
+                    </TableCell>
+                    <TableCell align="center">{row.time}</TableCell>
+                    <TableCell align="center">{row.nbOfJoined}</TableCell>
+                    <TableCell align="center">{row.nbOfReported}</TableCell>
+                    <TableCell>{row.manager}</TableCell>
+                    <TableCell>
+                      {row.status === "Đang diễn ra" ? <Chip label="hoạt động" /> : <Chip label="đã kết thúc" />}
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title="Quản lí trạng thái">
+                        <IconButton aria-label="Xem chi tiết">
+                          <BorderColorIcon color="error" />
+                        </IconButton>
                       </Tooltip>
-                    </IconButton>
-                  </Box>
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        handleOpenDetail(item);
-                      }}>
-                      Chi tiết
-                    </Button>
-                  </Box>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </TabPanel>
         {/* Sự kiện đăng kí */}
         <TabPanel value="2">

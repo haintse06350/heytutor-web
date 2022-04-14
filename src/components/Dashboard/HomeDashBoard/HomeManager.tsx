@@ -12,7 +12,7 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import { Doughnut } from "react-chartjs-2";
+
 const HomeManager = () => {
   const renderGeneralStatistic = [
     { title: "Bài đăng", data: "1200", dataStatus: 2.7 },
@@ -21,30 +21,6 @@ const HomeManager = () => {
   ];
 
   const classes = useStyles();
-
-  const data = {
-    labels: ["CTV", "Sự kiện", "Người tham gia", "Số vấn đề được giải quyết"],
-    datasets: [
-      {
-        label: "# of Votes",
-        data: [12, 19, 3, 5],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-
   return (
     <>
       <Grid container spacing={2}>
@@ -116,7 +92,7 @@ const HomeManager = () => {
             </Typography>
             <Grid container>
               <Grid item xs={6} md={6}>
-                <Doughnut data={data} />
+                {/* <Doughnut data={data} /> */}
               </Grid>
               <Grid item xs={6} md={6}>
                 <Typography>Cộng tác viện: 10</Typography>

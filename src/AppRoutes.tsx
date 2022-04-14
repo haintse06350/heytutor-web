@@ -1,25 +1,19 @@
 import React, { Fragment } from "react";
+import Post, { CreatePost } from "./components/CreatePost/CreatePost";
+import { UserCtx } from "./context/user/state";
+import { ListData } from "./components/ListData";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Chat from "./components/Chat/Chat";
 import Dashboard from "./components/Dashboard/Dashboard";
-// import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
-// import PostDetail from "./components/HomePage/PostDetail";
-// import Message from "./components/Message/Message";
-// import Login from "./components/Login/Login";
 import Loginv2 from "./components/Loginv2/Loginv2";
-import Post, { CreatePost } from "./components/CreatePost/CreatePost";
-// import Post2 from "./components/Post2/Post";
-import CreateEvent from "./components/CreateEvent/CreatEvent";
+import CreateEvent from "./components/Dashboard/ManagerEvent/CreateEvent";
 import Feedback from "./components/Feedback/Feedback";
-
 import UserProfile from "./components/UserProfile/UserProfile";
-import { UserCtx } from "./context/user/state";
 import RequireAuth from "./RequireAuth";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/PostDetail/PostItem";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
-import { ListData } from "./components/ListData";
 import PostDetail from "./components/HomePage/PostDetail";
 import EventDetail from "./components/Event/EventDetail";
 import EventList from "./components/Event/EventList";
@@ -34,6 +28,8 @@ import ManageEvent from "./components/Dashboard/ManagerEvent/Admin/ManageEvent";
 // import ManagerProfileUser from "./components/Dashboard/ManagerUser/ManagerProfileUser";
 import ManagerDetailCTV from "./components/Dashboard/ManagerCTV/ManagerDetailCTV";
 import ManagerEventDetail from "./components/Dashboard/ManagerEvent/Admin/ManageEventDetail";
+import HomeSupperAdmin from "./components/Dashboard/HomeDashBoard/HomeSupperAdmin";
+import LoginAdmin from "./components/Dashboard/LoginAdmin";
 
 export default function AppRoutes() {
   const { user }: any = React.useContext(UserCtx);
@@ -243,6 +239,23 @@ export default function AppRoutes() {
               </DashBoardLayout>
             }
           />
+          <Route
+            path={"/dashboard/supper-admin"}
+            element={
+              <DashBoardLayout>
+                <HomeSupperAdmin />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/dashboard/admin/manage-event/create-event"}
+            element={
+              <DashBoardLayout>
+                <CreateEvent />
+              </DashBoardLayout>
+            }
+          />
+          <Route path={"/dashboard/login"} element={<LoginAdmin />} />
         </Routes>
       </Fragment>
     </Router>

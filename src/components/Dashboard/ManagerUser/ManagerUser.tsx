@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStyles } from "./ManagerUser.style";
 import { useNavigate } from "react-router-dom";
 
@@ -21,6 +21,7 @@ import {
   IconButton,
   Grid,
   Popover,
+  SelectChangeEvent,
 } from "@mui/material";
 
 import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
@@ -29,16 +30,23 @@ import { DateRange } from "@mui/lab/DateRangePicker";
 import SearchIcon from "@mui/icons-material/Search";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import StarIcon from "@mui/icons-material/Star";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DialogManagerUser from "./DialogManageUser";
-// import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DatePicker from "@mui/lab/DatePicker";
+import moment from "moment";
+import { Manager } from "../../../models/manager";
 export const ManagerUser = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [openDatePicker, setOpenDatePicker] = useState(false);
-  const [filters, setFilters]: any = useState({ status: "joined" });
-  const [sortBy, setSortBy]: any = useState("deadlineTime");
+  const [sortBy, setSortBy]: any = useState("");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
   const [dataPick, setDataPick] = useState(null);
+  const [visible, setVisible] = useState("");
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
+  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
   function createData(
     id: number,
     name: string,
@@ -243,9 +251,10 @@ export const ManagerUser = () => {
       </Box>
     ));
   };
+
   const renderTime = (status: any) => {
     return status.map((item: any) => (
-      <Typography key={item}>{item !== "Hoạt động" ? "Còn 1 ngày" : "Thanh niên nghiêm túc"}</Typography>
+      <Typography key={item}>{item !== "Hoạt động" ? "Còn 1 ngày" : "Còn hiệu lực"}</Typography>
     ));
   };
 
@@ -261,60 +270,127 @@ export const ManagerUser = () => {
     setDataPick(row);
   };
 
+  const openDescribeEvent = Boolean(anchorEl);
+
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
+
+  const [eventPick, setEventPick] = useState("");
+  const onOpenDescribeEvent = (event: any, eventJoined: string) => {
+    setAnchorEl(event.currentTarget);
+    setEventPick(eventJoined);
+  };
+  const onCloseDescribeEvent = (event: SelectChangeEvent) => {
+    setAnchorEl(null);
+  };
+
+  const [
+    data = {
+      selected: [],
+      open: false,
+      sortByOpts: [
+        { value: "asc", label: "Tăng dần" },
+        { value: "desc", label: "Giảm dần" },
+      ],
+      sortOpts: [
+        { value: "isNotResolve", label: "Báo cáo xấu chưa giải quyết" },
+        { value: "reviewRegisterPoint", label: "Xếp hạng yêu cầu hỗ trợ" },
+        { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
+        { value: "generalEvent", label: "Chung sự kiện" },
+      ],
+      timeOpts: [
+        { value: "currentWeek", label: "Tuần này" },
+        { value: "currentMonth", label: "Tháng này" },
+        { value: "selectTime", label: "Chọn ngày" },
+      ],
+    },
+  ]: // setData,
+  any = useState();
+
+  const [rowsData, setRowsData] = useState(null);
+
+  const getListUser = async () => {
+    const data = await Manager.getUserManage();
+    setRowsData(data);
+  };
+  const [datePick, setDatePick] = useState(false);
+  const handleClosePickDate = () => {
+    setDatePick(false);
+  };
   const onChangeFilter = (event: any, type: string) => {
-    if (type === "status") {
-      // setPostStatus(event.target.value);
-    }
-    if (type === "hashtag") {
-      if (event.length === 0) {
-        delete filters["hashtag"];
-        setFilters({ ...filters });
-      } else {
-        const newFilter = {
-          hashtag: event,
-        };
-        setFilters({ ...filters, ...newFilter });
+    if (type === "time") {
+      if (event.target.value === "currentWeek") {
+        setValueFilterStartDate(moment().subtract(7, "days").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "currentMonth") {
+        setValueFilterStartDate(moment().subtract(1, "months").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "selectTime") {
+        setDatePick(true);
       }
-    } else if (type === "time") {
-      if (event.target.value === "Chọn ngày") {
-        delete filters["time"];
-        setOpenDatePicker(true);
-      } else {
-        const newFilter = {
-          time: event.target.value,
-        };
-        setFilters({ ...filters, ...newFilter });
-      }
-    } else {
-      const newFilter = {
-        status: event.target.value,
-      };
-      setFilters({ ...filters, ...newFilter });
     }
   };
-  const timeOpts = [
-    { value: "Tuần này", label: "Tuần này" },
-    { value: "Tháng này", label: "Tháng này" },
-    { value: "Chọn ngày", label: "Chọn ngày" },
-  ];
-
-  const sortOpts = [
-    { value: "deadlineTime", label: "Thời gian của vấn đề" },
-    { value: "reviewRegisterPoint", label: "Xếp hạng yêu cầu hỗ trợ" },
-    { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
-    { value: "isNotResolve", label: "Chưa giải quyết" },
-  ];
+  useEffect(() => {
+    getListUser();
+    console.log(rowsData, "rowdata");
+  }, []);
 
   return (
     <div className={classes.wrapTableManager}>
       <Box sx={{ mb: 2 }}>
         <Box sx={{ display: "flex" }}>
-          <Grid container item xs={12} spacing={1} sx={{ mt: 2, width: "100%" }}>
-            <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
+          <Grid container spacing={2} sx={{ mt: 2, width: "100%" }}>
+            <Grid item xs={12} lg={4} md={4}>
+              <Box component="form" noValidate autoComplete="off">
+                <TextField
+                  fullWidth
+                  classes={{ root: classes.textField }}
+                  id="outlined-select-currency"
+                  select
+                  label="Thời gian"
+                  defaultValue="currentWeek"
+                  // value={filters.time}
+                  onChange={(e: any) => onChangeFilter(e, "time")}>
+                  {data.timeOpts.map((option: any) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={4} md={4}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Ngày bắt đầu"
+                  inputFormat="dd/MM/yyyy"
+                  value={valueFilterStartDate}
+                  open={datePick}
+                  onClose={handleClosePickDate}
+                  onChange={(newValue) => {
+                    setValueFilterStartDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} lg={4} md={4}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Ngày kết thúc"
+                  inputFormat="dd/MM/yyyy"
+                  value={valueFilterEndDate}
+                  onChange={(newValue) => {
+                    setValueFilterEndDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+
+            <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   autoFocus
@@ -333,7 +409,7 @@ export const ManagerUser = () => {
                 />
               </Box>
             </Grid>
-            <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+            <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   fullWidth
@@ -341,25 +417,18 @@ export const ManagerUser = () => {
                   id="outlined-select-currency"
                   select
                   label="Hiển thị theo"
-                  defaultValue="Tuần này"
-                  value={filters.time}
-                  onChange={(e: any) => onChangeFilter(e, "time")}>
-                  {timeOpts.map((option: any) => (
+                  defaultValue="isNotResolve"
+                  value={visible}
+                  onChange={(e: any) => setVisible(e.target.value)}>
+                  {data.sortOpts.map((option: any) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
                   ))}
                 </TextField>
               </Box>
-              <Popover
-                open={openDatePicker}
-                onClose={onCloseDatePicker}
-                anchorOrigin={{ vertical: "center", horizontal: "center" }}
-                transformOrigin={{ vertical: "center", horizontal: "center" }}>
-                <DateRangePicker setValue={setDateData} value={dateData} />
-              </Popover>
             </Grid>
-            <Grid item xs={4} md={3} sx={{ minWidth: "20%" }}>
+            <Grid item xs={4} md={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   fullWidth
@@ -367,10 +436,10 @@ export const ManagerUser = () => {
                   id="outlined-select-currency"
                   select
                   label="Sắp xếp"
-                  defaultValue="Thời gian của vấn đề"
+                  defaultValue="desc"
                   value={sortBy}
                   onChange={(e: any) => setSortBy(e.target.value)}>
-                  {sortOpts.map((option: any) => (
+                  {data.sortByOpts.map((option: any) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -395,6 +464,7 @@ export const ManagerUser = () => {
               <TableCell>Id</TableCell>
               <TableCell>Tên</TableCell>
               <TableCell>Báo cáo xấu</TableCell>
+              <TableCell>Thuộc sự kiện</TableCell>
               <TableCell>Đánh giá hỗ trợ</TableCell>
               <TableCell>Đánh giá yêu cầu hỗ trợ</TableCell>
               <TableCell>Trạng thái</TableCell>
@@ -421,10 +491,17 @@ export const ManagerUser = () => {
                     variant="subtitle1"
                     sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
                     onClick={() => handleLink("detail")}>
-                    Chưa giải quyết:{row.nbOfReport + Math.floor(Math.random() * 10) + 1}/
-                    {row.nbOfReport + Math.floor(Math.random() * 10) + 2}
+                    Chưa giải quyết: {row.nbOfReport}/{row.nbOfReport + 1}
                   </Typography>
-                  Thuộc 4 sự kiện
+                </TableCell>
+                <TableCell sx={{ maxWidth: "100px" }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
+                    onClick={(e) => onOpenDescribeEvent(e, row.eventJoined)}
+                    noWrap>
+                    {row.eventJoined}
+                  </Typography>
                 </TableCell>
                 <TableCell sx={{ color: "#5ab4ec" }}>
                   {row.ratePoint} <StarIcon color="warning" /> {" / (" + row.nbOfRate + " lượt)"}
@@ -446,7 +523,24 @@ export const ManagerUser = () => {
                 </TableCell>
               </TableRow>
             ))}
-            <DialogManagerUser open={openDialogManageUser} closeDialog={closeDialog} data={dataPick} />;
+            <Popover
+              open={openDescribeEvent}
+              anchorEl={anchorEl}
+              onClose={onCloseDescribeEvent}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}>
+              <Box sx={{ p: 2 }} width="md">
+                <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
+                  Tiêu đề: {eventPick}
+                </Typography>
+                <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
+                  Tóm tắt: {eventPick}
+                </Typography>
+              </Box>
+            </Popover>
+            <DialogManagerUser open={openDialogManageUser} closeDialog={closeDialog} data={dataPick} />
           </TableBody>
         </Table>
         <TablePagination
