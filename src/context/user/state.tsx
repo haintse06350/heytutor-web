@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { INITIAL_STATE } from "./constants";
-import { login, logout } from "./dispatchers";
+import { login, logout, loginAdmin } from "./dispatchers";
 import Reducer from "./reducer";
 import IUserCtx from "./types";
 
@@ -11,6 +11,7 @@ export default function UserProvider({ children }: any) {
 
   const setters = {
     login: (user: any) => login(dispatch, user),
+    loginAdmin: (user: any) => loginAdmin(dispatch, user),
     logout: () => logout(dispatch),
   };
 

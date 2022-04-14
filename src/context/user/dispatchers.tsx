@@ -12,6 +12,16 @@ export const login = async (dispatch: React.Dispatch<any>, user: any) => {
   }
 };
 
+export const loginAdmin = async (dispatch: React.Dispatch<any>, user: any) => {
+  try {
+    const userObj: any = jwt_decode(user);
+    dispatch({ type: ACTIONS.ADMIN_LOGIN, admin: userObj.user });
+    return user;
+  } catch (e) {
+    console.error("Fail to log in", e);
+  }
+};
+
 export const logout = async (dispatch: React.Dispatch<any>) => {
   try {
     // await Auth.signOut();

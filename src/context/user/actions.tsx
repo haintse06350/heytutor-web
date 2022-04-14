@@ -1,4 +1,5 @@
 export const ACTIONS = {
+  ADMIN_LOGIN: "ADMIN_LOGIN",
   LOGIN: "LOGIN",
   LOGOUT: "LOGOUT",
 };

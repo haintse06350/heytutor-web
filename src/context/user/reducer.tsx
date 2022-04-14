@@ -10,6 +10,11 @@ export default (state: any, action: any) => {
         ...state,
         user,
       };
+    case ACTIONS.ADMIN_LOGIN:
+      return {
+        ...state,
+        user,
+      };
     case ACTIONS.LOGOUT:
       return {
         ...state,
