@@ -32,18 +32,17 @@ export const useStyles: any = makeStyles(() => ({
     position: "fixed",
     top: 70,
     right: 10,
-
-    "& > div": {
-      border: "1px solid black",
-      borderRadius: "8px 8px 50% 50% ",
-      backgroundColor: "black",
-      color: "#fff",
-      width: "140px",
-      height: 100,
-      "& > p": {
-        alignItems: "center",
-        textAlign: "center",
-      },
+  },
+  notiBox: {
+    border: "1px solid black",
+    borderRadius: "8px 8px 50% 50% ",
+    backgroundColor: "black",
+    color: "#fff",
+    width: "140px",
+    height: "fit-content",
+    "& > p": {
+      alignItems: "center",
+      textAlign: "center",
     },
   },
   quickNoti: {
@@ -52,5 +51,8 @@ export const useStyles: any = makeStyles(() => ({
     borderRadius: 8,
     background: "#ffffff",
     marginBottom: 8,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 }));

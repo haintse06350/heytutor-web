@@ -26,7 +26,6 @@ import { ReportDialog } from "./ReportDialog";
 
 export default function RegisterContent(props: any) {
   const { data, tab, loading } = props;
-  console.log(data);
   const classes = useStyles();
   const [openPostMenu, setOpenPostMenu] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -135,7 +134,6 @@ export default function RegisterContent(props: any) {
     }
   };
 
-  console.log("listPost", listPost);
   const gridView = () => {
     return map(listPost, (item: any, index: number) => (
       <Grid key={index} item xs={12} sm={6} md={6} lg={4}>

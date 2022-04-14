@@ -147,7 +147,7 @@ const RegisteredPost = (props: any) => {
   };
   return (
     <MainTabLayout
-      title={"Vấn đề tôi đăng kí hỗ trợ"}
+      title={"Vấn đề đăng kí hỗ trợ"}
       content={renderRegisterPost()}
       type="registeredPost"
       icon={<FactCheckIcon />}

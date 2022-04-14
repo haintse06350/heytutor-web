@@ -234,7 +234,7 @@ export const ExchangeTimeLine = (props: any) => {
                   <TimelineConnector />
                 </TimelineSeparator>
                 <TimelineContent>
-                  <Typography variant="subtitle1">{item.title}</Typography>
+                  <Typography variant="subtitle2">{item.title}</Typography>
                 </TimelineContent>
               </TimelineItem>
             ))}

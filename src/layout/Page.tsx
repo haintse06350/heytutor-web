@@ -8,7 +8,7 @@ import { Box, Container } from "@mui/material";
 
 const Page = forwardRef(({ children, title = "", ...other }: any, ref) => (
   <Box ref={ref} {...other}>
-    <Container sx={{ pt: 9 }} maxWidth="xl">
+    <Container sx={{ pt: 10 }} maxWidth="xl">
       {children}
     </Container>
   </Box>

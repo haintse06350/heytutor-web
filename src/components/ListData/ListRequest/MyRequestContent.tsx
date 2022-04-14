@@ -60,7 +60,7 @@ export default function MyRequestContent(props: any) {
   const { tabValue, data } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [openListRegisterDialog, setOpenListRegisterDialog]: any = React.useState(null);
+  const [openListRegisterDialog, setOpenListRegisterDialog]: any = React.useState(false);
   const [selectItem, setSelectItem] = React.useState<any>(null);
   const [userSelected, setUserSelected]: any = React.useState(null);
   const [openRemoveDialog, setOpenRemoveDialog] = React.useState(false);
@@ -193,7 +193,7 @@ export default function MyRequestContent(props: any) {
           variant="subtitle2"
           color="primary"
           sx={{ minWidth: 50, fontSize: 12, fontWeight: 500, cursor: "pointer" }}>
-          Chi tiết
+          Xem chi tiết
         </Typography>
       </div>
     );
@@ -298,7 +298,9 @@ export default function MyRequestContent(props: any) {
         </DialogContent>
         {dialogData?.length > 5 && (
           <DialogActions>
-            <Button autoFocus>Xem tất cả {dialogData?.length} người</Button>
+            <Button autoFocus onClick={() => onClickPostDetail(selectItem?.id)}>
+              Xem tất cả {dialogData?.length} người
+            </Button>
           </DialogActions>
         )}
       </Dialog>
@@ -317,8 +319,8 @@ export default function MyRequestContent(props: any) {
         onClose={onCloseRemoveDialog}
       />
       <ConfirmDialog
-        dialogTitle="Xác nhận chọn supporter"
-        dialogContent={`Bạn có chắc chắn muốn chọn ${userSelected?.username} làm supporter cho vấn đề này?`}
+        dialogTitle="Xác nhận chọn người hỗ trợ"
+        dialogContent={`Bạn có chắc chắn muốn chọn ${userSelected?.username} hỗ trợ cho vấn đề này?`}
         confirmAction={onConfirmSupporter}
         cancelAction={onCloseConfirmRegister}
         open={openConfirmRegister}

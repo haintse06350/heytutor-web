@@ -12,13 +12,13 @@ const BreadcrumbsTab = (props: any) => {
   const renderIcon = (title: string) => {
     switch (title) {
       case "Trang chủ": {
-        return <HomeOutlinedIcon />;
+        return <HomeOutlinedIcon sx={{ width: 18, mr: 1 }} />;
       }
       case "Vấn đề của tôi": {
-        return <ArticleOutlinedIcon />;
+        return <ArticleOutlinedIcon sx={{ width: 18, mr: 1 }} />;
       }
-      case "Vấn đề tôi đăng kí hỗ trợ": {
-        return <AppRegistrationOutlinedIcon />;
+      case "Vấn đề đi hỗ trợ": {
+        return <AppRegistrationOutlinedIcon sx={{ width: 18, mr: 1 }} />;
       }
     }
   };
@@ -46,14 +46,20 @@ const BreadcrumbsTab = (props: any) => {
     <FixBreadScrumbsStyle>
       <Breadcrumbs aria-label="breadcrumb">
         {map(history, (historyPage: any, index: number) => (
-          <Link key={index} underline="hover" sx={linkStyles} color="inherit" variant="h6" href={historyPage.href}>
+          <Link
+            key={index}
+            underline="hover"
+            sx={linkStyles}
+            color="inherit"
+            variant="subtitle1"
+            href={historyPage.href}>
             {renderIcon(historyPage.title)}
             {historyPage.title}
           </Link>
         ))}
         <Box sx={{ display: "flex", alignItems: "center" }} color="primary.main">
           {renderIcon(current.title)}
-          <Typography ml={0.5} variant="h6">
+          <Typography ml={0.5} variant="subtitle1">
             {current.title}
           </Typography>
         </Box>

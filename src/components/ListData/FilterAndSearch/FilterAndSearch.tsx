@@ -165,24 +165,25 @@ export default function FilterAndSearch(props: any) {
   };
 
   React.useEffect(() => {
+    console.log(data);
     if (query === "") {
       setRegisterDataFilter(data);
     } else {
       let filterData;
       if (searchBy === "title") {
-        filterData = data.filter((item: any) => {
+        filterData = data?.filter((item: any) => {
           return item.title.toLowerCase().includes(query.toLowerCase());
         });
       }
 
       if (searchBy === "content") {
-        filterData = data.filter((item: any) => {
+        filterData = data?.filter((item: any) => {
           return item.content.toLowerCase().includes(query.toLowerCase());
         });
       }
 
       if (searchBy === "user") {
-        filterData = data.filter((item: any) => {
+        filterData = data?.filter((item: any) => {
           return item.name.toLowerCase().includes(query.toLowerCase());
         });
       }

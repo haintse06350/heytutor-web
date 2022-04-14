@@ -8,7 +8,7 @@ import FilterAndSearch from "./FilterAndSearch/FilterAndSearch";
 import { Post } from "../../models/post";
 import RegisterContent from "./ListRequest/RegisterContent";
 import MyRequestContent from "./ListRequest/MyRequestContent";
-import { filter, countBy, flattenDeep, map } from "lodash";
+import { countBy, flattenDeep, map } from "lodash";
 
 export const ListData = () => {
   // const classes = useStyles();
@@ -145,10 +145,10 @@ export const ListData = () => {
 
   return (
     <Page>
-      <Box sx={{ pb: 5 }}>
+      <Box sx={{ pb: 3 }}>
         <BreadcrumbsTab
           history={[{ title: "Trang chủ", href: "/" }]}
-          current={{ title: isMyRequest ? "Vấn đề của tôi" : isRegistered ? "Vấn đề tôi đăng kí hỗ trợ" : "" }}
+          current={{ title: isMyRequest ? "Vấn đề của tôi" : isRegistered ? "Vấn đề đi hỗ trợ" : "" }}
         />
       </Box>
       <Box sx={{ pb: 3, mr: 1 }}>
@@ -163,7 +163,7 @@ export const ListData = () => {
           sortBy={sortDataBy}
           setFilters={setFilters}
           filters={filters}
-          data={isRegistered ? tabRegisterData : myRequestData}
+          data={isRegistered ? registerDataFilter : tabRequestData}
           hashtagCount={hashtagLabels}
           postCount={postCount}
         />

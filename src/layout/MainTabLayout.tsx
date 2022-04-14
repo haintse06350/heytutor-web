@@ -1,39 +1,26 @@
 import React from "react";
 // material
 import { styled } from "@mui/material/styles";
-import { Card, CardHeader, Divider } from "@mui/material";
-// utils
+import { Card, CardHeader, Divider, FormControl, InputLabel, MenuItem, Box } from "@mui/material";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useStyles } from "./Layout.style";
 
 // ----------------------------------------------------------------------
 
+const FILTER_REGISTER = [
+  { label: "Tháng này", value: "month" },
+  { label: "Tuần này", value: "week" },
+  { label: "Kì này", value: "semester" },
+];
+
 const MainTabLayout = (props: any) => {
   const { title, icon, content } = props;
+  const [sortListRegister, setSortListRegister] = React.useState("month");
+  const classes = useStyles();
 
-  // const getTabBgColor = (type: string, theme: any) => {
-  //   switch (type) {
-  //     case "myPost":
-  //       return {
-  //         color: theme.palette.primary.darker,
-  //         backgroundColor: theme.palette.primary.lighter,
-  //       };
-
-  //     case "registeredPost":
-  //       return {
-  //         color: theme.palette.info.darker,
-  //         backgroundColor: theme.palette.info.lighter,
-  //       };
-  //     case "mostRecentPost":
-  //       return {
-  //         color: theme.palette.error.darker,
-  //         backgroundColor: theme.palette.error.lighter,
-  //       };
-  //     case "event":
-  //       return {
-  //         color: theme.palette.warning.darker,
-  //         backgroundColor: theme.palette.warning.lighter,
-  //       };
-  //   }
-  // };
+  const onChangeSort = (event: SelectChangeEvent) => {
+    setSortListRegister(event.target.value as string);
+  };
 
   const RootStyle = styled(Card)(({ theme }: any) => ({
     display: "flex",
@@ -54,13 +41,35 @@ const MainTabLayout = (props: any) => {
     height: theme.spacing(4),
     justifyContent: "flex-start",
     color: "#000",
+    "& > div > div > span": {
+      fontSize: "1rem",
+    },
   }));
 
   return (
     <RootStyle>
-      <CardHeaderStyle sx={{ height: "fit-content", display: "flex", alignItems: "center", py: 2, px: 1 }}>
-        {icon}
-        <CardHeader title={title} sx={{ p: 0, ml: 1 }} />
+      <CardHeaderStyle
+        sx={{ height: "fit-content", display: "flex", alignItems: "center", justifyContent: "space-between", py: 2 }}>
+        <Box display="flex" alignItems="center">
+          {icon}
+          <CardHeader title={title} sx={{ p: 0, ml: 1, fontSize: "1rem" }} />
+        </Box>
+        <FormControl sx={{ width: 1 / 3 }}>
+          <InputLabel id="demo-simple-select-label">Thời gian</InputLabel>
+          <Select
+            classes={{ select: classes.selectRoot }}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={sortListRegister}
+            defaultValue="Tháng này"
+            onChange={onChangeSort}>
+            {FILTER_REGISTER.map((filter: any, index: number) => (
+              <MenuItem sx={{ fontSize: 12 }} key={index} value={filter.value}>
+                {filter.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </CardHeaderStyle>
       <Divider />
       {content}

@@ -7,11 +7,14 @@ import {
   Rating,
   Box,
   CardContent,
-  Container,
   Divider,
   Popover,
   Tooltip,
   Button,
+  TextField,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./PostItem.style";
@@ -28,6 +31,9 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import PersonRemoveRoundedIcon from "@mui/icons-material/PersonRemoveRounded";
 import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+
 import { User } from "../../models/users";
 // import { Slide } from "react-slideshow-image";
 // import "react-slideshow-image/dist/styles.css";
@@ -67,10 +73,12 @@ const PostItem = () => {
 
   const [openConfirmRegister, setOpenConfirmRegister] = React.useState(false);
   const [openRemoveDialog, setOpenRemoveDialog] = React.useState(false);
+  const [openCancelSupportDialog, setOpenCancelSupportDialog] = React.useState(false);
 
   const [loading, setLoading] = React.useState(false);
 
   const [selectedSupporter, setSelectedSupporter]: any = React.useState(null);
+  const [selectedRegister, setSelectedRegister]: any = React.useState(null);
 
   const [listRegister, setListRegister]: any = React.useState([]);
   const [listSupporter, setListSupporter]: any = React.useState([]);
@@ -83,16 +91,26 @@ const PostItem = () => {
 
   moment.locale("vi");
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const open = Boolean(anchorEl);
+  const [anchorElMenu, setAnchorElMenu] = React.useState<HTMLButtonElement | null>(null);
 
-  const onClickInfo = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const open = Boolean(anchorEl);
+  const openMenu = Boolean(anchorElMenu);
+
+  const onOpenPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const onOpenRegisterPopover = (event: React.MouseEvent<HTMLButtonElement>, register: any) => {
+    setAnchorElMenu(event.currentTarget);
+    setSelectedRegister(register);
   };
-  // const navigate = useNavigate();
+
+  console.log(anchorEl, anchorElMenu);
+
+  const onClosePopover = () => {
+    setAnchorEl(null);
+    setAnchorElMenu(null);
+  };
 
   const getPostStatus = () => {
     switch (tab) {
@@ -135,6 +153,20 @@ const PostItem = () => {
     setOpenRemoveDialog(false);
   };
 
+  const onOpenCancelSupportDialog = () => {
+    setOpenCancelSupportDialog(true);
+  };
+
+  const onCloseCancelSupportDialog = () => {
+    setOpenCancelSupportDialog(false);
+  };
+
+  const onConfirmCancelSupport = () => {
+    setNotificationSuccess(`Đã hủy hỗ trợ thành công`);
+    setOpenCancelSupportDialog(false);
+    navigate(-1);
+  };
+
   const onClickConfirmRegister = (user: any) => {
     setUserSelected(user);
     setOpenConfirmRegister(true);
@@ -170,7 +202,7 @@ const PostItem = () => {
       <Popover
         open={open}
         anchorEl={anchorEl}
-        onClose={handleClose}
+        onClose={onClosePopover}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
@@ -181,6 +213,33 @@ const PostItem = () => {
           nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
           aliquet nec, vulputate eget, arcu.
         </Typography>
+      </Popover>
+    );
+  };
+
+  const RegisterActionPopup = () => {
+    return (
+      <Popover
+        open={openMenu}
+        keepMounted
+        anchorEl={anchorElMenu}
+        onClose={onClosePopover}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}>
+        <Box>
+          <Tooltip title="Loại khỏi danh sách đăng kí">
+            <PersonRemoveRoundedIcon color="error" onClick={() => onClickRemoveRegisterUser(selectedRegister)} />
+          </Tooltip>
+          <Tooltip title="Chọn người hỗ trợ">
+            <PersonAddAltRoundedIcon
+              sx={{ ml: 0.5 }}
+              color="primary"
+              onClick={() => onClickConfirmRegister(selectedRegister)}
+            />
+          </Tooltip>
+        </Box>
       </Popover>
     );
   };
@@ -201,7 +260,7 @@ const PostItem = () => {
                 {post?.postDetails.user.name}
               </Typography>
               <Typography variant="caption">Đã hoàn thành 4/5 giao dịch</Typography>
-              <Typography display="flex" variant="caption">
+              <Typography display="flex" alignItems="center" variant="caption">
                 4.5 <StarRoundedIcon sx={{ color: "gold" }} /> / 5 votes
               </Typography>
             </Box>
@@ -227,7 +286,7 @@ const PostItem = () => {
                   <Typography variant="subtitle1" onClick={() => onClickProfile(sp.id)}>
                     {sp.name}
                   </Typography>
-                  <Typography display="flex" variant="subtitle1">
+                  <Typography display="flex" alignItems="center" variant="subtitle1">
                     {sp.rankPoint} <StarRoundedIcon sx={{ color: "gold" }} />
                   </Typography>
                 </Box>
@@ -263,31 +322,24 @@ const PostItem = () => {
         </Box>
         {listRegister.length > 0 ? (
           <Box sx={{ mt: 1, pb: 2, maxHeight: 450, overflowY: "scroll" }}>
-            {map(listRegister, (sp: any, idx: number) => (
+            {map(listRegister, (register: any, idx: number) => (
               <Box sx={{ p: 0.5 }} display="flex" key={idx}>
-                <Avatar {...stringAvatar(sp.name)} style={{ width: 30, height: 30, fontSize: 14 }} />
+                <Avatar {...stringAvatar(register.name)} style={{ width: 30, height: 30, fontSize: 14 }} />
                 <Box display="flex" flexDirection="column" flexGrow={1} sx={{ ml: 1 }}>
-                  <Typography className={classes.userName} variant="subtitle1" onClick={() => onClickProfile(sp.id)}>
-                    {sp.name}
+                  <Typography
+                    className={classes.userName}
+                    variant="subtitle1"
+                    onClick={() => onClickProfile(register.id)}>
+                    {register.name}
                   </Typography>
-                  <Typography display="flex" variant="caption">
-                    {sp.rankPoint} <StarRoundedIcon sx={{ color: "gold" }} />
+                  <Typography display="flex" alignItems="center" variant="caption">
+                    {register.rankPoint}{" "}
+                    <StarRoundedIcon sx={{ width: 20, color: !register.rankPoint ? "gray" : "gold" }} />
                   </Typography>
                 </Box>
-                {isMyPost && (
-                  <Box>
-                    <Tooltip title="Loại khỏi danh sách đăng kí">
-                      <PersonRemoveRoundedIcon color="error" onClick={() => onClickRemoveRegisterUser(sp)} />
-                    </Tooltip>
-                    <Tooltip title="Chọn người hỗ trợ">
-                      <PersonAddAltRoundedIcon
-                        sx={{ ml: 0.5 }}
-                        color="primary"
-                        onClick={() => onClickConfirmRegister(sp)}
-                      />
-                    </Tooltip>
-                  </Box>
-                )}
+                <Box onClick={(e: any) => onOpenRegisterPopover(e, register)}>
+                  <MoreHorizIcon key={idx} color="primary" />
+                </Box>
               </Box>
             ))}
           </Box>
@@ -341,6 +393,41 @@ const PostItem = () => {
     <Page>
       {howToUsePopup()}
       <ConfirmDialog
+        dialogTitle="Xác nhận huỷ hỗ trợ vấn đề này ?"
+        dialogContent={
+          <Box>
+            <Typography sx={{ fontWeight: 500 }}>
+              Bạn sẽ không thể đăng kí hỗ trợ bài viết này nếu bạn đã huỷ hỗ trợ !
+            </Typography>
+            <RadioGroup aria-labelledby="demo-customized-radios" name="customized-radios">
+              <FormControlLabel
+                classes={{ label: classes.formLabel }}
+                value="no-reply"
+                control={<Radio />}
+                label="Chủ bài viết không trả lời tin nhắn"
+              />
+              <FormControlLabel
+                classes={{ label: classes.formLabel }}
+                value="no-pay"
+                control={<Radio />}
+                label="Tôi có việc bận"
+              />
+              <FormControlLabel
+                classes={{ label: classes.formLabel }}
+                value="change-deal"
+                control={<Radio />}
+                label="Thay đổi thù lao không giống thoả thuận ban đầu"
+              />
+            </RadioGroup>
+            <TextField multiline fullWidth rows={4} sx={{ mt: 2.5 }} placeholder="Lý do khác" />
+          </Box>
+        }
+        confirmAction={onConfirmCancelSupport}
+        cancelAction={onCloseCancelSupportDialog}
+        open={openCancelSupportDialog}
+        onClose={onCloseCancelSupportDialog}
+      />
+      <ConfirmDialog
         dialogTitle="Xoá khỏi danh sách người đăng kí"
         dialogContent={
           <Box>
@@ -349,7 +436,7 @@ const PostItem = () => {
               đăng kí?
             </Typography>
             <Typography variant="caption" sx={{ fontSize: 12 }}>
-              <span style={{ fontWeight: "bold" }}>{userSelected?.name}</span> sẽ không thể đăng kí hỗ trợ bài viết này
+              <span style={{ fontWeight: "bold" }}>{userSelected?.name}</span> sẽ không thể đăng kí hỗ trợ vấn đề này
               nữa !
             </Typography>
           </Box>
@@ -360,11 +447,11 @@ const PostItem = () => {
         onClose={onCloseRemoveDialog}
       />
       <ConfirmDialog
-        dialogTitle="Xác nhận chọn supporter"
+        dialogTitle="Xác nhận chọn người hỗ trợ"
         dialogContent={
           <Typography>
-            Bạn có chắc chắn muốn chọn <span style={{ fontWeight: "bold" }}>{userSelected?.name}</span> làm supporter
-            cho vấn đề này?
+            Bạn có chắc chắn muốn chọn <span style={{ fontWeight: "bold" }}>{userSelected?.name}</span> hỗ trợ vấn đề
+            này?
           </Typography>
         }
         confirmAction={onConfirmSupporter}
@@ -374,21 +461,30 @@ const PostItem = () => {
         loadingConfirm={loading}
       />
       {/* no images just text*/}
-      <Container fixed>
-        <BreadcrumbsTab history={[{ title: "Vấn đề của tôi", href: "/my-request" }]} current={{ title: "Chi tiết" }} />
+      <>
+        <BreadcrumbsTab
+          history={[
+            {
+              title: isMyPost ? "Vấn đề đi hỗ trợ" : "Vấn đề của tôi",
+              href: isMyPost ? "/my-request" : "/registered-request",
+            },
+          ]}
+          current={{ title: "Chi tiết" }}
+        />
+        <RegisterActionPopup />
         <Grid container spacing={2}>
           <Grid item xs={12} md={3}>
-            <Card sx={{ mt: 6, p: 2 }}>{from === "my-request" ? <ListSupporter /> : <PostOwner />}</Card>
+            <Card sx={{ mt: 2, p: 2 }}>{from === "my-request" ? <ListSupporter /> : <PostOwner />}</Card>
             <Card sx={{ mt: 2, px: 2, pt: 2 }}>
               <ListRegister />
             </Card>
           </Grid>
           <Grid item xs={12} md={5}>
-            <Card sx={{ mt: 6, px: 4, pt: 2, pb: 4 }}>
+            <Card sx={{ mt: 2, px: 4, pt: 2, pb: 4 }}>
               <div className={classes.deadline}>
                 <div>
                   <AccessTimeOutlinedIcon sx={{ color: "#d32f2f" }} />
-                  <Typography sx={{ ml: 1, color: "#d32f2f", fontWeight: 600 }} variant="body2">
+                  <Typography variant="subtitle1" sx={{ ml: 1, color: "#d32f2f" }}>
                     Deadline trong{" "}
                     {moment(post.postDetails["Post.deadline"]).endOf("hours").fromNow() || "Cần xử lí trong hôm nay"}
                   </Typography>
@@ -396,13 +492,21 @@ const PostItem = () => {
                 <div className={clsx(classes.postStatus, `${tab}`)}>
                   <Typography variant="caption">{getPostStatus()}</Typography>
                 </div>
-                {isMyPost ? <Button>Chỉnh sửa</Button> : <Button color="error">Huỷ hỗ trợ</Button>}
+                {isMyPost ? (
+                  <Button>Chỉnh sửa</Button>
+                ) : (
+                  <Button sx={{ fontSize: 12 }} color="error" variant="outlined" onClick={onOpenCancelSupportDialog}>
+                    Huỷ hỗ trợ
+                  </Button>
+                )}
               </div>
               <div className={classes.postTitleAndAction}>
-                <Typography variant="h5">[ {post.postDetails["Post.title"]} ]</Typography>
+                <Typography variant="h6">[ {post.postDetails["Post.title"]} ]</Typography>
               </div>
 
-              {post.postDetails["Post.content"]}
+              <Typography variant="subtitle1" fontWeight={400} fontSize="1rem">
+                {post.postDetails["Post.content"]}
+              </Typography>
               <Box sx={{ mt: 2 }}>
                 <img src={demoImg6} alt="" />
               </Box>
@@ -432,14 +536,21 @@ const PostItem = () => {
               )}
             </Card>
           </Grid>
-          <Grid item xs={12} md={4} sx={{ mt: 6 }}>
+          <Grid item xs={12} md={4} sx={{ mt: 2 }}>
             <Box className={classes.positionFixed}>
               <Card elevation={20}>
                 <CardContent classes={{ root: classes.exchangeBox }}>
                   <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h6">Quá trình trao đổi</Typography>
-                    <Box className={classes.exchangeInfo} onClick={(e: any) => onClickInfo(e)}>
-                      i
+                    <Box display="flex" alignItems="center">
+                      <Typography variant="subtitle1">Quá trình trao đổi</Typography>
+                      <Box className={classes.exchangeInfo} onClick={(e: any) => onOpenPopover(e)}>
+                        i
+                      </Box>
+                    </Box>
+                    <Box display="flex" alignItems="center">
+                      <Tooltip title="Mở rộng">
+                        <OpenInFullIcon sx={{ width: 18, height: 18 }} />
+                      </Tooltip>
                     </Box>
                   </Box>
                   <Divider sx={{ mt: 1 }} variant="fullWidth" />
@@ -453,7 +564,7 @@ const PostItem = () => {
           </Grid>
         </Grid>
         <MessageBox postId={postId} userId={selectedSupporter?.id} userName={selectedSupporter?.name} />
-      </Container>
+      </>
     </Page>
   );
 };
