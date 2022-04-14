@@ -163,7 +163,7 @@ export const ListData = () => {
           sortBy={sortDataBy}
           setFilters={setFilters}
           filters={filters}
-          data={isRegistered ? registerDataFilter : tabRequestData}
+          data={isRegistered ? registerDataFilter : myRequestData}
           hashtagCount={hashtagLabels}
           postCount={postCount}
         />

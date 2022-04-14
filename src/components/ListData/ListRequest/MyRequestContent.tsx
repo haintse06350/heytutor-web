@@ -26,7 +26,8 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { stringAvatar } from "../../UserProfile/helper";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import AddTaskIcon from "@mui/icons-material/AddTask";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+// import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import BlockIcon from "@mui/icons-material/Block";
 import CloseIcon from "@mui/icons-material/Close";
 // import { renderCardImg } from "../utils";
 // import moment from "moment";
@@ -63,7 +64,7 @@ export default function MyRequestContent(props: any) {
   const [openListRegisterDialog, setOpenListRegisterDialog]: any = React.useState(false);
   const [selectItem, setSelectItem] = React.useState<any>(null);
   const [userSelected, setUserSelected]: any = React.useState(null);
-  const [openRemoveDialog, setOpenRemoveDialog] = React.useState(false);
+  const [openBlockDialog, setOpenBlockDialog] = React.useState(false);
   const [openConfirmRegister, setOpenConfirmRegister] = React.useState(false);
   const [selectedRegister, setSelectedRegister]: any = React.useState(null);
   const [sortListRegister, setSortListRegister] = React.useState("registerTime");
@@ -80,7 +81,7 @@ export default function MyRequestContent(props: any) {
   };
 
   const onCloseRemoveDialog = () => {
-    setOpenRemoveDialog(false);
+    setOpenBlockDialog(false);
   };
 
   const onCloseConfirmRegister = () => {
@@ -89,13 +90,13 @@ export default function MyRequestContent(props: any) {
   };
 
   const onConfirmRemoveRegister = () => {
-    setNotificationSuccess(`Đã xoá ${selectedRegister?.username} khỏi danh sách người đăng kí`);
-    setOpenRemoveDialog(false);
+    setNotificationSuccess(`Đã xoá ${userSelected?.username} khỏi danh sách người đăng kí`);
+    setOpenBlockDialog(false);
   };
 
   const onClickRemoveRegisterUser = (user: any) => {
     setUserSelected(user);
-    setOpenRemoveDialog(true);
+    setOpenBlockDialog(true);
   };
 
   const onClickConfirmRegister = (user: any) => {
@@ -133,7 +134,7 @@ export default function MyRequestContent(props: any) {
   const onOpenMsg = (user: any) => {
     onOpenMsgBox();
     setOpenListRegisterDialog(false);
-    setOpenRemoveDialog(false);
+    setOpenBlockDialog(false);
     setUserSelected(user);
   };
 
@@ -222,7 +223,7 @@ export default function MyRequestContent(props: any) {
         <Box>
           <Tooltip title="Loại người này khỏi danh sách đăng kí">
             <Button color="secondary" onClick={() => onClickRemoveRegisterUser(user)}>
-              <PersonRemoveIcon />
+              <BlockIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Chọn người này làm supporter">
@@ -315,7 +316,7 @@ export default function MyRequestContent(props: any) {
         dialogContent="Bạn có chắc chắn muốn loại người này khỏi danh sách đăng kí?"
         confirmAction={onConfirmRemoveRegister}
         cancelAction={onCloseRemoveDialog}
-        open={openRemoveDialog}
+        open={openBlockDialog}
         onClose={onCloseRemoveDialog}
       />
       <ConfirmDialog

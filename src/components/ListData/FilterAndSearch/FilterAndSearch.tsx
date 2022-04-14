@@ -121,7 +121,7 @@ export default function FilterAndSearch(props: any) {
   const renderTabMyRequestLabel = (label: string) => {
     let count = 0;
     let labelText = "";
-
+    console.log("data", data);
     switch (label) {
       case "isConfirmed": {
         count = data?.postHasSupporter.length;
@@ -165,7 +165,6 @@ export default function FilterAndSearch(props: any) {
   };
 
   React.useEffect(() => {
-    console.log(data);
     if (query === "") {
       setRegisterDataFilter(data);
     } else {

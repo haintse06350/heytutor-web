@@ -308,6 +308,7 @@ export const ManagerUser = () => {
     { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
     { value: "isNotResolve", label: "Chưa giải quyết" },
   ];
+
   return (
     <div className={classes.wrapTableManager}>
       <Box sx={{ mb: 2 }}>

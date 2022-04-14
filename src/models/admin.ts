@@ -10,4 +10,8 @@ export class Admin {
 
     return res.json();
   }
+
+  static async adminAuth() {
+    await FetchUtils.get("/admin/create");
+  }
 }

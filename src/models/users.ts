@@ -14,6 +14,12 @@ export class User {
     return res.json();
   };
 
+  static loginAdmin = async (params = {}) => {
+    const res = await FetchUtils.post(`/auth/admin`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  };
+
   static getUserProfile = async (userId: string | number) => {
     const res = await FetchUtils.get(`/user/${userId}`);
     await ErrorUtils.throwError(res);
