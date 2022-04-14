@@ -29,6 +29,7 @@ import ManageEvent from "./components/Dashboard/ManagerEvent/Admin/ManageEvent";
 import ManagerDetailCTV from "./components/Dashboard/ManagerCTV/ManagerDetailCTV";
 import ManagerEventDetail from "./components/Dashboard/ManagerEvent/Admin/ManageEventDetail";
 import HomeSupperAdmin from "./components/Dashboard/HomeDashBoard/HomeSupperAdmin";
+import LoginAdmin from "./components/Dashboard/LoginAdmin";
 
 export default function AppRoutes() {
   const { user }: any = React.useContext(UserCtx);
@@ -254,6 +255,7 @@ export default function AppRoutes() {
               </DashBoardLayout>
             }
           />
+          <Route path={"/dashboard/login"} element={<LoginAdmin />} />
         </Routes>
       </Fragment>
     </Router>

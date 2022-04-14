@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStyles } from "./ManagerUser.style";
 import { useNavigate } from "react-router-dom";
 
@@ -35,7 +35,7 @@ import DialogManagerUser from "./DialogManageUser";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DatePicker from "@mui/lab/DatePicker";
 import moment from "moment";
-
+import { Manager } from "../../../models/manager";
 export const ManagerUser = () => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ export const ManagerUser = () => {
   const [dataPick, setDataPick] = useState(null);
   const [visible, setVisible] = useState("");
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(null);
+  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
   const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
   function createData(
     id: number,
@@ -286,14 +286,6 @@ export const ManagerUser = () => {
     setAnchorEl(null);
   };
 
-  const onChangeFilter = (event: any, type: string) => {
-    if (type === "time") {
-      if (event.target.value === "currentWeek") {
-        // setValueFilterStartDate(moment.weekdays(-1));
-        setValueFilterEndDate(moment().startOf("day").toDate());
-      }
-    }
-  };
   const [
     data = {
       selected: [],
@@ -316,6 +308,34 @@ export const ManagerUser = () => {
     },
   ]: // setData,
   any = useState();
+
+  const [rowsData, setRowsData] = useState(null);
+
+  const getListUser = async () => {
+    const data = await Manager.getUserManage();
+    setRowsData(data);
+  };
+  const [datePick, setDatePick] = useState(false);
+  const handleClosePickDate = () => {
+    setDatePick(false);
+  };
+  const onChangeFilter = (event: any, type: string) => {
+    if (type === "time") {
+      if (event.target.value === "currentWeek") {
+        setValueFilterStartDate(moment().subtract(7, "days").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "currentMonth") {
+        setValueFilterStartDate(moment().subtract(1, "months").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "selectTime") {
+        setDatePick(true);
+      }
+    }
+  };
+  useEffect(() => {
+    getListUser();
+    console.log(rowsData, "rowdata");
+  }, []);
 
   return (
     <div className={classes.wrapTableManager}>
@@ -347,6 +367,8 @@ export const ManagerUser = () => {
                   label="Ngày bắt đầu"
                   inputFormat="dd/MM/yyyy"
                   value={valueFilterStartDate}
+                  open={datePick}
+                  onClose={handleClosePickDate}
                   onChange={(newValue) => {
                     setValueFilterStartDate(newValue);
                   }}
