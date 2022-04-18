@@ -22,6 +22,7 @@ import {
   Grid,
   Popover,
   SelectChangeEvent,
+  Select,
 } from "@mui/material";
 
 import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
@@ -40,13 +41,15 @@ export const ManagerUser = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [openDatePicker, setOpenDatePicker] = useState(false);
-  const [sortBy, setSortBy]: any = useState("");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
   const [dataPick, setDataPick] = useState(null);
-  const [visible, setVisible] = useState("");
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [sortBy, setSortBy]: any = useState("asc");
+  const [visible, setVisible] = useState("isNotResolve");
   const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
   const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
+  const [searchBy, setSearchBy] = React.useState("nameOfUser");
+
   function createData(
     id: number,
     name: string,
@@ -291,33 +294,29 @@ export const ManagerUser = () => {
       selected: [],
       open: false,
       sortByOpts: [
-        { value: "asc", label: "Tăng dần" },
-        { value: "desc", label: "Giảm dần" },
+        { value: "asc", label: "Số lượng tăng dần" },
+        { value: "desc", label: "Số lượng giảm dần" },
       ],
       sortOpts: [
         { value: "isNotResolve", label: "Báo cáo xấu chưa giải quyết" },
         { value: "reviewRegisterPoint", label: "Xếp hạng yêu cầu hỗ trợ" },
         { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
-        { value: "generalEvent", label: "Chung sự kiện" },
       ],
       timeOpts: [
         { value: "currentWeek", label: "Tuần này" },
         { value: "currentMonth", label: "Tháng này" },
-        { value: "selectTime", label: "Chọn ngày" },
       ],
     },
   ]: // setData,
   any = useState();
-
+  const onChangeSearchBy = (e: SelectChangeEvent) => {
+    setSearchBy(e.target.value);
+  };
   const [rowsData, setRowsData] = useState(null);
 
   const getListUser = async () => {
     const data = await Manager.getUserManage();
     setRowsData(data);
-  };
-  const [datePick, setDatePick] = useState(false);
-  const handleClosePickDate = () => {
-    setDatePick(false);
   };
   const onChangeFilter = (event: any, type: string) => {
     if (type === "time") {
@@ -327,8 +326,6 @@ export const ManagerUser = () => {
       } else if (event.target.value === "currentMonth") {
         setValueFilterStartDate(moment().subtract(1, "months").toDate());
         setValueFilterEndDate(moment().startOf("day").toDate());
-      } else if (event.target.value === "selectTime") {
-        setDatePick(true);
       }
     }
   };
@@ -367,8 +364,6 @@ export const ManagerUser = () => {
                   label="Ngày bắt đầu"
                   inputFormat="dd/MM/yyyy"
                   value={valueFilterStartDate}
-                  open={datePick}
-                  onClose={handleClosePickDate}
                   onChange={(newValue) => {
                     setValueFilterStartDate(newValue);
                   }}
@@ -402,9 +397,23 @@ export const ManagerUser = () => {
                         <SearchIcon />
                       </InputAdornment>
                     ),
+                    endAdornment: (
+                      <Select
+                        className={classes.select}
+                        value={searchBy}
+                        defaultValue="nameOfUser"
+                        onChange={onChangeSearchBy}
+                        inputProps={{
+                          name: "departmentValue",
+                          id: "departmentValue",
+                        }}>
+                        <MenuItem value="nameOfUser">Tên người dùng</MenuItem>
+                        <MenuItem value="nameOfEvent">Tiêu đề sự kiện</MenuItem>
+                      </Select>
+                    ),
                   }}
                   id="outlined-basic"
-                  placeholder="Tìm kiếm..."
+                  placeholder="Tìm kiếm ..."
                   variant="outlined"
                 />
               </Box>

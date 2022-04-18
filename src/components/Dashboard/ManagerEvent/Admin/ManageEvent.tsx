@@ -22,6 +22,8 @@ import {
   TableBody,
   Button,
   Chip,
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
 //icon
 
@@ -45,14 +47,19 @@ import DateRangePicker from "../../../ListData/DateTimePicker/DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
 
 import { useNavigate } from "react-router-dom";
+import { DatePicker, LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import moment from "moment";
 
 const ManageEvent = () => {
   const classes = useStyles();
   const [value, setValue] = useState("1");
   const [openDatePicker, setOpenDatePicker] = useState(false);
-  const [filters, setFilters]: any = useState({ status: "joined" });
-  const [sortBy, setSortBy]: any = useState("deadlineTime");
+  // const [filters, setFilters]: any = useState({ status: "joined" });
+  const [sortBy, setSortBy]: any = useState("desc");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
+  const [visible, setVisible] = useState("deadlineTime");
+
   const navigate = useNavigate();
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -73,49 +80,48 @@ const ManageEvent = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
+
   const onChangeFilter = (event: any, type: string) => {
-    if (type === "status") {
-      // setPostStatus(event.target.value);
-    }
-    if (type === "hashtag") {
-      if (event.length === 0) {
-        delete filters["hashtag"];
-        setFilters({ ...filters });
-      } else {
-        const newFilter = {
-          hashtag: event,
-        };
-        setFilters({ ...filters, ...newFilter });
+    if (type === "time") {
+      if (event.target.value === "currentWeek") {
+        setValueFilterStartDate(moment().subtract(7, "days").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "currentMonth") {
+        setValueFilterStartDate(moment().subtract(1, "months").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
       }
-    } else if (type === "time") {
-      if (event.target.value === "Chọn ngày") {
-        delete filters["time"];
-        setOpenDatePicker(true);
-      } else {
-        const newFilter = {
-          time: event.target.value,
-        };
-        setFilters({ ...filters, ...newFilter });
-      }
-    } else {
-      const newFilter = {
-        status: event.target.value,
-      };
-      setFilters({ ...filters, ...newFilter });
     }
   };
-  const timeOpts = [
-    { value: "Tuần này", label: "Tuần này" },
-    { value: "Tháng này", label: "Tháng này" },
-    { value: "Chọn ngày", label: "Chọn ngày" },
-  ];
+  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
+  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
 
-  const sortOpts = [
-    { value: "deadlineTime", label: "Thời gian của sự kiện" },
-    { value: "nbOfJoined", label: "Số người tham gia" },
-    { value: "nbOfReported", label: "Số báo cáo xấu" },
-  ];
-
+  const [
+    data = {
+      selected: [],
+      open: false,
+      sortByOpts: [
+        { value: "asc", label: "Tăng dần" },
+        { value: "desc", label: "Giảm dần" },
+        { value: "isActive", label: "Hoạt động" },
+        { value: "isDone", label: "Kết thúc" },
+      ],
+      sortOpts: [
+        { value: "deadlineTime", label: "Thời gian của sự kiện" },
+        { value: "nbOfJoined", label: "Số người tham gia" },
+        { value: "nbOfReported", label: "Số báo cáo xấu" },
+        { value: "status", label: "Trạng thái hoạt động" },
+      ],
+      timeOpts: [
+        { value: "currentWeek", label: "Tuần này" },
+        { value: "currentMonth", label: "Tháng này" },
+      ],
+    },
+  ]: // setData,
+  any = useState();
+  const [searchBy, setSearchBy] = React.useState("titleOfEvent");
+  const onChangeSearchBy = (e: SelectChangeEvent) => {
+    setSearchBy(e.target.value);
+  };
   const dataFake = [
     {
       id: 1,
@@ -136,11 +142,11 @@ const ManageEvent = () => {
       manager: "anhcd",
     },
   ];
-  // const navigate = useNavigate();
+  const handleVisible = (event: any) => {
+    setVisible(event.target.value);
+    event.target.value === "status" ? setSortBy("isActive") : setSortBy("desc");
+  };
 
-  // const handleOpenDetail = (item: any) => {
-  //   navigate(`/dashboard/admin/manage-event/detail?${item.id}`);
-  // };
   const handleCreateEvent = () => {
     navigate(`/dashboard/admin/manage-event/create-event`);
   };
@@ -165,7 +171,52 @@ const ManageEvent = () => {
         <TabPanel value="1">
           <Box sx={{ display: "flex" }}>
             <Grid container item xs={12} spacing={1} sx={{ mb: 2, width: "100%" }}>
-              <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
+              <Grid item xs={12} lg={4} md={4}>
+                <Box component="form" noValidate autoComplete="off">
+                  <TextField
+                    fullWidth
+                    classes={{ root: classes.textField }}
+                    id="outlined-select-currency"
+                    select
+                    label="Thời gian"
+                    defaultValue="currentWeek"
+                    // value={filters.time}
+                    onChange={(e: any) => onChangeFilter(e, "time")}>
+                    {data.timeOpts.map((option: any) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+              </Grid>
+              <Grid item xs={12} lg={4} md={4}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="Ngày bắt đầu"
+                    inputFormat="dd/MM/yyyy"
+                    value={valueFilterStartDate}
+                    onChange={(newValue) => {
+                      setValueFilterStartDate(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={12} lg={4} md={4}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="Ngày kết thúc"
+                    inputFormat="dd/MM/yyyy"
+                    value={valueFilterEndDate}
+                    onChange={(newValue) => {
+                      setValueFilterEndDate(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
                 <Box component="form" noValidate autoComplete="off">
                   <TextField
                     autoFocus
@@ -177,14 +228,28 @@ const ManageEvent = () => {
                           <SearchIcon />
                         </InputAdornment>
                       ),
+                      endAdornment: (
+                        <Select
+                          className={classes.select}
+                          value={searchBy}
+                          defaultValue="titleOfEvent"
+                          onChange={onChangeSearchBy}
+                          inputProps={{
+                            name: "departmentValue",
+                            id: "departmentValue",
+                          }}>
+                          <MenuItem value="titleOfEvent">Tiêu đề</MenuItem>
+                          <MenuItem value="nameOfCTV">Quản lí sự kiện</MenuItem>
+                        </Select>
+                      ),
                     }}
                     id="outlined-basic"
-                    placeholder="Tìm kiếm..."
+                    placeholder="Tìm kiếm ..."
                     variant="outlined"
                   />
                 </Box>
               </Grid>
-              <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
+              <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
                 <Box component="form" noValidate autoComplete="off">
                   <TextField
                     fullWidth
@@ -192,25 +257,18 @@ const ManageEvent = () => {
                     id="outlined-select-currency"
                     select
                     label="Hiển thị theo"
-                    defaultValue="Tuần này"
-                    value={filters.time}
-                    onChange={(e: any) => onChangeFilter(e, "time")}>
-                    {timeOpts.map((option: any) => (
+                    defaultValue="isNotResolve"
+                    value={visible}
+                    onChange={(event) => handleVisible(event)}>
+                    {data.sortOpts.map((option: any) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
                   </TextField>
                 </Box>
-                <Popover
-                  open={openDatePicker}
-                  onClose={onCloseDatePicker}
-                  anchorOrigin={{ vertical: "center", horizontal: "center" }}
-                  transformOrigin={{ vertical: "center", horizontal: "center" }}>
-                  <DateRangePicker setValue={setDateData} value={dateData} />
-                </Popover>
               </Grid>
-              <Grid item xs={4} md={3} sx={{ minWidth: "20%" }}>
+              <Grid item xs={4} md={4} sx={{ minWidth: "20%" }}>
                 <Box component="form" noValidate autoComplete="off">
                   <TextField
                     fullWidth
@@ -221,11 +279,18 @@ const ManageEvent = () => {
                     defaultValue="Thời gian của vấn đề"
                     value={sortBy}
                     onChange={(e: any) => setSortBy(e.target.value)}>
-                    {sortOpts.map((option: any) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
+                    {visible !== "status" &&
+                      data.sortByOpts.slice(0, 2).map((option: any) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    {visible === "status" &&
+                      data?.sortByOpts.slice(2, 4).map((option: any) => (
+                        <MenuItem key={option.value} value={option.value} defaultValue="isActive">
+                          {option.label}
+                        </MenuItem>
+                      ))}
                   </TextField>
                 </Box>
                 <Popover

@@ -113,4 +113,16 @@ export const useStyles = makeStyles(() => ({
       },
     },
   },
+  select: {
+    fontSize: 14,
+    fontWeight: 500,
+    "& > fieldset": {
+      border: "none",
+    },
+  },
+  textField: {
+    "& > div": {
+      background: "#fff",
+    },
+  },
 }));

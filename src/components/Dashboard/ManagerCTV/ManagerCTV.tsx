@@ -27,12 +27,15 @@ import {
   DialogActions,
   Autocomplete,
   Popover,
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
 // icon
 // import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import moment from "moment";
 // help
 
 // import { stringAvatar } from "../../UserProfile/helper";
@@ -61,27 +64,32 @@ const ManagerCTV = () => {
     nbOfEventDone: number,
     nbOfEventReported: number,
     approvedBy: string,
-    status: number
+    status: number,
+    titleEvent: string,
+    nbOfJoined: number,
+    nbOfReported: number
   ) {
-    return { id, name, gmail, nbOfEventManager, nbOfEventDone, nbOfEventReported, approvedBy, status };
+    return {
+      id,
+      name,
+      gmail,
+      nbOfEventManager,
+      nbOfEventDone,
+      nbOfEventReported,
+      approvedBy,
+      status,
+      titleEvent,
+      nbOfJoined,
+      nbOfReported,
+    };
   }
 
   const dataUser = [
-    createData(1, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(2, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2),
-    createData(3, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(4, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(5, "Nguyen DN Long", "longndn1@gmail.com", 0, 2, 2, "anhcdh4", 2),
-    createData(6, "Nguyen DN Long", "longndn1@gmail.com", 2, 2, 2, "anhcdh4", 2),
-    createData(7, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(8, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(9, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2),
-    createData(10, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(11, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(12, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2),
-    createData(13, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(14, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1),
-    createData(15, "Nguyen DN Long", "longndn1@gmail.com", 0, 2, 2, "anhcdh4", 2),
+    createData(1, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1, "Event 1", 1, 1),
+    createData(2, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2, "Event 1", 1, 1),
+    createData(3, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1, "Event 1", 1, 1),
+    createData(4, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1, "Event 1", 1, 1),
+    createData(5, "Nguyen DN Long", "longndn1@gmail.com", 0, 2, 2, "anhcdh4", 2, "Event 1", 1, 1),
   ];
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -89,7 +97,12 @@ const ManagerCTV = () => {
   const { setNotificationError } = React.useContext(NotificationCtx);
   const [openDatePicker, setOpenDatePicker] = useState(false);
   // const [filters, setFilters]: any = useState({ status: "joined" });
-  const [sortBy, setSortBy]: any = useState("");
+  const [visible, setVisible] = useState("isActive");
+  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
+  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
+  const [searchBy, setSearchBy] = React.useState("nameOfUser");
+
+  const [sortBy, setSortBy]: any = useState("desc");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
   // const [dataPick, setDataPick] = useState(null);
   const roleProps = {
@@ -136,20 +149,31 @@ const ManagerCTV = () => {
   const handleChangeTab = (path: string, id: number) => {
     navigate(`/dashboard/manage-ctv/${path}?id=${id}`);
   };
-  const [visible, setVisible] = useState("");
-  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(null);
-  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(null);
+  const onChangeFilter = (event: any, type: string) => {
+    if (type === "time") {
+      if (event.target.value === "currentWeek") {
+        setValueFilterStartDate(moment().subtract(7, "days").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "currentMonth") {
+        setValueFilterStartDate(moment().subtract(1, "months").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      }
+    }
+  };
   const [
     data = {
       selected: [],
       open: false,
       sortByOpts: [
-        { value: "asc", label: "Tăng dần" },
-        { value: "desc", label: "Giảm dần" },
+        { value: "asc", label: "Số lượng tăng dần" },
+        { value: "desc", label: "Số lượng giảm dần" },
+        { value: "isActive", label: "Hoạt động" },
+        { value: "isBlock", label: "Bị khóa" },
       ],
       sortOpts: [
         { value: "isActive", label: "Đang quản lí" },
         { value: "isPending", label: "Đang chờ phê duyệt" },
+        { value: "status", label: "Trạng thái hoạt động" },
       ],
       timeOpts: [
         { value: "currentWeek", label: "Tuần này" },
@@ -158,7 +182,9 @@ const ManagerCTV = () => {
     },
   ]: // setData,
   any = useState();
-
+  const onChangeSearchBy = (e: SelectChangeEvent) => {
+    setSearchBy(e.target.value);
+  };
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -262,6 +288,11 @@ const ManagerCTV = () => {
     );
   };
 
+  const handleVisible = (event: any) => {
+    setVisible(event.target.value);
+    event.target.value === "status" ? setSortBy("isActive") : setSortBy("desc");
+  };
+
   return (
     <div className={classes.root}>
       {renderDialog()}
@@ -288,8 +319,7 @@ const ManagerCTV = () => {
                   label="Thời gian"
                   defaultValue="currentWeek"
                   // value={filters.time}
-                  // onChange={(e: any) => onChangeFilter(e, "time")}
-                >
+                  onChange={(e: any) => onChangeFilter(e, "time")}>
                   {data.timeOpts.map((option: any) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
@@ -337,9 +367,23 @@ const ManagerCTV = () => {
                         <SearchIcon />
                       </InputAdornment>
                     ),
+                    endAdornment: (
+                      <Select
+                        className={classes.select}
+                        value={searchBy}
+                        defaultValue="nameOfUser"
+                        onChange={onChangeSearchBy}
+                        inputProps={{
+                          name: "departmentValue",
+                          id: "departmentValue",
+                        }}>
+                        <MenuItem value="nameOfUser">Tên người dùng</MenuItem>
+                        <MenuItem value="nameOfEvent">Tiêu đề sự kiện</MenuItem>
+                      </Select>
+                    ),
                   }}
                   id="outlined-basic"
-                  placeholder="Tìm kiếm..."
+                  placeholder="Tìm kiếm ..."
                   variant="outlined"
                 />
               </Box>
@@ -354,7 +398,7 @@ const ManagerCTV = () => {
                   label="Hiển thị theo"
                   defaultValue="isNotResolve"
                   value={visible}
-                  onChange={(e: any) => setVisible(e.target.value)}>
+                  onChange={(event) => handleVisible(event)}>
                   {data.sortOpts.map((option: any) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
@@ -371,14 +415,21 @@ const ManagerCTV = () => {
                   id="outlined-select-currency"
                   select
                   label="Sắp xếp"
-                  defaultValue="desc"
+                  defaultValue="asc"
                   value={sortBy}
                   onChange={(e: any) => setSortBy(e.target.value)}>
-                  {data.sortByOpts.map((option: any) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
+                  {visible !== "status" &&
+                    data?.sortByOpts.slice(0, 2).map((option: any) => (
+                      <MenuItem key={option.value} value={option.value} defaultValue="desc">
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  {visible === "status" &&
+                    data?.sortByOpts.slice(2, 4).map((option: any) => (
+                      <MenuItem key={option.value} value={option.value} defaultValue="isActive">
+                        {option.label}
+                      </MenuItem>
+                    ))}
                 </TextField>
               </Box>
               <Popover
@@ -401,6 +452,8 @@ const ManagerCTV = () => {
                   <TableCell>ID</TableCell>
                   <TableCell>Tên</TableCell>
                   <TableCell>Thông số sự kiện</TableCell>
+                  <TableCell>Tiêu đề sự kiện</TableCell>
+                  <TableCell>Thông số tương tác</TableCell>
                   <TableCell>Cập nhật bởi</TableCell>
                   <TableCell>Trạng thái</TableCell>
                   <TableCell>Quản lí</TableCell>
@@ -433,6 +486,19 @@ const ManagerCTV = () => {
                       </Typography>
                       <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
                         Chờ phê duyệt : {row.nbOfEventManager}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }} noWrap>
+                        {row.titleEvent}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                        Người tham gia : {row.nbOfJoined}
+                      </Typography>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                        Số báo cáo xấu : {row.nbOfReported}
                       </Typography>
                     </TableCell>
                     <TableCell>
