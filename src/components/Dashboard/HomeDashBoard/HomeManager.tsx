@@ -25,7 +25,7 @@ const HomeManager = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4} lg={4}>
-          <Card sx={{ p: 2, position: "relative" }}>
+          <Card sx={{ p: 2, position: "relative", height: "100%" }}>
             <Typography variant="subtitle1">Chúc mừng Cao Duc Anh!</Typography>
 
             <Typography variant="subtitle2">Người hỗ trợ có điểm đánh giá cao nhất tháng</Typography>
@@ -41,7 +41,7 @@ const HomeManager = () => {
           </Card>
         </Grid>
         <Grid item xs={12} md={8} lg={8}>
-          <Card sx={{ p: 2 }}>
+          <Card sx={{ p: 2, height: "100%" }}>
             <Typography>
               <b>Thông số phân tích cơ bản(theo tháng)</b>
             </Typography>
@@ -86,19 +86,46 @@ const HomeManager = () => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={6}>
-          <Card sx={{ p: 2 }}>
+          <Card sx={{ p: 2, height: "100%" }}>
             <Typography>
               <b>Tổng quan về cộng tác viên</b>
             </Typography>
             <Grid container>
-              <Grid item xs={6} md={6}>
-                {/* <Doughnut data={data} /> */}
+              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
+                  Cộng tác viện{" "}
+                </Typography>
+                <Typography variant="subtitle1">:</Typography>
               </Grid>
-              <Grid item xs={6} md={6}>
-                <Typography>Cộng tác viện: 10</Typography>
-                <Typography>Sự kiện: 40</Typography>
-                <Typography>Người tham gia: 140</Typography>
-                <Typography>Vấn đề được giải quyết: 40</Typography>
+              <Grid item xs={7}>
+                <Typography> &nbsp; 10</Typography>
+              </Grid>
+              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
+                  Sự kiện{" "}
+                </Typography>
+                <Typography variant="subtitle1">:</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography> &nbsp; 40</Typography>
+              </Grid>
+              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between", textDecoration: "underline" }}>
+                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
+                  Người tham gia{" "}
+                </Typography>
+                <Typography variant="subtitle1">:</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography> &nbsp; 140</Typography>
+              </Grid>
+              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
+                  Vấn đề được giải quyết{" "}
+                </Typography>
+                <Typography variant="subtitle1">:</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography> &nbsp; 40</Typography>
               </Grid>
             </Grid>
           </Card>
@@ -118,7 +145,7 @@ const HomeManager = () => {
                   </TimelineSeparator>
                   <TimelineContent>
                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography>8 Thông báo mới về báo cáo xấu</Typography>
+                      <Typography>3 Sự kiện mới được yêu cầu phê duyệt</Typography>
                       <Typography sx={{ color: "rgba(58, 53, 65, 0.68)" }}>8 giờ trước</Typography>
                     </Box>
                     <Box></Box>

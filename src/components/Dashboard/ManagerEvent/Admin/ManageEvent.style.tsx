@@ -36,4 +36,11 @@ export const useStyles = makeStyles(() => ({
     backgroundColor: "red",
     marginRight: 5,
   },
+  select: {
+    fontSize: 14,
+    fontWeight: 500,
+    "& > fieldset": {
+      border: "none",
+    },
+  },
 }));

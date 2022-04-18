@@ -36,6 +36,8 @@ const OnGoingEvent = () => {
 
   const [data, setData]: any = useState(null);
 
+  console.log(data);
+
   const handleViewDetail = (eventId: any) => {
     //navigate sang URL detail EVENT
     navigate(`/event-detail?eventid=${eventId}`);
