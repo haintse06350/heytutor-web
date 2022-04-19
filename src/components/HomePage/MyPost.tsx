@@ -108,16 +108,6 @@ const MyPost = (props: any) => {
                 subTitle="Đang trong quá trình hỗ trợ"
                 onNavigate={() => onNavigate("/my-request?detail=processing")}
               />
-              {/* <StatItem
-                onHoverElem={onHoverElem}
-                setOnHoverElem={setOnHoverElem}
-                tab="onEventPost"
-                icon={<EventNoteIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfPostOnEvent}
-                title="Đang tham gia trong các event"
-                subTitle="Các vấn đề đang được tìm kiếm người giúp đỡ trong các event"
-                onNavigate={() => onNavigate("/my-request?detail=onEvent")}
-              /> */}
             </Box>
           )}
           <Divider />

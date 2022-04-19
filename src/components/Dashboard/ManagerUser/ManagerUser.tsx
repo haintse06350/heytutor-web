@@ -237,20 +237,15 @@ export const ManagerUser = () => {
   const renderStatus = (status: any) => {
     return status.map((item: any) => (
       <Box key={item} sx={{ mt: 1 }}>
-        <Chip
-          label={item}
-          variant="outlined"
-          sx={{
-            color:
-              item === "Hoạt động"
-                ? "#00AB55"
-                : item === "Hạn chế đăng bài 1 ngày" ||
-                  item === "Hạn chế đăng bài 3 ngày" ||
-                  item === "Hạn chế đăng bài 7 ngày"
-                ? "#ff3a16"
-                : "#5ab4ec",
-          }}
-        />
+        {item === "Hoạt động" ? (
+          <Chip label={item} color="primary" />
+        ) : item === "Hạn chế đăng bài 1 ngày" ||
+          item === "Hạn chế đăng bài 3 ngày" ||
+          item === "Hạn chế đăng bài 7 ngày" ? (
+          <Chip label={item} color="info" />
+        ) : (
+          <Chip label={item} color="warning" />
+        )}
       </Box>
     ));
   };
@@ -474,7 +469,7 @@ export const ManagerUser = () => {
               <TableCell>Tên</TableCell>
               <TableCell>Báo cáo xấu</TableCell>
               <TableCell>Thuộc sự kiện</TableCell>
-              <TableCell>Đánh giá hỗ trợ</TableCell>
+              <TableCell>Đánh giá nhận hỗ trợ</TableCell>
               <TableCell>Đánh giá yêu cầu hỗ trợ</TableCell>
               <TableCell>Trạng thái</TableCell>
               <TableCell>Thời gian hiệu lực</TableCell>

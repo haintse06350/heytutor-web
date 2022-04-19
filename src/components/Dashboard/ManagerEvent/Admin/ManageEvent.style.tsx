@@ -1,7 +1,8 @@
 import { makeStyles } from "@mui/styles";
 
 export const useStyles = makeStyles(() => ({
-  wrapManageEvent: {},
+  wrapManageEvent: { position: "relative" },
+  btnCreateEvent: { position: "absolute", top: 0, right: 16 },
   nameUser: {
     textDecoration: "underline",
     cursor: "pointer",

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
-  Card,
   Grid,
-  Typography,
   Box,
   // Toolbar,
   IconButton,
@@ -39,7 +37,6 @@ import TabList from "@mui/lab/TabList";
 
 import TabPanel from "@mui/lab/TabPanel";
 import DialogPreviewEventDetail from "./DialogPreviewEventDetail";
-import img1 from "../../../../assets/home_event_images/14.png";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -100,16 +97,13 @@ const ManageEvent = () => {
       selected: [],
       open: false,
       sortByOpts: [
-        { value: "asc", label: "Tăng dần" },
-        { value: "desc", label: "Giảm dần" },
-        { value: "isActive", label: "Hoạt động" },
-        { value: "isDone", label: "Kết thúc" },
+        { value: "asc", label: "Số lượng tăng dần" },
+        { value: "desc", label: "Số lượng giảm dần" },
       ],
       sortOpts: [
         { value: "deadlineTime", label: "Thời gian của sự kiện" },
         { value: "nbOfJoined", label: "Số người tham gia" },
         { value: "nbOfReported", label: "Số báo cáo xấu" },
-        { value: "status", label: "Trạng thái hoạt động" },
       ],
       timeOpts: [
         { value: "currentWeek", label: "Tuần này" },
@@ -150,9 +144,10 @@ const ManageEvent = () => {
   const handleCreateEvent = () => {
     navigate(`/dashboard/admin/manage-event/create-event`);
   };
+
   return (
     <div className={classes.wrapManageEvent}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }} className={classes.btnCreateEvent}>
         <Button startIcon={<AddCircleOutlineIcon />} variant="contained" sx={{ mb: 2 }} onClick={handleCreateEvent}>
           Tạo sự kiện
         </Button>
@@ -336,7 +331,11 @@ const ManageEvent = () => {
                     <TableCell align="center">{row.nbOfReported}</TableCell>
                     <TableCell>{row.manager}</TableCell>
                     <TableCell>
-                      {row.status === "Đang diễn ra" ? <Chip label="hoạt động" /> : <Chip label="đã kết thúc" />}
+                      {row.status === "Đang diễn ra" ? (
+                        <Chip label="Hoạt động" color="primary" />
+                      ) : (
+                        <Chip label="Đã kết thúc" color="error" />
+                      )}
                     </TableCell>
                     <TableCell>
                       <Tooltip title="Quản lí trạng thái">
@@ -353,37 +352,191 @@ const ManageEvent = () => {
         </TabPanel>
         {/* Sự kiện đăng kí */}
         <TabPanel value="2">
-          <Grid container>
-            <Grid item xs={12} md={6} lg={6}>
-              <Card sx={{ p: 2 }}>
-                <img src={img1} alt="img event detail" />
-                <Typography variant="subtitle1">Để có một cuối kỳ thật hoàn hảo với SSG102</Typography>
-                <Typography variant="subtitle1">Thời gian dự kiến : 24/3/2022 - 4/5/2022</Typography>
+          <Box sx={{ mb: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <Grid container item xs={12} spacing={1} sx={{ width: "100%" }}>
+                <Grid item xs={12} lg={4} md={4}>
+                  <Box component="form" noValidate autoComplete="off">
+                    <TextField
+                      fullWidth
+                      classes={{ root: classes.textField }}
+                      id="outlined-select-currency"
+                      select
+                      label="Thời gian"
+                      defaultValue="currentWeek"
+                      // value={filters.time}
+                      onChange={(e: any) => onChangeFilter(e, "time")}>
+                      {data.timeOpts.map((option: any) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} lg={4} md={4}>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Ngày bắt đầu"
+                      inputFormat="dd/MM/yyyy"
+                      value={valueFilterStartDate}
+                      onChange={(newValue) => {
+                        setValueFilterStartDate(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item xs={12} lg={4} md={4}>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Ngày kết thúc"
+                      inputFormat="dd/MM/yyyy"
+                      value={valueFilterEndDate}
+                      onChange={(newValue) => {
+                        setValueFilterEndDate(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
+                    />
+                  </LocalizationProvider>
+                </Grid>
 
-                <IconButton onClick={handleClickOpenPreview("paper")}>
-                  <Tooltip title="Xem hiển thị">
-                    <VisibilityIcon color="inherit" />
-                  </Tooltip>
-                </IconButton>
-                <IconButton>
-                  <Tooltip title="Phê duyệt">
-                    <CheckCircleIcon color="success" />
-                  </Tooltip>
-                </IconButton>
-                <IconButton>
-                  <Tooltip title="Từ chối">
-                    <BlockIcon color="error" />
-                  </Tooltip>
-                </IconButton>
-                <IconButton>
-                  <Tooltip title="Bình luận">
-                    <CommentIcon sx={{ color: "blue" }} />
-                  </Tooltip>
-                </IconButton>
-                <DialogPreviewEventDetail open={openPreview} handleClose={handleClosePreview} scroll={scroll} />
-              </Card>
+                <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
+                  <Box component="form" noValidate autoComplete="off">
+                    <TextField
+                      autoFocus
+                      classes={{ root: classes.textField }}
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <Select
+                            className={classes.select}
+                            value={searchBy}
+                            defaultValue="nameOfUser"
+                            onChange={onChangeSearchBy}
+                            inputProps={{
+                              name: "departmentValue",
+                              id: "departmentValue",
+                            }}>
+                            <MenuItem value="nameOfUser">Tên người dùng</MenuItem>
+                            <MenuItem value="nameOfEvent">Tiêu đề sự kiện</MenuItem>
+                          </Select>
+                        ),
+                      }}
+                      id="outlined-basic"
+                      placeholder="Tìm kiếm ..."
+                      variant="outlined"
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
+                  <Box component="form" noValidate autoComplete="off">
+                    <TextField
+                      fullWidth
+                      classes={{ root: classes.textField }}
+                      id="outlined-select-currency"
+                      select
+                      label="Hiển thị theo"
+                      defaultValue="isNotResolve"
+                      value={visible}
+                      onChange={(event) => handleVisible(event)}>
+                      {data.sortOpts.map((option: any) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+                </Grid>
+                <Grid item xs={4} md={4} sx={{ minWidth: "20%" }}>
+                  <Box component="form" noValidate autoComplete="off">
+                    <TextField
+                      fullWidth
+                      classes={{ root: classes.textField }}
+                      id="outlined-select-currency"
+                      select
+                      label="Sắp xếp"
+                      defaultValue="asc"
+                      value={sortBy}
+                      onChange={(e: any) => setSortBy(e.target.value)}>
+                      {visible !== "status" &&
+                        data?.sortByOpts.slice(0, 2).map((option: any) => (
+                          <MenuItem key={option.value} value={option.value} defaultValue="desc">
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      {visible === "status" &&
+                        data?.sortByOpts.slice(2, 4).map((option: any) => (
+                          <MenuItem key={option.value} value={option.value} defaultValue="isActive">
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                  </Box>
+                  <Popover
+                    open={openDatePicker}
+                    onClose={onCloseDatePicker}
+                    anchorOrigin={{ vertical: "center", horizontal: "center" }}
+                    transformOrigin={{ vertical: "center", horizontal: "center" }}>
+                    <DateRangePicker setValue={setDateData} value={dateData} />
+                  </Popover>
+                </Grid>
+              </Grid>
+            </Box>
+            <Grid container>
+              <Grid item xs={12}>
+                <TableContainer component={Paper}>
+                  <Table aria-label="ctv table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Tiêu đề</TableCell>
+                        <TableCell>Thời gian</TableCell>
+                        <TableCell>Quản lí bởi</TableCell>
+                        <TableCell>Quản lí</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>1</TableCell>
+                        <TableCell>Để có một cuối kỳ thật hoàn hảo với SSG102</TableCell>
+                        <TableCell>24/3/2022</TableCell>
+                        <TableCell>anhcd</TableCell>
+                        <TableCell>
+                          <IconButton onClick={handleClickOpenPreview("paper")}>
+                            <Tooltip title="Xem hiển thị">
+                              <VisibilityIcon color="primary" />
+                            </Tooltip>
+                          </IconButton>
+                          <IconButton>
+                            <Tooltip title="Phê duyệt">
+                              <CheckCircleIcon color="success" />
+                            </Tooltip>
+                          </IconButton>
+                          <IconButton>
+                            <Tooltip title="Từ chối">
+                              <BlockIcon color="error" />
+                            </Tooltip>
+                          </IconButton>
+                          <IconButton>
+                            <Tooltip title="Bình luận">
+                              <CommentIcon sx={{ color: "blue" }} />
+                            </Tooltip>
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                    <DialogPreviewEventDetail open={openPreview} handleClose={handleClosePreview} scroll={scroll} />
+                  </Table>
+                </TableContainer>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </TabPanel>
       </TabContext>
     </div>

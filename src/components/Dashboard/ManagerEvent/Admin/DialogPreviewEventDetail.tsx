@@ -60,9 +60,15 @@ const DialogPreviewEventDetail = (props: any) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Trở lại</Button>
-        <Button onClick={handleClose}>Từ chối </Button>
-        <Button onClick={handleClose}>Phê duyệt</Button>
+        <Button sx={{ color: "#94a4c4" }} onClick={handleClose}>
+          Trở lại
+        </Button>
+        <Button onClick={handleClose} color="error">
+          Từ chối{" "}
+        </Button>
+        <Button onClick={handleClose} color="primary">
+          Phê duyệt
+        </Button>
       </DialogActions>
     </Dialog>
   );

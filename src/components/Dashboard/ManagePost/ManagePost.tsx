@@ -3,7 +3,7 @@ import {
   Grid,
   // Typography,
   Box,
-  Button,
+  // Button,
   TextField,
   MenuItem,
   InputAdornment,
@@ -22,7 +22,7 @@ import {
 import { useStyles } from "./ManagePost.style";
 
 // icon
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+// import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -40,7 +40,7 @@ import moment from "moment";
 const ManagePost = () => {
   const classes = useStyles();
   const [value, setValue] = useState("1");
-  const [visible, setVisible] = useState("isActive");
+  const [visible, setVisible] = useState("isReported");
   const [sortBy, setSortBy]: any = useState("desc");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
   const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
@@ -53,16 +53,14 @@ const ManagePost = () => {
       selected: [],
       open: false,
       sortByOpts: [
-        { value: "asc", label: "Tăng dần" },
-        { value: "desc", label: "Giảm dần" },
+        { value: "asc", label: "Số lượng tăng dần" },
+        { value: "desc", label: "Số lượng giảm dần" },
         { value: "isActive", label: "Hoạt động" },
         { value: "isBlock", label: "Bị khóa" },
       ],
       sortOpts: [
-        { value: "isNotResolve", label: "Báo cáo xấu chưa giải quyết" },
-        { value: "reviewRegisterPoint", label: "Xếp hạng yêu cầu hỗ trợ" },
-        { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
-        { value: "generalEvent", label: "Chung sự kiện" },
+        { value: "isReported", label: "Báo cáo xấu" },
+        { value: "status", label: "Trạng thái" },
       ],
       timeOpts: [
         { value: "currentWeek", label: "Tuần này" },
@@ -379,11 +377,11 @@ const ManagePost = () => {
   return (
     <>
       {/* header */}
-      <Grid container item sx={{ mb: 2 }} className={classes.btnCreatePost}>
+      {/* <Grid container item sx={{ mb: 2 }} className={classes.btnCreatePost}>
         <Button startIcon={<AddCircleOutlineIcon />} variant="contained">
           Tạo bài viết
         </Button>
-      </Grid>
+      </Grid> */}
       {/* icon header */}
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

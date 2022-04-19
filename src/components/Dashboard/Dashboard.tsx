@@ -446,7 +446,7 @@ const Dashboard = () => {
                 <ListItemIcon>
                   <PeopleAltIcon />
                 </ListItemIcon>
-                <ListItemText primary="Quản lí cộng tác viên" />
+                <ListItemText primary="Cộng tác viên" />
               </ListItem>
               <ListItem
                 button
@@ -456,7 +456,7 @@ const Dashboard = () => {
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Quản lí người dùng hệ thống" />
+                <ListItemText primary="Người dùng hệ thống" />
               </ListItem>
             </List>
           </Collapse>

@@ -222,7 +222,7 @@ export default function MyRequestContent(props: any) {
       return (
         <Box>
           <Tooltip title="Loại người này khỏi danh sách đăng kí">
-            <Button color="secondary" onClick={() => onClickRemoveRegisterUser(user)}>
+            <Button color="error" onClick={() => onClickRemoveRegisterUser(user)}>
               <BlockIcon />
             </Button>
           </Tooltip>

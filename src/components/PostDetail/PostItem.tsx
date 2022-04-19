@@ -111,7 +111,11 @@ const PostItem = () => {
   const onClosePopover = () => {
     setAnchorEl(null);
   };
-
+  // const isNearDeadline = (deadline: string) => {
+  //   if (deadline.includes("giờ") || deadline.includes("phút")) {
+  //     return true;
+  //   }
+  // };
   const getPostStatus = () => {
     switch (tab) {
       case "isActive": {
@@ -259,8 +263,9 @@ const PostItem = () => {
                   <Typography variant="subtitle1" onClick={() => onClickProfile(sp.id)}>
                     {sp.name}
                   </Typography>
+
                   <Typography display="flex" alignItems="center" variant="subtitle1">
-                    {sp.rankPoint} <StarRoundedIcon sx={{ color: "gold" }} />
+                    {sp.rankPoint} <StarRoundedIcon sx={{ color: !sp.rankPoint ? "gray" : "gold" }} />
                   </Typography>
                 </Box>
                 <Tooltip title="Trao đổi">
@@ -586,14 +591,19 @@ const PostItem = () => {
               <div className={classes.deadline}>
                 <div>
                   <AccessTimeOutlinedIcon sx={{ color: "#d32f2f" }} />
+                  {/* <AccessTimeOutlinedIcon
+                    sx={{
+                      color: isNearDeadline(post.postDetails["Post.deadline"].endOf("hours").fromNow())
+                        ? "#d32f2f"
+                        : "#94a4c4",
+                    }}
+                  /> */}
                   <Typography variant="subtitle1" sx={{ ml: 1, color: "#d32f2f" }}>
                     Deadline trong{" "}
                     {moment(post.postDetails["Post.deadline"]).endOf("hours").fromNow() || "Cần xử lí trong hôm nay"}
                   </Typography>
                 </div>
-                <div className={clsx(classes.postStatus, `${tab}`)}>
-                  <Typography variant="caption">{getPostStatus()}</Typography>
-                </div>
+
                 {isMyPost ? (
                   <Button>Chỉnh sửa</Button>
                 ) : (
@@ -603,7 +613,12 @@ const PostItem = () => {
                 )}
               </div>
               <div className={classes.postTitleAndAction}>
-                <Typography variant="h6">[ {post.postDetails["Post.title"]} ]</Typography>
+                <Typography variant="h6">
+                  <div className={clsx(classes.postStatus, `${tab}`)}>
+                    <Typography variant="caption">{getPostStatus()}</Typography>
+                  </div>
+                  [ {post.postDetails["Post.title"]} ]
+                </Typography>
               </div>
 
               <Typography variant="subtitle1" fontWeight={400} fontSize="1rem">

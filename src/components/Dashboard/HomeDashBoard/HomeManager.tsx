@@ -63,76 +63,36 @@ const HomeManager = () => {
         <Grid item xs={6} md={3} lg={3}>
           <Card sx={{ p: 2, height: "100%" }}>
             <Typography>
-              <b>Vấn đề cần giải quyết</b>
+              <b>Sự kiện mới</b>
             </Typography>
-            <Typography variant="h4">1200 vấn đề</Typography>
+            <Typography variant="h4">2 sự kiện</Typography>
             <Typography sx={{ color: "green" }} variant="body1">
               +12%
             </Typography>
-            <Chip label="Tháng trước" />
+            <Box>
+              <Chip label="Tháng trước" />
+              <Button>Xem chi tiết</Button>
+            </Box>
           </Card>
         </Grid>
         <Grid item xs={6} md={3} lg={3}>
           <Card sx={{ p: 2, height: "100%" }}>
             <Typography>
-              <b>Người đăng kí giải quyết vấn đề</b>
+              <b>Cộng tác viên</b>
             </Typography>
-            <Typography variant="h4">80 người</Typography>
+            <Typography variant="h4">8 người</Typography>
             <Typography color="error" variant="body1">
-              -10%
+              &nbsp;
             </Typography>
-            <Chip label="Tháng trước" />
+            <Box>
+              <Chip label="Tất cả" />
+              <Button>Xem chi tiết</Button>
+            </Box>
           </Card>
         </Grid>
 
         <Grid item xs={12} md={6} lg={6}>
           <Card sx={{ p: 2, height: "100%" }}>
-            <Typography>
-              <b>Tổng quan về cộng tác viên</b>
-            </Typography>
-            <Grid container>
-              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
-                  Cộng tác viện{" "}
-                </Typography>
-                <Typography variant="subtitle1">:</Typography>
-              </Grid>
-              <Grid item xs={7}>
-                <Typography> &nbsp; 10</Typography>
-              </Grid>
-              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
-                  Sự kiện{" "}
-                </Typography>
-                <Typography variant="subtitle1">:</Typography>
-              </Grid>
-              <Grid item xs={7}>
-                <Typography> &nbsp; 40</Typography>
-              </Grid>
-              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between", textDecoration: "underline" }}>
-                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
-                  Người tham gia{" "}
-                </Typography>
-                <Typography variant="subtitle1">:</Typography>
-              </Grid>
-              <Grid item xs={7}>
-                <Typography> &nbsp; 140</Typography>
-              </Grid>
-              <Grid item xs={5} sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="subtitle1" sx={{ textDecoration: "underline", cursor: "pointer" }}>
-                  Vấn đề được giải quyết{" "}
-                </Typography>
-                <Typography variant="subtitle1">:</Typography>
-              </Grid>
-              <Grid item xs={7}>
-                <Typography> &nbsp; 40</Typography>
-              </Grid>
-            </Grid>
-          </Card>
-        </Grid>
-        {/* activity timeline */}
-        <Grid item xs={12} md={6} lg={6}>
-          <Card sx={{ p: 2 }}>
             <Typography>
               <b>Thông báo hoạt động</b>
             </Typography>
@@ -171,6 +131,10 @@ const HomeManager = () => {
               </Timeline>
             </Box>
           </Card>
+        </Grid>
+        {/* activity timeline */}
+        <Grid item xs={12} md={6} lg={6}>
+          <Card sx={{ p: 2 }}></Card>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <Card sx={{ p: 2 }}></Card>
