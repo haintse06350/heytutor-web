@@ -175,15 +175,6 @@ export default function RegisterContent(props: any) {
           </div>
           <div className={classes.cardContent}>
             <Box sx={{ my: 1.5 }}>
-              {/* <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 18, height: 18, color: "#94a4c4" }} />
-                <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 700, lineHeight: 1.5 }}>
-                  Số lượt xem
-                </Typography>
-                <Typography variant="subtitle2" sx={{ fontSize: 12, fontWeight: 700, lineHeight: 1.5, ml: 0.5 }}>
-                  100
-                </Typography>
-              </Box> */}
               <Box sx={{ mt: 1 }}>
                 <Typography
                   variant="subtitle2"

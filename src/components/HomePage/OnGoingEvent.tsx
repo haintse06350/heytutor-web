@@ -72,11 +72,11 @@ const OnGoingEvent = () => {
                 <img src={demoImg6} alt="" />
                 <Typography
                   className={classes.titleEvent}
-                  variant="h5"
+                  variant="subtitle1"
                   onClick={() => handleViewDetail(item?.eventContent?.id)}>
                   {item?.eventContent?.title}
                 </Typography>
-                <Typography variant="body1" sx={{ ml: 2 }}>
+                <Typography variant="caption" sx={{ ml: 2, mb: 1 }}>
                   {item?.eventContent?.description}
                 </Typography>
               </Grid>

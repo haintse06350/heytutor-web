@@ -52,7 +52,7 @@ const MainTabLayout = (props: any) => {
         sx={{ height: "fit-content", display: "flex", alignItems: "center", justifyContent: "space-between", py: 2 }}>
         <Box display="flex" alignItems="center">
           {icon}
-          <CardHeader title={title} sx={{ p: 0, ml: 1, fontSize: "1rem" }} />
+          <CardHeader title={title} sx={{ p: 0, ml: 1, fontSize: "0.9rem", fontWeight: "400" }} />
         </Box>
         <FormControl sx={{ width: 1 / 3 }}>
           <InputLabel id="demo-simple-select-label">Thời gian</InputLabel>

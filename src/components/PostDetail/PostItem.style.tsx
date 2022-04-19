@@ -102,9 +102,13 @@ export const useStyles: any = makeStyles(() => ({
     flexDirection: "column",
   },
   postStatus: {
-    padding: "1px 4px",
+    width: "fit-content",
+    height: "fit-content",
+    padding: "0px 8px",
     color: "#fff",
     borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
     "&.isActive": {
       background: "#FF6B6B",
     },
@@ -116,6 +120,9 @@ export const useStyles: any = makeStyles(() => ({
     },
     "&.isDone": {
       background: "#4CAF50",
+    },
+    "& > span": {
+      paddingTop: "-2px",
     },
   },
   positionFixed: {},

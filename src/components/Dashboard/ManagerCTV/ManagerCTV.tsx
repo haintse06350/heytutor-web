@@ -509,9 +509,9 @@ const ManagerCTV = () => {
 
                     <TableCell sx={{ color: row.status === 1 ? "green" : "red" }}>
                       {row.status === 1 ? (
-                        <Chip label="Hoạt động" variant="outlined" color="primary" />
+                        <Chip label="Hoạt động" color="primary" />
                       ) : (
-                        <Chip label="Bị khóa" variant="outlined" color="error" />
+                        <Chip label="Bị khóa" color="error" />
                       )}
                     </TableCell>
                     <TableCell>
@@ -525,7 +525,6 @@ const ManagerCTV = () => {
                   </TableRow>
                 ))}
               </TableBody>
-
               <DialogEditManageCTV open={openDialogEdit} onClose={closeDialogEdit} />
             </Table>
           </TableContainer>

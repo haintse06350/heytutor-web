@@ -254,7 +254,7 @@ const DashBoardLayout = ({ children }: any) => {
                 <ListItemIcon>
                   <PeopleAltIcon />
                 </ListItemIcon>
-                <ListItemText primary="Quản lí cộng tác viên" />
+                <ListItemText primary="Cộng tác viên" />
               </ListItem>
               <ListItem
                 button
@@ -264,7 +264,7 @@ const DashBoardLayout = ({ children }: any) => {
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Quản lí người dùng hệ thống" />
+                <ListItemText primary="Người dùng hệ thống" />
               </ListItem>
             </List>
           </Collapse>
