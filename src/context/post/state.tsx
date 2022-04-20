@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import CreatePost from "../../components/CreatePost/CreatePost";
 import { INITIAL_STATE } from "./constants";
 import { createPost, discardCreatingPost } from "./dispatchers";
 import Reducer from "./reducer";
@@ -14,5 +15,10 @@ export default function PostProvider({ children }: any) {
     discardCreatingPost: () => discardCreatingPost(dispatch),
   };
 
-  return <PostCtx.Provider value={{ ...state, ...setters }}>{children}</PostCtx.Provider>;
+  return (
+    <PostCtx.Provider value={{ ...state, ...setters }}>
+      {children}
+      {state.isCreatingPost && <CreatePost />}
+    </PostCtx.Provider>
+  );
 }

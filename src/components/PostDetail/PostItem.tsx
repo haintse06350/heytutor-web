@@ -225,6 +225,15 @@ const PostItem = () => {
     navigate(`/profile?userId=${userId}`);
   };
 
+  const onUploadFile = ({ target }: any) => {
+    const fileReader = new FileReader();
+    console.log("on upload");
+    fileReader.readAsDataURL(target.files[0]);
+    fileReader.onload = (e: any) => {
+      console.log(e.target.result);
+    };
+  };
+
   const PostOwner = () => {
     return (
       <Box>
@@ -488,10 +497,12 @@ const PostItem = () => {
                     />
                     <Box sx={{ mt: 2 }} display="flex" alignItems="center" justifyContent="flex-start">
                       <Typography variant="subtitle1">Hoặc</Typography>
-                      <Input accept="*" id="contained-button-file" multiple type="file" />
-                      <Button sx={{ ml: 2 }} variant="contained" component="span">
-                        Upload file
-                      </Button>
+                      <label htmlFor="icon-button-file">
+                        <Input onChange={onUploadFile} accept="*" id="icon-button-file" multiple type="file" />
+                        <Button sx={{ ml: 2 }} variant="contained" component="span">
+                          Upload file
+                        </Button>
+                      </label>
                     </Box>
                   </Box>
                 </Box>
@@ -671,7 +682,11 @@ const PostItem = () => {
                     </Box>
                   </Box>
                   <Divider sx={{ mt: 1 }} variant="fullWidth" />
-                  <ExchangeTimeLine selectedSupporter={selectedSupporter} isMyRequest={isMyRequest} />
+                  <ExchangeTimeLine
+                    selectedSupporter={selectedSupporter}
+                    isMyRequest={isMyRequest}
+                    onUploadFile={onUploadFile}
+                  />
                 </CardContent>
                 <Box className={classes.actions}>
                   <RenderExchangeActions selectedSupporter={selectedSupporter} role={from} />

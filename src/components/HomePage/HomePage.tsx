@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
+import { FirstTimeLoginPopup } from "../FirstTimeLoginPopup/FirstTimeLoginPopup";
 //utils
 // import { fShortenNumber } from "../../utils/formatNumber";
 
@@ -29,8 +30,9 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const classes = useStyles();
-  const getUserStats = async () => {
-    const data = await Home.getUserStats();
+
+  const getUserStats = async (filters: any) => {
+    const data = await Home.getUserStats(filters);
     setData(data);
   };
 
@@ -42,9 +44,8 @@ const HomePage = () => {
     Notification.listNotification().then((res) => {
       setUnreadNoti(res.filter((item: any) => item.status === "unread"));
     });
-    getUserStats();
+    getUserStats({ time: "month" });
   }, []);
-  console.log("unread", unreadNoti);
 
   const NotiIcon = ({ noti }: any) => {
     if (noti.notificationType === "accept_register") {
@@ -53,7 +54,7 @@ const HomePage = () => {
     return <HowToRegIcon />;
   };
 
-  const deadlineDayInSeconds = 1651566107; //"2022-05-03T08:21:47.000Z"
+  const deadlineDayInSeconds = 1650961307; //"2022-04-26T08:21:47.000Z"
 
   React.useEffect(() => {
     //@ts-ignore
@@ -63,6 +64,7 @@ const HomePage = () => {
 
   return (
     <>
+      <FirstTimeLoginPopup />
       <Box sx={{ mt: 1 }} className={classes.wrapHomePage}>
         <Page>
           <Box display="flex" alignItems="flex-end" justifyContent="center" sx={{ mb: 2 }}>

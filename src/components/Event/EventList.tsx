@@ -44,7 +44,8 @@ export const EventList = () => {
 
   const getListEventByUser = async () => {
     const data = await Event.getListEventByUser();
-    setData(data.listEvent);
+    console.log("data", data);
+    setData(data);
   };
   const [openDatePicker, setOpenDatePicker] = React.useState(false);
   const [filters, setFilters]: any = React.useState({ status: "joined" });
@@ -131,6 +132,7 @@ export const EventList = () => {
   useEffect(() => {
     getListEventByUser();
   }, []);
+
   if (!data) {
     return (
       <Page>

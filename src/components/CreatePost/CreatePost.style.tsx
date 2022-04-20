@@ -27,13 +27,6 @@ export const useStyles: any = makeStyles(() => ({
 
     position: "relative",
   },
-  image: {
-    borderRadius: 8,
-    width: "100px",
-    height: "100px",
-    objectFit: "cover",
-    marginTop: 5,
-  },
   deleteButton: {
     position: "absolute",
     top: 16,
@@ -214,5 +207,47 @@ export const useStyles: any = makeStyles(() => ({
     zIndex: 99,
     top: "25%",
     left: "50%",
+  },
+  input: {
+    fontSize: 14,
+    fontWeight: 500,
+    "& > div": {
+      fontSize: 14,
+      fontWeight: 500,
+    },
+    "& > div > textarea": {
+      fontSize: 14,
+      fontWeight: 500,
+    },
+    "& > div > input": {
+      fontSize: 14,
+      fontWeight: 500,
+    },
+  },
+  image: {
+    width: 150,
+    height: 100,
+    position: "relative",
+    "& > img": {
+      width: "100%",
+      height: "100%",
+      borderRadius: 4,
+    },
+  },
+  overlay: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    borderRadius: 4,
+    top: 0,
+    "&:hover": {
+      display: "block",
+      backgroundColor: "rgba(9, 30, 66, 0.5)",
+    },
+  },
+  removeImage: {
+    position: "absolute",
+    bottom: 6,
+    right: 6,
   },
 }));

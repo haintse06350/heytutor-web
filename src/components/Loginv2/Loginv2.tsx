@@ -46,14 +46,11 @@ const Loginv2 = () => {
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography color="textPrimary" variant="h4" sx={{ textAlign: "left" }}>
-                Sign in
-              </Typography>
-              <Typography color="textSecondary" gutterBottom variant="body2" sx={{ textAlign: "left" }}>
-                Sign in on the internal platform
+                Đăng nhập
               </Typography>
             </Box>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={8}>
                 <Button
                   fullWidth
                   color="error"
@@ -61,7 +58,7 @@ const Loginv2 = () => {
                   onClick={(e: any) => formik.handleSubmit(e)}
                   size="large"
                   variant="contained">
-                  Login with Google
+                  Đăng nhập với tài khoản FPT
                 </Button>
               </Grid>
             </Grid>
@@ -71,14 +68,14 @@ const Loginv2 = () => {
                 pt: 3,
               }}>
               <Typography align="center" color="textSecondary" variant="body1">
-                or login with email address
+                hoặc đăng nhập với email
               </Typography>
             </Box>
             <TextField
               error={Boolean(formik.touched.email && formik.errors.email)}
               fullWidth
               helperText={formik.touched.email && formik.errors.email}
-              label="Email Address"
+              label="Email"
               margin="normal"
               name="email"
               onBlur={formik.handleBlur}
@@ -92,7 +89,7 @@ const Loginv2 = () => {
               error={Boolean(formik.touched.password && formik.errors.password)}
               fullWidth
               helperText={formik.touched.password && formik.errors.password}
-              label="Password"
+              label="Mật khẩu"
               margin="normal"
               name="password"
               onBlur={formik.handleBlur}
@@ -110,7 +107,7 @@ const Loginv2 = () => {
                 size="large"
                 type="submit"
                 variant="contained">
-                Sign In Now
+                Đăng nhập
               </Button>
             </Box>
           </form>

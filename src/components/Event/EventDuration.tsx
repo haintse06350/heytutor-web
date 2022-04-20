@@ -27,10 +27,11 @@ const EventDuration = (data: any) => {
 
   const [showListEvent, setShowListEvent] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+
   const handleViewDetail = (eventId: any) => {
-    //navigate sang URL detail EVENT
     navigate(`/event-detail?eventid=${eventId}`);
   };
+
   const handleEventList = () => {
     navigate(`/event-list`);
   };

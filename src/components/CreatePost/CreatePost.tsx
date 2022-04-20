@@ -1,263 +1,205 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useStyles } from "./CreatePost.style";
 //component marterial
 import {
-  styled,
-  Button,
-  IconButton,
-  Grid,
   Box,
-  Typography,
-  InputLabel,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  FormControl,
   Select,
   MenuItem,
-  Tooltip,
-  TextField,
-  FormControl,
-  OutlinedInput,
+  Button,
+  Typography,
 } from "@mui/material";
-// icon
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SendIcon from "@mui/icons-material/Send";
-import CloseIcon from "@mui/icons-material/Close";
+import { styled } from "@mui/material/styles";
+import DeleteIcon from "@mui/icons-material/Delete";
 // component
 import { Post as PostModel } from "../../models/post";
 import { NotificationCtx } from "../../context/notification/state";
-// import { UserCtx } from "../../context/user/state";
-import { useLocalStorage } from "../usingLocalStorage/usingLocalStorage";
-import Page from "../../layout/Page";
-import InputAdornment from "@mui/material/InputAdornment";
-// import { Event } from "../../models/event";
+import { PostCtx } from "../../context/post/state";
+import { CustomizedAutoCompleteHashTag } from "./AutoCompleteHashTag";
+import { Event } from "../../models/event";
 
 export const CreatePost = () => {
   const classes = useStyles();
-
-  const [postItem, setPostItem] = useLocalStorage("postItem", { title: "", hashTag: "", content: "", images: [] });
-
-  // const [openSelect, setOpenSelect] = useLocalStorage("openSelect", false);
-  const [loading, setLoading] = useLocalStorage("loading", false);
-
+  const { discardCreatingPost } = useContext(PostCtx);
+  const [hashTag, setHashTag]: any = useState(null);
+  const [eventJoint, setEventJoint]: any = useState(null);
+  const [selectedEvent, setSelectedEvent]: any = useState(null);
+  const [title, setTitle]: any = useState(null);
+  const [content, setContent]: any = useState(null);
+  const [images, setImages]: any = useState([]);
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
 
-  // const { user }: any = useContext(UserCtx);
+  const [errorInput, setErrorInput]: any = useState(null);
 
-  const onDiscard = () => {
-    console.log("discard clicked");
+  const onChangeEvent = (event: any) => {
+    setSelectedEvent(event.target.value);
   };
 
-  const onInsertPhoto = () => {
-    console.log("insert photo clicked");
-  };
-
-  const onPost = async () => {
-    setLoading(true);
-    // const params = { userId: user?.id, postItem.title, postItem.hashTag, postItem.content };
-    const params = {};
+  const onCreatePost = async () => {
     try {
-      await PostModel.create(params);
-      setNotificationSuccess("Post created successfully");
+      if (!hashTag) {
+        setErrorInput({ field: "hashtag" });
+        return;
+      }
+      if (!title) {
+        setErrorInput({ field: "title" });
+        return;
+      }
+      if (!content) {
+        setErrorInput({ field: "content" });
+        return;
+      }
+      const input = {};
+      await PostModel.create(input);
+      setNotificationSuccess("Tạo bài viết thành công");
     } catch (error) {
-      setNotificationError("Error creating post");
+      console.log(error);
+      setNotificationError("Tạo bài viết thất bại!");
     }
-
-    setLoading(false);
   };
+
+  useEffect(() => {
+    Event.getListEventByUser().then((res) => {
+      setEventJoint(res);
+    });
+  }, []);
 
   const Input = styled("input")({
     display: "none",
   });
-
-  const handleChangeTitle = (e: any) => {
-    postItem.title = e.target.value;
-    setPostItem({ ...postItem, [e.target.name]: e.target.value });
-    console.log(postItem);
-  };
-
-  const handleChangeHashtag = (e: any) => {
-    postItem.hashTag = e.target.value;
-    setPostItem({ ...postItem, [e.target.name]: e.target.value });
-  };
-
-  const handleChangeContent = (e: any) => {
-    postItem.content = e.target.value;
-    setPostItem({ ...postItem, [e.target.name]: e.target.value });
-  };
 
   const onUploadImage = ({ target }: any) => {
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(target.files[0]);
     fileReader.onload = (e: any) => {
-      const prevImages = [...postItem.images];
+      const prevImages = [...images];
       prevImages.push({ src: e.target.result } as any);
-      postItem.images = prevImages;
-      setPostItem({ ...postItem, [e.target.name]: e.target.value });
+      setImages(prevImages);
     };
   };
 
-  const onRemoveImage = (image: string, index: number) => {
-    const newImages = postItem.images.filter((img: string, idx: number) => img !== image && idx !== index);
-    postItem.images = newImages;
-    setPostItem({ ...postItem });
-  };
-
-  const [isPayment, setIsPayment] = useState("1");
-  const handleIsPayment = (e: any) => {
-    setIsPayment(e.target.value);
-    console.log(isPayment);
-  };
-  const [money, setMoney] = useState("100");
-  // get event list user regsitered
-  // const [data, setData]: any = useState(null);
-
-  // const getListEventByUser = async () => {
-  //   const data = await Event.getListEventByUser();
-  //   setData(data.listEvent);
-  // };
-  // useEffect(() => {
-  //   getListEventByUser();
-  // }, []);
-  return (
-    <Page>
-      <Box>
-        <Typography variant="h4" color="primary">
-          Tạo bài đăng
-        </Typography>
-        <Grid container>
-          <Grid item xs={12} md={4} lg={4}>
-            <Typography variant="h6">Chọn sự kiện đăng vấn đề</Typography>
-          </Grid>
-          <Grid item xs={12} md={8} lg={8}>
-            <div className={classes.contentDetail}>
-              <InputLabel id="select-event-joined">Sự kiện</InputLabel>
-              <Select
-                sx={{ backgroundColor: "#fff" }}
-                labelId="select-event-joined"
-                id="demo-simple-select"
-                value={"1"}
-                label="Sự kiện"
-                // onChange={handleChange}
-              >
-                {}
-                <MenuItem value={"1"}>Ten</MenuItem>
-                <MenuItem value={"2"}>Twenty</MenuItem>
-                <MenuItem value={"3"}>Thirty</MenuItem>
-              </Select>
-            </div>
-          </Grid>
-          <Grid item xs={12} md={4} lg={4} sx={{ mt: 1 }}>
-            <Typography variant="h6">Nội dung cơ bản</Typography>
-          </Grid>
-          <Grid item xs={12} md={8} lg={8} sx={{ mt: 1 }}>
-            {/* content post */}
-            <div className={classes.contentDetail}>
-              {/* tiêu đề */}
-              <TextField
-                label="Tiêu đề ... "
-                value={postItem.title}
-                onChange={(e) => handleChangeTitle(e)}
-                sx={{ backgroundColor: "#fff", width: 1, mb: 1 }}
-              />
-              {/* hashtag */}
-              <TextField
-                label="Gắn thẻ(hashtag) ..."
-                value={postItem.hashTag}
-                onChange={(e) => handleChangeHashtag(e)}
-                sx={{ backgroundColor: "#fff", width: 1 }}
-              />
-              {/* chon gia */}
-
-              <Box sx={{ display: "flex", mt: 1, backgroundColor: "#fff", pt: 1 }}>
-                <TextField
-                  select
-                  sx={{ width: 1 / 2, pt: 1 }}
-                  id="demo-simple-select"
-                  value={isPayment}
-                  onChange={(e) => handleIsPayment(e)}
-                  label="Trả công">
-                  <MenuItem value={"1"}>Có</MenuItem>
-                  <MenuItem value={"2"}>Không</MenuItem>
-                </TextField>
-
-                {isPayment === "1" && (
-                  <FormControl sx={{ m: 1, width: 1 / 2, ml: 2 }}>
-                    <InputLabel htmlFor="outlined-adornment-amount">Giá</InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      value={money}
-                      onChange={(e) => setMoney(e.target.value)}
-                      startAdornment={<InputAdornment position="start">VND</InputAdornment>}
-                      endAdornment={<InputAdornment position="end">K</InputAdornment>}
-                      label="Amount"
-                    />
-                  </FormControl>
-                )}
-              </Box>
-
-              {/* nội dung */}
-
-              <TextField
-                label="Nội dung ..."
-                value={postItem.content}
-                onChange={(e) => handleChangeContent(e)}
-                sx={{ backgroundColor: "#fff", width: 1, mt: 1 }}
-                multiline
-                rows={4}
+  const ImageBox = () => {
+    return (
+      <Box display="flex" flexWrap="wrap">
+        {images.map((image: any, index: number) => (
+          <Box className={classes.image} key={index} m={1}>
+            <img src={image.src} alt="img" />
+            <div className={classes.overlay}>
+              <DeleteIcon
+                sx={{ color: "white" }}
+                className={classes.removeImage}
+                onClick={() => onRemoveImage(image, index)}
               />
             </div>
-          </Grid>
-
-          <Grid item xs={12} md={4} lg={4}>
-            <Typography variant="h6">Thêm ảnh</Typography>
-          </Grid>
-          <Grid item xs={12} md={8} lg={8}>
-            <div className={classes.addOptionPostL}>
-              <div className={classes.insertPhotoPost} onClick={onInsertPhoto}>
-                <label htmlFor="icon-button-file">
-                  <Input onChange={onUploadImage} accept="image/*" id="icon-button-file" type="file" />
-                  <Tooltip title="Hãy chọn những bức ảnh thật ý nghĩa nhé !">
-                    <IconButton aria-label="upload picture" component="span">
-                      <AddPhotoAlternateIcon sx={{ color: "black" }} fontSize="large" />
-                    </IconButton>
-                  </Tooltip>
-                </label>
-              </div>
-            </div>
-            {postItem.images.length > 0 && (
-              <Grid container spacing={1} className={classes.listImg}>
-                {postItem.images.map((img: any, index: number) => (
-                  <Grid item xs={3} className={classes.imagePost} key={index}>
-                    <img className={classes.image} key={index} src={img.src} alt="img" />
-                    <div className={classes.deleteButton} onClick={() => onRemoveImage(img, index)}>
-                      <CloseIcon />
-                    </div>
-                  </Grid>
-                ))}
-              </Grid>
-            )}
-          </Grid>
-          <Grid xs={12} lg={4} md={4}></Grid>
-          <Grid xs={12} lg={8} md={8} sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-            <div className={classes.buttonPostScreen}>
-              <LoadingButton
-                onClick={onPost}
-                endIcon={<SendIcon />}
-                loading={loading}
-                loadingPosition="end"
-                variant="contained">
-                Đăng bài
-              </LoadingButton>
-            </div>
-            <div className={classes.buttonDiscardScreen} onClick={onDiscard}>
-              <Button variant="contained" endIcon={<CloseIcon />}>
-                Hủy đăng bài
-              </Button>
-            </div>
-          </Grid>
-        </Grid>
+          </Box>
+        ))}
       </Box>
-    </Page>
+    );
+  };
+
+  const onRemoveImage = (image: string, index: number) => {
+    const newImages = images.filter((img: string, idx: number) => img !== image && idx !== index);
+    setImages(newImages);
+  };
+
+  return (
+    <Dialog onClose={discardCreatingPost} open={true} maxWidth="xl" fullWidth>
+      <DialogTitle>Tạo bài viết</DialogTitle>
+      <DialogContent>
+        <Box>
+          <Box>
+            <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="title">
+              Tiêu đề
+            </label>
+            <span style={{ color: "red" }}>*</span>
+          </Box>
+          <Box sx={{ mt: 1 }}>
+            <TextField
+              value={title}
+              className={classes.input}
+              onChange={(e: any) => setTitle(e.target.value)}
+              id="title"
+              variant="outlined"
+              sx={{ width: 1 / 2, fontSize: 14, fontWeight: 500 }}
+              required
+            />
+          </Box>
+        </Box>
+        <CustomizedAutoCompleteHashTag setSelectedHashTag={setHashTag} />
+        <FormControl sx={{ mt: 1.25, width: 1 / 2 }}>
+          <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="event">
+            Đăng trong sự kiện
+          </label>
+          <Select
+            labelId="event"
+            id="simple-select-autowidth"
+            value={selectedEvent?.eventContent.title}
+            onChange={onChangeEvent}
+            className={classes.input}
+            fullWidth
+            sx={{ mt: 1 }}>
+            {eventJoint?.map((option: any) => (
+              <MenuItem className={classes.input} key={option.eventContent.id} value={option}>
+                {option.eventContent.title.slice(0, 50)}...
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Box sx={{ mt: 1.25 }}>
+          <Box>
+            <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="content">
+              Ảnh
+            </label>
+          </Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ mt: 1, height: 50, border: "1px dashed #c1c7d0", borderRadius: 0.5 }}>
+            <label htmlFor="icon-button-file">
+              <Input onChange={onUploadImage} accept="image/*" id="icon-button-file" multiple type="file" />
+              <Typography variant="subtitle2">Upload ảnh</Typography>
+            </label>
+          </Box>
+        </Box>
+        {images.length > 0 && <ImageBox />}
+        <Box sx={{ mt: 1.25 }}>
+          <Box>
+            <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="content">
+              Nội dung vấn đề
+            </label>
+            <span style={{ color: "red" }}>*</span>
+          </Box>
+          <Box sx={{ mt: 1 }}>
+            <TextField
+              value={content}
+              onChange={(e: any) => setContent(e.target.value)}
+              className={classes.input}
+              multiline
+              rows={4}
+              id="content"
+              variant="outlined"
+              fullWidth
+              required
+            />
+          </Box>
+        </Box>
+      </DialogContent>
+      <DialogActions sx={{ pb: 4, px: 2 }}>
+        <Button color="secondary" sx={{ textTransform: "none" }} onClick={discardCreatingPost}>
+          Huỷ
+        </Button>
+        <Button sx={{ textTransform: "none" }} variant="contained" color="primary">
+          Đăng
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

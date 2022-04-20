@@ -83,7 +83,7 @@ const Input = styled("input")({
 });
 
 export const ExchangeTimeLine = (props: any) => {
-  const { isMyRequest, selectedSupporter } = props;
+  const { isMyRequest, selectedSupporter, onUploadFile } = props;
   const classes = useStyles();
   const [exchangeData, setExchangeData] = React.useState(DEMO_EXCHANGE_DATA);
   const [openAnswerDialog, setOpenAnswerDialog] = React.useState(false);
@@ -185,10 +185,12 @@ export const ExchangeTimeLine = (props: any) => {
           <TextField margin="dense" id="link" label="Link tài liệu" type="link" fullWidth variant="standard" />
           <Box sx={{ mt: 2 }} display="flex" alignItems="center" justifyContent="flex-start">
             <Typography variant="subtitle1">Hoặc</Typography>
-            <Input accept="*" id="contained-button-file" multiple type="file" />
-            <Button sx={{ ml: 2 }} variant="contained" component="span">
-              Upload file
-            </Button>
+            <label htmlFor="icon-button-file">
+              <Input onChange={onUploadFile} accept="*" id="icon-button-file" multiple type="file" />
+              <Button sx={{ ml: 2 }} variant="contained" component="span">
+                Upload file
+              </Button>
+            </label>
           </Box>
         </DialogContent>
         <DialogActions>

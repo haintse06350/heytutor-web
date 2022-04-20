@@ -67,18 +67,22 @@ export const ListData = () => {
     }
   };
 
+  const resetData = () => {
+    if (tabValue === "all") {
+      registerData && setRegisterDataFilter([...registerData.registerData, ...registerData.supportData]);
+    } else {
+      if (tabValue === "isConfirmed") {
+        setRegisterDataFilter(registerData?.supportData);
+      }
+      if (tabValue === "isPending") {
+        setRegisterDataFilter(registerData?.registerData);
+      }
+    }
+  };
+
   React.useEffect(() => {
     if (tabValue && registerData) {
-      if (tabValue === "all") {
-        setRegisterDataFilter([...registerData.registerData, ...registerData.supportData]);
-      } else {
-        if (tabValue === "isConfirmed") {
-          setRegisterDataFilter(registerData.supportData);
-        }
-        if (tabValue === "isPending") {
-          setRegisterDataFilter(registerData.registerData);
-        }
-      }
+      resetData();
     }
   }, [tabValue, registerData]);
 
@@ -160,6 +164,7 @@ export const ListData = () => {
           onClickHashtag={onClickHashtag}
           setRegisterDataFilter={setRegisterDataFilter}
           setSortBy={setSortDataBy}
+          resetData={resetData}
           sortBy={sortDataBy}
           setFilters={setFilters}
           filters={filters}

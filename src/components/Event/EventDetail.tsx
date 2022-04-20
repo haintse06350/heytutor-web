@@ -16,21 +16,33 @@ import img1 from "../../assets/home_event_images/14.png";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment";
+
 const EventDetail = () => {
   const classes = useStyles();
   const urlParams = new URLSearchParams(window.location.search);
   const eventId = urlParams.get("eventid");
   const [dataDetail, setDataDetail]: any = useState(null);
+  const [listPost, setListPost]: any = useState(null);
   // pdf
 
-  const getEventDetailByEventId = async () => {
+  const getEventDetailByEventId = async (eventId: string) => {
     const data = await Event.getEventDetailByEventId(eventId);
     setDataDetail(data);
-    console.log("event ID", eventId);
   };
 
+  const getListPostOfEvent = async (eventId: string) => {
+    const res = await Event.getListPostOnEvent(eventId);
+    setListPost(res);
+  };
+
+  //TODO: show list post
+  console.log("listPost", listPost);
+
   useEffect(() => {
-    getEventDetailByEventId();
+    if (eventId) {
+      getEventDetailByEventId(eventId);
+      getListPostOfEvent(eventId);
+    }
   }, [eventId]);
 
   if (!dataDetail) {
@@ -55,7 +67,7 @@ const EventDetail = () => {
         <Page className={classes.root}>
           <Grid item xs={12} md={8} lg={8} className={classes.postContent}>
             <Grid item>
-              <img src={img1} alt="img event detail" /> 
+              <img src={img1} alt="img event detail" />
             </Grid>
             <Grid item className={classes.postTitle}>
               <Typography variant="h5">{dataDetail?.eventContent?.title}</Typography>
@@ -71,18 +83,18 @@ const EventDetail = () => {
                     <Typography style={{ fontSize: 14 }}>{dataDetail?.eventContent?.viewCount}</Typography>
                   </Box>
                 </Tooltip>
-                  <Tooltip title="Số lượt đăng kí hỗ trợ">
-                    <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                      <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{dataDetail?.listNonRegisterPost}</Typography>
-                    </Box>
-                  </Tooltip>
-                  <Tooltip title="Số vấn đề đăng kí">
-                    <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                      <EventNoteIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                      <Typography style={{ fontSize: 14 }}>{dataDetail?.listUserRequestor}</Typography>
-                    </Box>
-                  </Tooltip>
+                <Tooltip title="Số lượt đăng kí hỗ trợ">
+                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                    <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listNonRegisterPost}</Typography>
+                  </Box>
+                </Tooltip>
+                <Tooltip title="Số vấn đề đăng kí">
+                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                    <EventNoteIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
+                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listUserRequestor}</Typography>
+                  </Box>
+                </Tooltip>
                 <Tooltip title="Thời gian kết thúc đăng kí">
                   <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
                     <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />

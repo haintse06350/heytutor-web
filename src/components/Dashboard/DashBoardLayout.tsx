@@ -87,9 +87,10 @@ const DashBoardLayout = ({ children }: any) => {
   const theme = useTheme();
   const classes = useStyles();
   const navigate = useNavigate();
-  const { user } = useContext(UserCtx);
   const [open, setOpen] = useState(false);
   const [openTab, setOpenTab] = useState(false);
+  const { admin } = useContext(UserCtx);
+
   const onOpenDrawer = () => {
     setOpen(true);
   };
@@ -107,7 +108,6 @@ const DashBoardLayout = ({ children }: any) => {
   };
 
   const currentPage = window.location.pathname;
-  console.log(currentPage);
 
   const renderPageTitle = () => {
     switch (currentPage) {
@@ -144,8 +144,8 @@ const DashBoardLayout = ({ children }: any) => {
     }
   };
 
-  if (!user) {
-    return <Navigate to="/login" />;
+  if (!admin) {
+    return <Navigate to="/dashboard/login" />;
   }
 
   return (
@@ -165,7 +165,7 @@ const DashBoardLayout = ({ children }: any) => {
             <Typography variant="h6" noWrap component="div">
               {renderPageTitle()}
             </Typography>
-            <Avatar {...stringAvatar("Đức Anh")}></Avatar>
+            <Avatar {...stringAvatar(admin?.name)}></Avatar>
           </Box>
         </Toolbar>
       </AppBar>
@@ -188,13 +188,15 @@ const DashBoardLayout = ({ children }: any) => {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Trang chủ quản lí" />
-            {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
-          </ListItem>
+          {!admin?.role.includes("ctv") && (
+            <ListItem button>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Trang chủ quản lí" />
+              {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
+            </ListItem>
+          )}
           <Collapse in={openTab} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem
@@ -219,31 +221,38 @@ const DashBoardLayout = ({ children }: any) => {
               </ListItem>
             </List>
           </Collapse>
-          <ListItem
-            button
-            onClick={() => handleChangePage("manage-post")}
-            className={renderTabCurrent() === "manage-post" ? classes.active : ""}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lí bài đăng" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={() => handleChangePage("admin/manage-event")}
-            className={renderTabCurrent() === "manage-event" ? classes.active : ""}>
-            <ListItemIcon>
-              <EventIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lí sự kiện" />
-          </ListItem>
-          <ListItem button onClick={(e) => handleClick(e)}>
-            <ListItemIcon>
-              <ManageAccountsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lí người dùng" />
-            {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
-          </ListItem>
+          {!admin?.role.includes("ctv") && (
+            <ListItem
+              button
+              onClick={() => handleChangePage("manage-post")}
+              className={renderTabCurrent() === "manage-post" ? classes.active : ""}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lí bài đăng" />
+            </ListItem>
+          )}
+          {admin?.role === "superadmin" ||
+            (admin?.role.includes("ctv") && (
+              <ListItem
+                button
+                onClick={() => handleChangePage("admin/manage-event")}
+                className={renderTabCurrent() === "manage-event" ? classes.active : ""}>
+                <ListItemIcon>
+                  <EventIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quản lí sự kiện" />
+              </ListItem>
+            ))}
+          {!admin?.role.includes("ctv") && (
+            <ListItem button onClick={(e) => handleClick(e)}>
+              <ListItemIcon>
+                <ManageAccountsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lí người dùng" />
+              {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
+            </ListItem>
+          )}
           <Collapse in={openTab} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem

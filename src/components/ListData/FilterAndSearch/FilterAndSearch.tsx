@@ -3,7 +3,18 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, TextField, MenuItem, Grid, Chip, InputAdornment, Popover, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  TextField,
+  MenuItem,
+  Grid,
+  Chip,
+  InputAdornment,
+  Popover,
+  Typography,
+  Paper,
+  FormGroup,
+} from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import DateRangePicker from "../DateTimePicker/DateRangePicker";
@@ -39,6 +50,7 @@ export default function FilterAndSearch(props: any) {
     setFilters,
     setSortBy,
     sortBy,
+    resetData,
   } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   // const [postStatus, setPostStatus] = React.useState("");
@@ -121,7 +133,7 @@ export default function FilterAndSearch(props: any) {
   const renderTabMyRequestLabel = (label: string) => {
     let count = 0;
     let labelText = "";
-    console.log("data", data);
+
     switch (label) {
       case "isConfirmed": {
         count = data?.postHasSupporter.length;
@@ -166,7 +178,7 @@ export default function FilterAndSearch(props: any) {
 
   React.useEffect(() => {
     if (query === "") {
-      setRegisterDataFilter(data);
+      resetData();
     } else {
       let filterData;
       if (searchBy === "title") {
@@ -174,7 +186,6 @@ export default function FilterAndSearch(props: any) {
           return item.title.toLowerCase().includes(query.toLowerCase());
         });
       }
-
       if (searchBy === "content") {
         filterData = data?.filter((item: any) => {
           return item.content.toLowerCase().includes(query.toLowerCase());
@@ -234,7 +245,7 @@ export default function FilterAndSearch(props: any) {
       </Paper>
       <Grid container item xs={12} spacing={1} sx={{ mt: 2, width: "100%" }}>
         <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
-          <Box component="form" autoComplete="off">
+          <FormGroup>
             <TextField
               autoFocus
               classes={{ root: classes.textField }}
@@ -247,15 +258,7 @@ export default function FilterAndSearch(props: any) {
                   </InputAdornment>
                 ),
                 endAdornment: (
-                  <Select
-                    className={classes.select}
-                    value={searchBy}
-                    defaultValue="title"
-                    onChange={onChangeSearchBy}
-                    inputProps={{
-                      name: "departmentValue",
-                      id: "departmentValue",
-                    }}>
+                  <Select className={classes.select} value={searchBy} defaultValue="title" onChange={onChangeSearchBy}>
                     <MenuItem value="title">Tiêu đề</MenuItem>
                     <MenuItem value="user">Người đăng yêu cầu</MenuItem>
                     <MenuItem value="content">Nội dung yêu cầu</MenuItem>
@@ -266,7 +269,7 @@ export default function FilterAndSearch(props: any) {
               placeholder="Tìm kiếm yêu cầu theo..."
               variant="outlined"
             />
-          </Box>
+          </FormGroup>
         </Grid>
         <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
           <Box component="form" noValidate autoComplete="off">

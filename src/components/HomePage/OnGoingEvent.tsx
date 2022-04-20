@@ -141,7 +141,7 @@ const OnGoingEvent = () => {
 
   const getListEventByUser = async () => {
     const data = await Event.getListEventByUser();
-    setData(data.listEvent);
+    setData(data);
   };
 
   const getListEventNotEnroll = async () => {

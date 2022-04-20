@@ -8,6 +8,7 @@ const adminToken = localStorage.getItem("heytutor-admin");
 if (userToken) {
   const decoded: any = jwt_decode(userToken);
   user = decoded.user;
+  console.log("user", user);
 }
 
 if (adminToken) {

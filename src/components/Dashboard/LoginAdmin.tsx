@@ -46,6 +46,10 @@ const LoginAdmin = () => {
       if (admin.role === "superadmin" || admin.role === "admin") {
         navigate("/dashboard/home-manager");
       }
+
+      if (admin.role === "ctv1" || admin.role === "ctv2" || admin.role === "ctv3") {
+        navigate("/dashboard/admin/manage-event");
+      }
     }
   }, [admin]);
 
