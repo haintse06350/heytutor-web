@@ -42,7 +42,7 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### Deployment
-## Deploy and Hosting via AWS Amplify
+## Deploy and Hosting with AWS Amplify
 <img width="841" alt="Screen Shot 2022-04-23 at 02 01 42" src="https://user-images.githubusercontent.com/43951048/164777856-c3916b91-bc01-470c-be0c-917f7963577a.png">
 <img width="884" alt="Screen Shot 2022-04-23 at 02 02 24" src="https://user-images.githubusercontent.com/43951048/164777898-88097696-7298-4059-986a-d2a1adcd954a.png">
 <img width="891" alt="Screen Shot 2022-04-23 at 02 02 52" src="https://user-images.githubusercontent.com/43951048/164777953-7f15ac62-e017-4a2b-b781-2b156cda66a6.png">
