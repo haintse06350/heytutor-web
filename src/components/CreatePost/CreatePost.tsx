@@ -13,6 +13,7 @@ import {
   MenuItem,
   Button,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,16 +23,32 @@ import { NotificationCtx } from "../../context/notification/state";
 import { PostCtx } from "../../context/post/state";
 import { CustomizedAutoCompleteHashTag } from "./AutoCompleteHashTag";
 import { Event } from "../../models/event";
+import { isEmpty, map } from "lodash";
+import { SelectDeadline } from "./SelectDeadline";
+import { s3Client } from "../../models/s3";
+import { dataURItoBlob } from "../../utils/convertDataUrlToFile";
+import { UserCtx } from "../../context/user/state";
+import { v4 as uuidv4 } from "uuid";
+// import { useNavigate } from "react-router-dom";
+
+const token = localStorage.getItem("heytutor-user");
 
 export const CreatePost = () => {
   const classes = useStyles();
   const { discardCreatingPost } = useContext(PostCtx);
+  const { user } = useContext(UserCtx);
+  // const navigate = useNavigate();
+
   const [hashTag, setHashTag]: any = useState(null);
   const [eventJoint, setEventJoint]: any = useState(null);
   const [selectedEvent, setSelectedEvent]: any = useState(null);
   const [title, setTitle]: any = useState(null);
   const [content, setContent]: any = useState(null);
   const [images, setImages]: any = useState([]);
+  const [valueDate, setDateValue] = useState<Date | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [postSuccess, setPostSuccess]: any = useState(null);
+
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
 
   const [errorInput, setErrorInput]: any = useState(null);
@@ -40,27 +57,73 @@ export const CreatePost = () => {
     setSelectedEvent(event.target.value);
   };
 
+  const onViewPost = () => {
+    // navigate(`/post-detail?postId=${postSuccess?.id}`);
+  };
+
   const onCreatePost = async () => {
     try {
-      if (!hashTag) {
-        setErrorInput({ field: "hashtag" });
-        return;
-      }
-      if (!title) {
+      if (isEmpty(title)) {
         setErrorInput({ field: "title" });
         return;
       }
-      if (!content) {
+      if (isEmpty(hashTag)) {
+        setErrorInput({ field: "hashtag" });
+        return;
+      }
+      if (isEmpty(content)) {
         setErrorInput({ field: "content" });
         return;
       }
-      const input = {};
-      await PostModel.create(input);
-      setNotificationSuccess("Tạo bài viết thành công");
+      const isValidDate = new Date(valueDate as any).getTime() > new Date().getTime();
+      if (valueDate && !isValidDate) {
+        setErrorInput({ field: "deadline" });
+        return;
+      }
+      setLoading(true);
+      const postId = uuidv4();
+
+      let imagesToUpload = [];
+      if (images.length > 0) {
+        imagesToUpload = map(images, (img: any, index: number) => {
+          const blob = dataURItoBlob(img.src);
+          const resultFile = new File([blob], `${user.id}_${postId}_${index}`);
+          return resultFile;
+        });
+
+        await s3Client.upload({
+          type: "post_images",
+          key: "post_images",
+          file: imagesToUpload,
+          token,
+        });
+      }
+
+      const imageLinks = map(imagesToUpload, (file: any) => file.name);
+      const input = {
+        title,
+        hashtag: JSON.stringify(map(hashTag, (item: any) => item.courseCode)),
+        content,
+        images: JSON.stringify(imageLinks),
+        eventId: selectedEvent?.eventContent.id || null,
+        deadline: valueDate,
+      };
+
+      const post = await PostModel.create(input);
+      if (post) {
+        setNotificationSuccess("Tạo bài viết thành công");
+        setPostSuccess(post);
+      }
     } catch (error) {
       console.log(error);
       setNotificationError("Tạo bài viết thất bại!");
     }
+
+    setLoading(false);
+  };
+
+  const isRequired = (field: string) => {
+    return errorInput?.field === field;
   };
 
   useEffect(() => {
@@ -75,7 +138,6 @@ export const CreatePost = () => {
 
   const onUploadImage = ({ target }: any) => {
     const fileReader = new FileReader();
-
     fileReader.readAsDataURL(target.files[0]);
     fileReader.onload = (e: any) => {
       const prevImages = [...images];
@@ -114,7 +176,7 @@ export const CreatePost = () => {
       <DialogContent>
         <Box>
           <Box>
-            <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="title">
+            <label style={{ fontSize: 14, fontWeight: 700 }} htmlFor="title">
               Tiêu đề
             </label>
             <span style={{ color: "red" }}>*</span>
@@ -130,10 +192,22 @@ export const CreatePost = () => {
               required
             />
           </Box>
+          {isRequired("title") && (
+            <Typography variant="caption" sx={{ color: "red" }}>
+              Vui lòng nhập tiêu đề
+            </Typography>
+          )}
         </Box>
-        <CustomizedAutoCompleteHashTag setSelectedHashTag={setHashTag} />
+        <Box>
+          <CustomizedAutoCompleteHashTag setSelectedHashTag={setHashTag} />
+          {isRequired("hashtag") && (
+            <Typography variant="caption" sx={{ color: "red" }}>
+              Vui lòng chọn hashtag
+            </Typography>
+          )}
+        </Box>
         <FormControl sx={{ mt: 1.25, width: 1 / 2 }}>
-          <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="event">
+          <label style={{ fontSize: 14, fontWeight: 700 }} htmlFor="event">
             Đăng trong sự kiện
           </label>
           <Select
@@ -153,7 +227,7 @@ export const CreatePost = () => {
         </FormControl>
         <Box sx={{ mt: 1.25 }}>
           <Box>
-            <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="content">
+            <label style={{ fontSize: 14, fontWeight: 700 }} htmlFor="content">
               Ảnh
             </label>
           </Box>
@@ -169,9 +243,22 @@ export const CreatePost = () => {
           </Box>
         </Box>
         {images.length > 0 && <ImageBox />}
+        <FormControl sx={{ mt: 1.25, width: 1 / 2 }}>
+          <label style={{ fontSize: 14, fontWeight: 700 }} htmlFor="event">
+            Ngày cần giải quyết
+          </label>
+          <Box sx={{ mt: 1 }}>
+            <SelectDeadline valueDate={valueDate} setDateValue={setDateValue} />
+          </Box>
+          {isRequired("deadline") && (
+            <Typography variant="caption" sx={{ color: "red" }}>
+              Ngày cần giải quyết không hợp lệ
+            </Typography>
+          )}
+        </FormControl>
         <Box sx={{ mt: 1.25 }}>
           <Box>
-            <label style={{ fontSize: 14, fontWeight: 500 }} htmlFor="content">
+            <label style={{ fontSize: 14, fontWeight: 700 }} htmlFor="content">
               Nội dung vấn đề
             </label>
             <span style={{ color: "red" }}>*</span>
@@ -189,15 +276,31 @@ export const CreatePost = () => {
               required
             />
           </Box>
+          {isRequired("content") && (
+            <Typography variant="caption" sx={{ color: "red" }}>
+              Vui lòng nhập nội dung vấn đề
+            </Typography>
+          )}
         </Box>
       </DialogContent>
       <DialogActions sx={{ pb: 4, px: 2 }}>
         <Button color="secondary" sx={{ textTransform: "none" }} onClick={discardCreatingPost}>
           Huỷ
         </Button>
-        <Button sx={{ textTransform: "none" }} variant="contained" color="primary">
-          Đăng
-        </Button>
+        {postSuccess ? (
+          <Button variant="contained" sx={{ textTransform: "none" }} color="primary" onClick={onViewPost}>
+            Xem bài viết
+          </Button>
+        ) : (
+          <Button
+            disabled={loading}
+            sx={{ textTransform: "none" }}
+            variant="contained"
+            color="primary"
+            onClick={onCreatePost}>
+            {loading ? <CircularProgress size={20} /> : "Đăng"}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

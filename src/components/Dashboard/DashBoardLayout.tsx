@@ -14,6 +14,7 @@ import {
   ListItemText,
   ListItemIcon,
   Avatar,
+  Button,
 } from "@mui/material";
 import { useStyles } from "./Dashboard.style";
 
@@ -89,7 +90,8 @@ const DashBoardLayout = ({ children }: any) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [openTab, setOpenTab] = useState(false);
-  const { admin } = useContext(UserCtx);
+  const { user } = useContext(UserCtx);
+  const admin = user;
 
   const onOpenDrawer = () => {
     setOpen(true);
@@ -165,7 +167,17 @@ const DashBoardLayout = ({ children }: any) => {
             <Typography variant="h6" noWrap component="div">
               {renderPageTitle()}
             </Typography>
-            <Avatar {...stringAvatar(admin?.name)}></Avatar>
+            <Box display="flex" alignItems="center">
+              <Avatar {...stringAvatar(admin?.name)}></Avatar>
+              <Button
+                sx={{ backgroundColor: "#fff", ml: 2 }}
+                onClick={() => {
+                  localStorage.removeItem("heytutor-user");
+                  window.location.reload();
+                }}>
+                Logout
+              </Button>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>

@@ -135,6 +135,7 @@ export const ListData = () => {
 
   const getListMyRequestData = async (filters: any) => {
     const res = await Post.getListMyRequest(filters);
+    console.log("getListMyRequest", res);
     setMyRequestData(res);
   };
 
