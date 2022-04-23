@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   // Typography,
@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
 import { useStyles } from "./ManagePost.style";
+import { Manager } from "../../../models/manager";
 
 // icon
 // import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -96,6 +97,16 @@ const ManagePost = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
+  const [row, setRow] = useState([]);
+  const getListPostManage = async () => {
+    const res = await Manager.getListPostManage();
+    setRow(res);
+  };
+  console.log(row);
+
+  useEffect(() => {
+    getListPostManage();
+  }, []);
   const renderManagerPost = () => {
     return (
       <Box sx={{ mb: 2 }}>
@@ -244,7 +255,7 @@ const ManagePost = () => {
                     <TableCell>Tiêu đề</TableCell>
                     <TableCell>Thuộc sự kiện</TableCell>
                     <TableCell>Thông số tương tác</TableCell>
-                    <TableCell>Cập nhật bởi</TableCell>
+                    <TableCell>Lý do</TableCell>
                     <TableCell>Trạng thái</TableCell>
                     <TableCell>Quản lí</TableCell>
                   </TableRow>
@@ -252,122 +263,6 @@ const ManagePost = () => {
                 <TableBody></TableBody>
               </Table>
             </TableContainer>
-          </Grid>
-        </Grid>
-      </Box>
-    );
-  };
-
-  const renderTabPanel = () => {
-    return (
-      <Box>
-        <Grid container spacing={2} sx={{ mt: 2, width: "100%" }}>
-          <Grid item xs={12} lg={4} md={4}>
-            <Box component="form" noValidate autoComplete="off">
-              <TextField
-                fullWidth
-                id="outlined-select-currency"
-                select
-                label="Thời gian"
-                defaultValue="currentWeek"
-                // value={filters.time}
-                // onChange={(e: any) => onChangeFilter(e, "time")}
-              >
-                {data.timeOpts.map((option: any) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-          </Grid>
-          <Grid item xs={12} lg={4} md={4}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Ngày bắt đầu"
-                inputFormat="dd/MM/yyyy"
-                value={valueFilterStartDate}
-                onChange={(newValue) => {
-                  setValueFilterStartDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={12} lg={4} md={4}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Ngày kết thúc"
-                inputFormat="dd/MM/yyyy"
-                value={valueFilterEndDate}
-                onChange={(newValue) => {
-                  setValueFilterEndDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
-              />
-            </LocalizationProvider>
-          </Grid>
-
-          <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
-            <Box component="form" noValidate autoComplete="off">
-              <TextField
-                autoFocus
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                id="outlined-basic"
-                placeholder="Tìm kiếm..."
-                variant="outlined"
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
-            <Box component="form" noValidate autoComplete="off">
-              <TextField
-                fullWidth
-                id="outlined-select-currency"
-                select
-                label="Hiển thị theo"
-                defaultValue="isNotResolve"
-                value={visible}
-                onChange={(e: any) => setVisible(e.target.value)}>
-                {data.sortOpts.map((option: any) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-          </Grid>
-          <Grid item xs={4} md={4} sx={{ minWidth: "20%" }}>
-            <Box component="form" noValidate autoComplete="off">
-              <TextField
-                fullWidth
-                id="outlined-select-currency"
-                select
-                label="Sắp xếp"
-                defaultValue="desc"
-                value={sortBy}
-                onChange={(e: any) => setSortBy(e.target.value)}>
-                {data.sortByOpts.map((option: any) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-            <Popover
-              open={openDatePicker}
-              onClose={onCloseDatePicker}
-              anchorOrigin={{ vertical: "center", horizontal: "center" }}
-              transformOrigin={{ vertical: "center", horizontal: "center" }}>
-              <DateRangePicker setValue={setDateData} value={dateData} />
-            </Popover>
           </Grid>
         </Grid>
       </Box>
@@ -386,17 +281,12 @@ const ManagePost = () => {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Đăng kí ghim" value="1" />
-            <Tab label="Bị báo cáo" value="2" />
-            <Tab label="Đã hạn chế" value="3" />
-            <Tab label="Chưa có đăng kí" value="4" />
+            <Tab label="Bị báo cáo" value="1" />
           </TabList>
         </Box>
         {/* thông tin CTV */}
         {/* Sự kiện đang quản lí */}
-        <TabPanel value="1">{renderTabPanel()}</TabPanel>
-        <TabPanel value="2">{renderManagerPost()}</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="1">{renderManagerPost()}</TabPanel>
       </TabContext>
     </>
   );

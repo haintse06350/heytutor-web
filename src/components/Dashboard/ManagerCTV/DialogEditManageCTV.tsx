@@ -19,7 +19,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import moment from "moment";
 
 const DialogEditManageCTV = (props: any) => {
-  const { open, onClose, title } = props;
+  const { open, onClose, data } = props;
   const [openPickDate, setOpenPickDate] = useState(false);
   const [valueEndDate, setValueEndDate] = useState<Date | null>(moment().startOf("day").toDate());
   const [valueRadioSelected, setValueRadioSelected] = useState<String>("overTime");
@@ -36,15 +36,15 @@ const DialogEditManageCTV = (props: any) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Quản lí sự kiện {title}</DialogTitle>
+      <DialogTitle>Quản lí sự kiện</DialogTitle>
       <DialogContent>
         <Grid container>
           <Grid item xs={4} md={4} lg={4}>
             <Typography variant="subtitle1">Thông tin cơ bản</Typography>
-            <Typography>Tên: Cao Duc Anh</Typography>
-            <Typography>Gmail: anhcd1@gmail.com</Typography>
-            <Typography>Thêm bởi: anhcdh4</Typography>
-            <Typography>Trạng thái: Hoạt động</Typography>
+            <Typography>Tên: {data?.name}</Typography>
+            <Typography>Gmail: {data?.email}</Typography>
+            <Typography>Thêm bởi: {data?.updatedBy}</Typography>
+            <Typography>Trạng thái: {data?.isActive === 1 ? "Hoạt động" : "Đã khóa"} </Typography>
           </Grid>
           <Grid item xs={8} md={8} lg={8}>
             <Typography variant="subtitle1">Quản lí cộng tác viên</Typography>

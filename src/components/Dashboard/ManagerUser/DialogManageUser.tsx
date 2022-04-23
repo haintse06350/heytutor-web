@@ -17,38 +17,77 @@ const DialogManagerUser = (props: any) => {
   const { open, closeDialog, data } = props;
 
   const typeCheckBoxs = [
-    { id: 1, name: "Hạn chế đăng bài 1 trong ngày" },
-    { id: 2, name: "Hạn chế đăng bài 3 trong ngày" },
-    { id: 3, name: "Hạn chế đăng bài 7 trong ngày" },
-    { id: 4, name: "Hạn đăng kí giải quyết trong 1 ngày" },
-    { id: 5, name: "Hạn đăng kí giải quyết trong 3 ngày" },
-    { id: 6, name: "Hạn đăng kí giải quyết trong 7 ngày" },
+    { value: "1-1", name: "Hạn chế đăng bài 1 trong ngày" },
+    { value: "1-2", name: "Hạn chế đăng bài 3 trong ngày" },
+    { value: "1-3", name: "Hạn chế đăng bài 5 trong ngày" },
+    { value: "1-4", name: "Hạn chế đăng bài 7 trong ngày" },
+    { value: "2-1", name: "Hạn chế đăng kí giải quyết 1 trong ngày" },
+    { value: "2-2", name: "Hạn chế đăng kí giải quyết 3 trong ngày" },
+    { value: "2-3", name: "Hạn chế đăng kí giải quyết 5 trong ngày" },
+    { value: "2-4", name: "Hạn chế đăng kí giải quyết 7 trong ngày" },
+    { value: "3-1", name: "Hạn chế bình luận giải quyết 1 trong ngày" },
+    { value: "3-2", name: "Hạn chế bình luận giải quyết 3 trong ngày" },
+    { value: "3-3", name: "Hạn chế bình luận giải quyết 5 trong ngày" },
+    { value: "3-4", name: "Hạn chế bình luận giải quyết 7 trong ngày" },
   ];
 
+  const renderLabelStatus = (item: string) => {
+    switch (item) {
+      case "1-1":
+        return "Hạn chế người dùng đăng bài trong 1 ngày";
+      case "1-2":
+        return "Hạn chế người dùng đăng bài trong 3 ngày";
+      case "1-3":
+        return "Hạn chế người dùng đăng bài trong 5 ngày";
+      case "1-4":
+        return "Hạn chế người dùng đăng bài trong 7 ngày";
+      case "2-1":
+        return "Hạn chế người dùng đăng ký trong 1 ngày";
+      case "2-2":
+        return "Hạn chế người dùng đăng ký trong 3 ngày";
+      case "2-3":
+        return "Hạn chế người dùng đăng ký trong 5 ngày";
+      case "2-4":
+        return "Hạn chế người dùng đăng ký trong 7 ngày";
+      case "3-1":
+        return "Hạn chế người dùng comment trong 1 ngày";
+      case "3-2":
+        return "Hạn chế người dùng comment trong 3 ngày";
+      case "3-3":
+        return "Hạn chế người dùng comment trong 5 ngày";
+      case "3-4":
+        return "Hạn chế người dùng comment trong 7 ngày";
+      case "4":
+        return "Hạn chế người dùng vĩnh viễn";
+      default:
+        return "Hoạt động";
+    }
+  };
+
+  const renderColorStatus = (item: string) => {
+    if (item === null) {
+      return "primary";
+    } else {
+      return "error";
+    }
+  };
+
   const renderStatus = () => {
-    return (
-      <Box sx={{ display: "flex" }}>
-        {data?.status.map((item: any) => (
-          <Box key={item} sx={{ mt: 1 }}>
-            {item === "Hoạt động" ? (
-              <Chip label={item} color="primary" />
-            ) : item === "Hạn chế đăng bài 1 ngày" ||
-              item === "Hạn chế đăng bài 3 ngày" ||
-              item === "Hạn chế đăng bài 7 ngày" ? (
-              <Chip label={item} color="info" />
-            ) : (
-              <Chip label={item} color="warning" />
-            )}
-          </Box>
-        ))}
-      </Box>
-    );
+    if (data?.userBanInfo.length === 0) {
+      return <Chip label="Hoạt động" color="primary" />;
+    } else {
+      return data?.userBanInfo.map((item: any, index: number) => (
+        <Box key={index} sx={{ mt: 1 }}>
+          <Chip label={renderLabelStatus(item?.type || null)} color={renderColorStatus(item?.type)}></Chip>
+        </Box>
+      ));
+    }
   };
 
   return (
-    <Dialog open={open} onClose={closeDialog} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={closeDialog} maxWidth="lg" fullWidth>
       <Box sx={{ p: 2 }}>
-        <DialogTitle>Quản lí</DialogTitle>
+        <DialogTitle>Quản lí người dùng[ {data?.userInfo.name} ]</DialogTitle>
         {/* xu li */}
         <Box>
           <Typography>Trạng thái hiện tại</Typography>
@@ -67,12 +106,12 @@ const DialogManagerUser = (props: any) => {
                 value="Bỏ hạn chế"
                 label="Bỏ hạn chế"
               />
-              {typeCheckBoxs.slice(0, 3).map((item: any) => (
+              {typeCheckBoxs.slice(0, 4).map((item: any, index: number) => (
                 <FormControlLabel
-                  key={item.id}
+                  key={index}
                   sx={{ display: "block" }}
                   control={<Radio name={item.name} />}
-                  value={item.name}
+                  value={item.value}
                   label={item.name}
                 />
               ))}
@@ -88,12 +127,33 @@ const DialogManagerUser = (props: any) => {
                 value="Bỏ hạn chế"
                 label="Bỏ hạn chế"
               />
-              {typeCheckBoxs.slice(3, 6).map((item: any) => (
+              {typeCheckBoxs.slice(4, 8).map((item: any, index: number) => (
                 <FormControlLabel
-                  key={item.id}
+                  key={index}
                   sx={{ display: "block" }}
                   control={<Radio name={item.name} />}
-                  value={item.name}
+                  value={item.value}
+                  label={item.name}
+                />
+              ))}
+            </RadioGroup>
+          </Box>
+          <Box>
+            <FormLabel id="radio-button-supporter">Quyền người hỗ trợ</FormLabel>
+
+            <RadioGroup aria-labelledby="radio-button-supporter">
+              <FormControlLabel
+                sx={{ display: "block" }}
+                control={<Radio name="Bỏ hạn chế" />}
+                value="Bỏ hạn chế"
+                label="Bỏ hạn chế"
+              />
+              {typeCheckBoxs.slice(8, 12).map((item: any, index: number) => (
+                <FormControlLabel
+                  key={index}
+                  sx={{ display: "block" }}
+                  control={<Radio name={item.name} />}
+                  value={item.value}
                   label={item.name}
                 />
               ))}
