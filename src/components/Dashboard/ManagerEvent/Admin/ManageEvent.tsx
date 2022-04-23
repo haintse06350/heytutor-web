@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Box,
@@ -47,6 +47,7 @@ import { useNavigate } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import moment from "moment";
+import { Manager } from "../../../../models/manager";
 
 const ManageEvent = () => {
   const classes = useStyles();
@@ -144,6 +145,17 @@ const ManageEvent = () => {
   const handleCreateEvent = () => {
     navigate(`/dashboard/admin/manage-event/create-event`);
   };
+
+  const [dataEventOfCollaborator, setDataEventOfCollaborator] = useState(null);
+  const getDataEvent = async () => {
+    const data = await Manager.getListEventOfCollaborator();
+    setDataEventOfCollaborator(data);
+  };
+
+  useEffect(() => {
+    getDataEvent();
+    console.log(dataEventOfCollaborator);
+  }, []);
 
   return (
     <div className={classes.wrapManageEvent}>

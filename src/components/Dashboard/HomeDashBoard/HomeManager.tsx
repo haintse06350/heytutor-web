@@ -1,6 +1,20 @@
 import React from "react";
 // MUI
-import { Box, Card, Grid, Typography, Button, Chip } from "@mui/material";
+import {
+  Box,
+  Card,
+  Grid,
+  Typography,
+  Button,
+  Chip,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+} from "@mui/material";
 import { useStyles } from "./HomeManager.style";
 import imgCup from "../../../assets/home_event_images/trophy.png";
 // icon
@@ -133,11 +147,24 @@ const HomeManager = () => {
           </Card>
         </Grid>
         {/* activity timeline */}
-        <Grid item xs={12} md={6} lg={6}>
-          <Card sx={{ p: 2 }}></Card>
-        </Grid>
-        <Grid item xs={12} md={6} lg={6}>
-          <Card sx={{ p: 2 }}></Card>
+        <Grid item xs={12} md={12} lg={12}>
+          <TableContainer component={Paper}>
+            <Table aria-label="ctv table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell>Tiêu đề</TableCell>
+                  <TableCell>Thời gian hết hạn</TableCell>
+                  <TableCell>Số người tham gia</TableCell>
+                  <TableCell>Số báo cáo xấu</TableCell>
+                  <TableCell>Quản lí sự kiện</TableCell>
+                  <TableCell>Trạng thái</TableCell>
+                  <TableCell>Quản lí</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody></TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     </>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useStyles } from "./ManagerCTV.style";
 import {
   Grid,
@@ -36,9 +36,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import moment from "moment";
-// help
 
-// import { stringAvatar } from "../../UserProfile/helper";
 // component
 
 import DialogEditManageCTV from "./DialogEditManageCTV";
@@ -51,46 +49,12 @@ import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { Manager } from "../../../models/manager";
 
 const ManagerCTV = () => {
   const classes = useStyles();
   const navigate = useNavigate();
 
-  function createData(
-    id: number,
-    name: string,
-    gmail: string,
-    nbOfEventManager: number,
-    nbOfEventDone: number,
-    nbOfEventReported: number,
-    approvedBy: string,
-    status: number,
-    titleEvent: string,
-    nbOfJoined: number,
-    nbOfReported: number
-  ) {
-    return {
-      id,
-      name,
-      gmail,
-      nbOfEventManager,
-      nbOfEventDone,
-      nbOfEventReported,
-      approvedBy,
-      status,
-      titleEvent,
-      nbOfJoined,
-      nbOfReported,
-    };
-  }
-
-  const dataUser = [
-    createData(1, "Cao Duc Anh", "anhcd1@gmail.com", 1, 1, 1, "anhcdh4", 1, "Event 1", 1, 1),
-    createData(2, "Cao Duc Anh", "anhcd5@gmail.com", 0, 2, 2, "anhcdh4", 2, "Event 1", 1, 1),
-    createData(3, "Nguyen Trung Hai", "haint1@gmail.com", 1, 1, 1, "anhcdh4", 1, "Event 1", 1, 1),
-    createData(4, "Le Huy Chuong", "chuonglh1@gmail.com", 1, 1, 1, "anhcdh4", 1, "Event 1", 1, 1),
-    createData(5, "Nguyen DN Long", "longndn1@gmail.com", 0, 2, 2, "anhcdh4", 2, "Event 1", 1, 1),
-  ];
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -104,6 +68,8 @@ const ManagerCTV = () => {
 
   const [sortBy, setSortBy]: any = useState("desc");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
+  // const [filter, setFilter] = useState<string>("");
+  // const [query, setQuery] = useState<string>("");
   // const [dataPick, setDataPick] = useState(null);
   const roleProps = {
     options: [
@@ -134,8 +100,11 @@ const ManagerCTV = () => {
     setPage(0);
   };
 
+  const [userSelected, setUserSelected] = useState();
   const [openDialogEdit, setOpenDialogEdit] = React.useState(false);
-  const handleOpenEdit = () => {
+
+  const handleOpenEdit = (userInfo: any) => {
+    setUserSelected(userInfo);
     setOpenDialogEdit(true);
   };
   const closeDialogEdit = () => {
@@ -292,6 +261,29 @@ const ManagerCTV = () => {
     setVisible(event.target.value);
     event.target.value === "status" ? setSortBy("isActive") : setSortBy("desc");
   };
+  const [dataUser, setDataUser] = useState([]);
+  const getListCollaborator = async () => {
+    const rows = await Manager.getListCollaborator();
+    setDataUser(rows);
+  };
+
+  useEffect(() => {
+    getListCollaborator();
+  }, []);
+
+  // useEffect(() => {
+  //   if (query === "") {
+  //     //resest data
+  //   } else {
+  //     //search
+  //     let filterData;
+  //     if (searchBy === "nameOfUser") {
+  //       filterData = data.data.filter((item: any) => item.username.includes(query));
+  //     } else if (searchBy === "nameOfEvent") {
+  //       filterData = data.data.filter((item: any) => item.name.includes(query));
+  //     }
+  //   }
+  // }, []);
 
   return (
     <div className={classes.root}>
@@ -452,7 +444,6 @@ const ManagerCTV = () => {
                   <TableCell>ID</TableCell>
                   <TableCell>Tên</TableCell>
                   <TableCell>Thông số sự kiện</TableCell>
-                  <TableCell>Tiêu đề sự kiện</TableCell>
                   <TableCell>Thông số tương tác</TableCell>
                   <TableCell>Cập nhật bởi</TableCell>
                   <TableCell>Trạng thái</TableCell>
@@ -460,78 +451,75 @@ const ManagerCTV = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataUser?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {row.id}
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: "flex" }}>
-                        <Box>
-                          <Typography
-                            variant="subtitle1"
-                            sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
-                            onClick={() => handleChangeTab("profile", row.id)}>
-                            {row.name}
-                          </Typography>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 400 }}>
-                            {row.gmail}
-                          </Typography>
+                {dataUser
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row: any, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row">
+                        {row?.userInfo.id}
+                      </TableCell>
+                      <TableCell>
+                        <Box sx={{ display: "flex" }}>
+                          <Box>
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
+                              onClick={() => handleChangeTab("profile", row?.userInfo.id)}>
+                              {row?.userInfo.name}
+                            </Typography>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 400 }}>
+                              {row?.userInfo.email}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        Đang quản lí : {row.nbOfEventManager}
-                      </Typography>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        Chờ phê duyệt : {row.nbOfEventManager}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }} noWrap>
-                        {row.titleEvent}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        Người tham gia : {row.nbOfJoined}
-                      </Typography>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        Số báo cáo xấu : {row.nbOfReported}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        {row.approvedBy}
-                      </Typography>
-                    </TableCell>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          Đang quản lí : {row.nbOfActiveEvents}
+                        </Typography>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          Chờ phê duyệt : {row.nbOfPendingEvents}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          Người tham gia : 999
+                        </Typography>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          Số báo cáo xấu : 999
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          {row?.userInfo.updatedBy}
+                        </Typography>
+                      </TableCell>
 
-                    <TableCell sx={{ color: row.status === 1 ? "green" : "red" }}>
-                      {row.status === 1 ? (
-                        <Chip label="Hoạt động" color="primary" />
-                      ) : (
-                        <Chip label="Bị khóa" color="error" />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {/* Ban cộng tác viên */}
-                      <IconButton aria-label="Quản lí cộng tác viên" onClick={handleOpenEdit}>
-                        <Tooltip title="Quản lí cộng tác viên">
-                          <EditIcon color="error" />
-                        </Tooltip>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      <TableCell sx={{ color: row.status === 1 ? "green" : "red" }}>
+                        {row?.userInfo.isActive === 1 ? (
+                          <Chip label="Hoạt động" color="primary" />
+                        ) : (
+                          <Chip label="Bị khóa" color="error" />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {/* Ban cộng tác viên */}
+                        <IconButton aria-label="Quản lí cộng tác viên" onClick={() => handleOpenEdit(row?.userInfo)}>
+                          <Tooltip title="Quản lí cộng tác viên">
+                            <EditIcon color="error" />
+                          </Tooltip>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
-              <DialogEditManageCTV open={openDialogEdit} onClose={closeDialogEdit} />
+              <DialogEditManageCTV open={openDialogEdit} onClose={closeDialogEdit} data={userSelected} />
             </Table>
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[5, 10, 20]}
             component="div"
-            count={dataUser.length}
+            count={dataUser?.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

@@ -23,6 +23,7 @@ import {
   Popover,
   SelectChangeEvent,
   Select,
+  FormControl,
 } from "@mui/material";
 
 import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
@@ -37,6 +38,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DatePicker from "@mui/lab/DatePicker";
 import moment from "moment";
 import { Manager } from "../../../models/manager";
+
 export const ManagerUser = () => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -49,182 +51,14 @@ export const ManagerUser = () => {
   const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
   const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
   const [searchBy, setSearchBy] = React.useState("nameOfUser");
-
-  function createData(
-    id: number,
-    name: string,
-    gmail: string,
-    nbOfEventJoined: number,
-    eventJoined: string,
-    nbOfRegisted: number,
-    nbOfRequested: number,
-    nbOfReport: number,
-    ratePoint: number,
-    nbOfRate: number,
-    status: Array<string>
-  ) {
-    return {
-      id,
-      name,
-      gmail,
-      nbOfEventJoined,
-      eventJoined,
-      nbOfRegisted,
-      nbOfRequested,
-      nbOfReport,
-      ratePoint,
-      nbOfRate,
-      status,
-    };
-  }
-
-  const rows = [
-    createData(
-      1,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "Để có một cuối kỳ thật hoàn hảo với SSG102 ",
-      21,
-      4,
-      1,
-      4.7,
-      120,
-      ["Hoạt động"]
-    ),
-    createData(
-      2,
-      "Nguyen Trung Hai",
-      "trungnt2@fpt.edu.vn",
-      2,
-      "Chung tay cùng nhau vượt qua nỗi sợ mang tên PRO192",
-      21,
-      4,
-      0,
-      4,
-      120,
-      ["Hạn chế đăng bài 3 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-    createData(
-      3,
-      "Le Huy Chuong",
-      "chuonglh1@fpt.edu.vn",
-      2,
-      "Say “No” với mệt mỏi, Say “No” với thức đêm Tham gia ngay để say ",
-      21,
-      4,
-      0,
-      4.7,
-      120,
-      ["Hạn chế đăng bài 3 ngày", "Hạn chế đăng kí 7 ngày"]
-    ),
-    createData(
-      4,
-      "Cao Duc Anh",
-      "anhcd1@fpt.edu.vn",
-      2,
-      "“No” thức đêm học bài mà vẫn có thể dễ dàng qua PRF192 ",
-      21,
-      4,
-      0,
-      3.7,
-      120,
-      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-    createData(
-      5,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "CSD. thức đêm học bài mà vẫn có thể dễ dàng qua  ",
-      21,
-      4,
-      0,
-      2.7,
-      120,
-      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-    createData(
-      6,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "CSD thức đêm học bài mà vẫn có thể dễ dàng qua  ",
-      21,
-      4,
-      0,
-      1.7,
-      120,
-      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-    createData(
-      7,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "CSD thức đêm học bài mà vẫn có thể dễ dàng qua  ",
-      21,
-      4,
-      0,
-      1.7,
-      120,
-      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-    createData(
-      8,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "CSD  thức đêm học bài mà vẫn có thể dễ dàng qua ",
-      21,
-      4,
-      0,
-      1.7,
-      120,
-      ["Hạn chế đăng bài 3 ngày", "Hạn chế đăng kí 7 ngày"]
-    ),
-    createData(
-      9,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "CSD  thức đêm học bài mà vẫn có thể dễ dàng qua ",
-      21,
-      4,
-      0,
-      1.7,
-      120,
-      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-    createData(
-      10,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "CSD  thức đêm học bài mà vẫn có thể dễ dàng qua ",
-      21,
-      4,
-      0,
-      1.7,
-      120,
-      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-    createData(
-      11,
-      "Cao Duc Anh",
-      "anhcd4@fpt.edu.vn",
-      2,
-      "CSD  thức đêm học bài mà vẫn có thể dễ dàng qua ",
-      21,
-      4,
-      0,
-      1.7,
-      120,
-      ["Hạn chế đăng bài 1 ngày", "Hạn chế đăng kí 1 ngày"]
-    ),
-  ];
+  const [searchValue, setSearchValue] = React.useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rows, setRows]: any = useState(null);
+  const openDescribeEvent = Boolean(anchorEl);
+  const [eventTitlePick, setEventTitlePick] = useState("");
+  const [eventDesPick, setEventDesPick] = useState("");
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -234,26 +68,67 @@ export const ManagerUser = () => {
     setPage(0);
   };
 
+  const renderLabelStatus = (item: string) => {
+    switch (item) {
+      case "1-1":
+        return "Hạn chế người dùng đăng bài trong 1 ngày";
+      case "1-2":
+        return "Hạn chế người dùng đăng bài trong 3 ngày";
+      case "1-3":
+        return "Hạn chế người dùng đăng bài trong 5 ngày";
+      case "1-4":
+        return "Hạn chế người dùng đăng bài trong 7 ngày";
+      case "2-1":
+        return "Hạn chế người dùng đăng ký trong 1 ngày";
+      case "2-2":
+        return "Hạn chế người dùng đăng ký trong 3 ngày";
+      case "2-3":
+        return "Hạn chế người dùng đăng ký trong 5 ngày";
+      case "2-4":
+        return "Hạn chế người dùng đăng ký trong 7 ngày";
+      case "3-1":
+        return "Hạn chế người dùng comment trong 1 ngày";
+      case "3-2":
+        return "Hạn chế người dùng comment trong 3 ngày";
+      case "3-3":
+        return "Hạn chế người dùng comment trong 5 ngày";
+      case "3-4":
+        return "Hạn chế người dùng comment trong 7 ngày";
+      case "4":
+        return "Hạn chế người dùng vĩnh viễn";
+      default:
+        return "Hoạt động";
+    }
+  };
+
+  const renderColorStatus = (item: string) => {
+    if (item === null) {
+      return "primary";
+    } else {
+      return "error";
+    }
+  };
+
   const renderStatus = (status: any) => {
-    return status.map((item: any) => (
-      <Box key={item} sx={{ mt: 1 }}>
-        {item === "Hoạt động" ? (
-          <Chip label={item} color="primary" />
-        ) : item === "Hạn chế đăng bài 1 ngày" ||
-          item === "Hạn chế đăng bài 3 ngày" ||
-          item === "Hạn chế đăng bài 7 ngày" ? (
-          <Chip label={item} color="info" />
-        ) : (
-          <Chip label={item} color="warning" />
-        )}
-      </Box>
-    ));
+    if (status.length === 0) {
+      return <Chip label="Hoạt động" color="primary" />;
+    } else {
+      return status.map((item: any, index: number) => (
+        <Box key={index} sx={{ mt: 1 }}>
+          <Chip label={renderLabelStatus(item?.type || null)} color={renderColorStatus(item?.type)}></Chip>
+        </Box>
+      ));
+    }
   };
 
   const renderTime = (status: any) => {
-    return status.map((item: any) => (
-      <Typography key={item}>{item !== "Hoạt động" ? "Còn 1 ngày" : "Còn hiệu lực"}</Typography>
-    ));
+    if (status.length === 0) {
+      return <Typography>Còn hiệu lực</Typography>;
+    } else {
+      return status.map((item: any, index: number) => (
+        <Typography key={index}>{item?.type !== null ? "Còn 1 ngày" : "Còn hiệu lực"}</Typography>
+      ));
+    }
   };
 
   const handleLink = (props: any) => {
@@ -267,18 +142,16 @@ export const ManagerUser = () => {
     setOpenDialogManageUser(true);
     setDataPick(row);
   };
-
-  const openDescribeEvent = Boolean(anchorEl);
-
+  console.log(dataPick);
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
 
-  const [eventPick, setEventPick] = useState("");
-  const onOpenDescribeEvent = (event: any, eventJoined: string) => {
+  const onOpenDescribeEvent = (event: any, title: any, description: any) => {
     setAnchorEl(event.currentTarget);
-    setEventPick(eventJoined);
+    setEventTitlePick(title);
+    setEventDesPick(description);
   };
   const onCloseDescribeEvent = (event: SelectChangeEvent) => {
     setAnchorEl(null);
@@ -307,11 +180,10 @@ export const ManagerUser = () => {
   const onChangeSearchBy = (e: SelectChangeEvent) => {
     setSearchBy(e.target.value);
   };
-  const [rowsData, setRowsData] = useState(null);
 
   const getListUser = async () => {
-    const data = await Manager.getUserManage();
-    setRowsData(data);
+    const res = await Manager.getUserManage();
+    setRows(res);
   };
   const onChangeFilter = (event: any, type: string) => {
     if (type === "time") {
@@ -324,10 +196,28 @@ export const ManagerUser = () => {
       }
     }
   };
+
   useEffect(() => {
     getListUser();
-    console.log(rowsData, "rowdata");
   }, []);
+
+  // useEffect(() => {
+  //   if (searchValue === "") {
+  //     //reset data
+  //   } else {
+  //     let filterData: any = [];
+  //     if (searchBy === "nameOfUser") {
+  //       filterData = rows?.userInfo.filter((item: any) => {
+  //         return item.name.toLowerCase().includes(searchValue.toLowerCase());
+  //       });
+  //     } else if (searchBy === "nameOfEvent") {
+  //       filterData = rows?.eventInfo.filter((item: any) => {
+  //         return item.eventTitle.toLowerCase().includes(searchValue.toLowerCase());
+  //       });
+  //     }
+  //     console.log(filterData);
+  //   }
+  // }, [searchValue, searchBy]);
 
   return (
     <div className={classes.wrapTableManager}>
@@ -382,35 +272,40 @@ export const ManagerUser = () => {
 
             <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
-                <TextField
-                  autoFocus
-                  classes={{ root: classes.textField }}
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <Select
-                        className={classes.select}
-                        value={searchBy}
-                        defaultValue="nameOfUser"
-                        onChange={onChangeSearchBy}
-                        inputProps={{
-                          name: "departmentValue",
-                          id: "departmentValue",
-                        }}>
-                        <MenuItem value="nameOfUser">Tên người dùng</MenuItem>
-                        <MenuItem value="nameOfEvent">Tiêu đề sự kiện</MenuItem>
-                      </Select>
-                    ),
-                  }}
-                  id="outlined-basic"
-                  placeholder="Tìm kiếm ..."
-                  variant="outlined"
-                />
+                <FormControl>
+                  <TextField
+                    autoFocus
+                    classes={{ root: classes.textField }}
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                      ),
+
+                      endAdornment: (
+                        <Select
+                          className={classes.select}
+                          value={searchBy}
+                          defaultValue="nameOfUser"
+                          onChange={onChangeSearchBy}
+                          inputProps={{
+                            name: "departmentValue",
+                            id: "departmentValue",
+                          }}>
+                          <MenuItem value="nameOfUser">Tên người dùng</MenuItem>
+                          <MenuItem value="nameOfEvent">Tiêu đề sự kiện</MenuItem>
+                        </Select>
+                      ),
+                    }}
+                    id="outlined-basic"
+                    placeholder="Tìm kiếm ..."
+                    variant="outlined"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                  />
+                </FormControl>
               </Box>
             </Grid>
             <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
@@ -477,17 +372,17 @@ export const ManagerUser = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.id}>
+            {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
+              <TableRow key={index}>
                 <TableCell component="th" scope="row">
-                  {row.id}
+                  {row?.userInfo.id}
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                    {row.name}
+                    {row?.userInfo.name}
                   </Typography>
                   <Typography variant="subtitle2" sx={{ fontWeight: 400 }}>
-                    {row.gmail}
+                    {row?.userInfo.gmail}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -495,29 +390,33 @@ export const ManagerUser = () => {
                     variant="subtitle1"
                     sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
                     onClick={() => handleLink("detail")}>
-                    Chưa giải quyết: {row.nbOfReport}/{row.nbOfReport + 1}
+                    Chưa giải quyết: {row?.nbOfNotResolvedReport.length}/{row?.nbOfReport.length}
                   </Typography>
                 </TableCell>
                 <TableCell sx={{ maxWidth: "100px" }}>
                   <Typography
                     variant="subtitle1"
                     sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
-                    onClick={(e) => onOpenDescribeEvent(e, row.eventJoined)}
+                    onClick={(e) => onOpenDescribeEvent(e, row?.eventInfo.title, row?.eventInfo.description)}
                     noWrap>
-                    {row.eventJoined}
+                    {row?.eventInfo.title}
                   </Typography>
                 </TableCell>
                 <TableCell sx={{ color: "#5ab4ec" }}>
-                  {row.ratePoint} <StarIcon color="warning" /> {" / (" + row.nbOfRate + " lượt)"}
+                  {row?.rankInfo === null ? 0 : row?.rankInfo?.rankPoint}{" "}
+                  {row?.rankInfo === null ? <StarIcon sx={{ color: "gray" }} /> : <StarIcon color="warning" />}/ (
+                  {row?.rankInfo === null ? 0 : row?.rankInfo?.voteCount || 0} lượt )
                 </TableCell>
                 <TableCell sx={{ color: "#ff3a16" }}>
-                  {row.ratePoint} <StarIcon color="warning" /> {" / (" + row.nbOfRate + " lượt)"}
+                  {row?.rankInfo === null ? 0 : row?.rankInfo?.requestPoint || 0}{" "}
+                  {row?.rankInfo === null ? <StarIcon sx={{ color: "gray" }} /> : <StarIcon color="warning" />}/ ({" "}
+                  {row?.rankInfo === null ? 0 : row?.rankInfo?.requestVoteCount} lượt )
                 </TableCell>
                 <TableCell>
                   {/* render status */}
-                  {renderStatus(row.status)}
+                  {renderStatus(row?.userBanInfo)}
                 </TableCell>
-                <TableCell>{renderTime(row.status)}</TableCell>
+                <TableCell>{renderTime(row?.userBanInfo)}</TableCell>
                 <TableCell className={classes.iconMoreHoriz}>
                   <Tooltip title="Quản lí trạng thái">
                     <IconButton aria-label="Xem chi tiết" onClick={() => handleDialogManageUser(row)}>
@@ -537,10 +436,10 @@ export const ManagerUser = () => {
               }}>
               <Box sx={{ p: 2 }} width="md">
                 <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
-                  Tiêu đề: {eventPick}
+                  Tiêu đề: {eventTitlePick}
                 </Typography>
                 <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
-                  Tóm tắt: {eventPick}
+                  Tóm tắt: {eventDesPick}
                 </Typography>
               </Box>
             </Popover>
@@ -550,7 +449,7 @@ export const ManagerUser = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 20]}
           component="div"
-          count={rows.length}
+          count={rows?.length || 0}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
