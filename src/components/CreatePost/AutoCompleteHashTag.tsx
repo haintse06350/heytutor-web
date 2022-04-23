@@ -18,7 +18,7 @@ const Label = styled("label")`
   line-height: 1.5;
   display: block;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
 `;
 
 const InputWrapper = styled("div")(

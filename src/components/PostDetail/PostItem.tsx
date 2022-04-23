@@ -24,7 +24,6 @@ import { stringAvatar } from "../UserProfile/helper";
 import Page from "../../layout/Page";
 import { Post } from "../../models/post";
 // import demoImg5 from "../../assets/default_images/5.jpg";
-import demoImg6 from "../../assets/default_images/6.jpg";
 // import demoImg4 from "../../assets/default_images/4.jpg";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
@@ -60,6 +59,7 @@ import PdfFile from "../../assets/file/pdf.svg";
 import ZipFile from "../../assets/file/zip.svg";
 import RawFile from "../../assets/file/raw.svg";
 import { styled } from "@mui/styles";
+import { getImageUrl } from "../../utils/imageUrl";
 
 const Input = styled("input")({
   display: "none",
@@ -93,6 +93,7 @@ const PostItem = () => {
   const [listRegister, setListRegister]: any = React.useState([]);
   const [listSupporter, setListSupporter]: any = React.useState([]);
 
+  const postImages = JSON.parse(post?.postDetails["Post.images"] || "[]");
   // const [msg, setMsg] = useState("");
   const { onOpenMsgBox } = React.useContext(MsgCtx);
   const { user } = React.useContext(UserCtx);
@@ -373,9 +374,9 @@ const PostItem = () => {
           });
           getPostConversation(postId, userId);
         } else {
-          const supporter = post.supporters[0].userData;
+          const supporter = post?.supporters[0]?.userData;
           setUserProfile(supporter);
-          getPostConversation(post.postDetails["Post.id"], post.supporters[0].supporterId[0]);
+          getPostConversation(post?.postDetails["Post.id"], post?.supporters[0].supporterId[0]);
         }
       });
     }
@@ -636,7 +637,14 @@ const PostItem = () => {
                 {post.postDetails["Post.content"]}
               </Typography>
               <Box sx={{ mt: 2 }}>
-                <img src={demoImg6} alt="" />
+                <Grid container spacing={1}>
+                  {postImages &&
+                    map(postImages, (image: string, index: number) => (
+                      <Grid item xs={postImages.length > 1 ? 6 : 12}>
+                        <img key={index} src={getImageUrl(image)} alt="" style={{ width: "100%", borderRadius: 4 }} />
+                      </Grid>
+                    ))}
+                </Grid>
               </Box>
               {!isMyPost && userProfile && (
                 <div className={classes.userPanel}>

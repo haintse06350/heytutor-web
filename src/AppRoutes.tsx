@@ -30,6 +30,7 @@ import ManagerDetailCTV from "./components/Dashboard/ManagerCTV/ManagerDetailCTV
 import ManagerEventDetail from "./components/Dashboard/ManagerEvent/Admin/ManageEventDetail";
 import HomeSupperAdmin from "./components/Dashboard/HomeDashBoard/HomeSupperAdmin";
 import LoginAdmin from "./components/Dashboard/LoginAdmin";
+import Search from "./components/HomePage/Search/Search";
 
 export default function AppRoutes() {
   const { user }: any = React.useContext(UserCtx);
@@ -89,7 +90,14 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-          <Route path={"/createEvent"} element={<CreateEvent />} />
+          <Route
+            path={"/dashboard/admin/create-event"}
+            element={
+              <DashBoardLayout>
+                <CreateEvent />
+              </DashBoardLayout>
+            }
+          />
 
           <Route
             path={"/create-post"}
@@ -211,6 +219,14 @@ export default function AppRoutes() {
             element={
               <DashBoardLayout>
                 <HomeManager />
+              </DashBoardLayout>
+            }
+          />
+          <Route
+            path={"/search"}
+            element={
+              <DashBoardLayout>
+                <Search />
               </DashBoardLayout>
             }
           />

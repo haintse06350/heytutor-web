@@ -17,14 +17,15 @@ const LoginAdmin = () => {
   const [isLoading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { loginAdmin, admin } = useContext(UserCtx);
+  const { loginAdmin, user } = useContext(UserCtx);
   const navigate = useNavigate();
+  const admin = user;
 
   const onLogin = async () => {
     setLoading(true);
     try {
       const user = await User.loginAdmin({ email, password });
-      localStorage.setItem("heytutor-admin", user.token);
+      localStorage.setItem("heytutor-user", user.token);
       loginAdmin(user);
       window.location.reload();
     } catch (e) {
