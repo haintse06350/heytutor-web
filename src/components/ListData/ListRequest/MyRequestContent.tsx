@@ -1,8 +1,6 @@
 import {
-  Divider,
   Typography,
   Grid,
-  Card,
   Popover,
   Box,
   Dialog,
@@ -20,8 +18,6 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { map } from "lodash";
 import * as React from "react";
 import { useStyles } from "./ResultContent.style";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { stringAvatar } from "../../UserProfile/helper";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
@@ -32,15 +28,14 @@ import CloseIcon from "@mui/icons-material/Close";
 // import { renderCardImg } from "../utils";
 // import moment from "moment";
 // import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import moment from "moment";
 import "moment/locale/vi";
-import clsx from "classnames";
 import { MessageBox } from "../../MessageBox/MessageBox";
 import { MsgCtx } from "../../../context/message/message";
 import { useNavigate } from "react-router-dom";
 import { NotificationCtx } from "../../../context/notification/state";
 import { ConfirmDialog } from "../../Common/ConfirmDialog/ConfirmDialog";
 import { UserPost } from "../../../models/user-post";
+import { ListPost } from "./ListPost";
 
 const FILTER_REGISTER = [
   {
@@ -117,18 +112,13 @@ export default function MyRequestContent(props: any) {
   const onOpenMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
+
   const onCloseMenu = (event: SelectChangeEvent) => {
     setAnchorEl(null);
   };
 
   const onChangeSort = (event: SelectChangeEvent) => {
     setSortListRegister(event.target.value as string);
-  };
-
-  const isNearDeadline = (deadline: string) => {
-    if (deadline.includes("giờ") || deadline.includes("phút")) {
-      return true;
-    }
   };
 
   const onOpenMsg = (user: any) => {
@@ -334,46 +324,13 @@ export default function MyRequestContent(props: any) {
         </Typography>
       </div>
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        {map(data, (item: any, index: number) => (
-          <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
-            <Card className={clsx(classes.item, selectItem?.id === item.id && classes.activeCard)}>
-              <div className={classes.cardHeader}>
-                <div className={classes.postTitle}>
-                  <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.id)}>
-                    {item.postData.title}
-                  </Typography>
-                  <Typography variant="caption" noWrap>
-                    Bài đăng từ {moment(item.createdAt).format("DD/MM")}
-                  </Typography>
-                  <div className={classes.dueDate}>
-                    <AccessTimeOutlinedIcon
-                      sx={{
-                        color: isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow())
-                          ? "#d32f2f"
-                          : "#94a4c4",
-                      }}
-                    />
-                    <Typography
-                      variant="subtitle2"
-                      className={clsx(
-                        classes.deadline,
-                        isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow()) && classes.nearDeadline
-                      )}>
-                      Đến hạn cần giải quyết trong {moment(item.postData.deadline).endOf("hours").fromNow()}
-                    </Typography>
-                  </div>
-                </div>
-                <div>
-                  <MoreVertRoundedIcon onClick={onOpenMenu} />
-                </div>
-              </div>
-              <div className={classes.cardContent}>
-                <Divider />
-                <div className={classes.userPostAvatar}>{renderRegisterAndSupporter(item)}</div>
-              </div>
-            </Card>
-          </Grid>
-        ))}
+        <ListPost
+          data={data}
+          onClickPostDetail={onClickPostDetail}
+          selectItem={selectItem}
+          onOpenMenu={onOpenMenu}
+          renderRegisterAndSupporter={renderRegisterAndSupporter}
+        />
         <Popover
           open={openMenu}
           anchorEl={anchorEl}

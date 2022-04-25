@@ -6,8 +6,7 @@ import { Badge, Box, IconButton } from "@mui/material";
 import MenuPopover from "./MenuPopover";
 
 //icons
-import EmailIcon from "@mui/icons-material/Email";
-
+import MessageIcon from "@mui/icons-material/Message";
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -34,7 +33,7 @@ export default function AccountPopover() {
           }),
         }}>
         <Badge badgeContent={2} color="error">
-          <EmailIcon color="primary" />
+          <MessageIcon color="primary" />
         </Badge>
       </IconButton>
 

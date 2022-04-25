@@ -1,6 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserCtx } from "../../context/user/state";
-import { Dialog, DialogTitle, DialogContent, Typography, Box, Grid, Card, Chip, Button, Tooltip } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography,
+  Box,
+  Grid,
+  Card,
+  Chip,
+  Button,
+  Tooltip,
+  Divider,
+} from "@mui/material";
 import { map } from "lodash";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -10,16 +22,16 @@ import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import { Home } from "../../models/home";
-import { useNavigate } from "react-router-dom";
-import { useStyles } from "./FirstTimeLoginPopup.style";
+// import { useNavigate } from "react-router-dom";
+import { useStyles } from "./GuidelinePage.style";
 import moment from "moment";
 import "moment/locale/vi";
 import { Event } from "../../models/event";
 import { NotificationCtx } from "../../context/notification/state";
 import { PostCtx } from "../../context/post/state";
 
-export const FirstTimeLoginPopup = () => {
-  const { user } = useContext(UserCtx);
+export const GuidelinePage = () => {
+  const { user, openGuideline, onCloseGuideline } = useContext(UserCtx);
   const [openDialog, setOpenDialog] = useState(false);
   const [listEvent, setListEvent]: any = useState(null);
   const [listPost, setListPost]: any = useState(null);
@@ -28,15 +40,16 @@ export const FirstTimeLoginPopup = () => {
 
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
   const { createPost } = useContext(PostCtx);
-  const navigate = useNavigate();
+
+  // const navigate = useNavigate();
   const classes = useStyles();
 
   const onViewDetail = (eventId: any) => {
-    navigate(`/event-detail?eventid=${eventId}`);
+    // navigate(`/event-detail?eventid=${eventId}`);
   };
 
   const onClickPost = (postId: any) => {
-    navigate(`/post-detail?postId=${postId}`);
+    // navigate(`/post-detail?postId=${postId}`);
   };
 
   const onClickJoinEvent = async (eventId: string) => {
@@ -70,6 +83,7 @@ export const FirstTimeLoginPopup = () => {
   }, []);
 
   const onCloseDialog = () => {
+    onCloseGuideline();
     setOpenDialog(false);
   };
 
@@ -78,23 +92,37 @@ export const FirstTimeLoginPopup = () => {
   };
 
   return (
-    <Dialog maxWidth="lg" fullWidth open={openDialog} onClose={onCloseDialog}>
-      <DialogTitle>
-        <Box display="flex" flexDirection="column">
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            Chào mừng {user.fullName}
-            <CloseOutlinedIcon onClick={onCloseDialog} />
+    <Dialog
+      classes={{ paper: classes.dialogPaper }}
+      maxWidth="lg"
+      fullScreen
+      open={openDialog || openGuideline}
+      onClose={onCloseDialog}>
+      <Box sx={{ padding: 0, margin: 0, width: "100%", height: 70 }}>
+        <DialogTitle>
+          <Box display="flex" flexDirection="column" sx={{ mt: 1 }}>
+            <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Typography variant="h5" sx={{ fontWeight: 700 }}>
+                Chào mừng đến với Hey Tutor! 🎉
+              </Typography>
+              <CloseOutlinedIcon onClick={onCloseDialog} />
+            </Box>
           </Box>
-          <Typography variant="subtitle2" fontWeight={400} color="textSecondary">
-            Dựa trên thông tin về ngành học và các môn bạn đang học trong kì của bạn chúng tôi gợi ý cho bạn tham gia
-            vào các sự kiện dưới đây
-          </Typography>
-        </Box>
-      </DialogTitle>
+        </DialogTitle>
+        <Divider />
+      </Box>
       <DialogContent>
-        <Box sx={{ height: "fit-content" }}>
-          <Typography sx={{ mb: 1 }} variant="subtitle2">
-            Các sự kiện có thể bạn quan tâm
+        <Box sx={{ height: "fit-content", pt: 0, px: 3 }}>
+          <Typography sx={{ mb: 1 }} variant="h5" color="textSecondary" fontWeight={600}>
+            Hãy bắt đầu xem qua các tính năng chính và cách hoạt động của hệ thống
+          </Typography>
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
+            Sự kiện:{" "}
+            <Typography component="span" variant="subtitle1" fontWeight={400}>
+              Được tạo ra với chủ đề cụ thể, giúp bạn đễ dàng tiếp cận hoặc đăng vấn đề bạn muốn được hỗ trợ trong phạm
+              vi chủ đề của sự kiện
+            </Typography>
           </Typography>
           <Grid container spacing={3}>
             {map(listEvent?.slice(0, 3), (item: any, index: number) => (
@@ -149,12 +177,18 @@ export const FirstTimeLoginPopup = () => {
             endIcon={<ArrowForwardOutlinedIcon sx={{ width: 16 }} />}
             variant="contained"
             sx={{ float: "right", mt: 1.25, py: 0.5, px: 1, fontSize: 10 }}>
-            Xem thêm
+            Xem thêm các sự kiện khác
           </Button>
+          <Divider sx={{ mt: 7 }} />
+
           <Grid container spacing={3} sx={{ mt: 1 }}>
             <Grid item xs={6}>
-              <Typography variant="subtitle2" sx={{ mt: 1.25, mb: 0.5 }}>
-                Top 3 vấn đề nổi bật
+              <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
+                Vấn đề bạn có thể giúp:{" "}
+                <Typography component="span" variant="subtitle1" fontWeight={400}>
+                  Các vấn đề của mọi người cần được hỗ trợ. Nếu bạn có thể giúp đỡ, hãy đăng đăng kí trở thành người hỗ
+                  trợ để kiếm về cho mình
+                </Typography>
               </Typography>
               <Grid container spacing={3}>
                 {map(listPost?.slice(0, 3), (item: any, index: number) => (
@@ -185,11 +219,14 @@ export const FirstTimeLoginPopup = () => {
               </Grid>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="subtitle2" sx={{ mt: 1.25, mb: 1 }}>
-                Bạn cũng có chia sẻ vấn đề của mình để tìm sự trợ giúp tốt nhất
+              <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
+                Vấn đề bạn cần giúp đỡ:{" "}
+                <Typography component="span" variant="subtitle1" fontWeight={400}>
+                  Bạn có thể đăng vấn đề của mình lên để có thể nhận được giúp đỡ của người khác.
+                </Typography>
               </Typography>
               <Grid container spacing={3}>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <Card
                     sx={{
                       p: 2,
@@ -202,7 +239,7 @@ export const FirstTimeLoginPopup = () => {
                     }}
                     onClick={createPost}>
                     <AddCircleOutlineOutlinedIcon sx={{ width: 40, height: 40 }} color="secondary" />
-                    <Typography variant="subtitle2">Tạo bài viết</Typography>
+                    <Typography variant="subtitle2">Đăng vấn đề của bạn</Typography>
                   </Card>
                 </Grid>
               </Grid>

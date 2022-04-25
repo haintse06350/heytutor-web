@@ -8,7 +8,6 @@ export const useStyles: any = makeStyles(() => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "-72px",
   },
   moreBtn: {
     display: "flex",

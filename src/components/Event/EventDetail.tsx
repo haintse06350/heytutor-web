@@ -5,29 +5,27 @@ import { useStyles } from "./EventDetail.style";
 import Page from "../../layout/Page";
 
 //component material
-import { Grid, Typography, Box, Tooltip, Button, CircularProgress } from "@mui/material";
+import { Grid, Box, CircularProgress, Typography } from "@mui/material";
 // icon
-import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Event } from "../../models/event";
-import SlideShowEventList from "./SlideShowEventList";
+import { ListPost } from "../ListData/ListRequest/ListPost";
+import { useNavigate } from "react-router-dom";
 import img1 from "../../assets/home_event_images/14.png";
-import EventNoteIcon from "@mui/icons-material/EventNote";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment";
+import "moment/locale/vi";
+import FilterAndSearch from "../ListData/FilterAndSearch/FilterAndSearch";
+// import { map } from "lodash";
 
 const EventDetail = () => {
   const classes = useStyles();
   const urlParams = new URLSearchParams(window.location.search);
   const eventId = urlParams.get("eventid");
-  const [dataDetail, setDataDetail]: any = useState(null);
+  const [event, setEvent]: any = useState(null);
   const [listPost, setListPost]: any = useState(null);
-  // pdf
 
   const getEventDetailByEventId = async (eventId: string) => {
     const data = await Event.getEventDetailByEventId(eventId);
-    setDataDetail(data);
+    setEvent(data);
   };
 
   const getListPostOfEvent = async (eventId: string) => {
@@ -35,8 +33,14 @@ const EventDetail = () => {
     setListPost(res);
   };
 
+  const navigate = useNavigate();
+
+  const onClickPostDetail = (postId: number) => {
+    navigate(`/post-detail?postId=${postId}&from=event`);
+  };
+
   //TODO: show list post
-  console.log("listPost", listPost);
+  console.log("listPost", listPost, event);
 
   useEffect(() => {
     if (eventId) {
@@ -45,7 +49,7 @@ const EventDetail = () => {
     }
   }, [eventId]);
 
-  if (!dataDetail) {
+  if (!listPost) {
     return (
       <Page className={classes.root}>
         <Box
@@ -53,6 +57,8 @@ const EventDetail = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            height: "100vh",
+            width: "100%",
           }}>
           <CircularProgress />
         </Box>
@@ -61,67 +67,48 @@ const EventDetail = () => {
   } else {
     return (
       <>
-        <Box sx={{ mt: 8 }}>
-          <SlideShowEventList />
-        </Box>
-        <Page className={classes.root}>
-          <Grid item xs={12} md={8} lg={8} className={classes.postContent}>
-            <Grid item>
-              <img src={img1} alt="img event detail" />
-            </Grid>
-            <Grid item className={classes.postTitle}>
-              <Typography variant="h5">{dataDetail?.eventContent?.title}</Typography>
-            </Grid>
-            <div className={classes.mainContent}>
-              <Typography variant="body1">{dataDetail?.eventContent?.description}</Typography>
-            </div>
-            <Grid container item xs={12} className={classes.simpleActions}>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Tooltip title="Số lượt xem">
-                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                    <VisibilityOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography style={{ fontSize: 14 }}>{dataDetail?.eventContent?.viewCount}</Typography>
-                  </Box>
-                </Tooltip>
-                <Tooltip title="Số lượt đăng kí hỗ trợ">
-                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                    <HowToRegOutlinedIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listNonRegisterPost}</Typography>
-                  </Box>
-                </Tooltip>
-                <Tooltip title="Số vấn đề đăng kí">
-                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                    <EventNoteIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography style={{ fontSize: 14 }}>{dataDetail?.listUserRequestor}</Typography>
-                  </Box>
-                </Tooltip>
-                <Tooltip title="Thời gian kết thúc đăng kí">
-                  <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                    <AccessTimeIcon sx={{ mr: 0.5, width: 20, height: 20 }} />
-                    <Typography style={{ fontSize: 14 }}>
-                      {moment(dataDetail?.eventContent?.endAt).fromNow()}
-                    </Typography>
-                  </Box>
-                </Tooltip>
+        <Page maxWidth="lg" className={classes.root}>
+          <Box display="flex">
+            <img style={{ borderRadius: 8, height: 180 }} src={img1} alt="" />
+            <Box sx={{ ml: 1, width: "100%" }}>
+              <Typography variant="subtitle1">{event?.eventContent.title}</Typography>
+              <Typography variant="subtitle2" color="textSecondary">
+                {event?.eventContent.description}
+              </Typography>
+              <Box sx={{ background: "#d8dfe6", borderRadius: 1, p: 1, mt: 1 }}>
+                <Typography variant="subtitle2">
+                  Tổng số bài đăng:{" "}
+                  <Typography component="span" variant="caption">
+                    {listPost?.length}{" "}
+                  </Typography>
+                </Typography>
+                <Typography variant="subtitle2">
+                  Thời gian kết thúc sự kiện:{" "}
+                  <Typography component="span" variant="caption">
+                    {moment().from(event?.eventContent.endAt)}{" "}
+                  </Typography>
+                </Typography>
+                <Typography variant="subtitle2">
+                  Bài viết của bạn trong sự kiện:{" "}
+                  <Typography component="span" variant="caption">
+                    {event?.listPostInEventOfUser}
+                  </Typography>
+                </Typography>
               </Box>
-            </Grid>
-            <Grid item>
-              <Typography>{dataDetail?.eventContent?.content}</Typography>
-            </Grid>
-            <Grid sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-              <Tooltip title="Danh sách số vấn đề có trong sự kiện">
-                <Button variant="contained" startIcon={<ArrowForwardIcon />} sx={{ mr: 2 }}>
-                  Vấn đề{" "}
-                </Button>
-              </Tooltip>
-              <Tooltip title="Danh sách người đăng ký hỗ trợ">
-                <Button variant="contained" color="secondary" startIcon={<ArrowForwardIcon />}>
-                  Người đăng ký hỗ trợ
-                </Button>
-              </Tooltip>
-            </Grid>
+            </Box>
+          </Box>
+          <Box sx={{ mt: 1 }}>
+            <FilterAndSearch onListEvent={true} resetData={() => {}} />
+          </Box>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <ListPost
+              data={listPost}
+              onClickPostDetail={onClickPostDetail}
+              selectItem={{}}
+              onOpenMenu={() => {}}
+              renderRegisterAndSupporter={null}
+            />
           </Grid>
-          <Grid item xs={12} md={4} lg={4}></Grid>
         </Page>
       </>
     );

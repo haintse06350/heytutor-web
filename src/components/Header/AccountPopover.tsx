@@ -10,28 +10,39 @@ import { UserCtx } from "../../context/user/state";
 //utils
 import { stringAvatar } from "../UserProfile/helper";
 //icons
-import PersonIcon from "@mui/icons-material/Person";
-import SettingsIcon from "@mui/icons-material/Settings";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import UserGuideIcon from "../../assets/user-guide.png";
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  const { user } = useContext(UserCtx);
+  const { user, onOpenGuideline } = useContext(UserCtx);
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => {
+  const onOpenPopover = () => {
     setOpen(true);
   };
-  const handleClose = () => {
+
+  const onClosePopOver = () => {
     setOpen(false);
+  };
+
+  const onOpenUserGuide = () => {
+    onOpenGuideline();
+    onClosePopOver();
+  };
+
+  const UserGuide = () => {
+    return <img width={24} height={22} style={{ marginRight: 16 }} src={UserGuideIcon} alt="" />;
   };
 
   return (
     <>
       <IconButton
         ref={anchorRef}
-        onClick={handleOpen}
+        onClick={onOpenPopover}
         sx={{
           padding: 0,
           width: 44,
@@ -51,7 +62,7 @@ export default function AccountPopover() {
         <Avatar {...stringAvatar(user?.name || "Trung Hai")} alt="photoURL" />
       </IconButton>
 
-      <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ width: 220 }}>
+      <MenuPopover open={open} onClose={onClosePopOver} anchorEl={anchorRef.current} sx={{ width: 250 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
             {user?.name || "Nguyễn Trung Hải"}
@@ -67,32 +78,37 @@ export default function AccountPopover() {
           key={"profile"}
           to={"/profile"}
           component={RouterLink}
-          onClick={handleClose}
+          onClick={onClosePopOver}
           sx={{ typography: "body2", py: 1, px: 2.5 }}>
-          <PersonIcon
+          <PersonOutlinedIcon
             sx={{
               mr: 2,
               width: 24,
               height: 24,
             }}
           />
-          Profile
+          Trang cá nhân
+        </MenuItem>
+
+        <MenuItem onClick={onOpenUserGuide} sx={{ typography: "body2", py: 1, px: 2.5 }}>
+          <UserGuide />
+          Hướng dẫn
         </MenuItem>
 
         <MenuItem
           key={"setting"}
           to={"/setting"}
           component={RouterLink}
-          onClick={handleClose}
+          onClick={onClosePopOver}
           sx={{ typography: "body2", py: 1, px: 2.5 }}>
-          <SettingsIcon
+          <SettingsOutlinedIcon
             sx={{
               mr: 2,
               width: 24,
               height: 24,
             }}
           />
-          Setting
+          Cài đặt
         </MenuItem>
 
         <Box sx={{ p: 2, pt: 1.5 }}>
