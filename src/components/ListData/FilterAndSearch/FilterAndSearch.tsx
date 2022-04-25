@@ -51,6 +51,7 @@ export default function FilterAndSearch(props: any) {
     setSortBy,
     sortBy,
     resetData,
+    onListEvent,
   } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   // const [postStatus, setPostStatus] = React.useState("");
@@ -234,6 +235,40 @@ export default function FilterAndSearch(props: any) {
     }
   };
 
+  const SearchBasic = () => {
+    return (
+      <FormGroup>
+        <TextField
+          autoFocus
+          classes={{ root: classes.textField }}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <Select className={classes.select} value={searchBy} defaultValue="title" onChange={onChangeSearchBy}>
+                <MenuItem value="title">Tiêu đề</MenuItem>
+                <MenuItem value="user">Người đăng yêu cầu</MenuItem>
+                <MenuItem value="content">Nội dung yêu cầu</MenuItem>
+              </Select>
+            ),
+          }}
+          id="outlined-basic"
+          placeholder="Tìm kiếm yêu cầu theo..."
+          variant="outlined"
+        />
+      </FormGroup>
+    );
+  };
+
+  if (onListEvent) {
+    return <SearchBasic />;
+  }
+
   return (
     <Box className={classes.searchAndFilter} sx={{ width: "100%", typography: "body1" }}>
       <Paper elevation={2} sx={{ px: 2 }}>
@@ -245,31 +280,7 @@ export default function FilterAndSearch(props: any) {
       </Paper>
       <Grid container item xs={12} spacing={1} sx={{ mt: 2, width: "100%" }}>
         <Grid item xs={6} md={6} sx={{ minWidth: "20%" }}>
-          <FormGroup>
-            <TextField
-              autoFocus
-              classes={{ root: classes.textField }}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <Select className={classes.select} value={searchBy} defaultValue="title" onChange={onChangeSearchBy}>
-                    <MenuItem value="title">Tiêu đề</MenuItem>
-                    <MenuItem value="user">Người đăng yêu cầu</MenuItem>
-                    <MenuItem value="content">Nội dung yêu cầu</MenuItem>
-                  </Select>
-                ),
-              }}
-              id="outlined-basic"
-              placeholder="Tìm kiếm yêu cầu theo..."
-              variant="outlined"
-            />
-          </FormGroup>
+          <SearchBasic />
         </Grid>
         <Grid item xs={6} md={3} sx={{ minWidth: "20%" }}>
           <Box component="form" noValidate autoComplete="off">

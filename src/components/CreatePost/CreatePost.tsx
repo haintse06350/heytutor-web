@@ -111,12 +111,12 @@ export const CreatePost = () => {
 
       const post = await PostModel.create(input);
       if (post) {
-        setNotificationSuccess("Tạo bài viết thành công");
+        setNotificationSuccess("Đăng vấn đề thành công");
         setPostSuccess(post);
       }
     } catch (error) {
       console.log(error);
-      setNotificationError("Tạo bài viết thất bại!");
+      setNotificationError("Đăng vấn đề thất bại!");
     }
 
     setLoading(false);
@@ -172,7 +172,7 @@ export const CreatePost = () => {
 
   return (
     <Dialog onClose={discardCreatingPost} open={true} maxWidth="xl" fullWidth>
-      <DialogTitle>Tạo bài viết</DialogTitle>
+      <DialogTitle>Đăng vấn đề</DialogTitle>
       <DialogContent>
         <Box>
           <Box>

@@ -20,6 +20,16 @@ export default (state: any, action: any) => {
         ...state,
         user: null,
       };
+    case ACTIONS.OPEN_GUIDELINE:
+      return {
+        ...state,
+        openGuideline: true,
+      };
+    case ACTIONS.CLOSE_GUIDELINE:
+      return {
+        ...state,
+        openGuideline: false,
+      };
     default:
       return state;
   }

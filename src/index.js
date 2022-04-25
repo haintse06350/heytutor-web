@@ -7,18 +7,21 @@ import NotificationProvider from "./context/notification/state";
 import UserProvider from "./context/user/state";
 import PostProvider from "./context/post/state";
 import MsgProvider from "./context/message/message";
+import ThemeConfig from "./theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <NotificationProvider>
-      <UserProvider>
-        <MsgProvider>
-          <PostProvider>
-            <App />
-          </PostProvider>
-        </MsgProvider>
-      </UserProvider>
-    </NotificationProvider>
+    <ThemeConfig>
+      <NotificationProvider>
+        <UserProvider>
+          <MsgProvider>
+            <PostProvider>
+              <App />
+            </PostProvider>
+          </MsgProvider>
+        </UserProvider>
+      </NotificationProvider>
+    </ThemeConfig>
   </React.StrictMode>,
   document.getElementById("root")
 );

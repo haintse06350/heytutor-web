@@ -7,4 +7,7 @@ export const useStyles: any = makeStyles(() => ({
       textDecoration: "underline",
     },
   },
+  dialogPaper: {
+    backgroundColor: "#eeeeee",
+  },
 }));

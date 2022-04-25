@@ -23,3 +23,9 @@ export const renderCardImg = (index: number) => {
   }
   return demoImg6;
 };
+
+export const isNearDeadline = (deadline: string) => {
+  if (deadline.includes("giờ") || deadline.includes("phút")) {
+    return true;
+  }
+};

@@ -5,6 +5,7 @@ declare module "*.svg" {
 }
 declare module "*.jpg";
 declare module "*.png";
+declare module "*.PNG";
 declare module "*.pdf";
 
 declare module "react-slideshow-image";

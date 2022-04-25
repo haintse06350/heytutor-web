@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
-import { FirstTimeLoginPopup } from "../FirstTimeLoginPopup/FirstTimeLoginPopup";
 //utils
 // import { fShortenNumber } from "../../utils/formatNumber";
 
@@ -64,7 +63,6 @@ const HomePage = () => {
 
   return (
     <>
-      <FirstTimeLoginPopup />
       <Box sx={{ mt: 1 }} className={classes.wrapHomePage}>
         <Page>
           <Box display="flex" alignItems="flex-end" justifyContent="center" sx={{ mb: 2 }}>
@@ -112,7 +110,7 @@ const HomePage = () => {
           <Box className={classes.wrapWarningUser}>
             <Box display="flex" alignItems="center" justifyContent="space-between">
               <CloseIcon sx={{ width: 18, opacity: 0 }} />
-              <Typography align="center" variant="h5" color="error">
+              <Typography align="center" variant="subtitle1" color="error">
                 Chú ý
               </Typography>
               <CloseIcon sx={{ width: 16, cursor: "pointer" }} onClick={() => setOpenNotice(false)} />

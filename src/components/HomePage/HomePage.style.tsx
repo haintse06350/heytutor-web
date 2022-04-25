@@ -37,11 +37,13 @@ export const useStyles: any = makeStyles(() => ({
     borderRadius: "8px 8px 50% 50% ",
     backgroundColor: "black",
     color: "#fff",
-    width: "140px",
+    width: "120px",
     height: "fit-content",
     "& > p": {
       alignItems: "center",
       textAlign: "center",
+      fontSize: "12px",
+      padding: 12,
     },
   },
   quickNoti: {

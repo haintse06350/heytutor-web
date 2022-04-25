@@ -10,9 +10,20 @@ if (userToken) {
 }
 
 export const INITIAL_STATE = {
+  openGuideline: false,
   user,
   // Mock functions that should never be called, they are just here to pass the type checks
   login: (user: any) => {
+    return new Promise<any>(function (resolve, reject) {
+      reject({});
+    });
+  },
+  onOpenGuideline: () => {
+    return new Promise<any>(function (resolve, reject) {
+      reject({});
+    });
+  },
+  onCloseGuideline: () => {
     return new Promise<any>(function (resolve, reject) {
       reject({});
     });

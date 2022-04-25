@@ -2,6 +2,15 @@ import React from "react";
 import { ACTIONS } from "./actions";
 import jwt_decode from "jwt-decode";
 
+export const onOpenGuideline = (dispatch: React.Dispatch<any>) => {
+  console.log("onclick open guideline");
+  dispatch({ type: ACTIONS.OPEN_GUIDELINE });
+};
+
+export const onCloseGuideline = (dispatch: React.Dispatch<any>) => {
+  dispatch({ type: ACTIONS.CLOSE_GUIDELINE });
+};
+
 export const login = async (dispatch: React.Dispatch<any>, user: any) => {
   try {
     const userObj: any = jwt_decode(user);

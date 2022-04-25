@@ -2,10 +2,9 @@ import React, { useContext } from "react";
 
 // material
 import { alpha, styled } from "@mui/material/styles";
-import { AppBar, Toolbar, Box, Stack, Typography, Button } from "@mui/material";
-
+import { AppBar, Toolbar, Box, Stack, Button } from "@mui/material";
+import Logo from "../../../assets/logo.PNG";
 //components
-import Searchbar from "./Searchbar";
 import NotificationsPopover from "../../Header/NotificationsPopover";
 import AccountPopover from "../../Header/AccountPopover";
 import MessagePopover from "../../Header/MessagePopover";
@@ -38,30 +37,34 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 
 const NavigationBar = () => {
   const navigate = useNavigate();
+  const { createPost } = useContext(PostCtx);
+
   const handleClickHome = () => {
     navigate("/home");
   };
-  const { createPost } = useContext(PostCtx);
+
   return (
     <RootStyle>
       <ToolbarStyle>
-        <Typography
-          onClick={handleClickHome}
-          variant="h3"
-          noWrap
-          component="div"
-          sx={{ color: "#5048E5", display: { xs: "none", sm: "block" }, cursor: "pointer", marginRight: "80px" }}>
-          HEYTUTOR
-        </Typography>
-        <Searchbar />
+        <img style={{ width: 140, position: "absolute", left: -10 }} onClick={handleClickHome} src={Logo} alt="" />
         <Box sx={{ flexGrow: 1 }} />
-        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1 }}>
           <Button
-            sx={{ maxHeight: 36, width: 150 }}
+            sx={{
+              maxHeight: 30,
+              width: 120,
+              fontSize: "12px",
+              fontWeight: "bold",
+              color: "#fff",
+              px: 0.75,
+              py: 0.5,
+              mr: 2,
+              textTransform: " none",
+            }}
             onClick={() => createPost()}
             variant="contained"
-            startIcon={<AddIcon sx={{ color: "#FFFFFF" }} />}>
-            Tạo bài viết
+            startIcon={<AddIcon sx={{ color: "#FFFFFF", width: 14 }} />}>
+            Đăng vấn đề
           </Button>
           <MessagePopover />
           <NotificationsPopover />
