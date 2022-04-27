@@ -25,7 +25,6 @@ export const useStyles: any = makeStyles(() => ({
   titleEvent: {
     cursor: "pointer",
     textDecoration: "underline",
-    lineHeight: "40px",
   },
   wrapHomePage: { position: "relative" },
   wrapWarningUser: {

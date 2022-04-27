@@ -1,20 +1,6 @@
 import React from "react";
 // MUI
-import {
-  Box,
-  Card,
-  Grid,
-  Typography,
-  Button,
-  Chip,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableCell,
-} from "@mui/material";
+import { Box, Card, Grid, Typography, Button, Chip } from "@mui/material";
 import { useStyles } from "./HomeManager.style";
 import imgCup from "../../../assets/home_event_images/trophy.png";
 // icon
@@ -45,7 +31,7 @@ const HomeManager = () => {
             <Typography variant="subtitle2">Người hỗ trợ có điểm đánh giá cao nhất tháng</Typography>
             <Typography>4.9 / 100 đánh giá</Typography>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Button variant="contained" sx={{ mt: 0.5 }}>
+              <Button variant="contained" sx={{ mt: 1, maxHeight: "32px" }}>
                 Bảng xếp hạng đánh giá
               </Button>
               <Box>
@@ -74,22 +60,22 @@ const HomeManager = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={6} md={3} lg={3}>
+        <Grid item xs={6} md={4} lg={4}>
           <Card sx={{ p: 2, height: "100%" }}>
             <Typography>
-              <b>Sự kiện mới</b>
+              <b>Người dùng có báo cáo xấu</b>
             </Typography>
-            <Typography variant="h4">2 sự kiện</Typography>
+            <Typography variant="h4">12 báo cáo chưa xử lí</Typography>
             <Typography sx={{ color: "green" }} variant="body1">
               +12%
             </Typography>
-            <Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Chip label="Tháng trước" />
               <Button>Xem chi tiết</Button>
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={6} md={3} lg={3}>
+        <Grid item xs={6} md={4} lg={4}>
           <Card sx={{ p: 2, height: "100%" }}>
             <Typography>
               <b>Cộng tác viên</b>
@@ -98,14 +84,29 @@ const HomeManager = () => {
             <Typography color="error" variant="body1">
               &nbsp;
             </Typography>
-            <Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Chip label="Tất cả" />
+              <Button>Xem chi tiết</Button>
+            </Box>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4} lg={4}>
+          <Card sx={{ p: 2, height: "100%" }}>
+            <Typography>
+              <b>Bài đăng có báo cáo xấu</b>
+            </Typography>
+            <Typography variant="h4">18 bài chưa xử lí</Typography>
+            <Typography sx={{ color: "green" }} variant="body1">
+              +12%
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Chip label="Tất cả" />
               <Button>Xem chi tiết</Button>
             </Box>
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={12} lg={12}>
           <Card sx={{ p: 2, height: "100%" }}>
             <Typography>
               <b>Thông báo hoạt động</b>
@@ -147,25 +148,6 @@ const HomeManager = () => {
           </Card>
         </Grid>
         {/* activity timeline */}
-        <Grid item xs={12} md={12} lg={12}>
-          <TableContainer component={Paper}>
-            <Table aria-label="ctv table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Id</TableCell>
-                  <TableCell>Tiêu đề</TableCell>
-                  <TableCell>Thời gian hết hạn</TableCell>
-                  <TableCell>Số người tham gia</TableCell>
-                  <TableCell>Số báo cáo xấu</TableCell>
-                  <TableCell>Quản lí sự kiện</TableCell>
-                  <TableCell>Trạng thái</TableCell>
-                  <TableCell>Quản lí</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody></TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
       </Grid>
     </>
   );

@@ -87,8 +87,8 @@ const DashBoardLayout = ({ children }: any) => {
   const theme = useTheme();
   const classes = useStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [openTab, setOpenTab] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [openTab, setOpenTab] = useState(true);
   const { admin } = useContext(UserCtx);
 
   const onOpenDrawer = () => {
@@ -199,16 +199,6 @@ const DashBoardLayout = ({ children }: any) => {
           )}
           <Collapse in={openTab} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem
-                button
-                sx={{ pl: 4 }}
-                onClick={() => handleChangePage("home-ctv")}
-                className={renderTabCurrent() === "home-ctv" ? classes.active : ""}>
-                <ListItemIcon>
-                  <PeopleAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cộng tác viên" />
-              </ListItem>
               <ListItem
                 button
                 sx={{ pl: 4 }}

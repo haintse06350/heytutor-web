@@ -54,17 +54,21 @@ const ManageEvent = () => {
   const [value, setValue] = useState("1");
   const [openDatePicker, setOpenDatePicker] = useState(false);
   // const [filters, setFilters]: any = useState({ status: "joined" });
+  const navigate = useNavigate();
+
   const [sortBy, setSortBy]: any = useState("desc");
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
   const [visible, setVisible] = useState("deadlineTime");
-
-  const navigate = useNavigate();
-
+  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
+  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
+  const [searchBy, setSearchBy] = React.useState("titleOfEvent");
+  const [openPreview, setOpenPreview] = useState(false);
+  const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
+  const [dataEventOfCollaborator, setDataEventOfCollaborator] = useState(null);
+  const [rows, setRows]: any = useState(null);
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-  const [openPreview, setOpenPreview] = useState(false);
-  const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
 
   const handleClickOpenPreview = (scrollType: DialogProps["scroll"]) => () => {
     setOpenPreview(true);
@@ -78,20 +82,6 @@ const ManageEvent = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
-
-  const onChangeFilter = (event: any, type: string) => {
-    if (type === "time") {
-      if (event.target.value === "currentWeek") {
-        setValueFilterStartDate(moment().subtract(7, "days").toDate());
-        setValueFilterEndDate(moment().startOf("day").toDate());
-      } else if (event.target.value === "currentMonth") {
-        setValueFilterStartDate(moment().subtract(1, "months").toDate());
-        setValueFilterEndDate(moment().startOf("day").toDate());
-      }
-    }
-  };
-  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
-  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
 
   const [
     data = {
@@ -113,30 +103,22 @@ const ManageEvent = () => {
     },
   ]: // setData,
   any = useState();
-  const [searchBy, setSearchBy] = React.useState("titleOfEvent");
+
+  const onChangeFilter = (event: any, type: string) => {
+    if (type === "time") {
+      if (event.target.value === "currentWeek") {
+        setValueFilterStartDate(moment().subtract(7, "days").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "currentMonth") {
+        setValueFilterStartDate(moment().subtract(1, "months").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      }
+    }
+  };
   const onChangeSearchBy = (e: SelectChangeEvent) => {
     setSearchBy(e.target.value);
   };
-  const dataFake = [
-    {
-      id: 1,
-      title: "Sự kiện 1",
-      time: "25/4/2022",
-      status: "Đang diễn ra",
-      nbOfJoined: "10",
-      nbOfReported: "2",
-      manager: "anhcd",
-    },
-    {
-      id: 2,
-      title: "Sự kiện 2",
-      time: "20/10/2020",
-      status: "Đã kết thúc",
-      nbOfJoined: "10",
-      nbOfReported: "2",
-      manager: "anhcd",
-    },
-  ];
+
   const handleVisible = (event: any) => {
     setVisible(event.target.value);
     event.target.value === "status" ? setSortBy("isActive") : setSortBy("desc");
@@ -146,15 +128,16 @@ const ManageEvent = () => {
     navigate(`/dashboard/admin/manage-event/create-event`);
   };
 
-  const [dataEventOfCollaborator, setDataEventOfCollaborator] = useState(null);
   const getDataEvent = async () => {
     const data = await Manager.getListEventOfCollaborator();
     setDataEventOfCollaborator(data);
+    setRows(data);
   };
+  console.log(rows, "rows");
+  console.log(dataEventOfCollaborator);
 
   useEffect(() => {
     getDataEvent();
-    console.log(dataEventOfCollaborator);
   }, []);
 
   return (
@@ -327,23 +310,18 @@ const ManageEvent = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataFake.map((row: any) => (
-                  <TableRow key={row} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                {rows.map((row: any, index: number) => (
+                  <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
-                      {row.id}
+                      {row?.eventDetail?.id}
                     </TableCell>
-                    <TableCell>
-                      {row.title}
-                      {row.title}
-                      {row.title}
-                      {row.title}
-                    </TableCell>
-                    <TableCell align="center">{row.time}</TableCell>
-                    <TableCell align="center">{row.nbOfJoined}</TableCell>
-                    <TableCell align="center">{row.nbOfReported}</TableCell>
+                    <TableCell>{row?.eventDetail?.title}</TableCell>
+                    <TableCell align="center">{moment(row?.eventDetail?.endAt).fromNow()}</TableCell>
+                    <TableCell align="center">{row?.listUserInEvent?.length}</TableCell>
+                    <TableCell align="center">{row?.listReportInEvent?.length}</TableCell>
                     <TableCell>{row.manager}</TableCell>
                     <TableCell>
-                      {row.status === "Đang diễn ra" ? (
+                      {moment(row?.eventDetail?.endAt).endOf("day").fromNow() ? (
                         <Chip label="Hoạt động" color="primary" />
                       ) : (
                         <Chip label="Đã kết thúc" color="error" />

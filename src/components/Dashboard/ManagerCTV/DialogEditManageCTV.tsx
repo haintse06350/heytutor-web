@@ -36,7 +36,7 @@ const DialogEditManageCTV = (props: any) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Quản lí sự kiện</DialogTitle>
+      <DialogTitle>Quản lí cộng tác viên</DialogTitle>
       <DialogContent>
         <Grid container>
           <Grid item xs={4} md={4} lg={4}>
