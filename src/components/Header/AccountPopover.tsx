@@ -59,7 +59,7 @@ export default function AccountPopover() {
             },
           }),
         }}>
-        <Avatar {...stringAvatar(user?.name || "Trung Hai")} alt="photoURL" />
+        <Avatar style={{ border: "2px solid #00ab55" }} {...stringAvatar(user?.name || "Trung Hai")} alt="photoURL" />
       </IconButton>
 
       <MenuPopover open={open} onClose={onClosePopOver} anchorEl={anchorRef.current} sx={{ width: 250 }}>

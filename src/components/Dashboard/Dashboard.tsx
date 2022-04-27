@@ -19,7 +19,7 @@ import {
   MenuItem,
   Avatar,
 } from "@mui/material";
-// import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
+import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -50,7 +50,6 @@ import ManagePost from "./ManagePost/ManagePost";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { stringAvatar } from "../UserProfile/helper";
 import HomeManageCTV from "./HomeDashBoard/HomeManageCTV";
-
 import ManagerCTV from "./ManagerCTV/ManagerCTV";
 
 const drawerWidth = 240;
@@ -113,7 +112,7 @@ const Dashboard = () => {
   const [dataStudent, setDataStudent]: any = useState(null);
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [cookie, setCookie] = useState("");
+  const [cookie, setCookie]: any = useState(null);
   // const [progress, setProgress] = useState(0);
 
   const onClickFetchData = async () => {
@@ -137,9 +136,9 @@ const Dashboard = () => {
     setOpen(false);
   };
 
-  const handleClick = (e: any) => {
-    setOpenTab(!openTab);
-    console.log(e.currentTarget.value);
+  const handleClick = (tab: any) => {
+    setOpenTab(tab);
+    setActiveTab(tab);
   };
 
   const renderDemoData = () => {
@@ -205,18 +204,18 @@ const Dashboard = () => {
     setDataStudent({ columns: formatColumns, rows });
   };
 
-  // const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
-  //   return (
-  //     <Box sx={{ display: "flex", alignItems: "center" }}>
-  //       <Box sx={{ width: "100%", mr: 1 }}>
-  //         <LinearProgress variant="determinate" {...props} />
-  //       </Box>
-  //       <Box sx={{ minWidth: 35 }}>
-  //         <Typography variant="body2" color="text.secondary">{`${props.value.toFixed(1)}%`}</Typography>
-  //       </Box>
-  //     </Box>
-  //   );
-  // };
+  const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%", mr: 1 }}>
+          <LinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box sx={{ minWidth: 35 }}>
+          <Typography variant="body2" color="text.secondary">{`${props.value.toFixed(1)}%`}</Typography>
+        </Box>
+      </Box>
+    );
+  };
 
   // useEffect(() => {
   //   const timer = setInterval(() => {
@@ -284,8 +283,10 @@ const Dashboard = () => {
   const renderImportDataUI = () => {
     return (
       <div className={classes.importContainer}>
-        <FormControl variant="standard">
-          <InputLabel htmlFor="input-with-icon-adornment">Paste FAP cookie here</InputLabel>
+        <FormControl variant="standard" sx={{ width: "80%" }}>
+          <InputLabel htmlFor="input-with-icon-adornment">
+            Paste FAP cookie here (use FPT edu account login to FAP to get cookie)
+          </InputLabel>
           <Input
             id="input-with-icon-adornment"
             onChange={(e) => setCookie(e.target.value)}
@@ -315,18 +316,45 @@ const Dashboard = () => {
         <LoadingButton
           classes={{ root: classes.buttonFetch }}
           fullWidth
-          disabled={!term && !cookie}
+          disabled={Boolean(cookie)}
           onClick={onClickFetchData}
           loading={loading}
           loadingIndicator="Loading..."
           variant="outlined">
-          Fetch data
+          Fetching data
         </LoadingButton>
-        {/* {loading && (
+        {cookie && (
           <Box sx={{ width: "100%" }}>
-            <LinearProgressWithLabel value={progress} />
+            <LinearProgressWithLabel value={20} />
           </Box>
-        )} */}
+        )}
+        <Box sx={{ width: "100%", mt: 4 }} display="flex" justifyContent="flex-start">
+          <Typography
+            sx={{ textDecorationLine: "underline", textUnderlineOffset: 8 }}
+            align="left"
+            variant="subtitle1"
+            color="primary">
+            Student data
+          </Typography>
+          <Typography sx={{ ml: 2 }} align="left" variant="subtitle1" color="textSecondary">
+            Course data
+          </Typography>
+          <Typography sx={{ ml: 2 }} align="left" variant="subtitle1" color="textSecondary">
+            Class data
+          </Typography>
+          <Typography sx={{ ml: 2 }} align="left" variant="subtitle1" color="textSecondary">
+            Semester data
+          </Typography>
+        </Box>
+        <div style={{ height: 500, width: "100%", marginTop: 20 }}>
+          <DataGrid
+            {...dataStudent}
+            pageSize={10}
+            rowsPerPageOptions={[20, 40, 60]}
+            loading={!dataStudent}
+            components={{ Toolbar: GridToolbar }}
+          />
+        </div>
       </div>
     );
   };

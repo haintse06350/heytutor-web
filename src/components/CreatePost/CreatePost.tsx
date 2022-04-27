@@ -48,13 +48,19 @@ export const CreatePost = () => {
   const [valueDate, setDateValue] = useState<Date | null>(null);
   const [loading, setLoading] = useState(false);
   const [postSuccess, setPostSuccess]: any = useState(null);
+  const [customHashtag, setCustomHashtag]: any = useState(null);
 
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
 
   const [errorInput, setErrorInput]: any = useState(null);
 
   const onChangeEvent = (event: any) => {
-    setSelectedEvent(event.target.value);
+    if (event.target.value === "none") {
+      setSelectedEvent(null);
+      setEventJoint(null);
+    } else {
+      setSelectedEvent(event.target.value);
+    }
   };
 
   const onViewPost = () => {
@@ -67,7 +73,7 @@ export const CreatePost = () => {
         setErrorInput({ field: "title" });
         return;
       }
-      if (isEmpty(hashTag)) {
+      if (isEmpty(hashTag) && isEmpty(customHashtag)) {
         setErrorInput({ field: "hashtag" });
         return;
       }
@@ -81,13 +87,12 @@ export const CreatePost = () => {
         return;
       }
       setLoading(true);
-      const postId = uuidv4();
 
       let imagesToUpload = [];
       if (images.length > 0) {
         imagesToUpload = map(images, (img: any, index: number) => {
           const blob = dataURItoBlob(img.src);
-          const resultFile = new File([blob], `${user.id}_${postId}_${index}`);
+          const resultFile = new File([blob], `${user.id}_${uuidv4()}_${index}`);
           return resultFile;
         });
 
@@ -100,9 +105,13 @@ export const CreatePost = () => {
       }
 
       const imageLinks = map(imagesToUpload, (file: any) => file.name);
+      const hashtagSelect = !isEmpty(hashTag) ? map(hashTag, (item: any) => item.courseCode) : [];
+      const cusHashtag = !isEmpty(customHashtag) ? customHashtag.split(",") : [];
+      const concatHashtag = [...hashtagSelect, ...cusHashtag];
+
       const input = {
         title,
-        hashtag: JSON.stringify(map(hashTag, (item: any) => item.courseCode)),
+        hashtag: JSON.stringify(concatHashtag),
         content,
         images: JSON.stringify(imageLinks),
         eventId: selectedEvent?.eventContent.id || null,
@@ -172,7 +181,7 @@ export const CreatePost = () => {
 
   return (
     <Dialog onClose={discardCreatingPost} open={true} maxWidth="xl" fullWidth>
-      <DialogTitle>Đăng vấn đề</DialogTitle>
+      <DialogTitle>Đăng vấn đề bạn muốn được hỗ trợ</DialogTitle>
       <DialogContent>
         <Box>
           <Box>
@@ -189,6 +198,7 @@ export const CreatePost = () => {
               id="title"
               variant="outlined"
               sx={{ width: 1 / 2, fontSize: 14, fontWeight: 500 }}
+              placeholder="Nhập tiêu đề"
               required
             />
           </Box>
@@ -198,8 +208,25 @@ export const CreatePost = () => {
             </Typography>
           )}
         </Box>
-        <Box>
-          <CustomizedAutoCompleteHashTag setSelectedHashTag={setHashTag} />
+        <Box display="flex" sx={{ mt: 1.25 }}>
+          <CustomizedAutoCompleteHashTag hashTag={hashTag} setSelectedHashTag={setHashTag} />
+          <FormControl sx={{ ml: 2, width: 1 / 2 }}>
+            <label style={{ fontSize: 14, fontWeight: 700 }} htmlFor="event">
+              Hashtag tuỳ chỉnh
+            </label>
+            <Box sx={{ mt: 1 }}>
+              <TextField
+                value={customHashtag}
+                className={classes.input}
+                onChange={(e: any) => setCustomHashtag(e.target.value)}
+                id="title"
+                variant="outlined"
+                sx={{ width: 1, fontSize: 14, fontWeight: 500 }}
+                placeholder="Bắt đầu bằng dấu # và cách nhau bằng dấu , (ví dụ #assignment)"
+                required
+              />
+            </Box>
+          </FormControl>
           {isRequired("hashtag") && (
             <Typography variant="caption" sx={{ color: "red" }}>
               Vui lòng chọn hashtag
@@ -213,11 +240,15 @@ export const CreatePost = () => {
           <Select
             labelId="event"
             id="simple-select-autowidth"
+            defaultValue={"none"}
             value={selectedEvent?.eventContent.title}
             onChange={onChangeEvent}
-            className={classes.input}
+            className={!selectedEvent ? classes.selectPlaceholder : classes.input}
             fullWidth
             sx={{ mt: 1 }}>
+            <MenuItem className={classes.selectPlaceholder} value={"none"}>
+              Chọn đăng vào sự kiện bạn đang tham gia
+            </MenuItem>
             {eventJoint?.map((option: any) => (
               <MenuItem className={classes.input} key={option.eventContent.id} value={option}>
                 {option.eventContent.title.slice(0, 50)}...
@@ -231,16 +262,16 @@ export const CreatePost = () => {
               Ảnh
             </label>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            sx={{ mt: 1, height: 50, border: "1px dashed #c1c7d0", borderRadius: 0.5 }}>
-            <label htmlFor="icon-button-file">
+          <label htmlFor="icon-button-file">
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{ mt: 1, height: 50, border: "1px dashed #c1c7d0", borderRadius: 0.5 }}>
               <Input onChange={onUploadImage} accept="image/*" id="icon-button-file" multiple type="file" />
-              <Typography variant="subtitle2">Upload ảnh</Typography>
-            </label>
-          </Box>
+              <Typography variant="subtitle2">Thêm ảnh</Typography>
+            </Box>
+          </label>
         </Box>
         {images.length > 0 && <ImageBox />}
         <FormControl sx={{ mt: 1.25, width: 1 / 2 }}>
