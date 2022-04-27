@@ -491,7 +491,7 @@ const ManagerCTV = () => {
                       </TableCell>
                       <TableCell>
                         <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                          {row?.userInfo.updatedBy}
+                          {row?.updateName}
                         </Typography>
                       </TableCell>
 

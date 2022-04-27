@@ -76,7 +76,7 @@ const HomePage = () => {
             bạn cũng có thể trở thành người giải quyết vấn đề
           </Typography>
           <Grid container spacing={3}>
-            <Grid container item spacing={2} xs={12} md={3.7} lg={3.7} sx={{ height: "fit-content" }}>
+            <Grid container item spacing={2} xs={12} md={4} lg={4} sx={{ height: "fit-content" }}>
               <Grid item xs={12} sm={12}>
                 <MyPost data={data?.myRequestStats} />
               </Grid>
@@ -87,7 +87,7 @@ const HomePage = () => {
                 <ImageEvent />
               </Grid>
             </Grid>
-            <Grid item xs={12} md={7.5}>
+            <Grid item xs={12} md={8}>
               {unreadNoti.length > 0 &&
                 unreadNoti.slice(0, 3).map((item: any, index: number) => (
                   <Box className={classes.quickNoti} key={index} onClick={() => onClickPostDetail(item.postId)}>

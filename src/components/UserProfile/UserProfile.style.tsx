@@ -8,6 +8,7 @@ export const useStyles: any = makeStyles((theme) => ({
     fontFamily: "sans-serif",
     alignItems: "center",
     textAlign: "center",
+    marginTop: "64px",
   },
   userHeader: {
     width: "100%",

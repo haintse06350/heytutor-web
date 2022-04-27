@@ -214,16 +214,6 @@ const DashBoardLayout = ({ children }: any) => {
               <ListItem
                 button
                 sx={{ pl: 4 }}
-                onClick={() => handleChangePage("home-ctv")}
-                className={renderTabCurrent() === "home-ctv" ? classes.active : ""}>
-                <ListItemIcon>
-                  <PeopleAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cộng tác viên" />
-              </ListItem>
-              <ListItem
-                button
-                sx={{ pl: 4 }}
                 onClick={() => handleChangePage("home-manager")}
                 className={renderTabCurrent() === "home-manager" ? classes.active : ""}>
                 <ListItemIcon>

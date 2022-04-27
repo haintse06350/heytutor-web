@@ -79,7 +79,7 @@ export default function AppRoutes() {
 
           <Route path={"/login"} element={<Loginv2 />} />
           {/** chưa có page */}
-          <Route path={"/profile"} element={<UserProfile />} />
+          {/* <Route path={"/profile"} element={<UserProfile />} /> */}
           <Route path={"/event"} element={<NotFound />} />
           <Route path={"/notification"} element={<NotFound />} />
           <Route

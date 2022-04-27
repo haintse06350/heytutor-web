@@ -110,7 +110,7 @@ const ManagePost = () => {
   const renderManagerPost = () => {
     return (
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
           <Grid container item xs={12} spacing={1} sx={{ mt: 1, width: "100%" }}>
             <Grid item xs={12} lg={4} md={4}>
               <Box component="form" noValidate autoComplete="off">

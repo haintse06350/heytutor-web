@@ -44,30 +44,22 @@ const ManageEvent = () => {
   const [openDatePicker, setOpenDatePicker] = useState(false);
   // const [filters, setFilters]: any = useState({ status: "joined" });
   const [status, setStatus]: any = useState("all");
-  const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
-  const [visible, setVisible] = useState("deadlineTime");
   const [events, setEvents]: any = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
+  const [visible, setVisible] = useState("deadlineTime");
+  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
+  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
+  const [searchBy, setSearchBy] = React.useState("titleOfEvent");
+  const [dataEventOfCollaborator, setDataEventOfCollaborator] = useState(null);
+  const [rows, setRows]: any = useState(null);
 
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
-
-  const onChangeFilter = (event: any, type: string) => {
-    if (type === "time") {
-      if (event.target.value === "currentWeek") {
-        setValueFilterStartDate(moment().subtract(7, "days").toDate());
-        setValueFilterEndDate(moment().startOf("day").toDate());
-      } else if (event.target.value === "currentMonth") {
-        setValueFilterStartDate(moment().subtract(1, "months").toDate());
-        setValueFilterEndDate(moment().startOf("day").toDate());
-      }
-    }
-  };
-  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
-  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
 
   const [
     data = {
@@ -90,7 +82,18 @@ const ManageEvent = () => {
     },
   ]: // setData,
   any = useState();
-  const [searchBy, setSearchBy] = React.useState("titleOfEvent");
+
+  const onChangeFilter = (event: any, type: string) => {
+    if (type === "time") {
+      if (event.target.value === "currentWeek") {
+        setValueFilterStartDate(moment().subtract(7, "days").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      } else if (event.target.value === "currentMonth") {
+        setValueFilterStartDate(moment().subtract(1, "months").toDate());
+        setValueFilterEndDate(moment().startOf("day").toDate());
+      }
+    }
+  };
   const onChangeSearchBy = (e: SelectChangeEvent) => {
     setSearchBy(e.target.value);
   };
@@ -102,15 +105,16 @@ const ManageEvent = () => {
     navigate(`/dashboard/admin/create-event`);
   };
 
-  const [dataEventOfCollaborator, setDataEventOfCollaborator]: any = useState(null);
   const getDataEvent = async () => {
     const data = await Manager.getListEventOfCollaborator();
     setDataEventOfCollaborator(data);
+    setRows(data);
   };
+  console.log(rows, "rows");
+  console.log(dataEventOfCollaborator);
 
   useEffect(() => {
     getDataEvent();
-    console.log(dataEventOfCollaborator);
   }, []);
 
   useEffect(() => {
