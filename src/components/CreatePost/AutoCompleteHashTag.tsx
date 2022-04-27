@@ -10,7 +10,7 @@ const Root = styled("div")(
   ({ theme }) => `
   color: ${theme.palette.mode === "dark" ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,.85)"};
   font-size: 14px;
-  margin-top: 12px;
+  width: 50%;
 `
 );
 
@@ -24,13 +24,13 @@ const Label = styled("label")`
 const InputWrapper = styled("div")(
   ({ theme }) => `
   margin-top: 8px;
-  width: 50%;
+  width: 100%;
   dispaly: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid ${theme.palette.mode === "dark" ? "#434343" : "#d9d9d9"};
   background-color: ${theme.palette.mode === "dark" ? "#141414" : "#fff"};
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 1px;
   display: flex;
   flex-wrap: wrap;
@@ -59,6 +59,11 @@ const InputWrapper = styled("div")(
     border: 0;
     margin: 0;
     outline: 0;
+    ::placeholder { 
+      font-size: 14;
+      font-weight: 500;
+      color: #919eab;
+    }
   }
 `
 );
@@ -160,7 +165,7 @@ const Listbox = styled("ul")(
 `
 );
 
-export const CustomizedAutoCompleteHashTag = ({ setSelectedHashTag }: any) => {
+export const CustomizedAutoCompleteHashTag = ({ hashTag, setSelectedHashTag }: any) => {
   const [listCoutse, setListCoutse] = React.useState<any>([]);
   const {
     getRootProps,
@@ -201,7 +206,7 @@ export const CustomizedAutoCompleteHashTag = ({ setSelectedHashTag }: any) => {
           {value.map((option: CourseOptionType, index: number) => (
             <StyledTag label={option.courseCode} {...getTagProps({ index })} />
           ))}
-          <input {...getInputProps()} />
+          <input placeholder={hashTag?.length > 0 ? "" : "Gắn thẻ cho bài đăng của bạn"} {...getInputProps()} />
         </InputWrapper>
       </div>
       {groupedOptions.length > 0 ? (

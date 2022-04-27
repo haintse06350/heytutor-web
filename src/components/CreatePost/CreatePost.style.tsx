@@ -224,6 +224,14 @@ export const useStyles: any = makeStyles(() => ({
       fontWeight: 500,
     },
   },
+  selectPlaceholder: {
+    color: "#919eab",
+    fontSize: 14,
+    fontWeight: 500,
+    "& > input": {
+      color: "#919eab",
+    },
+  },
   image: {
     width: 150,
     height: 100,

@@ -95,7 +95,7 @@ export const GuidelinePage = () => {
     <Dialog
       classes={{ paper: classes.dialogPaper }}
       maxWidth="lg"
-      fullScreen
+      fullWidth
       open={openDialog || openGuideline}
       onClose={onCloseDialog}>
       <Box sx={{ padding: 0, margin: 0, width: "100%", height: 70 }}>
