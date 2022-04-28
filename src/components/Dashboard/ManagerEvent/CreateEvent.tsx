@@ -99,7 +99,7 @@ const CreateEvent = () => {
       viewCount: 0,
       title: eventTitle,
       description: eventDescription,
-      createdAt: startDate,
+      startAt: startDate,
       endAt: endDate,
       hashtag: JSON.stringify(map(hashTag, (item: any) => item.courseCode)),
       content: eventContent,
