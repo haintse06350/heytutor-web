@@ -105,16 +105,6 @@ const RegisteredPost = (props: any) => {
                 subTitle="Số vấn đề tôi đã đăng kí nhưng chưa được xác nhận"
                 onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
               />
-              {/* <StatItem
-                onHoverElem={onHoverElem}
-                setOnHoverElem={setOnHoverElem}
-                tab="onEvent"
-                icon={<ConfirmationNumberOutlinedIcon sx={{ color: theme.palette.grey[500] }} />}
-                data={data.nbOfPendingPost}
-                title="Chưa được xác nhận"
-                subTitle="Số vấn đề đăng kí hỗ trợ nhưng chưa được xác nhận"
-                onNavigate={() => onNavigate("/registered-request?detail=confirmed")}
-              /> */}
             </Box>
           )}
           <Divider />

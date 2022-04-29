@@ -1,40 +1,28 @@
-import React, { useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  Typography,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-  Grid,
-  Button,
-} from "@mui/material";
+import React from "react";
+import { Dialog, DialogTitle, Grid, Button, Typography, DialogActions } from "@mui/material";
 const JoinEvent = (props: any) => {
-  const { onClose, open } = props;
-  const [rollUser, setRollUser] = useState("1");
-  const handleChange = (event: SelectChangeEvent) => {
-    setRollUser(event.target.value as string);
-  };
+  const { onClose, open, data } = props;
+
   const handleClickClose = () => {
     onClose(onClose);
   };
   return (
-    <Dialog open={open} onClose={handleClickClose}>
+    <Dialog open={open} maxWidth="md" fullWidth>
       <Grid sx={{ p: 2 }}>
-        <DialogTitle>Đăng ký tham gia sự kiện</DialogTitle>
-        <Typography variant="h5"></Typography>
-        <InputLabel id="select-roll">Vai trò tham gia</InputLabel>
-        <Select labelId="select-roll" id="demo-simple-select" value={rollUser} label="rollUser" onChange={handleChange}>
-          <MenuItem value={1}>Tham gia hỗ trợ</MenuItem>
-          <MenuItem value={2}>Tham gia cần hỗ trợ</MenuItem>
-        </Select>
+        <DialogTitle>Bạn có chắc mình tham gia đúng sự kiện</DialogTitle>
+
+        <Typography>Tiêu đề : {data?.title}</Typography>
       </Grid>
-      <Button onClick={handleClickClose} variant="contained" sx={{ m: 2 }}>
-        Đăng kí
-      </Button>
+
+      <DialogActions>
+        <Button onClick={handleClickClose} sx={{ color: "#94a4c4" }}>
+          Hủy bỏ
+        </Button>
+        <Button variant="contained" onClick={handleClickClose}>
+          Đồng ý
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
-
 export default JoinEvent;

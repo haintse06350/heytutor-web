@@ -21,6 +21,7 @@ import {
   Chip,
   Select,
   SelectChangeEvent,
+  TablePagination,
 } from "@mui/material";
 //icon
 
@@ -36,7 +37,7 @@ import { useNavigate } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import moment from "moment";
-import { Manager } from "../../../../models/manager";
+// import { Manager } from "../../../../models/manager";
 import { Event } from "../../../../models/event";
 
 const ManageEvent = () => {
@@ -44,18 +45,28 @@ const ManageEvent = () => {
   const [openDatePicker, setOpenDatePicker] = useState(false);
   // const [filters, setFilters]: any = useState({ status: "joined" });
   const [status, setStatus]: any = useState("all");
-  const [events, setEvents]: any = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
-  const [visible, setVisible] = useState("deadlineTime");
+  const [visible, setVisible] = useState("nbOfJoinedDesc");
   const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
   const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
   const [searchBy, setSearchBy] = React.useState("titleOfEvent");
-  const [dataEventOfCollaborator, setDataEventOfCollaborator] = useState(null);
+
+  const [events, setEvents]: any = useState(null);
+
   const [rows, setRows]: any = useState(null);
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
@@ -71,9 +82,10 @@ const ManageEvent = () => {
         { value: "isPending", label: "Đang chờ duyệt" },
       ],
       sortOpts: [
-        { value: "deadlineTime", label: "Thời gian của sự kiện" },
-        { value: "nbOfJoined", label: "Số người tham gia" },
-        { value: "nbOfReported", label: "Số báo cáo xấu" },
+        { value: "nbOfJoinedDesc", label: "Số người tham gia giảm dần" },
+        { value: "nbOfJoinedAsc", label: "Số người tham gia tăng dần" },
+        { value: "nbOfReportedDesc", label: "Số báo cáo xấu giảm dần" },
+        { value: "nbOfReportedAsc", label: "Số báo cáo xấu tăng dần" },
       ],
       timeOpts: [
         { value: "currentWeek", label: "Tuần này" },
@@ -82,7 +94,12 @@ const ManageEvent = () => {
     },
   ]: // setData,
   any = useState();
-
+  const onChangeSearchBy = (e: SelectChangeEvent) => {
+    setSearchBy(e.target.value);
+  };
+  const handleCreateEvent = () => {
+    navigate(`/dashboard/admin/create-event`);
+  };
   const onChangeFilter = (event: any, type: string) => {
     if (type === "time") {
       if (event.target.value === "currentWeek") {
@@ -92,30 +109,12 @@ const ManageEvent = () => {
         setValueFilterStartDate(moment().subtract(1, "months").toDate());
         setValueFilterEndDate(moment().startOf("day").toDate());
       }
+    } else if (type === "visible") {
+      setVisible(event.target.value);
+    } else if (type === "status") {
+      setStatus(event.target.value);
     }
   };
-  const onChangeSearchBy = (e: SelectChangeEvent) => {
-    setSearchBy(e.target.value);
-  };
-  const handleVisible = (event: any) => {
-    setVisible(event.target.value);
-  };
-
-  const handleCreateEvent = () => {
-    navigate(`/dashboard/admin/create-event`);
-  };
-
-  const getDataEvent = async () => {
-    const data = await Manager.getListEventOfCollaborator();
-    setDataEventOfCollaborator(data);
-    setRows(data);
-  };
-  console.log(rows, "rows");
-  console.log(dataEventOfCollaborator);
-
-  useEffect(() => {
-    getDataEvent();
-  }, []);
 
   useEffect(() => {
     Event.getListEventByAdmin().then((res) => {
@@ -124,11 +123,41 @@ const ManageEvent = () => {
   }, []);
 
   useEffect(() => {
-    if (searchQuery) {
-      console.log("searchQuery", searchQuery);
+    if (searchQuery === null || searchQuery === "") {
+      setRows(events);
+    } else {
+      let dataFilter;
+      if (searchBy === "titleOfEvent") {
+        dataFilter = events.filter((item: any) => {
+          return item?.title.toLowerCase().includes(searchQuery.toLowerCase());
+        });
+      }
+      //  else if (searchBy === "nameOfCTV") {
+      //   dataFilter = dataEventOfCollaborator.filter((item: any) => {
+      //     return item.nameOfCTV.toLowerCase().includes(searchQuery.toLowerCase());
+      //   });
+      // }
+      setRows(dataFilter);
     }
-  }, [searchQuery]);
+  }, [searchQuery, status]);
 
+  // useEffect(() => {
+  //   let dataFilter;
+  //   if (status === "all") {
+  //     dataFilter = events.filter((event: any) => {
+  //       return event?.isApproved?.includes("0") || event?.isApproved?.includes("1");
+  //     });
+  //   } else if (status === "isActive") {
+  //     dataFilter = events.filter((event: any) => {
+  //       return event?.isApproved?.includes("1");
+  //     });
+  //   } else if (status === "isPending") {
+  //     dataFilter = events.filter((event: any) => {
+  //       return event?.isApproved?.includes("0");
+  //     });
+  //   }
+  //   setFilterEvent(dataFilter);
+  // }, []);
   return (
     <div className={classes.wrapManageEvent}>
       <Box display="flex" alignItems="center" justifyContent="flex-end" sx={{ mb: 2 }}>
@@ -190,6 +219,7 @@ const ManageEvent = () => {
             <Box component="form" noValidate autoComplete="off">
               <TextField
                 autoFocus
+                value={searchQuery}
                 onChange={(e: any) => setSearchQuery(e.target.value)}
                 classes={{ root: classes.textField }}
                 fullWidth
@@ -230,7 +260,8 @@ const ManageEvent = () => {
                 label="Hiển thị theo"
                 defaultValue="isNotResolve"
                 value={visible}
-                onChange={(event) => handleVisible(event)}>
+                // onChange={(event) => handleVisible(event)}
+                onChange={(event) => onChangeFilter(event, "visible")}>
                 {data.sortOpts.map((option: any) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
@@ -249,7 +280,8 @@ const ManageEvent = () => {
                 label="Trạng thái"
                 defaultValue="all"
                 value={status}
-                onChange={(e: any) => setStatus(e.target.value)}>
+                // onChange={(e: any) => setStatus(e.target.value)}>
+                onChange={(e: any) => onChangeFilter(e, "status")}>
                 {data?.eventStatus.map((option: any) => (
                   <MenuItem key={option.value} value={option.value} defaultValue="all">
                     {option.label}
@@ -283,13 +315,13 @@ const ManageEvent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {events?.map((row: any) => (
-              <TableRow key={row} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row: any, index: number) => (
+              <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell component="th" scope="row">
-                  {row.id}
+                  {row?.id}
                 </TableCell>
-                <TableCell>{row.title}</TableCell>
-                <TableCell align="center">{row.endAt}</TableCell>
+                <TableCell>{row?.title}</TableCell>
+                <TableCell align="center">{moment(row.endAt).fromNow()}</TableCell>
                 <TableCell align="center">{Math.floor(Math.random() * 100)}</TableCell>
                 <TableCell align="center">{row.isApproved ? Math.floor(Math.random() * 10) : 0}</TableCell>
                 <TableCell>
@@ -310,6 +342,15 @@ const ManageEvent = () => {
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 20]}
+          component="div"
+          count={rows?.length || 0}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
     </div>
   );

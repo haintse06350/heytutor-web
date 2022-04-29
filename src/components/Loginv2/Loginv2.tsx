@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, InputAdornment, TextField, Typography } from "@mui/material";
 import { Google as GoogleIcon } from "../../assets/google";
 import { useNavigate } from "react-router-dom";
 import { UserCtx } from "../../context/user/state";
 import { User } from "../../models/users";
-
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import LockIcon from "@mui/icons-material/Lock";
 const Loginv2 = () => {
   const navigate = useNavigate();
   const { login }: any = useContext(UserCtx);
@@ -42,21 +43,21 @@ const Loginv2 = () => {
           flexGrow: 1,
           minHeight: "100%",
         }}>
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" sx={{ background: "#fff", borderRadius: 1 }}>
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
-              <Typography color="textPrimary" variant="h4" sx={{ textAlign: "left" }}>
+              <Typography color="textPrimary" variant="h6" sx={{ textAlign: "left" }}>
                 Đăng nhập
               </Typography>
             </Box>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12} md={12}>
                 <Button
                   fullWidth
                   color="error"
                   startIcon={<GoogleIcon />}
                   onClick={(e: any) => formik.handleSubmit(e)}
-                  size="large"
+                  size="medium"
                   variant="contained">
                   Đăng nhập với tài khoản FPT
                 </Button>
@@ -76,6 +77,7 @@ const Loginv2 = () => {
               fullWidth
               helperText={formik.touched.email && formik.errors.email}
               label="Email"
+              placeholder="Email"
               margin="normal"
               name="email"
               onBlur={formik.handleBlur}
@@ -84,12 +86,20 @@ const Loginv2 = () => {
               value={formik.values.email}
               variant="outlined"
               disabled={formik.isSubmitting}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               error={Boolean(formik.touched.password && formik.errors.password)}
               fullWidth
               helperText={formik.touched.password && formik.errors.password}
               label="Mật khẩu"
+              placeholder="Mật khẩu"
               margin="normal"
               name="password"
               onBlur={formik.handleBlur}
@@ -98,13 +108,20 @@ const Loginv2 = () => {
               value={formik.values.password}
               variant="outlined"
               disabled={formik.isSubmitting}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                ),
+              }}
             />
             <Box sx={{ py: 2 }}>
               <Button
                 color="primary"
                 disabled={formik.isSubmitting}
                 fullWidth
-                size="large"
+                size="medium"
                 type="submit"
                 variant="contained">
                 Đăng nhập
