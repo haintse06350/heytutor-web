@@ -1,7 +1,7 @@
 import React from "react";
 // material
 import { styled } from "@mui/material/styles";
-import { Card, CardHeader, Divider, FormControl, InputLabel, MenuItem, Box } from "@mui/material";
+import { Card, CardHeader, Divider, FormControl, MenuItem, Box } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useStyles } from "./Layout.style";
 
@@ -55,10 +55,8 @@ const MainTabLayout = (props: any) => {
           <CardHeader title={title} sx={{ p: 0, ml: 1, fontSize: "0.9rem", fontWeight: "400" }} />
         </Box>
         <FormControl sx={{ width: 1 / 3 }}>
-          <InputLabel id="demo-simple-select-label">Thời gian</InputLabel>
           <Select
             classes={{ select: classes.selectRoot }}
-            labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={sortListRegister}
             defaultValue="Tháng này"

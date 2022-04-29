@@ -71,12 +71,13 @@ const OnGoingEvent = () => {
               <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
                 <img src={demoImg6} alt="" />
                 <Typography
+                  sx={{ mt: 1, width: "100%" }}
                   className={classes.titleEvent}
                   variant="subtitle1"
                   onClick={() => handleViewDetail(item?.eventContent?.id)}>
                   {item?.eventContent?.title}
                 </Typography>
-                <Typography variant="caption" sx={{ ml: 2, mb: 1 }}>
+                <Typography variant="caption" sx={{ ml: 2, mb: 1, color: "#000" }}>
                   {item?.eventContent?.description}
                 </Typography>
               </Grid>

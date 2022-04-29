@@ -27,7 +27,7 @@ const EventDuration = (data: any) => {
 
   const [showListEvent, setShowListEvent] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-
+  const [eventSelected, setEventSelected] = useState(null);
   const handleViewDetail = (eventId: any) => {
     navigate(`/event-detail?eventid=${eventId}`);
   };
@@ -36,8 +36,9 @@ const EventDuration = (data: any) => {
     navigate(`/event-list`);
   };
 
-  const handleClickOpenDialog = () => {
+  const handleClickOpenDialog = (data: any) => {
     setOpenDialog(true);
+    setEventSelected(data);
   };
 
   useEffect(() => {
@@ -51,12 +52,12 @@ const EventDuration = (data: any) => {
           <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
             <img src={demoImg6} alt="" />
             <Typography
-              variant="h5"
-              sx={{ ml: 1, cursor: "pointer" }}
+              variant="subtitle1"
+              sx={{ mt: 1, cursor: "pointer", textDecoration: "underline", width: "100%" }}
               onClick={() => handleViewDetail(item?.eventDetail?.id)}>
               {item?.eventDetail?.title}
             </Typography>
-            <Typography variant="body1" sx={{ ml: 2 }}>
+            <Typography variant="caption" sx={{ ml: 2 }}>
               {item?.eventDetail?.description}
             </Typography>
           </Grid>
@@ -113,11 +114,11 @@ const EventDuration = (data: any) => {
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
                 size="small"
-                color="secondary"
+                color="primary"
                 variant="contained"
                 sx={{ width: 200 }}
                 endIcon={<ArrowForwardIcon />}
-                onClick={handleClickOpenDialog}>
+                onClick={() => handleClickOpenDialog(item?.eventDetail)}>
                 Đăng ký
               </Button>
             </Box>
@@ -126,7 +127,7 @@ const EventDuration = (data: any) => {
         </Box>
       ))}
 
-      <JoinEvent open={openDialog} onClose={() => setOpenDialog(false)}></JoinEvent>
+      <JoinEvent open={openDialog} onClose={() => setOpenDialog(false)} data={eventSelected}></JoinEvent>
       {showListEvent && (
         <Box sx={{ p: 2, textAlign: "right" }}>
           <Typography sx={{ mb: 1 }}>Đăng hiển thị: 3/{data?.length}</Typography>

@@ -75,6 +75,7 @@ const EventDetail = () => {
               <Typography variant="subtitle2" color="textSecondary">
                 {event?.eventContent.description}
               </Typography>
+              <Typography>{event?.eventContent.description}</Typography>
               <Box sx={{ background: "#d8dfe6", borderRadius: 1, p: 1, mt: 1 }}>
                 <Typography variant="subtitle2">
                   Tổng số bài đăng:{" "}
