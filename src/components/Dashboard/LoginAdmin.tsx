@@ -96,7 +96,7 @@ const LoginAdmin = () => {
         />
         <Button
           className={classes.btnSubmit}
-          variant="outlined"
+          variant="contained"
           color="primary"
           fullWidth
           onClick={onLogin}

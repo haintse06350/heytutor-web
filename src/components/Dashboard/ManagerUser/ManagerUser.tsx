@@ -128,8 +128,8 @@ export const ManagerUser = () => {
     }
   };
 
-  const handleLink = (props: any) => {
-    navigate(`/dashboard/manage-user/${props}`);
+  const handleLink = (userId: any, eventId: any) => {
+    navigate(`/dashboard/manage-user/detail?userId=${userId}&eventId=${eventId}`);
   };
   const [openDialogManageUser, setOpenDialogManageUser] = useState(false);
   const closeDialog = () => {
@@ -230,7 +230,7 @@ export const ManagerUser = () => {
           <Grid container spacing={1} sx={{ width: "100%" }}>
             <Grid item xs={6} md={4} lg={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
-                <FormControl>
+                <FormControl fullWidth>
                   <TextField
                     autoFocus
                     classes={{ root: classes.textField }}
@@ -349,8 +349,8 @@ export const ManagerUser = () => {
                     <Typography
                       variant="subtitle1"
                       sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
-                      onClick={() => handleLink("detail")}>
-                      Chưa giải quyết: {row?.nbOfNotResolvedReport.length}/{row?.nbOfReport.length}
+                      onClick={() => handleLink(row?.userInfo.id, row?.eventInfo.id)}>
+                      Chưa giải quyết: {row?.nbOfNotResolvedReport.listReport.length}/{row?.nbOfReport.length}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: "100px" }}>

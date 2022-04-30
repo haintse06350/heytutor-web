@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, Tab, Box, Typography, Grid, Card, Chip, Button } from "@mui/material";
 // import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,8 @@ import EmailIcon from "@mui/icons-material/Email";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import BreadcrumbsTab from "../../Common/Breadcrumbs/Breadcrumbs";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { Manager } from "../../../models/manager";
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -40,12 +41,28 @@ function a11yProps(index: number) {
   };
 }
 const ManageUserDetail = (props: any) => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [dataDetail, setDataDetail]: any = useState(null);
+  const [dataReports, setDataReports]: any = useState(null);
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get("userId");
+  const eventId = urlParams.get("eventId");
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  const getUserReportById = async (userId: any, eventId: any) => {
+    const res = await Manager.getUserReportById({ userId: parseInt(userId), eventId: parseInt(eventId) });
+    setDataDetail(res);
+    setDataReports(res?.listReportNotResolved);
+  };
+
+  useEffect(() => {
+    if (eventId && userId) {
+      getUserReportById(userId, eventId);
+    }
+  }, [eventId, userId]);
   return (
     <Box sx={{ width: "100%" }}>
       <BreadcrumbsTab
@@ -56,9 +73,7 @@ const ManageUserDetail = (props: any) => {
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Box sx={{ display: "flex", p: 1 }}>
           <AccountCircleIcon sx={{ mr: 1 }} />
-          <Typography variant="h6">Cao Duc Anh</Typography>
-          <EmailIcon sx={{ ml: 4, mr: 1 }} />
-          <Typography variant="h6">anhcd@fpt.edu.vn</Typography>
+          <Typography variant="h6">{dataDetail?.listReportNotResolved.userInfo?.name}</Typography>
         </Box>
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -70,58 +85,52 @@ const ManageUserDetail = (props: any) => {
       <TabPanel value={value} index={0}>
         <Box>
           <Grid container>
-            <Grid item xs={12} md={6} lg={6}>
-              <Card sx={{ p: 2 }}>
-                <Typography variant="h6">Người báo cáo xấu</Typography>
-                <Grid container>
-                  <Grid item xs={1}>
-                    <AccountCircleIcon />
+            {dataReports?.map((item: any, index: number) => (
+              <Grid key={index} item xs={12} md={6} lg={6}>
+                <Card sx={{ p: 2 }}>
+                  <Typography variant="h6">Người báo cáo xấu</Typography>
+                  <Grid container>
+                    <Grid item xs={1}>
+                      <AccountCircleIcon />
+                    </Grid>
+                    <Grid item xs={3} sx={{ display: "flex", justifyContent: "space-between" }}>
+                      <Typography variant="subtitle1">Tên </Typography>
+                      <Typography variant="subtitle1">:</Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Typography> &nbsp; {item?.reportDetail?.reportedName}</Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography variant="subtitle1">Tên </Typography>
-                    <Typography variant="subtitle1">:</Typography>
+                  <Grid container>
+                    <Grid item xs={1}>
+                      <EmailIcon />
+                    </Grid>
+                    <Grid item xs={3} sx={{ display: "flex", justifyContent: "space-between" }}>
+                      <Typography variant="subtitle1">Hòm thư </Typography>
+                      <Typography variant="subtitle1">:</Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Typography>&nbsp; anhcd4@gmail.com</Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={8}>
-                    <Typography> &nbsp; Cao Duc Anh</Typography>
-                  </Grid>
-                </Grid>
-                <Grid container>
-                  <Grid item xs={1}>
-                    <EmailIcon />
-                  </Grid>
-                  <Grid item xs={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography variant="subtitle1">Hòm thư </Typography>
-                    <Typography variant="subtitle1">:</Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography>&nbsp; anhcd4@gmail.com</Typography>
-                  </Grid>
-                </Grid>
-                <Box sx={{ display: "flex" }}>
-                  <EventNoteIcon sx={{ mr: 1 }} />
-                  <Typography variant="h6">Title sự kiện tham gia</Typography>
-                </Box>
-                <Box sx={{ display: "flex" }}>
-                  <AccessTimeIcon sx={{ mr: 1 }} />
-                  <Typography variant="subtitle1">28/4/2022</Typography>
-                </Box>
-                <Typography variant="subtitle1">Lí do báo cáo xấu :</Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Chip label="Giả mạo" />
-                  <Chip label="Lừa đảo" />
-                </Box>
+                  <Box sx={{ display: "flex" }}>
+                    <EventNoteIcon sx={{ mr: 1 }} />
+                    <Typography variant="h6">{dataDetail?.listReportNotResolved?.eventTitle?.title}</Typography>
+                  </Box>
 
-                <Typography variant="subtitle1">Nội dung báo cáo xấu : </Typography>
-                <Typography>
-                  mục đích: + Thể hiện được trình độ, thái độ của supporter. giúp người dùng có cái nhìn tổng quan về
-                  supporter để dễ dàng lựa chọn người giúp đỡ. + Phản ánh đánh giá của người dùng cho từng supporter. +
-                  Supporter: Tăng khả năng lựa chọn nếu được đánh giá số điểm tốt. Ghi nhận hỗ trợ càng nhiều bài đăng
-                  đã đóng thì profile càng đẹp
-                </Typography>
+                  <Typography variant="subtitle1">Lí do báo cáo xấu :</Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Chip label="Giả mạo" />
+                    <Chip label="Lừa đảo" />
+                  </Box>
 
-                <Button>Kiểm tra tính đúng đắn</Button>
-              </Card>
-            </Grid>
+                  <Typography variant="subtitle1">Nội dung báo cáo xấu : </Typography>
+                  <Typography>{item?.reportDetail?.reason}</Typography>
+
+                  <Button>Kiểm tra tính đúng đắn</Button>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
         </Box>
       </TabPanel>

@@ -88,8 +88,8 @@ const DashBoardLayout = ({ children }: any) => {
   const theme = useTheme();
   const classes = useStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [openTab, setOpenTab] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [openTab, setOpenTab] = useState(true);
   const { user } = useContext(UserCtx);
   const admin = user;
 
@@ -206,10 +206,9 @@ const DashBoardLayout = ({ children }: any) => {
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Trang chủ quản lí" />
-              {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
             </ListItem>
           )}
-          <Collapse in={openTab} timeout="auto" unmountOnExit>
+          <Collapse in={true} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem
                 button
