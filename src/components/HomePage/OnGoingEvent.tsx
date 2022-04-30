@@ -66,7 +66,7 @@ const OnGoingEvent = () => {
     } else {
       return (
         <>
-          {data?.slice(0, 3).map((item: any, index: number) => (
+          {data.slice(0, 3).map((item: any, index: number) => (
             <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4, mb: 3 }}>
               <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
                 <img src={demoImg6} alt="" />

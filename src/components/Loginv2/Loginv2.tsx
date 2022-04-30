@@ -8,6 +8,7 @@ import { UserCtx } from "../../context/user/state";
 import { User } from "../../models/users";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
+import Logo from "../../assets/logo.PNG";
 const Loginv2 = () => {
   const navigate = useNavigate();
   const { login }: any = useContext(UserCtx);
@@ -43,6 +44,12 @@ const Loginv2 = () => {
           flexGrow: 1,
           minHeight: "100%",
         }}>
+        <Box sx={{ position: "relative" }}>
+          <Typography variant="h3" sx={{ position: "absolute", top: "15%", right: "12%" }}>
+            Chào mừng bạn đến với hệ thống
+          </Typography>
+          <img src={Logo} alt="logo" />
+        </Box>
         <Container maxWidth="sm" sx={{ background: "#fff", borderRadius: 1 }}>
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>

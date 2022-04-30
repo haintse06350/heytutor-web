@@ -28,7 +28,9 @@ export const useStyles = makeStyles({
   inputPassword: {
     margin: "30px 0px !important",
   },
-  btnSubmit: {},
+  btnSubmit: {
+    marginBottom: "20px",
+  },
   btnGoogle: {
     marginTop: "30px !important",
     textTransform: "none",
