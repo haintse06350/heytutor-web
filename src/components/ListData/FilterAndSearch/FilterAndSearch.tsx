@@ -53,6 +53,7 @@ export default function FilterAndSearch(props: any) {
     sortBy,
     resetData,
     onListEvent,
+    rawMyRequestData,
   } = props;
   const [dateData, setDateData] = React.useState<DateRange<Date>>([null, null]);
   // const [postStatus, setPostStatus] = React.useState("");
@@ -133,33 +134,32 @@ export default function FilterAndSearch(props: any) {
   };
 
   const renderTabMyRequestLabel = (label: string) => {
-    console.log("data", data);
     let count = 0;
     let labelText = "";
 
     switch (label) {
       case "isConfirmed": {
-        count = data?.postHasSupporter.length;
+        count = rawMyRequestData?.postHasSupporter.length;
         labelText = "Đã có supporter";
         break;
       }
       case "isActive": {
-        count = data?.postHasRegister.length;
+        count = rawMyRequestData?.postHasRegister.length;
         labelText = "Chưa chọn supporter";
         break;
       }
       case "isPending": {
-        count = data?.postHasNoRegister.length;
+        count = rawMyRequestData?.postHasNoRegister.length;
         labelText = "Chưa có người đăng kí";
         break;
       }
       case "isOnEvent": {
-        count = data?.postOnEvent.length;
+        count = rawMyRequestData?.postOnEvent.length;
         labelText = "Đang trong sự kiện";
         break;
       }
       case "isDone": {
-        count = data?.postDone.length;
+        count = rawMyRequestData?.postDone.length;
         labelText = "Đã xong";
         break;
       }
@@ -178,8 +178,6 @@ export default function FilterAndSearch(props: any) {
   const handleViewMoreHashtag = () => {
     setViewMoreHashtag(viewMoreHashtag + 3);
   };
-
-  console.log("register data", data);
 
   React.useEffect(() => {
     if (query === "") {

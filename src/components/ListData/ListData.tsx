@@ -202,6 +202,7 @@ export const ListData = () => {
           tabValue={isRegistered ? tabValue : tabRequestValue}
           onChangeTab={isRegistered ? onChangeTab : onChangeRequestTab}
           onClickHashtag={onClickHashtag}
+          rawMyRequestData={myRequestData}
           setRegisterDataFilter={setRegisterDataFilter}
           setMyRequestFilter={setMyRequestFilter}
           setSortBy={setSortDataBy}
