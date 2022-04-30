@@ -45,6 +45,7 @@ export default function FilterAndSearch(props: any) {
     onClickHashtag,
     isSelectedHashtag,
     setRegisterDataFilter,
+    setMyRequestFilter,
     data,
     filters,
     setFilters,
@@ -132,6 +133,7 @@ export default function FilterAndSearch(props: any) {
   };
 
   const renderTabMyRequestLabel = (label: string) => {
+    console.log("data", data);
     let count = 0;
     let labelText = "";
 
@@ -177,29 +179,58 @@ export default function FilterAndSearch(props: any) {
     setViewMoreHashtag(viewMoreHashtag + 3);
   };
 
+  console.log("register data", data);
+
   React.useEffect(() => {
     if (query === "") {
       resetData();
     } else {
       let filterData;
+      let dataToSearch: any;
       if (searchBy === "title") {
-        filterData = data?.filter((item: any) => {
-          return item.title.toLowerCase().includes(query.toLowerCase());
+        switch (tabValue) {
+          case "isConfirmed": {
+            dataToSearch = data?.postHasSupporter;
+            break;
+          }
+          case "isActive": {
+            dataToSearch = data?.postHasRegister;
+            break;
+          }
+          case "isPending": {
+            dataToSearch = data?.postHasNoRegister;
+            break;
+          }
+          case "isOnEvent": {
+            dataToSearch = data?.postOnEvent;
+            break;
+          }
+          case "isDone": {
+            dataToSearch = data?.postDone;
+            break;
+          }
+        }
+        console.log("dataToSearch", dataToSearch);
+        filterData = dataToSearch?.filter((item: any) => {
+          return item.postData.title.toLowerCase().includes(query.toLowerCase());
         });
+
+        console.log("filterData", filterData);
       }
       if (searchBy === "content") {
-        filterData = data?.filter((item: any) => {
-          return item.content.toLowerCase().includes(query.toLowerCase());
+        filterData = dataToSearch?.postData.filter((item: any) => {
+          return item.postData.content.toLowerCase().includes(query.toLowerCase());
         });
       }
 
       if (searchBy === "user") {
-        filterData = data?.filter((item: any) => {
-          return item.name.toLowerCase().includes(query.toLowerCase());
+        filterData = dataToSearch?.postData.filter((item: any) => {
+          return item.postData.name.toLowerCase().includes(query.toLowerCase());
         });
       }
 
       setRegisterDataFilter(filterData);
+      setMyRequestFilter(filterData);
     }
   }, [query, searchBy]);
 

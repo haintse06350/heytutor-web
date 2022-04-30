@@ -11,6 +11,7 @@ import "moment/locale/vi";
 
 export const ListPost = (props: any) => {
   const { data, onClickPostDetail, selectItem, onOpenMenu, renderRegisterAndSupporter } = props;
+
   const classes = useStyles();
   return (
     <>
@@ -25,26 +26,34 @@ export const ListPost = (props: any) => {
                 <Typography variant="caption" noWrap>
                   Bài đăng từ {moment(item.createdAt).format("DD/MM")}
                 </Typography>
-                <div className={classes.dueDate}>
-                  <AccessTimeOutlinedIcon
-                    sx={{
-                      color: isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow())
-                        ? "#d32f2f"
-                        : "#94a4c4",
-                    }}
-                  />
-                  <Typography
-                    variant="subtitle2"
-                    className={clsx(
-                      classes.deadline,
-                      isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow()) && classes.nearDeadline
-                    )}>
-                    Đến hạn cần giải quyết trong {moment(item.postData.deadline).endOf("hours").fromNow()}
-                  </Typography>
-                </div>
+                {item.postData.deadline ? (
+                  <div className={classes.dueDate}>
+                    <AccessTimeOutlinedIcon
+                      sx={{
+                        color: isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow())
+                          ? "#d32f2f"
+                          : "#94a4c4",
+                      }}
+                    />
+                    <Typography
+                      variant="subtitle2"
+                      className={clsx(
+                        classes.deadline,
+                        isNearDeadline(moment(item.postData.deadline).endOf("hours").fromNow()) && classes.nearDeadline
+                      )}>
+                      Đến hạn cần giải quyết trong {moment(item.postData.deadline).endOf("hours").fromNow()}
+                    </Typography>
+                  </div>
+                ) : (
+                  <div className={classes.dueDate}>
+                    <Typography variant="subtitle2" className={classes.deadline}>
+                      Không có hạn deadline
+                    </Typography>
+                  </div>
+                )}
               </div>
               <div>
-                <MoreVertRoundedIcon onClick={onOpenMenu} />
+                <MoreVertRoundedIcon onClick={(e: any) => onOpenMenu(e, item)} />
               </div>
             </div>
             {renderRegisterAndSupporter && (

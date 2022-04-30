@@ -1,7 +1,7 @@
 import fetch from "isomorphic-unfetch";
 import _ from "lodash";
 
-const api = process.env.REACT_APP_API || "http://localhost:3001";
+const api = process.env.REACT_APP_API || "http://34.207.112.134:3001";
 const getSessionId = () => localStorage.getItem("heytutor-user");
 
 export default class Network {

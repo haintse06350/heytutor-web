@@ -36,6 +36,7 @@ import { NotificationCtx } from "../../../context/notification/state";
 import { ConfirmDialog } from "../../Common/ConfirmDialog/ConfirmDialog";
 import { UserPost } from "../../../models/user-post";
 import { ListPost } from "./ListPost";
+import { EditPost } from "./EditPost";
 
 const FILTER_REGISTER = [
   {
@@ -53,7 +54,7 @@ const FILTER_REGISTER = [
 ];
 
 export default function MyRequestContent(props: any) {
-  const { tabValue, data } = props;
+  const { tabValue, data, setData } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [openListRegisterDialog, setOpenListRegisterDialog]: any = React.useState(false);
@@ -64,7 +65,10 @@ export default function MyRequestContent(props: any) {
   const [selectedRegister, setSelectedRegister]: any = React.useState(null);
   const [sortListRegister, setSortListRegister] = React.useState("registerTime");
   const [loading, setLoading] = React.useState(false);
+  const [editedPost, setEditedPost] = React.useState<any>(null);
 
+  const [openEdit, setOpenEdit] = React.useState(false);
+  console.log("data", data);
   const { onOpenMsgBox } = React.useContext(MsgCtx);
   const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
 
@@ -84,9 +88,24 @@ export default function MyRequestContent(props: any) {
     setOpenConfirmRegister(false);
   };
 
-  const onConfirmRemoveRegister = () => {
-    setNotificationSuccess(`Đã xoá ${userSelected?.username} khỏi danh sách người đăng kí`);
-    setOpenBlockDialog(false);
+  const onConfirmRemoveRegister = async () => {
+    try {
+      setLoading(true);
+      await UserPost.removeRegister({ postId: selectItem.postId, registerId: userSelected.id });
+      setSelectedRegister(userSelected);
+      setOpenBlockDialog(false);
+      const newListRegisterUser = selectItem.registerUsers.filter((item: any) => item.id !== userSelected.id);
+      if (newListRegisterUser.length === 0) {
+        setOpenListRegisterDialog(false);
+      }
+      const updatedItem = { ...selectItem, registerUsers: newListRegisterUser };
+      setSelectItem(updatedItem);
+      setNotificationSuccess(`Đã xoá ${userSelected?.username} khỏi danh sách người đăng kí`);
+    } catch (error) {
+      console.log(error);
+      setNotificationError("Có lỗi xảy ra, vui lòng thử lại sau");
+    }
+    setLoading(false);
   };
 
   const onClickRemoveRegisterUser = (user: any) => {
@@ -109,12 +128,14 @@ export default function MyRequestContent(props: any) {
     setSelectItem(item);
   };
 
-  const onOpenMenu = (event: any) => {
+  const onOpenMenu = (event: any, item: any) => {
     setAnchorEl(event.currentTarget);
+    setSelectItem(item);
   };
 
   const onCloseMenu = (event: SelectChangeEvent) => {
     setAnchorEl(null);
+    setSelectItem(null);
   };
 
   const onChangeSort = (event: SelectChangeEvent) => {
@@ -131,10 +152,11 @@ export default function MyRequestContent(props: any) {
   const onConfirmSupporter = async () => {
     try {
       setLoading(true);
-      await UserPost.addSupporter({ postId: selectItem.id, registerId: userSelected.id });
+      await UserPost.addSupporter({ postId: selectItem.postId, registerId: userSelected.id });
       setOpenConfirmRegister(false);
       setOpenListRegisterDialog(false);
       setSelectedRegister(userSelected);
+      navigate(`/post-detail?postId=${selectItem.postId}&tab=isActive&from=my-request`);
       setNotificationSuccess(`Đã chọn ${userSelected?.username} làm supporter cho vấn đề này`);
     } catch (error) {
       setNotificationError("Có lỗi xảy ra, vui lòng thử lại sau");
@@ -154,15 +176,39 @@ export default function MyRequestContent(props: any) {
       });
     }
 
+    const renderPostStatus = () => {
+      if (tabValue === "isOnEvent") {
+        return "Đang trong sự kiện";
+      }
+      if (tabValue === "isConfirmed") {
+        return "hỗ trợ bạn vấn đề này";
+      } else if (tabValue === "isActive" && listUsers?.length > 0) {
+        return "đăng ký hỗ trợ";
+      } else if (tabValue === "isPending") {
+        return "chưa có người đăng ký hỗ trợ";
+      } else if (tabValue === "isDone") {
+        return "đã hoàn thành";
+      }
+    };
+
     return (
-      <div className={classes.listSupporter} onClick={() => onClickOpenListRegister(item)}>
+      <div className={classes.listSupporter} onClick={() => listUsers?.length > 0 && onClickOpenListRegister(item)}>
         <div className={classes.listSupporterTitle}>
           {listUsers?.length <= 2 ? (
-            <Typography variant="subtitle2" sx={{ mr: 1, fontSize: 14, fontWeight: 500, cursor: "pointer" }}>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                mr: 1,
+                fontSize: 14,
+                fontWeight: 500,
+                cursor: "pointer",
+                textDecoration: tabValue === "isOnEvent" ? "underline" : "none",
+              }}
+              onClick={() => tabValue === "isOnEvent" && navigate(`/event-detail?eventid=${item.eventId}`)}>
               {map(listUsers, (username: string) => (
                 <span style={{ fontWeight: 600 }}>{username}</span>
               ))}{" "}
-              {tabValue === "isActive" ? "hỗ trợ bạn vấn đề này" : tabValue === "isPending" ? "đăng ký hỗ trợ" : ""}
+              {renderPostStatus()}
             </Typography>
           ) : (
             <>
@@ -180,12 +226,14 @@ export default function MyRequestContent(props: any) {
             </>
           )}
         </div>
-        <Typography
-          variant="subtitle2"
-          color="primary"
-          sx={{ minWidth: 50, fontSize: 12, fontWeight: 500, cursor: "pointer" }}>
-          Xem chi tiết
-        </Typography>
+        {listUsers?.length > 0 && (
+          <Typography
+            variant="subtitle2"
+            color="primary"
+            sx={{ minWidth: 50, fontSize: 12, fontWeight: 500, cursor: "pointer" }}>
+            Xem chi tiết
+          </Typography>
+        )}
       </div>
     );
   };
@@ -298,9 +346,29 @@ export default function MyRequestContent(props: any) {
     );
   };
 
+  React.useEffect(() => {
+    if (editedPost) {
+      data?.map((item: any) => {
+        if (item.id === editedPost.id) {
+          item.postData = editedPost;
+        }
+        return item;
+      });
+      setData(data);
+      setAnchorEl(null);
+      setSelectItem(null);
+    }
+  }, [editedPost]);
+
   return (
     <Box sx={{ mt: 2 }}>
       {renderSupporterRegisterDialog()}
+      <EditPost
+        openDialog={openEdit}
+        onCloseDialog={() => setOpenEdit(false)}
+        post={selectItem}
+        setEditedPost={setEditedPost}
+      />
       <ConfirmDialog
         dialogTitle="Xoá khỏi danh sách người đăng kí"
         dialogContent="Bạn có chắc chắn muốn loại người này khỏi danh sách đăng kí?"
@@ -308,6 +376,7 @@ export default function MyRequestContent(props: any) {
         cancelAction={onCloseRemoveDialog}
         open={openBlockDialog}
         onClose={onCloseRemoveDialog}
+        loadingConfirm={loading}
       />
       <ConfirmDialog
         dialogTitle="Xác nhận chọn người hỗ trợ"
@@ -342,11 +411,8 @@ export default function MyRequestContent(props: any) {
           <Box
             className={classes.actions}
             sx={{ display: "flex", alignItems: "center", flexDirection: "column", py: 1, px: 1 }}>
-            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
+            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }} onClick={() => setOpenEdit(true)}>
               Chỉnh sửa
-            </Typography>
-            <Typography variant="subtitle2" sx={{ py: 0.5, px: 2 }}>
-              Cập nhật trạng thái
             </Typography>
           </Box>
         </Popover>

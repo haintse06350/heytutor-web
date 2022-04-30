@@ -9,13 +9,14 @@ import { Post } from "../../models/post";
 import RegisterContent from "./ListRequest/RegisterContent";
 import MyRequestContent from "./ListRequest/MyRequestContent";
 import { countBy, flattenDeep, map } from "lodash";
+import { useNavigate } from "react-router-dom";
 
 export const ListData = () => {
   // const classes = useStyles();
-  // const navigate = useNavigate();
-  // const urlParams = new URLSearchParams(window.location.search);
+  const navigate = useNavigate();
+  const urlParams = new URLSearchParams(window.location.search);
   const pathname = window.location.pathname;
-  // const detail = urlParams.get("detail");
+  const detail = urlParams.get("detail");
 
   const isMyRequest = pathname.includes("my-request");
   const isRegistered = pathname.includes("registered-request");
@@ -29,7 +30,7 @@ export const ListData = () => {
   const [tabRequestData, setTabRequestData]: any = React.useState(null);
 
   const [registerDataFilter, setRegisterDataFilter] = React.useState(tabRegisterData);
-  // const [myRequestFilter, setMyRequestFilter] = React.useState(tabRequestData);
+  const [myRequestFilter, setMyRequestFilter] = React.useState(tabRequestData);
 
   const [tabValue, setTabValue] = React.useState("all");
   const [tabRequestValue, setTabRequestValue] = React.useState("isActive");
@@ -47,6 +48,21 @@ export const ListData = () => {
 
   const onChangeRequestTab = (event: React.SyntheticEvent, tab: string) => {
     setTabRequestValue(tab);
+    if (tab === "isConfirmed") {
+      navigate("/my-request?detail=processing", { replace: true });
+    }
+    if (tab === "isActive") {
+      navigate("/my-request?detail=active", { replace: true });
+    }
+    if (tab === "isPending") {
+      navigate("/my-request?detail=pending", { replace: true });
+    }
+    if (tab === "isOnEvent") {
+      navigate("/my-request?detail=onEvent", { replace: true });
+    }
+    if (tab === "isDone") {
+      navigate("/my-request?detail=isDone", { replace: true });
+    }
   };
 
   const isSelectedHashtag = (hashtag: string) => {
@@ -87,7 +103,11 @@ export const ListData = () => {
   }, [tabValue, registerData]);
 
   React.useEffect(() => {
-    const allHashtag = map(registerDataFilter, (item: any) => JSON.parse(item.hashtag));
+    const allHashtag = map(registerDataFilter, (item: any) => {
+      if (item.hashtag) {
+        return JSON.parse(item.hashtag);
+      } else return [];
+    });
     const hashTagGroup = countBy(flattenDeep(allHashtag));
     setHashtagLabels(hashTagGroup);
   }, [registerDataFilter]);
@@ -96,23 +116,23 @@ export const ListData = () => {
     if (tabRequestValue && myRequestData) {
       switch (tabRequestValue) {
         case "isConfirmed": {
-          setTabRequestData(myRequestData.postHasSupporter);
+          setMyRequestFilter(myRequestData.postHasSupporter);
           return;
         }
         case "isActive": {
-          setTabRequestData(myRequestData.postHasRegister);
+          setMyRequestFilter(myRequestData.postHasRegister);
           return;
         }
         case "isPending": {
-          setTabRequestData(myRequestData.postHasNoRegister);
+          setMyRequestFilter(myRequestData.postHasNoRegister);
           return;
         }
         case "isOnEvent": {
-          setTabRequestData(myRequestData.postOnEvent);
+          setMyRequestFilter(myRequestData.postOnEvent);
           return;
         }
         case "isDone": {
-          setTabRequestData(myRequestData.postDone);
+          setMyRequestFilter(myRequestData.postDone);
           return;
         }
       }
@@ -135,7 +155,6 @@ export const ListData = () => {
 
   const getListMyRequestData = async (filters: any) => {
     const res = await Post.getListMyRequest(filters);
-    console.log("getListMyRequest", res);
     setMyRequestData(res);
   };
 
@@ -147,6 +166,26 @@ export const ListData = () => {
   React.useEffect(() => {
     registerData && setTabRegisterData(registerData);
   }, [registerData]);
+
+  React.useEffect(() => {
+    if (detail) {
+      if (detail === "active") {
+        setTabRequestValue("isActive");
+      }
+      if (detail === "processing") {
+        setTabRequestValue("isConfirmed");
+      }
+      if (detail === "pending") {
+        setTabRequestValue("isPending");
+      }
+      if (detail === "onEvent") {
+        setTabRequestValue("isOnEvent");
+      }
+      if (detail === "isDone") {
+        setTabRequestValue("isDone");
+      }
+    }
+  }, [detail]);
 
   return (
     <Page>
@@ -164,19 +203,25 @@ export const ListData = () => {
           onChangeTab={isRegistered ? onChangeTab : onChangeRequestTab}
           onClickHashtag={onClickHashtag}
           setRegisterDataFilter={setRegisterDataFilter}
+          setMyRequestFilter={setMyRequestFilter}
           setSortBy={setSortDataBy}
           resetData={resetData}
           sortBy={sortDataBy}
           setFilters={setFilters}
           filters={filters}
-          data={isRegistered ? registerDataFilter : myRequestData}
+          data={isRegistered ? registerDataFilter : myRequestFilter}
           hashtagCount={hashtagLabels}
           postCount={postCount}
         />
         {isRegistered ? (
           <RegisterContent loading={loading} data={registerDataFilter} tab={tabValue} />
         ) : (
-          <MyRequestContent loading={loading} tabValue={tabRequestValue} data={tabRequestData} />
+          <MyRequestContent
+            loading={loading}
+            tabValue={tabRequestValue}
+            data={myRequestFilter}
+            setData={setTabRequestData}
+          />
         )}
       </Box>
     </Page>
