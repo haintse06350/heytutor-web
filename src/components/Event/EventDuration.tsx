@@ -42,12 +42,14 @@ const EventDuration = (data: any) => {
   };
 
   useEffect(() => {
-    data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
-  }, [data?.length]);
+    if (data) {
+      data.data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
+    }
+  }, [data]);
 
   return (
     <>
-      {data?.data?.map((item: any, index: number) => (
+      {data?.data?.slice(0, 3).map((item: any, index: number) => (
         <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4, mb: 3 }}>
           <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
             <img src={demoImg6} alt="" />
@@ -130,7 +132,7 @@ const EventDuration = (data: any) => {
       <JoinEvent open={openDialog} onClose={() => setOpenDialog(false)} data={eventSelected}></JoinEvent>
       {showListEvent && (
         <Box sx={{ p: 2, textAlign: "right" }}>
-          <Typography sx={{ mb: 1 }}>Đăng hiển thị: 3/{data?.length}</Typography>
+          <Typography sx={{ mb: 1 }}>Đăng hiển thị: 3/{data?.data.length}</Typography>
           <Button
             variant="contained"
             size="small"

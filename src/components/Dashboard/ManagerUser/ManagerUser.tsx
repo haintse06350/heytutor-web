@@ -140,8 +140,8 @@ export const ManagerUser = () => {
     setDataPick(row);
   };
 
-  // const onBanUser = (userId: any, type: string, banDate: any, eventId: any, postId: number, commentId: number) => {
-  //   // userId, type, banDate, eventId, postId, commentId
+  // const onBanUser = (userId: number, type: string, eventId: number, postId: number, commentId: number) => {
+  //   // userId, type, eventId, postId, commentId
   // };
 
   // const onCloseDatePicker = () => {
@@ -352,7 +352,7 @@ export const ManagerUser = () => {
                       variant="subtitle1"
                       sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
                       onClick={() => handleLink(row?.userInfo.id, row?.eventInfo.id)}>
-                      Chưa giải quyết: {row?.nbOfNotResolvedReport.length}/{row?.nbOfReport.length}
+                      Chưa giải quyết: {row?.nbOfNotResolvedReport.reportDetail.length}/{row?.nbOfReport.length}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: "100px" }}>
@@ -381,7 +381,7 @@ export const ManagerUser = () => {
                   <TableCell>{renderTime(row?.userBanInfo)}</TableCell>
                   <TableCell className={classes.iconMoreHoriz}>
                     <Tooltip title="Quản lí trạng thái">
-                      <IconButton aria-label="Xem chi tiết" onClick={() => handleDialogManageUser(row)}>
+                      <IconButton aria-label="Khóa người dùng" onClick={() => handleDialogManageUser(row)}>
                         <BorderColorIcon color="error" />
                       </IconButton>
                     </Tooltip>
