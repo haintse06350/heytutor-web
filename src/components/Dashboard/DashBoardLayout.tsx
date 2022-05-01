@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserCtx } from "../../context/user/state";
 import { styled, useTheme } from "@mui/material/styles";
 import {
@@ -145,10 +145,6 @@ const DashBoardLayout = ({ children }: any) => {
       return "";
     }
   };
-
-  if (!admin) {
-    return <Navigate to="/dashboard/login" />;
-  }
 
   return (
     <Box sx={{ display: "flex" }}>

@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserCtx } from "./context/user/state";
-import BottomNav from "./components/BottomNavigation/BottomNavigation";
-import NavigationBar from "./components/Common/NavigationBar/NavigationBar";
 import { NotificationCtx } from "./context/notification/state";
 
 const RequireAuthAdmin = ({ children }: any) => {
@@ -19,13 +17,7 @@ const RequireAuthAdmin = ({ children }: any) => {
     return <Navigate to="/dashboard/login" />;
   }
 
-  return (
-    <div>
-      <NavigationBar />
-      {children}
-      <BottomNav />
-    </div>
-  );
+  return <div>{children}</div>;
 };
 
 export default RequireAuthAdmin;

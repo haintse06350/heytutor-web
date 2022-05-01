@@ -252,9 +252,9 @@ export default function AppRoutes() {
           <Route
             path={"/search"}
             element={
-              <DashBoardLayout>
+              <RequireAuth>
                 <Search />
-              </DashBoardLayout>
+              </RequireAuth>
             }
           />
           <Route

@@ -19,7 +19,7 @@ const LoginAdmin = () => {
   const [isLoading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { loginAdmin, user } = useContext(UserCtx);
+  const { login, user } = useContext(UserCtx);
   const navigate = useNavigate();
   const admin = user;
 
@@ -28,7 +28,7 @@ const LoginAdmin = () => {
     try {
       const user = await User.loginAdmin({ email, password });
       localStorage.setItem("heytutor-user", user.token);
-      loginAdmin(user);
+      login(user);
       window.location.reload();
     } catch (e) {
       console.log(e);
@@ -50,7 +50,7 @@ const LoginAdmin = () => {
         navigate("/dashboard/home-manager");
       }
 
-      if (admin.role === "ctv1" || admin.role === "ctv2" || admin.role === "ctv3") {
+      if (admin.role.toLowerCase().includes("ctv")) {
         navigate("/dashboard/admin/manage-event");
       }
     }

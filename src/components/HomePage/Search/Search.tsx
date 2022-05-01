@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useStyles } from "./Search.style";
-import { Dialog, Typography, TextField, InputAdornment, Avatar, Box, Tooltip, Button } from "@mui/material";
+import { Typography, TextField, InputAdornment, Avatar, Box, Tooltip, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { debounce } from "lodash";
 import { Post } from "../../../models/post";
@@ -12,9 +12,10 @@ import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
+import Page from "../../../layout/Page";
 
 const Search = (props: any) => {
-  const { open, onClose, searchQuery } = props;
+  const { searchQuery } = props;
   const classes = useStyles();
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,7 @@ const Search = (props: any) => {
   }, [searchQuery]);
 
   return (
-    <Dialog open={open} onClose={onClose} fullScreen>
+    <Page>
       <div className={classes.searchContainer}>
         <div className={classes.searchBox}>
           <TextField
@@ -82,7 +83,6 @@ const Search = (props: any) => {
             }}
             placeholder={"Tìm kiếm trên Heytutor"}
           />
-          <Typography onClick={onClose}>Cancel</Typography>
         </div>
         <div className={classes.searchResult}>
           {query === "" && !searchResult && (
@@ -175,7 +175,7 @@ const Search = (props: any) => {
           )}
         </div>
       </div>
-    </Dialog>
+    </Page>
   );
 };
 

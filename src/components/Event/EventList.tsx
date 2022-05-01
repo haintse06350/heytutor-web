@@ -38,6 +38,7 @@ import { DateRange } from "@mui/lab/DateRangePicker";
 import checkDeadline from "../Common/CheckDeadline";
 import TabPanel from "@mui/lab/TabPanel";
 import EventDuration from "./EventDuration";
+
 export const EventList = () => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState("joined");
