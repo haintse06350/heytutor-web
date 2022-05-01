@@ -8,7 +8,7 @@ import MenuPopover from "./MenuPopover";
 //context
 import { UserCtx } from "../../context/user/state";
 //utils
-import { stringAvatar } from "../UserProfile/helper";
+// import { stringAvatar } from "../UserProfile/helper";
 //icons
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
@@ -59,7 +59,7 @@ export default function AccountPopover() {
             },
           }),
         }}>
-        <Avatar style={{ border: "2px solid #00ab55" }} {...stringAvatar(user?.name || "Trung Hai")} alt="photoURL" />
+        <Avatar style={{ border: "2px solid #00ab55" }} src={user?.avatar} alt="photoURL" />
       </IconButton>
 
       <MenuPopover open={open} onClose={onClosePopOver} anchorEl={anchorRef.current} sx={{ width: 250 }}>

@@ -5,7 +5,7 @@ import BottomNav from "./components/BottomNavigation/BottomNavigation";
 import NavigationBar from "./components/Common/NavigationBar/NavigationBar";
 import { NotificationCtx } from "./context/notification/state";
 
-const RequireAuth = ({ children }: any) => {
+const RequireAuthAdmin = ({ children }: any) => {
   const { user } = useContext(UserCtx);
   const { setNotificationInfo } = useContext(NotificationCtx);
 
@@ -15,8 +15,8 @@ const RequireAuth = ({ children }: any) => {
     setNotificationInfo("Đăng nhập thất bại! Vui lòng thử lại với tài khoản FPT education");
   }
 
-  if (!user) {
-    return <Navigate to="/login" />;
+  if (!user?.role) {
+    return <Navigate to="/dashboard/login" />;
   }
 
   return (
@@ -28,4 +28,4 @@ const RequireAuth = ({ children }: any) => {
   );
 };
 
-export default RequireAuth;
+export default RequireAuthAdmin;

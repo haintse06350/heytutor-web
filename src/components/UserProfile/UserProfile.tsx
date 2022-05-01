@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useStyles } from "./UserProfile.style";
-import { stringAvatar } from "./helper";
 import { Grid, Avatar, Typography, Button, Rating, Tabs, Tab, Box } from "@mui/material";
 import { UserCtx } from "../../context/user/state";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
@@ -119,7 +118,7 @@ const UserProfile = () => {
         <Grid item className={classes.userHeader}>
           <div className={classes.header} style={styleColor}>
             <div className={classes.avatar}>
-              <Avatar {...stringAvatar(userProfile?.name)} className={classes.roundedAvt} />
+              <Avatar src={user?.avatar} className={classes.roundedAvt} />
             </div>
             {/* tom tat ca nhan */}
             <div className={classes.userSumarry}>

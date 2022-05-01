@@ -6,6 +6,9 @@ export const useStyles: any = makeStyles(() => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
+    marginTop: 100,
+    padding: "0px 20px",
   },
   selectTerm: {
     marginTop: "20px !important",
@@ -27,5 +30,9 @@ export const useStyles: any = makeStyles(() => ({
     "& > span": {
       display: "flex",
     },
+  },
+  activeTab: {
+    textDecorationLine: "underline",
+    textUnderlineOffset: 8,
   },
 }));

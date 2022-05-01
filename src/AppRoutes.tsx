@@ -4,13 +4,14 @@ import { UserCtx } from "./context/user/state";
 import { ListData } from "./components/ListData";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Chat from "./components/Chat/Chat";
-import Dashboard from "./components/Dashboard/Dashboard";
+import CrawlTool from "./components/Dashboard/CrawlTool";
 import HomePage from "./components/HomePage/HomePage";
 import Loginv2 from "./components/Loginv2/Loginv2";
 import CreateEvent from "./components/Dashboard/ManagerEvent/CreateEvent";
 import Feedback from "./components/Feedback/Feedback";
 import UserProfile from "./components/UserProfile/UserProfile";
 import RequireAuth from "./RequireAuth";
+import RequireAuthAdmin from "./RequireAuthAdmin";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/PostDetail/PostItem";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
@@ -33,7 +34,18 @@ import LoginAdmin from "./components/Dashboard/LoginAdmin";
 import Search from "./components/HomePage/Search/Search";
 
 export default function AppRoutes() {
-  const { user }: any = React.useContext(UserCtx);
+  const { login }: any = React.useContext(UserCtx);
+
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userToken = urlParams.get("token");
+
+    if (userToken) {
+      localStorage.setItem("heytutor-user", userToken);
+      login(userToken);
+      window.location.href = window.location.pathname;
+    }
+  }, []);
 
   return (
     <Router>
@@ -47,10 +59,13 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-          {/** test */}
           <Route
             path={"/profile"}
-            element={<RequireAuth>{user?.isAdmin ? <Dashboard /> : <UserProfile />}</RequireAuth>}
+            element={
+              <RequireAuth>
+                <UserProfile />
+              </RequireAuth>
+            }
           />
           <Route
             path={"/home"}
@@ -126,10 +141,10 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path={"/dashboard"}
+            path={"/fap-tool"}
             element={
               <RequireAuth>
-                <Dashboard />
+                <CrawlTool />
               </RequireAuth>
             }
           />
@@ -177,49 +192,61 @@ export default function AppRoutes() {
           <Route
             path={"/dashboard/manage-user"}
             element={
-              <DashBoardLayout>
-                <ManagerUser />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <ManagerUser />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/manage-user/detail"}
             element={
-              <DashBoardLayout>
-                <ManagerUserDetail />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <ManagerUserDetail />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/manage-post"}
             element={
-              <DashBoardLayout>
-                <ManagePost />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <ManagePost />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/manage-ctv"}
             element={
-              <DashBoardLayout>
-                <ManagerCTV />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <ManagerCTV />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/home-ctv"}
             element={
-              <DashBoardLayout>
-                <HomeManageCTV />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <HomeManageCTV />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/home-manager"}
             element={
-              <DashBoardLayout>
-                <HomeManager />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <HomeManager />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
@@ -233,46 +260,55 @@ export default function AppRoutes() {
           <Route
             path={"/dashboard/admin/manage-event"}
             element={
-              <DashBoardLayout>
-                <ManageEvent />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <ManageEvent />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
 
           <Route
             path={"/dashboard/manage-ctv/profile"}
             element={
-              <DashBoardLayout>
-                <ManagerDetailCTV />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <ManagerDetailCTV />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/admin/manage-event/detail"}
             element={
-              <DashBoardLayout>
-                <ManagerEventDetail />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <ManagerEventDetail />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/supper-admin"}
             element={
-              <DashBoardLayout>
-                <HomeSupperAdmin />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <HomeSupperAdmin />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route
             path={"/dashboard/admin/manage-event/create-event"}
             element={
-              <DashBoardLayout>
-                <CreateEvent />
-              </DashBoardLayout>
+              <RequireAuthAdmin>
+                <DashBoardLayout>
+                  <CreateEvent />
+                </DashBoardLayout>
+              </RequireAuthAdmin>
             }
           />
           <Route path={"/dashboard/login"} element={<LoginAdmin />} />
-          <Route path={"/data"} element={<Dashboard />} />
         </Routes>
       </Fragment>
     </Router>

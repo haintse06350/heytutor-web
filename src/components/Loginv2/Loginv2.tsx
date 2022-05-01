@@ -63,7 +63,7 @@ const Loginv2 = () => {
                   fullWidth
                   color="error"
                   startIcon={<GoogleIcon />}
-                  onClick={(e: any) => formik.handleSubmit(e)}
+                  href={`${process.env.REACT_APP_API}/auth/google/`}
                   size="medium"
                   variant="contained">
                   Đăng nhập với tài khoản FPT
