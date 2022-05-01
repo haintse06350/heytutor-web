@@ -193,7 +193,7 @@ const ManagerCTV = () => {
   };
   const renderDialog = () => {
     return (
-      <Dialog open={openDialog} onClose={onCloseDialog}>
+      <Dialog open={openDialog} maxWidth="md" fullWidth>
         <DialogTitle>Thêm cộng tác viên</DialogTitle>
         <DialogContent>
           <Container maxWidth="xs">
@@ -242,7 +242,7 @@ const ManagerCTV = () => {
           </Container>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
-          <Button onClick={onCloseDialog} color="primary">
+          <Button onClick={onCloseDialog} sx={{ color: "#919eab" }}>
             Cancel
           </Button>
           <Button
@@ -266,7 +266,7 @@ const ManagerCTV = () => {
     const rows = await Manager.getListCollaborator();
     setDataUser(rows);
   };
-
+  console.log(dataUser, "dataUser");
   useEffect(() => {
     getListCollaborator();
   }, []);
@@ -294,8 +294,7 @@ const ManagerCTV = () => {
             startIcon={<AddCircleOutlineRoundedIcon />}
             variant="contained"
             color="primary"
-            // onClick={() => setOpenDialog(true)}
-          >
+            onClick={() => setOpenDialog(true)}>
             Add user
           </Button>
         </Box>
@@ -444,7 +443,6 @@ const ManagerCTV = () => {
                   <TableCell>ID</TableCell>
                   <TableCell>Tên</TableCell>
                   <TableCell>Thông số sự kiện</TableCell>
-                  <TableCell>Thông số tương tác</TableCell>
                   <TableCell>Cập nhật bởi</TableCell>
                   <TableCell>Trạng thái</TableCell>
                   <TableCell>Quản lí</TableCell>
@@ -479,14 +477,6 @@ const ManagerCTV = () => {
                         </Typography>
                         <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
                           Chờ phê duyệt : {row.nbOfPendingEvents}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                          Người tham gia : 999
-                        </Typography>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                          Số báo cáo xấu : 999
                         </Typography>
                       </TableCell>
                       <TableCell>
