@@ -15,7 +15,6 @@ import RequireAuthAdmin from "./RequireAuthAdmin";
 import NotFound from "./components/NotFound/NotFound";
 import PostItem from "./components/PostDetail/PostItem";
 import ListMyPost from "./components/HomePage/ListMyPost/ListMyPost";
-import PostDetail from "./components/HomePage/PostDetail";
 import EventDetail from "./components/Event/EventDetail";
 import EventList from "./components/Event/EventList";
 import DashBoardLayout from "./components/Dashboard/DashBoardLayout";
@@ -156,15 +155,6 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
-          <Route
-            path={"/post-detail"}
-            element={
-              <RequireAuth>
-                <PostDetail />
-              </RequireAuth>
-            }
-          />
-
           <Route
             path={"/testUseLocalStorage"}
             element={

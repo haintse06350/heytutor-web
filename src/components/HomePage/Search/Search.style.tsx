@@ -39,10 +39,6 @@ export const useStyles: any = makeStyles(() => ({
       color: "#0288d1",
     },
   },
-  searchResult: {
-    width: "100%",
-    height: "100%",
-  },
   centerView: {
     width: "100%",
     position: "absolute",
@@ -86,104 +82,44 @@ export const useStyles: any = makeStyles(() => ({
     borderRadius: 16,
     padding: 14,
     background: "#F8F8F8",
+    fontWeight: 700,
   },
   active: {
-    background: "#0288d1",
+    background: "#00aa55",
     color: "#fff",
-  },
-  listResult: {
-    marginTop: 20,
   },
   countResult: {
     marginTop: 10,
-    fontSize: 14,
-    lineHeight: "14px",
-    letterSpacing: -0.2,
-    fontWeight: 700,
-    color: "#000",
-  },
-  resultItem: {
-    padding: 8,
-    width: "100%",
-    backgroundColor: "#F8F8F8",
-    borderRadius: 8,
-    display: "flex",
-  },
-  postUser: {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 40,
-    "& > div": {
-      position: "absolute",
-      top: 5,
-    },
-  },
-  postContent: {
-    marginLeft: 10,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    "& > p:nth-child(1)": {
-      color: "#0288d1",
-    },
-    "& > p:nth-child(2)": {
-      fontSize: 12,
-      lineHeight: "16px",
-      letterSpacing: -0.2,
-      fontWeight: 400,
-      color: "#727477",
-    },
-  },
-  postReaction: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    "& > div": {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      marginRight: 10,
-      "& > svg": {
-        width: 20,
-        height: 20,
-      },
-      "& > span": {
-        marginLeft: 4,
-        fontSize: 14,
-        lineHeight: "16px",
-        letterSpacing: -0.2,
-        fontWeight: 400,
-        color: "#727477",
-      },
-    },
-  },
-  hashTag: {
-    margin: "4px 0px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    fontWeight: "normal",
     "& > span": {
-      marginRight: 4,
-      fontSize: 14,
-      lineHeight: "16px",
-      letterSpacing: -0.2,
-      fontWeight: 400,
-      backgroundColor: "#bfbebe",
-      color: "#727477",
-      borderRadius: 4,
-      padding: 3,
+      fontWeight: 700,
+      fontStyle: "italic",
     },
   },
-  button: {
-    margin: "5px 0",
-    "& > Button": {
-      marginLeft: 12,
-    },
-  },
-  previewProfileContent: {
+  searchResult: {
     width: "100%",
-    height: 42,
+    height: "100%",
+    marginTop: 20,
+  },
+  searchResultItem: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  left: {
+    "& > img": {
+      minWidth: 300,
+      minHeight: 180,
+    },
+  },
+  right: {
+    marginLeft: 12,
+  },
+  userBox: {
+    display: "flex",
+    alignItems: "center",
+  },
+  hashtag: {
+    marginTop: 4,
   },
 }));
