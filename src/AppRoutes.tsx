@@ -271,6 +271,7 @@ export default function AppRoutes() {
               </DashBoardLayout>
             }
           />
+
           <Route path={"/dashboard/login"} element={<LoginAdmin />} />
           <Route path={"/data"} element={<Dashboard />} />
         </Routes>

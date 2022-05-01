@@ -27,8 +27,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
-import { DateRange } from "@mui/lab/DateRangePicker";
+// import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
+// import { DateRange } from "@mui/lab/DateRangePicker";
 // icon
 import SearchIcon from "@mui/icons-material/Search";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -40,20 +40,20 @@ import { Manager } from "../../../models/manager";
 export const ManagerUser = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [openDatePicker, setOpenDatePicker] = useState(false);
-  const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
-  const [dataPick, setDataPick] = useState(null);
+  // const [openDatePicker, setOpenDatePicker] = useState(false);
+  // const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [sortBy, setSortBy]: any = useState("asc");
-  const [visible, setVisible] = useState("isNotResolve");
+  // const [sortBy, setSortBy]: any = useState("asc");
+  // const [visible, setVisible] = useState("isNotResolve");
   const [searchBy, setSearchBy] = React.useState("nameOfUser");
   const [searchValue, setSearchValue] = React.useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [rows, setRows]: any = useState(null);
   const openDescribeEvent = Boolean(anchorEl);
+  const [rows, setRows]: any = useState(null);
   const [eventTitlePick, setEventTitlePick] = useState("");
   const [eventDesPick, setEventDesPick] = useState("");
+  const [dataPick, setDataPick]: any = useState(null);
   const [dataFetch, setDataFetch]: any = useState(null);
   // const [dataFetchVisibleAndSort, setDataFetchVisibleAndSort]: any = useState(null);
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -128,8 +128,8 @@ export const ManagerUser = () => {
     }
   };
 
-  const handleLink = (props: any) => {
-    navigate(`/dashboard/manage-user/${props}`);
+  const handleLink = (userId: any, eventId: any) => {
+    navigate(`/dashboard/manage-user/detail?userId=${userId}&eventId=${eventId}`);
   };
   const [openDialogManageUser, setOpenDialogManageUser] = useState(false);
   const closeDialog = () => {
@@ -140,9 +140,13 @@ export const ManagerUser = () => {
     setDataPick(row);
   };
 
-  const onCloseDatePicker = () => {
-    setOpenDatePicker(false);
-  };
+  // const onBanUser = (userId: any, type: string, banDate: any, eventId: any, postId: number, commentId: number) => {
+  //   // userId, type, banDate, eventId, postId, commentId
+  // };
+
+  // const onCloseDatePicker = () => {
+  //   setOpenDatePicker(false);
+  // };
 
   const onOpenDescribeEvent = (event: any, title: any, description: any) => {
     setAnchorEl(event.currentTarget);
@@ -153,25 +157,25 @@ export const ManagerUser = () => {
     setAnchorEl(null);
   };
 
-  const [
-    data = {
-      selected: [],
-      open: false,
-      sortByOpts: [
-        { value: "asc", label: "Số lượng tăng dần" },
-        { value: "desc", label: "Số lượng giảm dần" },
-      ],
-      sortOpts: [
-        { value: "isNotResolve", label: "Báo cáo xấu chưa giải quyết" },
-        { value: "reviewRegisterPoint", label: "Xếp hạng yêu cầu hỗ trợ" },
-        { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
-      ],
-      timeOpts: [
-        { value: "currentWeek", label: "Tuần này" },
-        { value: "currentMonth", label: "Tháng này" },
-      ],
-    },
-  ]: any = useState();
+  // const [
+  //   data = {
+  //     selected: [],
+  //     open: false,
+  //     sortByOpts: [
+  //       { value: "asc", label: "Số lượng tăng dần" },
+  //       { value: "desc", label: "Số lượng giảm dần" },
+  //     ],
+  //     sortOpts: [
+  //       { value: "isNotResolve", label: "Báo cáo xấu chưa giải quyết" },
+  //       { value: "reviewRegisterPoint", label: "Xếp hạng yêu cầu hỗ trợ" },
+  //       { value: "reviewRequesterPoint", label: "Xếp hạng hỗ trợ" },
+  //     ],
+  //     timeOpts: [
+  //       { value: "currentWeek", label: "Tuần này" },
+  //       { value: "currentMonth", label: "Tháng này" },
+  //     ],
+  //   },
+  // ]: any = useState();
   const onChangeSearchBy = (e: SelectChangeEvent) => {
     setSearchBy(e.target.value);
   };
@@ -201,8 +205,6 @@ export const ManagerUser = () => {
   //     console.log("bbbbbbbbbbb");
   //   }
   // }, [visible, sortBy]);
-  // console.log(sortBy, "sortBy", visible, "visible");
-  // console.log(dataFetchVisibleAndSort, "dataFetchVisibleAndSort");
 
   useEffect(() => {
     if (searchValue === null || searchValue === undefined || searchValue === "") {
@@ -230,7 +232,7 @@ export const ManagerUser = () => {
           <Grid container spacing={1} sx={{ width: "100%" }}>
             <Grid item xs={6} md={4} lg={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
-                <FormControl>
+                <FormControl fullWidth>
                   <TextField
                     autoFocus
                     classes={{ root: classes.textField }}
@@ -265,7 +267,7 @@ export const ManagerUser = () => {
                 </FormControl>
               </Box>
             </Grid>
-            <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
+            {/* <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   fullWidth
@@ -309,7 +311,7 @@ export const ManagerUser = () => {
                 transformOrigin={{ vertical: "center", horizontal: "center" }}>
                 <DateRangePicker setValue={setDateData} value={dateData} />
               </Popover>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
       </Box>
@@ -349,7 +351,7 @@ export const ManagerUser = () => {
                     <Typography
                       variant="subtitle1"
                       sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
-                      onClick={() => handleLink("detail")}>
+                      onClick={() => handleLink(row?.userInfo.id, row?.eventInfo.id)}>
                       Chưa giải quyết: {row?.nbOfNotResolvedReport.length}/{row?.nbOfReport.length}
                     </Typography>
                   </TableCell>

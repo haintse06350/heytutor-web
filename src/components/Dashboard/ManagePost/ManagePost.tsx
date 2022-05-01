@@ -17,6 +17,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  TablePagination,
 } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
 import { useStyles } from "./ManagePost.style";
@@ -48,7 +49,17 @@ const ManagePost = () => {
   const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
   const [searchBy, setSearchBy] = React.useState("nameOfUser");
   const [openDatePicker, setOpenDatePicker] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
   const [
     data = {
       selected: [],
@@ -97,12 +108,12 @@ const ManagePost = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
-  const [row, setRow] = useState([]);
+  const [rows, setRows] = useState([]);
   const getListPostManage = async () => {
     const res = await Manager.getListPostManage();
-    setRow(res);
+    setRows(res?.listReportedPost);
   };
-  console.log(row);
+  console.log(rows);
 
   useEffect(() => {
     getListPostManage();
@@ -254,14 +265,34 @@ const ManagePost = () => {
                     <TableCell>ID</TableCell>
                     <TableCell>Tiêu đề</TableCell>
                     <TableCell>Thuộc sự kiện</TableCell>
-                    <TableCell>Thông số tương tác</TableCell>
                     <TableCell>Lý do</TableCell>
                     <TableCell>Trạng thái</TableCell>
                     <TableCell>Quản lí</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody></TableBody>
+                <TableBody>
+                  {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
+                    <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                      <TableCell component="th" scope="row">
+                        {row?.id}
+                      </TableCell>
+                      <TableCell>{row?.content}</TableCell>
+                      <TableCell>{row?.title}</TableCell>
+                      <TableCell>{row?.reason}</TableCell>
+                      <TableCell>{row?.isResolved === 0 ? "Hoạt động" : "Đã ẩn"}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 20]}
+                component="div"
+                count={rows?.length || 0}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </TableContainer>
           </Grid>
         </Grid>
@@ -271,13 +302,6 @@ const ManagePost = () => {
 
   return (
     <>
-      {/* header */}
-      {/* <Grid container item sx={{ mb: 2 }} className={classes.btnCreatePost}>
-        <Button startIcon={<AddCircleOutlineIcon />} variant="contained">
-          Tạo bài viết
-        </Button>
-      </Grid> */}
-      {/* icon header */}
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">

@@ -32,7 +32,7 @@ export class Event {
     return res.json();
   }
 
-  static async joinEvent(eventId: string) {
+  static async joinEvent(eventId: number) {
     const res = await FetchUtils.post(`/join-event`, { eventId: eventId });
     await ErrorUtils.throwError(res);
     return res.json();
