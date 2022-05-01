@@ -120,7 +120,7 @@ export default function AccountPopover() {
             fullWidth
             color="inherit"
             variant="outlined">
-            Logout
+            Đăng xuất
           </Button>
         </Box>
       </MenuPopover>

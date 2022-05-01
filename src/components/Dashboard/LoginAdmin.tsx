@@ -64,9 +64,10 @@ const LoginAdmin = () => {
         display: "flex",
         flexGrow: 1,
         minHeight: "100%",
+        px: 4,
       }}>
       <Box sx={{ position: "relative" }}>
-        <Typography variant="h3" sx={{ position: "absolute", top: "15%", right: "12%" }}>
+        <Typography variant="h4" sx={{ position: "absolute", top: "15%", right: "12%" }}>
           Chào mừng bạn đến với hệ thống quản lí
         </Typography>
         <img src={Logo} alt="logo" />

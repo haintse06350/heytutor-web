@@ -8,7 +8,7 @@ export class Manager {
     return res.json();
   }
   static async getListCollaborator(params = {}) {
-    const res = await FetchUtils.get(`/list-collaborators`, params);
+    const res = await FetchUtils.get(`/collaborator-information`, params);
     await ErrorUtils.throwError(res);
     return res.json();
   }
@@ -21,6 +21,14 @@ export class Manager {
 
   static async getListPostManage(params = {}) {
     const res = await FetchUtils.get(`/get-list-post-manage`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async getUserReportById(params: any = {}) {
+    const res = await FetchUtils.get(
+      `/list-reports-of-user-in-event?userId=${params.userId}&eventId=${params.eventId}`
+    );
     await ErrorUtils.throwError(res);
     return res.json();
   }

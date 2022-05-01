@@ -52,7 +52,7 @@ export const GuidelinePage = () => {
     // navigate(`/post-detail?postId=${postId}`);
   };
 
-  const onClickJoinEvent = async (eventId: string) => {
+  const onClickJoinEvent = async (eventId: number) => {
     try {
       const res = await Event.joinEvent(eventId);
       if (res.status === 200) {

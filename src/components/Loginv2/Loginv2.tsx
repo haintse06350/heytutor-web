@@ -43,9 +43,10 @@ const Loginv2 = () => {
           display: "flex",
           flexGrow: 1,
           minHeight: "100%",
+          px: 4,
         }}>
         <Box sx={{ position: "relative" }}>
-          <Typography variant="h3" sx={{ position: "absolute", top: "15%", right: "12%" }}>
+          <Typography variant="h4" sx={{ position: "absolute", top: "15%", left: "18%" }}>
             Chào mừng bạn đến với hệ thống
           </Typography>
           <img src={Logo} alt="logo" />

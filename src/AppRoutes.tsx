@@ -308,6 +308,7 @@ export default function AppRoutes() {
               </RequireAuthAdmin>
             }
           />
+
           <Route path={"/dashboard/login"} element={<LoginAdmin />} />
         </Routes>
       </Fragment>
