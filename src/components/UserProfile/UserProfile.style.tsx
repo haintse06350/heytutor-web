@@ -6,8 +6,7 @@ export const useStyles: any = makeStyles((theme) => ({
     width: "100%",
     margin: "auto",
     fontFamily: "sans-serif",
-    alignItems: "center",
-    textAlign: "center",
+
     marginTop: "64px",
   },
   userHeader: {

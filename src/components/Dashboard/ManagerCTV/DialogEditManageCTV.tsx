@@ -1,39 +1,26 @@
-import React, { useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Typography,
-  Button,
-  Box,
-  Grid,
-  RadioGroup,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  TextField,
-} from "@mui/material";
-import { LocalizationProvider } from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import DatePicker from "@mui/lab/DatePicker";
-import moment from "moment";
+import React from "react";
+import { Dialog, DialogTitle, DialogContent, Typography, Button, Box, Grid, Checkbox } from "@mui/material";
+import { NotificationCtx } from "../../../context/notification/state";
+import { Manager } from "../../../models/manager";
 
 const DialogEditManageCTV = (props: any) => {
-  const { open, onClose, data } = props;
-  const [openPickDate, setOpenPickDate] = useState(false);
-  const [valueEndDate, setValueEndDate] = useState<Date | null>(moment().startOf("day").toDate());
-  const [valueRadioSelected, setValueRadioSelected] = useState<String>("overTime");
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (valueRadioSelected === "inTime") {
-      setOpenPickDate(true);
+  const { open, onClose, data, managerName, getListCollaborator } = props;
+  const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
+  const [checked, setChecked] = React.useState(false);
+  const onBanCollaborator = async (collaboratorid: any) => {
+    const res = await Manager.createBanCollaborator(collaboratorid);
+    if (res.status === 200) {
+      setNotificationSuccess("Khóa tài khoản thành công");
+      onClose();
+      getListCollaborator();
+    } else if (res.status === 403) {
+      setNotificationError("Khóa tài khoản thất bại");
     }
-    if (valueRadioSelected === "overTime") {
-      setOpenPickDate(false);
-    }
-    setValueRadioSelected((event.target as HTMLInputElement).value);
   };
-
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+  console.log(data);
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Quản lí cộng tác viên</DialogTitle>
@@ -43,45 +30,27 @@ const DialogEditManageCTV = (props: any) => {
             <Typography variant="subtitle1">Thông tin cơ bản</Typography>
             <Typography>Tên: {data?.name}</Typography>
             <Typography>Gmail: {data?.email}</Typography>
-            <Typography>Thêm bởi: {data?.updatedBy}</Typography>
+            <Typography>Thêm bởi: {managerName}</Typography>
             <Typography>Trạng thái: {data?.isActive === 1 ? "Hoạt động" : "Đã khóa"} </Typography>
           </Grid>
           <Grid item xs={8} md={8} lg={8}>
             <Typography variant="subtitle1">Quản lí cộng tác viên</Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={5} lg={5}>
-                <FormControl>
-                  <RadioGroup
-                    // defaultValue="overTime"
-                    name="radio-button-type-ban"
-                    value={valueRadioSelected}
-                    onChange={handleChange}>
-                    <FormControlLabel value="overTime" control={<Radio />} label="Khóa vô thời hạn" />
-                    <FormControlLabel value="inTime" control={<Radio />} label="Khóa có thời hạn" />
-                    {!openPickDate && (
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                          label="Ngày kết thúc"
-                          inputFormat="dd/MM/yyyy"
-                          value={valueEndDate}
-                          onChange={(newValue) => {
-                            setValueEndDate(newValue);
-                          }}
-                          renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
-                        />
-                      </LocalizationProvider>
-                    )}
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-            </Grid>
+
+            <Box display="flex">
+              <Checkbox checked={checked} onChange={handleChange} inputProps={{ "aria-label": "controlled" }} />
+              <Typography color="error">
+                Tài khoản này sẽ bị khóa vĩnh viễn cho đến khi mở lại bạn chắc chắn khóa tài khoản này chứ?
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
         <Box sx={{ float: "right" }}>
           <Button sx={{ color: "#94a4c4" }} onClick={onClose}>
             Trở lại
           </Button>
-          <Button>Khóa tài khoản</Button>
+          <Button disabled={!checked} onClick={() => onBanCollaborator(data?.id)}>
+            Khóa tài khoản
+          </Button>
         </Box>
       </DialogContent>
     </Dialog>
