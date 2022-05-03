@@ -20,6 +20,7 @@ import GppMaybeIcon from "@mui/icons-material/GppMaybe";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import demoImg6 from "../../assets/default_images/6.jpg";
 import { useStyles } from "../HomePage/HomePage.style";
+import { getImageUrl } from "../../utils/imageUrl";
 
 const EventDuration = (data: any) => {
   const navigate = useNavigate();
@@ -41,6 +42,15 @@ const EventDuration = (data: any) => {
     setEventSelected(data);
   };
 
+  const eventImage = (image: any) => {
+    const imageLink = image ? JSON.parse(image)[0] : null;
+    if (imageLink) {
+      return getImageUrl(imageLink);
+    } else {
+      return demoImg6;
+    }
+  };
+
   useEffect(() => {
     if (data) {
       data.data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
@@ -52,7 +62,7 @@ const EventDuration = (data: any) => {
       {data?.data?.slice(0, 3).map((item: any, index: number) => (
         <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4, mb: 3 }}>
           <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
-            <img src={demoImg6} alt="" />
+            <img src={eventImage(item?.eventDetail?.image)} alt="" />
             <Typography
               variant="subtitle1"
               sx={{ mt: 1, cursor: "pointer", textDecoration: "underline", width: "100%" }}

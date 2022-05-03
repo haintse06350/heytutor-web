@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useStyles } from "./Search.style";
-import { Typography, TextField, InputAdornment, Box, Avatar, Chip, Tooltip, Divider } from "@mui/material";
+import {
+  Typography,
+  TextField,
+  InputAdornment,
+  Grid,
+  Box,
+  Avatar,
+  Chip,
+  Tooltip,
+  Divider,
+  Button,
+} from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchIcon from "@mui/icons-material/Search";
 import { Post } from "../../../models/post";
@@ -11,6 +22,8 @@ import "moment/locale/vi";
 
 import Page from "../../../layout/Page";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "../../../utils/imageUrl";
+import { stringAvatar } from "../../UserProfile/helper";
 
 const Search = (props: any) => {
   moment.locale("vi");
@@ -121,6 +134,24 @@ const Search = (props: any) => {
     ));
   };
 
+  const renderImages = (images: any) => {
+    if (!images) {
+      return <img src="https://via.placeholder.com/300x180" alt="avatar" />;
+    } else {
+      const postImages = JSON.parse(images);
+      return map(postImages, (image: string, index: number) => (
+        <Grid item xs={postImages.length > 1 ? 6 : 12}>
+          <img
+            key={index}
+            src={getImageUrl(image)}
+            alt=""
+            style={{ borderRadius: 4, width: 300, minWidth: 300, maxWidth: 300, height: 180 }}
+          />
+        </Grid>
+      ));
+    }
+  };
+
   const renderSearchResult = () => {
     return (
       <>
@@ -139,9 +170,7 @@ const Search = (props: any) => {
         <Box className={classes.searchResult}>
           {map(postResult, (item: any) => (
             <Box className={classes.searchResultItem} key={item.id} onClick={() => onClickPost(item.id)}>
-              <Box className={classes.left}>
-                <img src="https://via.placeholder.com/300x180" alt="avatar" />
-              </Box>
+              <Box className={classes.left}>{renderImages(item.images)}</Box>
               <Box className={classes.right}>
                 <Tooltip title={item.title} placement="bottom-start">
                   <Typography variant="subtitle1">
@@ -161,11 +190,8 @@ const Search = (props: any) => {
                   )}
                 </Box>
                 <Box className={classes.userBox}>
-                  <Avatar
-                    src={item.user.avatar ? item.user.avatar : "https://via.placeholder.com/20x20"}
-                    alt="avatar"
-                  />
-                  <Typography sx={{ ml: 1 }} variant="body2">
+                  <Avatar {...stringAvatar(item?.user.name)}></Avatar>
+                  <Typography sx={{ ml: 1 }} variant="subtitle1">
                     {item.user.name}
                   </Typography>
                 </Box>
@@ -176,6 +202,19 @@ const Search = (props: any) => {
                   </Typography>
                 </Tooltip>
                 <Box className={classes.hashtag}>{renderHashTag(item.hashtag)}</Box>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    maxHeight: 30,
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    px: 0.75,
+                    py: 0.5,
+                    mt: 0.75,
+                    textTransform: " none",
+                  }}>
+                  Đăng kí hỗ trợ
+                </Button>
               </Box>
             </Box>
           ))}
@@ -210,7 +249,7 @@ const Search = (props: any) => {
           {query === "" && !searchResult && (
             <div className={classes.centerView}>
               <Typography>Nhập từ khoá để tìm kiếm !</Typography>
-              <span>Search for subjects, majors, questions and more.</span>
+              <span>Tìm kiếm theo vấn đề, sự kiện hoặc người dùng</span>
             </div>
           )}
           {query !== "" && searchResult?.postResult.length === 0 && (

@@ -8,19 +8,23 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import { isNearDeadline } from "../utils";
 import moment from "moment";
 import "moment/locale/vi";
+import LoadingState from "../../Common/LoadingState";
 
 export const ListPost = (props: any) => {
   const { data, onClickPostDetail, selectItem, onOpenMenu, renderRegisterAndSupporter } = props;
-
   const classes = useStyles();
+
+  if (!data) {
+    return <LoadingState />;
+  }
   return (
     <>
       {map(data, (item: any, index: number) => (
-        <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
+        <Grid key={index} item xs={12} sm={6}>
           <Card className={clsx(classes.item, selectItem?.id === item.id && classes.activeCard)}>
             <div className={classes.cardHeader}>
               <div className={classes.postTitle}>
-                <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.id)}>
+                <Typography variant="subtitle1" noWrap onClick={() => onClickPostDetail(item.postId)}>
                   {item.postData.title}
                 </Typography>
                 <Typography variant="caption" noWrap>

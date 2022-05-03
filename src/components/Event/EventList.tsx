@@ -6,7 +6,6 @@ import {
   Box,
   Grid,
   Typography,
-  CircularProgress,
   InputAdornment,
   MenuItem,
   Card,
@@ -15,6 +14,7 @@ import {
   Tab,
   TextField,
   Popover,
+  Container,
   // Avatar,
 } from "@mui/material";
 // import moment from "moment";
@@ -38,6 +38,8 @@ import { DateRange } from "@mui/lab/DateRangePicker";
 import checkDeadline from "../Common/CheckDeadline";
 import TabPanel from "@mui/lab/TabPanel";
 import EventDuration from "./EventDuration";
+import { getImageUrl } from "../../utils/imageUrl";
+import LoadingState from "../Common/LoadingState";
 
 export const EventList = () => {
   const classes = useStyles();
@@ -140,6 +142,15 @@ export const EventList = () => {
     setTabValue(newValue);
   };
 
+  const eventImage = (image: any) => {
+    const imageLink = image ? JSON.parse(image)[0] : null;
+    if (imageLink) {
+      return getImageUrl(imageLink);
+    } else {
+      return demoImg6;
+    }
+  };
+
   const renderFilter = () => {
     return (
       <Grid container item xs={12} spacing={1} sx={{ mt: 2, width: "100%" }}>
@@ -214,16 +225,13 @@ export const EventList = () => {
             <DateRangePicker setValue={setDateData} value={dateData} />
           </Popover>
         </Grid>
-        <Grid lg={3} md={3} xs={12} sx={{ width: "100%" }}>
-          <div></div>
-        </Grid>
-        <Grid lg={6} md={6} xs={12} sx={{ spacing: 2 }}>
+        <Grid xs={12} sx={{ spacing: 2 }}>
           <Box sx={{ p: 2 }}>
             {/* begin list data */}
             {data?.slice(1, 10).map((item: any, index: number) => (
               <Card key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4, mb: 3, p: 2 }}>
                 <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
-                  <img src={demoImg6} alt="" />
+                  <img src={eventImage(item?.eventContent?.image)} alt="" />
                   <Typography
                     variant="subtitle1"
                     className={classes.eventTitle}
@@ -300,9 +308,6 @@ export const EventList = () => {
             ))}
           </Box>
         </Grid>
-        <Grid lg={3} md={3} xs={12}>
-          <div></div>
-        </Grid>
       </Grid>
     );
   };
@@ -315,14 +320,7 @@ export const EventList = () => {
   if (!data) {
     return (
       <Page>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}>
-          <CircularProgress />
-        </Box>
+        <LoadingState />
       </Page>
     );
   } else {
@@ -332,34 +330,26 @@ export const EventList = () => {
           <SlideShowEventList />
         </Box>
 
-        <Grid container className={classes.rootEventList}>
-          <Box className={classes.searchAndFilter} sx={{ width: "100%", typography: "body1" }}>
-            <Paper elevation={2} sx={{ px: 2 }}>
-              <TabContext value={tabValue}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <TabList onChange={handleChange} aria-label="lab API tabs example">
-                    <Tab label={renderTabLabel("joined")} value="joined" />
-                    <Tab label={renderTabLabel("unJoined")} value="unJoined" />
-                  </TabList>
-                </Box>
-                <TabPanel value="joined">{renderFilter()}</TabPanel>
-                <TabPanel value="unJoined">
-                  <Grid container>
-                    <Grid lg={3} md={3} xs={12} sx={{ width: "100%" }}>
-                      <div></div>
-                    </Grid>
-                    <Grid lg={6} md={6} xs={12} sx={{ width: "100%" }}>
-                      <EventDuration data={dataEventNotEnroll}></EventDuration>
-                    </Grid>
-                    <Grid lg={3} md={3} xs={12} sx={{ width: "100%" }}>
-                      <div></div>
-                    </Grid>
+        <Container maxWidth="md" sx={{ pt: 1 }}>
+          <Paper elevation={2} sx={{ px: 2 }}>
+            <TabContext value={tabValue}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                  <Tab label={renderTabLabel("joined")} value="joined" />
+                  <Tab label={renderTabLabel("unJoined")} value="unJoined" />
+                </TabList>
+              </Box>
+              <TabPanel value="joined">{renderFilter()}</TabPanel>
+              <TabPanel value="unJoined">
+                <Grid container>
+                  <Grid xs={12} sx={{ width: "100%" }}>
+                    <EventDuration data={dataEventNotEnroll}></EventDuration>
                   </Grid>
-                </TabPanel>
-              </TabContext>
-            </Paper>
-          </Box>
-        </Grid>
+                </Grid>
+              </TabPanel>
+            </TabContext>
+          </Paper>
+        </Container>
       </Box>
     );
   }

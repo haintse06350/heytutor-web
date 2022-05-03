@@ -150,7 +150,7 @@ export default function AppRoutes() {
           <Route
             path={"/fap-tool"}
             element={
-              <RequireAuth>
+              <RequireAuth hideTopNav>
                 <CrawlTool />
               </RequireAuth>
             }

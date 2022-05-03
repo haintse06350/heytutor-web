@@ -22,4 +22,17 @@ export class UserPost {
 
     return res.json();
   }
+
+  static async unsupport(params = {}) {
+    const res = await FetchUtils.put(`/unsupport`, params);
+    await ErrorUtils.throwError(res);
+
+    return res.json();
+  }
+
+  static async registerPost(params: {}) {
+    const res = await FetchUtils.put(`/add-register`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
 }

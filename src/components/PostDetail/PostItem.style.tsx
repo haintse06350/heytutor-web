@@ -22,6 +22,7 @@ export const useStyles: any = makeStyles(() => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    width: "100%",
   },
   userNameAndAvatar: {
     width: "100%",
@@ -63,6 +64,7 @@ export const useStyles: any = makeStyles(() => ({
     alignItems: "center",
     justifyContent: "space-between",
     padding: "10px 0",
+    width: "100%",
     "& > div": {
       display: "flex",
     },
@@ -104,11 +106,15 @@ export const useStyles: any = makeStyles(() => ({
   postStatus: {
     width: "fit-content",
     height: "fit-content",
-    padding: "0px 8px",
+    float: "right",
+    padding: "0px 4px",
     color: "#fff",
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
+    "& > div > span": {
+      color: "#fff",
+    },
     "&.isActive": {
       background: "#FF6B6B",
     },

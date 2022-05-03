@@ -25,6 +25,7 @@ import EventDuration from "../Event/EventDuration";
 
 import demoImg6 from "../../assets/default_images/6.jpg";
 import checkDeadline from "../Common/CheckDeadline";
+import { getImageUrl } from "../../utils/imageUrl";
 
 const OnGoingEvent = () => {
   const [value, setValue] = React.useState("1");
@@ -49,6 +50,14 @@ const OnGoingEvent = () => {
   // const [itemCheck, setItemCheck] = useState();
   const [dataEventNotEnroll, setDataEventNotEnroll]: any = useState(null);
 
+  const eventImage = (image: any) => {
+    const imageLink = image ? JSON.parse(image)[0] : null;
+    if (imageLink) {
+      return getImageUrl(imageLink);
+    } else {
+      return demoImg6;
+    }
+  };
   const itemEvent = () => {
     if (!data) {
       return (
@@ -72,7 +81,7 @@ const OnGoingEvent = () => {
           {data.slice(0, 3).map((item: any, index: number) => (
             <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4, mb: 3 }}>
               <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
-                <img src={demoImg6} alt="" />
+                <img src={eventImage(item?.eventContent?.image)} alt="" />
                 <Typography
                   sx={{ mt: 1, width: "100%" }}
                   className={classes.titleEvent}

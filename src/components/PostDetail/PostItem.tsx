@@ -4,7 +4,7 @@ import {
   Typography,
   Avatar,
   Grid,
-  Rating,
+  // Rating,
   Box,
   CardContent,
   Divider,
@@ -15,6 +15,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  MenuItem,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./PostItem.style";
@@ -29,6 +30,7 @@ import BlockIcon from "@mui/icons-material/Block";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import DoneIcon from "@mui/icons-material/Done";
 import { User } from "../../models/users";
 
 import { MsgCtx } from "../../context/message/message";
@@ -42,7 +44,7 @@ import { UserCtx } from "../../context/user/state";
 import { ExchangeTimeLine } from "./ExchangeTimeLine";
 import { RenderExchangeActions } from "./RenderExchangeActions";
 import { MessageBox } from "../MessageBox/MessageBox";
-import { map } from "lodash";
+import { map, isEmpty } from "lodash";
 import { ConfirmDialog } from "../Common/ConfirmDialog/ConfirmDialog";
 import { UserPost } from "../../models/user-post";
 import { NotificationCtx } from "../../context/notification/state";
@@ -53,6 +55,13 @@ import ZipFile from "../../assets/file/zip.svg";
 import RawFile from "../../assets/file/raw.svg";
 import { styled } from "@mui/styles";
 import { getImageUrl } from "../../utils/imageUrl";
+import { ConfirmRegister } from "../Common/ConfirmRegister";
+import LoadingState from "../Common/LoadingState";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
+import CancelPresentationRoundedIcon from "@mui/icons-material/CancelPresentationRounded";
+import { ReportDialog } from "../ListData/ListRequest/ReportDialog";
 
 const Input = styled("input")({
   display: "none",
@@ -64,6 +73,7 @@ const PostItem = () => {
   const postId = urlParams.get("postId");
   const tab = urlParams.get("tab");
   const from = urlParams.get("from");
+  const eventId = urlParams.get("eventId");
   const isMyRequest = from === "my-request";
 
   const [post, setPost]: any = useState(null);
@@ -75,35 +85,71 @@ const PostItem = () => {
   const [openConfirmRegister, setOpenConfirmRegister] = React.useState(false);
   const [openRemoveDialog, setOpenRemoveDialog] = React.useState(false);
   const [openCancelSupportDialog, setOpenCancelSupportDialog] = React.useState(false);
-  const [openDialogListRegister, setOpenDialogListRegister] = React.useState(false);
   const [openExpandExchangeBox, setOpenExpandExchangeBox] = React.useState(false);
+  const [onOpenConfirmDone, setOnOpenConfirmDone] = React.useState(false);
 
-  console.log(openDialogListRegister);
   const [loading, setLoading] = React.useState(false);
+  const [isOpenConfirm, setIsOpenConfirm] = useState(false);
+  const [isOpenUnregister, setIsOpenUnregister] = useState(false);
 
   const [selectedSupporter, setSelectedSupporter]: any = React.useState(null);
 
   const [listRegister, setListRegister]: any = React.useState([]);
   const [listSupporter, setListSupporter]: any = React.useState([]);
 
-  const postImages = JSON.parse(post?.postDetails["Post.images"] || "[]");
+  const postImages = !isEmpty(post?.postDetails["Post.images"]) ? JSON.parse(post?.postDetails["Post.images"]) : null;
   // const [msg, setMsg] = useState("");
   const { onOpenMsgBox } = React.useContext(MsgCtx);
   const { user } = React.useContext(UserCtx);
   const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
   const navigate = useNavigate();
+  const [repostType, setRepostType] = useState("");
 
   moment.locale("vi");
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorElMenu, setAnchorElMenu] = React.useState<HTMLButtonElement | null>(null);
 
   const open = Boolean(anchorEl);
+  const openMenu = Boolean(anchorElMenu);
 
   const onOpenPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const onOpenPopoverMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenu(event.currentTarget);
+  };
+
   const onClosePopover = () => {
     setAnchorEl(null);
+  };
+
+  const onClosePopoverMenu = () => {
+    setAnchorElMenu(null);
+  };
+
+  const onReportPost = () => {
+    setRepostType("report");
+    onClosePopoverMenu();
+  };
+
+  const onRequestDone = () => {
+    setOnOpenConfirmDone(true);
+    onClosePopoverMenu();
+  };
+
+  const onCloseConfirmDone = () => {
+    setOnOpenConfirmDone(false);
+    onClosePopoverMenu();
+  };
+
+  const onConfirmDone = () => {
+    console.log("onConfirmDone");
+  };
+
+  const onCloseReportPost = () => {
+    setRepostType("");
+    onClosePopoverMenu();
   };
   // const isNearDeadline = (deadline: string) => {
   //   if (deadline.includes("giờ") || deadline.includes("phút")) {
@@ -113,10 +159,10 @@ const PostItem = () => {
   const getPostStatus = () => {
     switch (tab) {
       case "isActive": {
-        return "Đang xử lí";
+        return "Chưa có người đăng ký";
       }
       case "isConfirmed": {
-        return "Đã xác nhận";
+        return "Đang trong quá trình hỗ trợ";
       }
       case "isPending": {
         return "Đang chờ xác nhận";
@@ -126,6 +172,9 @@ const PostItem = () => {
       }
     }
   };
+
+  const isRegisterThisPost = post?.registers?.find((register: any) => register.id === user?.id);
+  const isSupportingThisPost = post?.supporters?.find((sp: any) => sp.id === user?.id);
 
   const getPostConversation = async (postId: string, userId: number) => {
     const conversation = await Message.getPostConversation(postId, userId);
@@ -152,17 +201,31 @@ const PostItem = () => {
   };
 
   const onOpenCancelSupportDialog = () => {
-    setOpenCancelSupportDialog(true);
+    isSupportingThisPost ? setOpenCancelSupportDialog(true) : setIsOpenUnregister(true);
+    onClosePopoverMenu();
+  };
+
+  const onRegisterPost = () => {
+    setIsOpenConfirm(true);
   };
 
   const onCloseCancelSupportDialog = () => {
     setOpenCancelSupportDialog(false);
   };
 
-  const onConfirmCancelSupport = () => {
-    setNotificationSuccess(`Đã hủy hỗ trợ thành công`);
-    setOpenCancelSupportDialog(false);
-    navigate(-1);
+  const onConfirmCancelSupport = async () => {
+    try {
+      const res = await UserPost.unsupport({ postId });
+      if (res.status === 200) {
+        setNotificationSuccess(`Đã hủy hỗ trợ thành công`);
+        setOpenCancelSupportDialog(false);
+        await fetchPostData(postId);
+      } else {
+        setNotificationError("Huỷ đăng kí thất bại!");
+      }
+    } catch (error) {
+      setNotificationError("Huỷ đăng kí thất bại!");
+    }
   };
 
   const onClickConfirmRegister = (user: any) => {
@@ -193,6 +256,70 @@ const PostItem = () => {
   const onClickContactSupporter = (user: any) => {
     setSelectedSupporter(user);
     onOpenMsgBox();
+  };
+
+  const PostOptions = () => {
+    return (
+      <Popover
+        open={openMenu}
+        anchorEl={anchorElMenu}
+        onClose={onClosePopoverMenu}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}>
+        {isMyPost && (
+          <MenuItem key={"edit"} sx={{ typography: "body2", py: 1, px: 2.5 }}>
+            <EditRoundedIcon
+              sx={{
+                mr: 1,
+                width: 20,
+                height: 20,
+              }}
+            />
+            <Typography variant="subtitle2">Chỉnh sửa bài viết</Typography>
+          </MenuItem>
+        )}
+        {!isMyPost && (
+          <MenuItem key={"edit"} sx={{ typography: "body2", py: 1, px: 2.5 }} onClick={onReportPost}>
+            <ReportGmailerrorredRoundedIcon
+              sx={{
+                mr: 1,
+                width: 20,
+                height: 20,
+              }}
+            />
+            <Typography variant="subtitle2">Báo cáo bài viết</Typography>
+          </MenuItem>
+        )}
+        <MenuItem key={"confirm"} sx={{ typography: "body2", py: 1, px: 2.5 }} onClick={onRequestDone}>
+          <DoneIcon
+            sx={{
+              mr: 1,
+              width: 20,
+              height: 20,
+            }}
+          />
+          <Typography variant="subtitle2">
+            {isMyPost ? "Xác nhận hoàn thành" : "Yêu cầu xác nhận đã hoàn thành"}
+          </Typography>
+        </MenuItem>
+        {!isMyPost && (
+          <MenuItem key={"cancel"} sx={{ typography: "body2", py: 1, px: 2.5 }} onClick={onOpenCancelSupportDialog}>
+            <CancelPresentationRoundedIcon
+              sx={{
+                mr: 1,
+                width: 20,
+                height: 20,
+              }}
+            />
+            <Typography variant="subtitle2">
+              {isSupportingThisPost ? "Huỷ hỗ trọ vấn đề này" : "Huỷ đăng kí hỗ trợ"}
+            </Typography>
+          </MenuItem>
+        )}
+      </Popover>
+    );
   };
 
   const howToUsePopup = () => {
@@ -303,7 +430,7 @@ const PostItem = () => {
         </Box>
         {listRegister.length > 0 ? (
           <Box sx={{ mt: 1, pb: 2, maxHeight: 450, overflowY: "scroll" }}>
-            {map(listRegister.slice(0, 5), (register: any, idx: number) => (
+            {map(listRegister, (register: any, idx: number) => (
               <Box sx={{ p: 0.5 }} display="flex" key={idx}>
                 <Avatar {...stringAvatar(register.name)} style={{ width: 30, height: 30, fontSize: 14 }} />
                 <Box display="flex" flexDirection="column" flexGrow={1} sx={{ ml: 1 }}>
@@ -313,7 +440,7 @@ const PostItem = () => {
                     onClick={() => onClickProfile(register.id)}>
                     {register.name}
                   </Typography>
-                  <Typography display="flex" alignItems="center" variant="caption">
+                  <Typography display="flex" alignItems="center" variant="subtitle1">
                     {register.rankPoint}{" "}
                     <StarRoundedIcon sx={{ width: 20, color: !register.rankPoint ? "gray" : "gold" }} />
                   </Typography>
@@ -321,24 +448,29 @@ const PostItem = () => {
                 {isMyPost && (
                   <Box>
                     <Tooltip title="Loại khỏi danh sách đăng kí">
-                      <BlockIcon color="error" onClick={() => onClickRemoveRegisterUser(register)} />
+                      <Button
+                        size="small"
+                        sx={{ p: 0, minWidth: "fit-content" }}
+                        onClick={() => onClickRemoveRegisterUser(register)}>
+                        <BlockIcon color="error" />
+                      </Button>
                     </Tooltip>
                     <Tooltip title="Chọn người hỗ trợ">
-                      <PersonAddAltRoundedIcon
-                        sx={{ ml: 0.5 }}
-                        color="primary"
-                        onClick={() => onClickConfirmRegister(register)}
-                      />
+                      <Button
+                        disabled={listSupporter?.length > 0}
+                        size="small"
+                        sx={{ p: 0, ml: 0.5, minWidth: "fit-content" }}
+                        onClick={() => onClickConfirmRegister(register)}>
+                        <PersonAddAltRoundedIcon
+                          sx={{ ml: 0.5 }}
+                          color={listSupporter?.length === 0 ? "primary" : "disabled"}
+                        />
+                      </Button>
                     </Tooltip>
                   </Box>
                 )}
               </Box>
             ))}
-            {listRegister.length > 5 && (
-              <Button variant="outlined" sx={{ float: "right" }} onClick={() => setOpenDialogListRegister(true)}>
-                Xem thêm
-              </Button>
-            )}
           </Box>
         ) : (
           <Box sx={{ mt: 1 }}>
@@ -352,26 +484,36 @@ const PostItem = () => {
     );
   };
 
+  const fetchPostData = async (postId: any) => {
+    try {
+      const post = await Post.getPostDetail(postId);
+      setPost(post);
+      setListRegister(post.registers || []);
+      setListSupporter(post.supporters || []);
+      const userPostId = post.postDetails["Post.userId"];
+      const isMyPost = userPostId === user?.id;
+      setIsMyPost(isMyPost);
+      if (!isMyPost) {
+        User.getUserProfile(userPostId)
+          .then((res: any) => {
+            setUserProfile(res);
+          })
+          .catch((err) => console.log(err));
+
+        getPostConversation(postId, userPostId);
+      } else {
+        const supporter = post?.supporters ? post?.supporters[0] : null;
+        setUserProfile(supporter);
+        post?.supporters && getPostConversation(post?.postDetails["Post.id"], post?.supporters[0].id);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (postId) {
-      Post.getPostDetail(postId).then((post: any) => {
-        setPost(post);
-        setListRegister(post.registers || []);
-        setListSupporter(post.supporters || []);
-        const userId = post.postDetails["Post.userId"];
-        const isMyPost = userId === user?.id;
-        setIsMyPost(isMyPost);
-        if (!isMyPost) {
-          User.getUserProfile(userId).then((res: any) => {
-            setUserProfile(res);
-          });
-          getPostConversation(postId, userId);
-        } else {
-          const supporter = post?.supporters[0]?.userData;
-          setUserProfile(supporter);
-          getPostConversation(post?.postDetails["Post.id"], post?.supporters[0].supporterId[0]);
-        }
-      });
+      fetchPostData(postId);
     }
   }, [postId]);
 
@@ -382,13 +524,30 @@ const PostItem = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (from === "notification" && listSupporter) {
+      if (isMyPost) {
+        setSelectedSupporter({ id: listSupporter[0]?.id, name: listSupporter[0]?.name });
+      } else {
+        setSelectedSupporter({ id: post?.postDetails.user.id, name: post?.postDetails.user.name });
+      }
+      onOpenMsgBox();
+    }
+  }, [isMyPost, from, listSupporter]);
+
   if (!post) {
-    return <Typography>Loading...</Typography>;
+    return <LoadingState />;
   }
 
   return (
     <Page>
       {howToUsePopup()}
+      <ReportDialog
+        type={repostType}
+        itemClicked={post}
+        confirmAction={() => {}}
+        onCloseReportDialog={onCloseReportPost}
+      />
       <ConfirmDialog
         dialogTitle="Xác nhận huỷ hỗ trợ vấn đề này ?"
         dialogContent={
@@ -424,6 +583,21 @@ const PostItem = () => {
         open={openCancelSupportDialog}
         onClose={onCloseCancelSupportDialog}
       />
+      <ConfirmRegister
+        postId={postId}
+        isOpen={isOpenConfirm}
+        setIsOpen={setIsOpenConfirm}
+        fetchPostData={fetchPostData}
+        isRegisterAction={true}
+      />
+      <ConfirmRegister
+        postId={postId}
+        isOpen={isOpenUnregister}
+        setIsOpen={setIsOpenUnregister}
+        fetchPostData={fetchPostData}
+        isRegisterAction={false}
+      />
+      <PostOptions />
       <ConfirmDialog
         dialogTitle="Xoá khỏi danh sách người đăng kí"
         dialogContent={
@@ -455,6 +629,19 @@ const PostItem = () => {
         cancelAction={onCloseConfirmRegister}
         open={openConfirmRegister}
         onClose={onCloseConfirmRegister}
+        loadingConfirm={loading}
+      />
+      <ConfirmDialog
+        dialogTitle={isMyPost ? "Xác nhận đã nhận được hỗ trợ" : "Xác nhận hoàn thành hỗ trợ"}
+        dialogContent={
+          <Typography>
+            Xác nhận hoàn thành hỗ trợ vấn đề này. Vấn đề được tính là hoàn thành khi cả 2 người đều xác nhận hoàn thành
+          </Typography>
+        }
+        confirmAction={onConfirmDone}
+        cancelAction={onCloseConfirmDone}
+        open={onOpenConfirmDone}
+        onClose={onCloseConfirmDone}
         loadingConfirm={loading}
       />
       <ConfirmDialog
@@ -578,68 +765,94 @@ const PostItem = () => {
         <BreadcrumbsTab
           history={[
             {
-              title: isMyPost ? "Vấn đề đi hỗ trợ" : "Vấn đề của tôi",
-              href: isMyPost ? "/my-request" : "/registered-request",
+              title: from === "event" ? "Sự kiện" : isMyPost ? "Vấn đề của tôi" : "Vấn đề đi hỗ trợ",
+              href:
+                from === "event"
+                  ? `/event-detail?eventid=${eventId}`
+                  : isMyPost
+                  ? "/my-request"
+                  : "/registered-request",
             },
           ]}
           current={{ title: "Chi tiết" }}
         />
         <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <Card sx={{ mt: 2, p: 2 }}>{from === "my-request" ? <ListSupporter /> : <PostOwner />}</Card>
-            <Card sx={{ mt: 2, px: 2, pt: 2 }}>
-              <ListRegister />
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={5}>
+          {(isSupportingThisPost || isRegisterThisPost || isMyPost) && (
+            <Grid item xs={12} md={3}>
+              <Card sx={{ mt: 2, p: 2 }}>
+                {isMyPost ? (
+                  <ListSupporter />
+                ) : isSupportingThisPost ? (
+                  <PostOwner />
+                ) : (
+                  <>
+                    <Typography>Đã đăng kí hỗ trợ vấn đề này</Typography>
+                  </>
+                )}
+              </Card>
+              <Card sx={{ mt: 2, px: 2, pt: 2 }}>
+                <ListRegister />
+              </Card>
+            </Grid>
+          )}
+          <Grid item xs={12} md={isRegisterThisPost || isMyPost || isSupportingThisPost ? 5 : 8}>
             <Card sx={{ mt: 2, px: 4, pt: 2, pb: 4 }}>
+              <div className={clsx(classes.postStatus, `${tab}`)}>
+                <Typography variant="caption">
+                  {listSupporter?.length > 0 ? "Đang trong quá trình hỗ trợ" : getPostStatus()}
+                </Typography>
+              </div>
               <div className={classes.deadline}>
                 <div>
-                  <AccessTimeOutlinedIcon sx={{ color: "#d32f2f" }} />
-                  {/* <AccessTimeOutlinedIcon
-                    sx={{
-                      color: isNearDeadline(post.postDetails["Post.deadline"].endOf("hours").fromNow())
-                        ? "#d32f2f"
-                        : "#94a4c4",
-                    }}
-                  /> */}
-                  <Typography variant="subtitle1" sx={{ ml: 1, color: "#d32f2f" }}>
-                    Deadline trong{" "}
-                    {moment(post.postDetails["Post.deadline"]).endOf("hours").fromNow() || "Cần xử lí trong hôm nay"}
-                  </Typography>
+                  <AccessTimeOutlinedIcon color="secondary" />
+                  {post.postDetails["Post.deadline"] ? (
+                    <Typography variant="subtitle1" color="textSecondary" sx={{ ml: 1 }}>
+                      Deadline trong{" "}
+                      {moment(post.postDetails["Post.deadline"]).endOf("hours").fromNow() || "Cần xử lí trong hôm nay"}
+                    </Typography>
+                  ) : (
+                    <Typography variant="subtitle1" color="textSecondary" sx={{ ml: 1 }}>
+                      Không có deadline cho vấn đề này
+                    </Typography>
+                  )}
                 </div>
 
-                {isMyPost ? (
-                  <Button>Chỉnh sửa</Button>
-                ) : (
-                  <Button sx={{ fontSize: 12 }} color="error" variant="outlined" onClick={onOpenCancelSupportDialog}>
-                    Huỷ hỗ trợ
+                {!isRegisterThisPost && !isSupportingThisPost && !isMyPost ? (
+                  <Button
+                    sx={{ fontSize: 12 }}
+                    size="small"
+                    color={"primary"}
+                    variant={"contained"}
+                    onClick={onRegisterPost}>
+                    {"Đăng kí hỗ trợ"}
                   </Button>
+                ) : (
+                  <MoreVertRoundedIcon onClick={(e: any) => onOpenPopoverMenu(e)} />
                 )}
               </div>
               <div className={classes.postTitleAndAction}>
-                <Typography variant="h6">
-                  <div className={clsx(classes.postStatus, `${tab}`)}>
-                    <Typography variant="caption">{getPostStatus()}</Typography>
-                  </div>
-                  [ {post.postDetails["Post.title"]} ]
-                </Typography>
+                <Typography variant="h6">[ {post.postDetails["Post.title"]} ]</Typography>
               </div>
 
               <Typography variant="subtitle1" fontWeight={400} fontSize="1rem">
                 {post.postDetails["Post.content"]}
               </Typography>
               <Box sx={{ mt: 2 }}>
-                <Grid container spacing={1}>
-                  {postImages &&
+                <Grid display="flex" alignItems="center" container spacing={1}>
+                  {!isEmpty(postImages) &&
                     map(postImages, (image: string, index: number) => (
                       <Grid item xs={postImages.length > 1 ? 6 : 12}>
-                        <img key={index} src={getImageUrl(image)} alt="" style={{ width: "100%", borderRadius: 4 }} />
+                        <img
+                          key={index}
+                          src={getImageUrl(image)}
+                          alt=""
+                          style={{ width: "100%", height: "100%", borderRadius: 4 }}
+                        />
                       </Grid>
                     ))}
                 </Grid>
               </Box>
-              {!isMyPost && userProfile && (
+              {!isMyPost && userProfile && isRegisterThisPost && (
                 <div className={classes.userPanel}>
                   <div className={classes.userNameAndAvatar}>
                     <div className={classes.userStats}>
@@ -649,17 +862,9 @@ const PostItem = () => {
                         <Typography sx={{ fontWeight: 500, fontSize: 14 }}>
                           Được đánh giá: {userProfile.voteCount} lượt
                         </Typography>
-                        <Rating name="read-only" value={userProfile.rankPoint} readOnly />
+                        {userProfile.rankPoint} <StarRoundedIcon sx={{ color: "gold" }} />
                       </div>
                     </div>
-                  </div>
-                  <div className={classes.userPostDetail}>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      Đã được giải quyết 3 yêu cầu trên 6 yêu cầu
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 400, fontStyle: "italic" }}>
-                      Bạn chưa từng giải quyết yêu cầu nào từ người dùng này
-                    </Typography>
                   </div>
                 </div>
               )}

@@ -122,11 +122,11 @@ export const ReportDialog = (props: any) => {
               classes={{ label: classes.formLabel }}
               value="other"
               control={<BpRadio />}
-              label="Other"
+              label="Lý do khác"
             />
           </RadioGroup>
         </FormControl>
-        <TextField multiline fullWidth rows={4} sx={{ mt: 2.5 }} placeholder="Lý do khác" />
+        <TextField multiline fullWidth rows={4} sx={{ mt: 2.5 }} placeholder="Nhập lý do khác" />
       </Box>
     );
   };

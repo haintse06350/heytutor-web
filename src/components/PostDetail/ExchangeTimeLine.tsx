@@ -83,7 +83,7 @@ const Input = styled("input")({
 });
 
 export const ExchangeTimeLine = (props: any) => {
-  const { isMyRequest, selectedSupporter, onUploadFile } = props;
+  const { isMyRequest, expand, onUploadFile } = props;
   const classes = useStyles();
   const [exchangeData, setExchangeData] = React.useState(DEMO_EXCHANGE_DATA);
   const [openAnswerDialog, setOpenAnswerDialog] = React.useState(false);
@@ -208,7 +208,7 @@ export const ExchangeTimeLine = (props: any) => {
       {renderPopover()}
       {renderUploadAnswerDialog()}
       <Box className={classes.timeLineRoot}>
-        {selectedSupporter ? (
+        {expand ? (
           <Timeline position="right">
             {exchangeData.map((item: any, index: number) => (
               <TimelineItem key={index}>

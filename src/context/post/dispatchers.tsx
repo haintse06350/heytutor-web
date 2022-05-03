@@ -3,7 +3,7 @@ import { ACTIONS } from "./actions";
 
 export const createPost = (dispatch: React.Dispatch<any>) => {
   try {
-    console.log("craete post ");
+    console.log("onClick create post ");
     dispatch({ type: ACTIONS.CREATE });
   } catch (e) {
     console.error(e);

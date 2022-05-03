@@ -14,7 +14,7 @@ export class Event {
     return res.json();
   }
 
-  static async getEventDetailByEventId(eventId: string) {
+  static async getEventDetailByEventId(eventId: number | string) {
     const res = await FetchUtils.get(`/get-event-detail/${eventId}`);
     await ErrorUtils.throwError(res);
     return res.json();
@@ -26,20 +26,32 @@ export class Event {
     return res.json();
   }
 
-  static async getListPostOnEvent(eventId: string) {
+  static async getListPostOnEvent(eventId: number | string) {
     const res = await FetchUtils.get(`/get-list-post-of-event/${eventId}`);
     await ErrorUtils.throwError(res);
     return res.json();
   }
 
-  static async joinEvent(eventId: number) {
-    const res = await FetchUtils.post(`/join-event`, { eventId: eventId });
+  static async joinEvent(eventId: number | string) {
+    const res = await FetchUtils.post(`/join-event`, { eventId });
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async unjoinEvent(eventId: number | string) {
+    const res = await FetchUtils.delete(`/unjoin-event`, { eventId });
     await ErrorUtils.throwError(res);
     return res.json();
   }
 
   static async create(params: {}) {
     const res = await FetchUtils.post(`/event/create`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async isJoinEvent(eventId: number | string) {
+    const res = await FetchUtils.get(`/check-user-in-event?eventId=${eventId}`);
     await ErrorUtils.throwError(res);
     return res.json();
   }

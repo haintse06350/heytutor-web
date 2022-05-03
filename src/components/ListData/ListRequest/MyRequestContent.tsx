@@ -283,7 +283,7 @@ export default function MyRequestContent(props: any) {
           {dialogTitle}
           <CloseIcon onClick={onCloseDialog} />
         </DialogTitle>
-        <Typography className={classes.postTitleOnDialog} noWrap onClick={() => onClickPostDetail(selectItem?.id)}>
+        <Typography className={classes.postTitleOnDialog} noWrap onClick={() => onClickPostDetail(selectItem?.postId)}>
           {selectItem?.postData.title}
         </Typography>
 
@@ -337,7 +337,7 @@ export default function MyRequestContent(props: any) {
         </DialogContent>
         {dialogData?.length > 5 && (
           <DialogActions>
-            <Button autoFocus onClick={() => onClickPostDetail(selectItem?.id)}>
+            <Button autoFocus onClick={() => onClickPostDetail(selectItem?.postId)}>
               Xem tất cả {dialogData?.length} người
             </Button>
           </DialogActions>

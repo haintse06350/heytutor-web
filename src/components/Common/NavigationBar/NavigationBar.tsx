@@ -2,16 +2,16 @@ import React, { useContext } from "react";
 
 // material
 import { alpha, styled } from "@mui/material/styles";
-import { AppBar, Toolbar, Box, Stack, Button } from "@mui/material";
+import { AppBar, Toolbar, Box, Stack, Button, IconButton } from "@mui/material";
 import Logo from "../../../assets/logo.PNG";
 //components
 import NotificationsPopover from "../../Header/NotificationsPopover";
 import AccountPopover from "../../Header/AccountPopover";
-import MessagePopover from "../../Header/MessagePopover";
 
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { PostCtx } from "../../../context/post/state";
+import SearchIcon from "@mui/icons-material/Search";
 
 const DRAWER_WIDTH = 0;
 const APPBAR_MOBILE = 64;
@@ -66,8 +66,12 @@ const NavigationBar = () => {
             startIcon={<AddIcon sx={{ color: "#FFFFFF", width: 14 }} />}>
             Đăng vấn đề
           </Button>
-          <MessagePopover />
+          <IconButton href="/search">
+            <SearchIcon color="primary" />
+          </IconButton>
+
           <NotificationsPopover />
+
           <AccountPopover />
         </Stack>
       </ToolbarStyle>

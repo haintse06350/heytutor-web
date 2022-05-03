@@ -24,6 +24,7 @@ import { useStyles } from "./FilterAndSearch.style";
 import moment from "moment";
 
 const timeOpts = [
+  { value: "semester", label: "Kì này" },
   { value: "week", label: "Tuần này" },
   { value: "month", label: "Tháng này" },
   { value: "day", label: "Chọn ngày" },
@@ -208,12 +209,9 @@ export default function FilterAndSearch(props: any) {
             break;
           }
         }
-        console.log("dataToSearch", dataToSearch);
         filterData = dataToSearch?.filter((item: any) => {
           return item.postData.title.toLowerCase().includes(query.toLowerCase());
         });
-
-        console.log("filterData", filterData);
       }
       if (searchBy === "content") {
         filterData = dataToSearch?.postData.filter((item: any) => {
@@ -268,7 +266,6 @@ export default function FilterAndSearch(props: any) {
     return (
       <FormGroup>
         <TextField
-          autoFocus
           classes={{ root: classes.textField }}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -319,7 +316,7 @@ export default function FilterAndSearch(props: any) {
               id="outlined-select-currency"
               select
               label="Hiển thị theo"
-              defaultValue="Tuần này"
+              defaultValue="Kì này"
               value={filters?.time?.includes("BETWEEN") ? "day" : filters.time}
               onChange={(e: any) => onChangeFilter(e, "time")}>
               {timeOpts.map((option: any) => (

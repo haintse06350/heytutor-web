@@ -43,7 +43,7 @@ const HomePage = () => {
     Notification.listNotification().then((res) => {
       setUnreadNoti(res.filter((item: any) => item.status === "unread"));
     });
-    getUserStats({ time: "month" });
+    getUserStats({ time: "semester" });
   }, []);
 
   const NotiIcon = ({ noti }: any) => {
@@ -53,28 +53,28 @@ const HomePage = () => {
     return <HowToRegIcon />;
   };
 
-  const deadlineDayInSeconds = 1650961307; //"2022-04-26T08:21:47.000Z"
+  // const deadlineDayInSeconds = 1650961307; //"2022-04-26T08:21:47.000Z"
 
-  React.useEffect(() => {
-    //@ts-ignore
-    const flipClock: any = new FlipDown(deadlineDayInSeconds);
-    flipClock.start();
-  }, []);
+  // React.useEffect(() => {
+  //   //@ts-ignore
+  //   const flipClock: any = new FlipDown(deadlineDayInSeconds);
+  //   flipClock.start();
+  // }, []);
 
   return (
     <>
       <Box sx={{ mt: 1 }} className={classes.wrapHomePage}>
         <Page>
           <Box display="flex" alignItems="flex-end" justifyContent="center" sx={{ mb: 2 }}>
-            <div id="flipdown" className="flipdown"></div>
+            {/* <div id="flipdown" className="flipdown"></div>
             <Typography sx={{ ml: 2 }} variant="h2">
               kì thi FE Spring 2022
-            </Typography>
+            </Typography> */}
           </Box>
-          <Typography align="center" variant="h6" sx={{ fontWeight: 400, width: "80%", margin: "auto", mb: 2 }}>
+          {/* <Typography align="center" variant="h6" sx={{ fontWeight: 400, width: "80%", margin: "auto", mb: 2 }}>
             Kì thi cuối kì Spring sắp diễn ra. Tham gia vào các sự kiện để tìm kiếm sự giúp đỡ từ các mentor khác hoặc
             bạn cũng có thể trở thành người giải quyết vấn đề
-          </Typography>
+          </Typography> */}
           <Grid container spacing={3}>
             <Grid container item spacing={2} xs={12} md={4} lg={4} sx={{ height: "fit-content" }}>
               <Grid item xs={12} sm={12}>

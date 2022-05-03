@@ -15,7 +15,7 @@ const ImageEvent = () => {
   const navigate = useNavigate();
 
   const onClickSlide = (index: number) => {
-    navigate(`/event-detail?eventid=${index}`);
+    navigate(`/event-detail?eventid=${index + 1}`);
   };
   return (
     <Card>

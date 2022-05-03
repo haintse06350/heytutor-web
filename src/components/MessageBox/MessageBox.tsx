@@ -10,6 +10,9 @@ import SendIcon from "@mui/icons-material/Send";
 import { stringAvatar } from "../UserProfile/helper";
 import { map } from "lodash";
 import { UserCtx } from "../../context/user/state";
+import moment from "moment";
+import "moment/locale/vi";
+import clsx from "classnames";
 
 export const MessageBox = (props: any) => {
   const { postId, userId, userName } = props;
@@ -19,6 +22,7 @@ export const MessageBox = (props: any) => {
   const [msg, setMsg] = React.useState("");
 
   const classes = useStyles();
+  moment.locale("vi");
 
   const onChangeInput = (event: any) => {
     setMsg(event.target.value);
@@ -93,9 +97,16 @@ export const MessageBox = (props: any) => {
                 {message.senderId !== user?.id && (
                   <Avatar {...stringAvatar(message.senderName)} className={classes.senderAvatar} />
                 )}
-                <Box className={classes.message} display="flex" flexDirection="column" sx={{ ml: 1 }}>
+                <Box
+                  className={clsx(classes.message, message.senderId === user?.id && classes.myMsg)}
+                  display="flex"
+                  flexDirection="column"
+                  sx={{ ml: 1 }}>
                   <Typography variant="body2" sx={{ fontWeight: 500 }}>
                     {message.message}
+                  </Typography>
+                  <Typography sx={{ fontSize: 10, fontStyle: "italic" }} variant="caption">
+                    {moment(message.createdAt).fromNow()}
                   </Typography>
                 </Box>
               </Box>

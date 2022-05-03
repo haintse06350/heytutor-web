@@ -35,7 +35,7 @@ export const GuidelinePage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [listEvent, setListEvent]: any = useState(null);
   const [listPost, setListPost]: any = useState(null);
-
+  console.log("listEvent", listEvent);
   const [joitEvent, setJointEvent]: any = useState([]);
 
   const { setNotificationSuccess, setNotificationError } = useContext(NotificationCtx);
@@ -75,7 +75,7 @@ export const GuidelinePage = () => {
   useEffect(() => {
     const getSuggestData = async () => {
       const data = await Home.getSuggestData();
-      setListEvent(data.top3EventBySubjects);
+      setListEvent(data.top3EventByMajor);
       setListPost(data.top3Post);
     };
 
@@ -174,6 +174,7 @@ export const GuidelinePage = () => {
             ))}
           </Grid>
           <Button
+            href="/event-list"
             endIcon={<ArrowForwardOutlinedIcon sx={{ width: 16 }} />}
             variant="contained"
             sx={{ float: "right", mt: 1.25, py: 0.5, px: 1, fontSize: 10 }}>
@@ -236,10 +237,15 @@ export const GuidelinePage = () => {
                       justifyContent: "center",
                       flexDirection: "column",
                       boxShadow: "rgb(0 0 0 / 7%) 0px 0px 21px 1px",
-                    }}
-                    onClick={createPost}>
-                    <AddCircleOutlineOutlinedIcon sx={{ width: 40, height: 40 }} color="secondary" />
-                    <Typography variant="subtitle2">Đăng vấn đề của bạn</Typography>
+                    }}>
+                    <AddCircleOutlineOutlinedIcon
+                      sx={{ width: 40, height: 40 }}
+                      color="secondary"
+                      onClick={() => createPost()}
+                    />
+                    <Typography variant="subtitle2" onClick={() => createPost()}>
+                      Đăng vấn đề của bạn
+                    </Typography>
                   </Card>
                 </Grid>
               </Grid>

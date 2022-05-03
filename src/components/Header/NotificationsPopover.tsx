@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
 // material
 import { alpha } from "@mui/material/styles";
 import {
@@ -28,13 +27,21 @@ import { Notification as NotiModel } from "../../models/notification";
 import { stringAvatar } from "../UserProfile/helper";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { map } from "lodash";
+import moment from "moment";
+import "moment/locale/vi";
 
 // ----------------------------------------------------------------------
 
-const translateDescription = (type: string) => {
-  switch (type) {
+const translateDescription = (notification: any) => {
+  switch (notification.notificationType) {
     case "accept_register":
       return "đã chấp nhận yêu cầu hỗ trợ của bạn";
+    case "new_message":
+      return `đã gửi tin nhắn cho bạn trong vấn đề #${notification.postId}`;
+    case "cancel_register":
+      return `đã huỷ yêu cầu hỗ trợ`;
+    case "request_register":
+      return `đã gửi yêu cầu hỗ trợ cho bạn`;
   }
 };
 
@@ -43,7 +50,7 @@ const renderContent = (notification: any) => {
     <Typography variant="subtitle2">
       {notification.fromUsername}
       <Typography component="span" variant="body2" sx={{ color: "text.secondary" }}>
-        &nbsp; {translateDescription(notification.notificationType)}
+        &nbsp; {translateDescription(notification)}
       </Typography>
     </Typography>
   );
@@ -75,6 +82,7 @@ export default function NotificationsPopover() {
   const navigate = useNavigate();
 
   const totalUnRead = notifications?.filter((item: any) => item.status === "unread").length;
+  moment.locale("vi");
 
   const handleOpen = () => {
     setOpen(true);
@@ -116,7 +124,7 @@ export default function NotificationsPopover() {
     setNotifications(updatedNoti);
     setOpen(false);
     NotiModel.readNotification({ notiId });
-    navigate(`/post-detail?postId=${postId}`);
+    navigate(`/post-detail?postId=${postId}&from=notification`);
   };
 
   const NotificationItem = ({ notification }: any) => {
@@ -146,7 +154,7 @@ export default function NotificationsPopover() {
                 alignItems: "center",
                 color: "text.disabled",
               }}>
-              {renderContent(notification).icon} {formatDistanceToNow(new Date(notification.createdAt))}
+              {renderContent(notification).icon} {moment(notification.createdAt).fromNow()}
             </Typography>
           }
         />

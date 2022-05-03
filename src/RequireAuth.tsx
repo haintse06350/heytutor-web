@@ -5,7 +5,7 @@ import BottomNav from "./components/BottomNavigation/BottomNavigation";
 import NavigationBar from "./components/Common/NavigationBar/NavigationBar";
 import { NotificationCtx } from "./context/notification/state";
 
-const RequireAuth = ({ children }: any) => {
+const RequireAuth = ({ children, ...props }: any) => {
   const { user } = useContext(UserCtx);
   const { setNotificationInfo } = useContext(NotificationCtx);
 
@@ -21,7 +21,7 @@ const RequireAuth = ({ children }: any) => {
 
   return (
     <div>
-      <NavigationBar />
+      {!props.hideTopNav && <NavigationBar />}
       {children}
       <BottomNav />
     </div>

@@ -8,14 +8,14 @@ import { useStyles } from "./Layout.style";
 // ----------------------------------------------------------------------
 
 const FILTER_REGISTER = [
-  { label: "Tháng này", value: "month" },
   { label: "Tuần này", value: "week" },
+  { label: "Tháng này", value: "month" },
   { label: "Kì này", value: "semester" },
 ];
 
 const MainTabLayout = (props: any) => {
   const { title, icon, content } = props;
-  const [sortListRegister, setSortListRegister] = React.useState("month");
+  const [sortListRegister, setSortListRegister] = React.useState("semester");
   const classes = useStyles();
 
   const onChangeSort = (event: SelectChangeEvent) => {
@@ -59,7 +59,7 @@ const MainTabLayout = (props: any) => {
             classes={{ select: classes.selectRoot }}
             id="demo-simple-select"
             value={sortListRegister}
-            defaultValue="Tháng này"
+            defaultValue="Kì này"
             onChange={onChangeSort}>
             {FILTER_REGISTER.map((filter: any, index: number) => (
               <MenuItem sx={{ fontSize: 12 }} key={index} value={filter.value}>

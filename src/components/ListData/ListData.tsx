@@ -40,7 +40,7 @@ export const ListData = () => {
   const [loading, setLoading] = React.useState(false);
   const [sortDataBy, setSortDataBy] = React.useState("deadline");
 
-  const [filters, setFilters]: any = React.useState({ time: "month" });
+  const [filters, setFilters]: any = React.useState({ time: "semester" });
 
   const onChangeTab = (event: React.SyntheticEvent, tab: string) => {
     setTabValue(tab);

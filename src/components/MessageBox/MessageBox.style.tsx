@@ -63,6 +63,9 @@ export const useStyles: any = makeStyles((theme) => ({
     borderRadius: "0px 8px 8px",
     backgroundColor: "#eceff5",
   },
+  myMsg: {
+    borderRadius: "8px 8px 0px",
+  },
   messageInput: {
     display: "flex",
     alignItems: "center",
