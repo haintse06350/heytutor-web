@@ -26,7 +26,7 @@ const JoinEvent = (props: any) => {
   return (
     <Dialog open={open} maxWidth="md" fullWidth>
       <Grid sx={{ p: 2 }}>
-        <DialogTitle>Bạn có chắc mình tham gia đúng sự kiện</DialogTitle>
+        <DialogTitle>Xác nhận tham gia sự kiện</DialogTitle>
         <Typography variant="subtitle1">Tiêu đề : </Typography>
         <Typography> {data?.title}</Typography>
         <Typography variant="subtitle1">Mô tả sự kiện : </Typography>

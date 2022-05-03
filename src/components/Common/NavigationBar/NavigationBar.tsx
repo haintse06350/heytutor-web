@@ -61,7 +61,9 @@ const NavigationBar = () => {
               mr: 2,
               textTransform: " none",
             }}
-            onClick={() => createPost()}
+            onClick={() => {
+              createPost();
+            }}
             variant="contained"
             startIcon={<AddIcon sx={{ color: "#FFFFFF", width: 14 }} />}>
             Đăng vấn đề

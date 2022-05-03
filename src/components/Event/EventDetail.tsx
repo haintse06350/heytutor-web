@@ -19,6 +19,7 @@ import { map } from "lodash";
 import { NotificationCtx } from "../../context/notification/state";
 import LoadingState from "../Common/LoadingState";
 import { getImageUrl } from "../../utils/imageUrl";
+import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
 
 const EventDetail = () => {
   const classes = useStyles();
@@ -128,6 +129,7 @@ const EventDetail = () => {
       <>
         <Page maxWidth="md" className={classes.root}>
           <Box>
+            <BreadcrumbsTab history={[{ title: "Trang chủ", href: "/" }]} current={{ title: "Sự kiện" }} />
             <Box display="flex" alignItems="flex-start">
               <img
                 style={{ borderRadius: 8, height: 250, width: "100%" }}
@@ -189,7 +191,7 @@ const EventDetail = () => {
                   <Typography variant="subtitle2">
                     Thời gian kết thúc sự kiện:
                     <Typography component="span" variant="caption" sx={{ ml: 1 }}>
-                      {moment().from(event?.eventContent.endAt)}
+                      {moment(event?.eventContent.endAt).fromNow()}
                     </Typography>
                   </Typography>
                   {isJoined && (

@@ -146,6 +146,7 @@ const DashBoardLayout = ({ children }: any) => {
     }
   };
 
+  console.log("admin", admin.role);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -204,20 +205,22 @@ const DashBoardLayout = ({ children }: any) => {
               <ListItemText primary="Trang chủ quản lí" />
             </ListItem>
           )}
-          <Collapse in={true} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                button
-                sx={{ pl: 4 }}
-                onClick={() => handleChangePage("home-manager")}
-                className={renderTabCurrent() === "home-manager" ? classes.active : ""}>
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Admin" />
-              </ListItem>
-            </List>
-          </Collapse>
+          {!admin?.role.includes("ctv") && (
+            <Collapse in={true} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem
+                  button
+                  sx={{ pl: 4 }}
+                  onClick={() => handleChangePage("home-manager")}
+                  className={renderTabCurrent() === "home-manager" ? classes.active : ""}>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Admin" />
+                </ListItem>
+              </List>
+            </Collapse>
+          )}
           {!admin?.role.includes("ctv") && (
             <ListItem
               button
@@ -250,30 +253,32 @@ const DashBoardLayout = ({ children }: any) => {
               {openTab ? <ExpandLess /> : <ExpandMoreIcon />}
             </ListItem>
           )}
-          <Collapse in={openTab} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                button
-                sx={{ pl: 4 }}
-                onClick={() => handleChangePage("manage-ctv")}
-                className={renderTabCurrent() === "manage-ctv" ? classes.active : ""}>
-                <ListItemIcon>
-                  <PeopleAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cộng tác viên" />
-              </ListItem>
-              <ListItem
-                button
-                sx={{ pl: 4 }}
-                onClick={() => handleChangePage("manage-user")}
-                className={renderTabCurrent() === "manage-user" ? classes.active : ""}>
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Người dùng hệ thống" />
-              </ListItem>
-            </List>
-          </Collapse>
+          {!admin?.role.includes("ctv") && (
+            <Collapse in={openTab} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem
+                  button
+                  sx={{ pl: 4 }}
+                  onClick={() => handleChangePage("manage-ctv")}
+                  className={renderTabCurrent() === "manage-ctv" ? classes.active : ""}>
+                  <ListItemIcon>
+                    <PeopleAltIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Cộng tác viên" />
+                </ListItem>
+                <ListItem
+                  button
+                  sx={{ pl: 4 }}
+                  onClick={() => handleChangePage("manage-user")}
+                  className={renderTabCurrent() === "manage-user" ? classes.active : ""}>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Người dùng hệ thống" />
+                </ListItem>
+              </List>
+            </Collapse>
+          )}
         </List>
         <Divider />
       </Drawer>

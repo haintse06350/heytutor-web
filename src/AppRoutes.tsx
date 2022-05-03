@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import Post, { CreatePost } from "./components/CreatePost/CreatePost";
 import { UserCtx } from "./context/user/state";
 import { ListData } from "./components/ListData";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -97,14 +96,6 @@ export default function AppRoutes() {
           <Route path={"/event"} element={<NotFound />} />
           <Route path={"/notification"} element={<NotFound />} />
           <Route
-            path={"/post"}
-            element={
-              <RequireAuth>
-                <Post />
-              </RequireAuth>
-            }
-          />
-          <Route
             path={"/dashboard/admin/create-event"}
             element={
               <DashBoardLayout>
@@ -112,16 +103,6 @@ export default function AppRoutes() {
               </DashBoardLayout>
             }
           />
-
-          <Route
-            path={"/create-post"}
-            element={
-              <RequireAuth>
-                <CreatePost />
-              </RequireAuth>
-            }
-          />
-
           <Route path={"/feedback"} element={<Feedback />} />
           <Route
             path={"/chat"}
@@ -160,14 +141,6 @@ export default function AppRoutes() {
             element={
               <RequireAuth>
                 <PostItem />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path={"/testUseLocalStorage"}
-            element={
-              <RequireAuth>
-                <CreatePost />
               </RequireAuth>
             }
           />

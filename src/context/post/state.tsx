@@ -9,10 +9,12 @@ export const PostCtx = React.createContext<IPostCtx>(INITIAL_STATE as any);
 
 export default function PostProvider({ children }: any) {
   const [state, dispatch] = useReducer(Reducer, INITIAL_STATE);
-
   const setters = {
     createPost: () => createPost(dispatch),
     discardCreatingPost: () => discardCreatingPost(dispatch),
+    viewPost: (id: number) => {
+      window.location.href = `http://localhost:3000/post-detail?postId=${id}`;
+    },
   };
 
   return (

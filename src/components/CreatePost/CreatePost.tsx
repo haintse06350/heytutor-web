@@ -35,7 +35,7 @@ const token = localStorage.getItem("heytutor-user");
 
 export const CreatePost = () => {
   const classes = useStyles();
-  const { discardCreatingPost } = useContext(PostCtx);
+  const { discardCreatingPost, viewPost } = useContext(PostCtx);
   const { user } = useContext(UserCtx);
   // const navigate = useNavigate();
 
@@ -122,12 +122,13 @@ export const CreatePost = () => {
       if (post) {
         setNotificationSuccess("Đăng vấn đề thành công");
         setPostSuccess(post);
+        viewPost(post.id);
+        discardCreatingPost();
       }
     } catch (error) {
       console.log(error);
       setNotificationError("Đăng vấn đề thất bại!");
     }
-
     setLoading(false);
   };
 

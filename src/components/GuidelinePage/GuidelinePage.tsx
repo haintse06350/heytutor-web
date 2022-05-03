@@ -45,11 +45,11 @@ export const GuidelinePage = () => {
   const classes = useStyles();
 
   const onViewDetail = (eventId: any) => {
-    // navigate(`/event-detail?eventid=${eventId}`);
+    window.location.href = `http://localhost:3000/event-detail?eventid=${eventId}`;
   };
 
   const onClickPost = (postId: any) => {
-    // navigate(`/post-detail?postId=${postId}`);
+    window.location.href = `http://localhost:3000/post-detail?postId=${postId}`;
   };
 
   const onClickJoinEvent = async (eventId: number) => {
@@ -241,7 +241,9 @@ export const GuidelinePage = () => {
                     <AddCircleOutlineOutlinedIcon
                       sx={{ width: 40, height: 40 }}
                       color="secondary"
-                      onClick={() => createPost()}
+                      onClick={() => {
+                        createPost();
+                      }}
                     />
                     <Typography variant="subtitle2" onClick={() => createPost()}>
                       Đăng vấn đề của bạn

@@ -61,7 +61,12 @@ const MyPost = (props: any) => {
           <Typography variant="subtitle2" sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
             Tạo bài viết ngay để tìm người giải quyết của bạn
           </Typography>
-          <Button variant="contained" color="primary" onClick={() => createPost()}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              createPost();
+            }}>
             Tạo bài viết
           </Button>
         </Box>
