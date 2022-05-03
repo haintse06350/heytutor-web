@@ -34,7 +34,24 @@ export class Manager {
   }
 
   static async createBanUser(params: any = {}) {
-    const res = await FetchUtils.post(`/create-ban`, params);
+    const res = await FetchUtils.put(`/create-ban`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async getCollaboratorById(userId: any) {
+    const res = await FetchUtils.get(`/collaborator-detail-information?userId=${userId}`);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+  static async createCollaborator(params: any = {}) {
+    const res = await FetchUtils.post(`/add-new-collaborator`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async createFeedback(params: any = {}) {
+    const res = await FetchUtils.post(`/add-new-feedback`, params);
     await ErrorUtils.throwError(res);
     return res.json();
   }
