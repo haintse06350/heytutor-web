@@ -55,6 +55,7 @@ export const ManagerUser = () => {
   const [eventDesPick, setEventDesPick] = useState("");
   const [dataPick, setDataPick]: any = useState(null);
   const [dataFetch, setDataFetch]: any = useState(null);
+
   // const [dataFetchVisibleAndSort, setDataFetchVisibleAndSort]: any = useState(null);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -139,10 +140,6 @@ export const ManagerUser = () => {
     setOpenDialogManageUser(true);
     setDataPick(row);
   };
-
-  // const onBanUser = (userId: number, type: string, eventId: number, postId: number, commentId: number) => {
-  //   // userId, type, eventId, postId, commentId
-  // };
 
   // const onCloseDatePicker = () => {
   //   setOpenDatePicker(false);

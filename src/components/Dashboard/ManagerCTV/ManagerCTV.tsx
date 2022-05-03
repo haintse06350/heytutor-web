@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useStyles } from "./ManagerCTV.style";
 import {
   Grid,
@@ -23,12 +23,14 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Container,
+  // Container,
   DialogActions,
-  Autocomplete,
+  // Autocomplete,
   Popover,
   Select,
   SelectChangeEvent,
+  FormControl,
+  // FormGroup,
 } from "@mui/material";
 // icon
 // import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -40,8 +42,6 @@ import moment from "moment";
 // component
 
 import DialogEditManageCTV from "./DialogEditManageCTV";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { NotificationCtx } from "../../../context/notification/state";
 import { useNavigate } from "react-router-dom";
 import { DateRange } from "@mui/lab/DateRangePicker";
@@ -50,15 +50,17 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Manager } from "../../../models/manager";
+import { UserCtx } from "../../../context/user/state";
 
 const ManagerCTV = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { user } = useContext(UserCtx);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const { setNotificationError } = React.useContext(NotificationCtx);
+  const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
   const [openDatePicker, setOpenDatePicker] = useState(false);
   // const [filters, setFilters]: any = useState({ status: "joined" });
   const [visible, setVisible] = useState("isActive");
@@ -71,23 +73,41 @@ const ManagerCTV = () => {
   // const [filter, setFilter] = useState<string>("");
   // const [query, setQuery] = useState<string>("");
   // const [dataPick, setDataPick] = useState(null);
-  const roleProps = {
-    options: [
-      { id: 1, title: "CTV1" },
-      { id: 2, title: "CTV2" },
-      { id: 3, title: "CTV3" },
-      { id: 4, title: "Admin1" },
-      { id: 5, title: "Admin2" },
-    ],
-    getOptionLabel: (option: any) => option.title,
+  const [createAdmin, setCreateAdmin] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    role: "",
+    address: "",
+    facebook: "",
+  });
+  const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateAdmin({ ...createAdmin, name: e.target.value });
+  };
+  const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateAdmin({ ...createAdmin, phone: e.target.value });
+  };
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateAdmin({ ...createAdmin, email: e.target.value });
+  };
+  const onChangeRole = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateAdmin({ ...createAdmin, role: e.target.value.toLowerCase() });
+  };
+  const onChangeAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateAdmin({ ...createAdmin, address: e.target.value });
+  };
+  const onChangeFacebook = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateAdmin({ ...createAdmin, facebook: e.target.value });
   };
 
-  const permissionsProps = {
-    options: [
-      { id: 1, title: "Quản lí event" },
-      { id: 2, title: "Quản lí người dùng" },
-      { id: 3, title: "Quản lí bài viết" },
-    ],
+  const roleProps = {
+    options:
+      user.role === "superadmin"
+        ? [
+            { id: 1, title: "ADMIN" },
+            { id: 2, title: "CTV" },
+          ]
+        : [{ id: 1, title: "CTV" }],
     getOptionLabel: (option: any) => option.title,
   };
 
@@ -154,103 +174,104 @@ const ManagerCTV = () => {
   const onChangeSearchBy = (e: SelectChangeEvent) => {
     setSearchBy(e.target.value);
   };
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      email: "",
-      role: "",
-      permissions: "",
-    },
-    validationSchema: Yup.object({
-      username: Yup.string().email("Must not be null").max(255).required("Username is required"),
-      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      role: Yup.string().email("Must not be null").max(255).required("Role is required"),
-      permissions: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-    }),
-    onSubmit: () => {
-      try {
-        console.log(formik.values.email);
-        if (formik.values.email.includes("Admin")) {
-          setNotificationError("Email này đã tồn tại");
-        }
-        console.log("on submit");
-      } catch (e) {
-        console.log(e);
-      }
-    },
-  });
 
-  const onSubmitDialog = () => {
-    console.log(formik.values.email);
-    if (formik.values.email.includes("admin")) {
-      setNotificationError("Email này đã tồn tại");
-    }
-    console.log("on submit");
-  };
   const onCloseDatePicker = () => {
     setOpenDatePicker(false);
     // setFinishPickDate(true);
   };
+
+  const onCreateCollaborator = async () => {
+    const res = await Manager.createCollaborator(createAdmin);
+    if (res) {
+      setNotificationSuccess("Thêm thành công");
+      getListCollaborator();
+      setOpenDialog(false);
+    } else {
+      setNotificationError("Thêm thất bại");
+    }
+  };
+
   const renderDialog = () => {
     return (
       <Dialog open={openDialog} maxWidth="md" fullWidth>
         <DialogTitle>Thêm cộng tác viên</DialogTitle>
         <DialogContent>
-          <Container maxWidth="xs">
-            <form onSubmit={formik.handleSubmit}>
-              <TextField
-                fullWidth
-                label="Username"
-                margin="normal"
-                name="username"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="username"
-                value={formik.values.username}
-                variant="outlined"
-                disabled={formik.isSubmitting}
-              />
-              <TextField
-                error={Boolean(formik.touched.email && formik.errors.email)}
-                fullWidth
-                helperText={formik.touched.email && formik.errors.email}
-                label="Email"
-                margin="normal"
-                name="email"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="email"
-                value={formik.values.email}
-                variant="outlined"
-                disabled={formik.isSubmitting}
-              />
-              <Autocomplete
-                sx={{ mt: 2 }}
-                {...roleProps}
-                id="disable-close-on-select"
-                disableCloseOnSelect
-                renderInput={(params) => <TextField {...params} label="Choose role" variant="standard" />}
-              />
-              <Autocomplete
-                sx={{ mt: 2 }}
-                {...permissionsProps}
-                id="disable-close-on-select"
-                disableCloseOnSelect
-                renderInput={(params) => <TextField {...params} label="Add permissions" variant="standard" />}
-              />
-            </form>
-          </Container>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={4}>
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  id="create-useremail"
+                  label="Email"
+                  type="email"
+                  value={createAdmin.email}
+                  onChange={onChangeEmail}
+                  fullWidth
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <TextField
+                  required
+                  id="create-userrole"
+                  select
+                  label="Vai trò người dùng"
+                  value={createAdmin.role}
+                  onChange={onChangeRole}
+                  helperText="Chọn vai trò của người dùng">
+                  {roleProps.options.map((option: any, index: number) => (
+                    <MenuItem key={index} value={option.title.toLowerCase()}>
+                      {option.title}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FormControl>
+            </Grid>
+            <Grid item xs={8}>
+              <FormControl fullWidth>
+                <TextField
+                  id="create-name"
+                  label="Tên"
+                  value={createAdmin.name}
+                  onChange={onChangeUsername}
+                  required
+                  fullWidth
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <TextField
+                  id="create-userphonenumber"
+                  label="Số điện thoại"
+                  type="phone"
+                  value={createAdmin.phone}
+                  onChange={onChangePhone}
+                  fullWidth
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <TextField
+                  id="create-useraddress"
+                  label="Địa chỉ"
+                  value={createAdmin.address}
+                  onChange={onChangeAddress}
+                  fullWidth
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <TextField
+                  id="create-userfacebook"
+                  label="Facebook"
+                  value={createAdmin.facebook}
+                  onChange={onChangeFacebook}
+                  fullWidth
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
         </DialogContent>
-        <DialogActions sx={{ p: 3 }}>
-          <Button onClick={onCloseDialog} sx={{ color: "#919eab" }}>
-            Cancel
-          </Button>
-          <Button
-            onClick={onSubmitDialog}
-            variant="outlined"
-            color="primary"
-            disabled={Boolean(formik.touched.email && formik.errors.email)}>
-            Save
+        <DialogActions>
+          <Button onClick={onCloseDialog}>Hủy</Button>
+          <Button onClick={onCreateCollaborator} color="primary" variant="contained">
+            Tạo mới
           </Button>
         </DialogActions>
       </Dialog>
@@ -266,7 +287,6 @@ const ManagerCTV = () => {
     const rows = await Manager.getListCollaborator();
     setDataUser(rows);
   };
-  console.log(dataUser, "dataUser");
   useEffect(() => {
     getListCollaborator();
   }, []);
@@ -278,7 +298,7 @@ const ManagerCTV = () => {
   //     //search
   //     let filterData;
   //     if (searchBy === "nameOfUser") {
-  //       filterData = data.data.filter((item: any) => item.username.includes(query));
+  //       filterData = data.data.filter((item: any) => item.name.includes(query));
   //     } else if (searchBy === "nameOfEvent") {
   //       filterData = data.data.filter((item: any) => item.name.includes(query));
   //     }
@@ -295,7 +315,7 @@ const ManagerCTV = () => {
             variant="contained"
             color="primary"
             onClick={() => setOpenDialog(true)}>
-            Add user
+            Thêm cộng tác viên
           </Button>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

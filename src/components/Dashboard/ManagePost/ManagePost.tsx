@@ -18,6 +18,8 @@ import {
   TableCell,
   TableBody,
   TablePagination,
+  Typography,
+  Chip,
 } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
 import { useStyles } from "./ManagePost.style";
@@ -38,6 +40,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
 import { DateRange } from "@mui/lab/DateRangePicker";
 import moment from "moment";
+// import { useNavigate } from "react-router-dom";
 
 const ManagePost = () => {
   const classes = useStyles();
@@ -113,8 +116,12 @@ const ManagePost = () => {
     const res = await Manager.getListPostManage();
     setRows(res?.listReportedPost);
   };
-  console.log(rows);
 
+  // const navigate = useNavigate();
+
+  // const onReferenceToPost = (id: string) => {
+  //   navigate(`/post-detail?postId=${id}&from=event`);
+  // };
   useEffect(() => {
     getListPostManage();
   }, []);
@@ -274,12 +281,34 @@ const ManagePost = () => {
                   {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
                     <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                       <TableCell component="th" scope="row">
-                        {row?.id}
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          {row?.id}
+                        </Typography>
                       </TableCell>
-                      <TableCell>{row?.content}</TableCell>
-                      <TableCell>{row?.title}</TableCell>
-                      <TableCell>{row?.reason}</TableCell>
-                      <TableCell>{row?.isResolved === 0 ? "Hoạt động" : "Đã ẩn"}</TableCell>
+                      <TableCell>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}>
+                          {row?.content}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          {row?.title}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          {row?.reason}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        {row?.isResolved === 0 ? (
+                          <Chip label="Hoạt động" color="primary" />
+                        ) : (
+                          <Chip label="Đã ẩn" color="error" />
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

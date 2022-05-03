@@ -94,6 +94,8 @@ const UserProfile = () => {
   const styleColor = {
     background: "linear-gradient(to right, #430089, #82ffa1)",
   };
+
+  console.log(userProfile);
   //end style
   // end edit story
 
@@ -185,13 +187,11 @@ const UserProfile = () => {
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                   <Tab label="Đánh giá" {...a11yProps(0)} />
-                  <Tab label="Bài đăng" {...a11yProps(1)} />
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
                 Đánh giá
               </TabPanel>
-              <TabPanel value={value} index={1}></TabPanel>
             </Box>
           </div>
         </Grid>

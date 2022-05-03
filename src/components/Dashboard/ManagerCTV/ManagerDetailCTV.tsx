@@ -1,22 +1,7 @@
-import React, { useState } from "react";
-import {
-  Card,
-  Grid,
-  Typography,
-  Box,
-  // Toolbar,
-  Divider,
-  LinearProgress,
-  LinearProgressProps,
-  // Button,
-  IconButton,
-  Tooltip,
-  // IconButton,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Card, Grid, Typography, Box, Divider, LinearProgress, LinearProgressProps } from "@mui/material";
 //icon
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 // help
 // import moment from "moment";
@@ -25,8 +10,10 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import BreadcrumbsTab from "../../Common/Breadcrumbs/Breadcrumbs";
-import Visibility from "@mui/icons-material/Visibility";
-import { useNavigate } from "react-router-dom";
+// import Visibility from "@mui/icons-material/Visibility";
+// import { useNavigate } from "react-router-dom";
+import { Manager } from "../../../models/manager";
+import moment from "moment";
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -43,15 +30,23 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
 
 const DialogDetailCTV = (props: any) => {
   const [value, setValue] = useState("1");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const [collaboratorDetail, setCollaboratorDetail]: any = useState(null);
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get("id");
 
+  const getListCollaboratorDetailById = async () => {
+    const res = await Manager.getCollaboratorById(userId);
+    setCollaboratorDetail(res);
+  };
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
-  const handleChangeTab = (link: string) => {
-    navigate(`/dashboard/${link}`);
-  };
+  console.log(collaboratorDetail);
+  useEffect(() => {
+    getListCollaboratorDetailById();
+  }, []);
   return (
     <Box sx={{ width: "100" }}>
       <BreadcrumbsTab
@@ -80,33 +75,10 @@ const DialogDetailCTV = (props: any) => {
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                      <Typography> &nbsp; Cao Duc Anh</Typography>
+                      <Typography> &nbsp; {collaboratorDetail?.name}</Typography>
                     </Grid>
                   </Grid>
-                  <Grid container>
-                    <Grid item xs={1}>
-                      <EmailIcon />
-                    </Grid>
-                    <Grid item xs={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography variant="subtitle1">Hòm thư </Typography>
-                      <Typography variant="subtitle1">:</Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography>&nbsp; anhcd4@gmail.com</Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container>
-                    <Grid item xs={1}>
-                      <PhoneIphoneIcon />
-                    </Grid>
-                    <Grid item xs={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography variant="subtitle1">Phone </Typography>
-                      <Typography variant="subtitle1">:</Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography>&nbsp; 0999999999</Typography>
-                    </Grid>
-                  </Grid>
+
                   <Grid container>
                     <Grid item xs={1}>
                       <ManageAccountsIcon />
@@ -116,48 +88,9 @@ const DialogDetailCTV = (props: any) => {
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                      <Typography>&nbsp; hailt@fpt.edu.vn</Typography>
+                      <Typography>&nbsp; {collaboratorDetail?.adminAddedName}</Typography>
                     </Grid>
                   </Grid>
-                  <Box>
-                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography variant="subtitle1">Sự kiện đang quản lí : </Typography>
-                        <Typography>&nbsp;&nbsp;2</Typography>
-                      </Box>
-                      <IconButton onClick={() => handleChangeTab("admin/manage-event")}>
-                        <Tooltip title="Xem chi tiết">
-                          <Visibility />
-                        </Tooltip>
-                      </IconButton>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography variant="subtitle1">Sự kiện đang đăng kí :&nbsp;&nbsp; </Typography>
-                        <Typography>2</Typography>
-                      </Box>
-                      <IconButton>
-                        <Tooltip title="Xem chi tiết">
-                          <Visibility />
-                        </Tooltip>
-                      </IconButton>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography variant="subtitle1">Sự kiện đã kết thúc : </Typography>
-                        <Typography>&nbsp;&nbsp;2</Typography>
-                      </Box>
-                      <IconButton>
-                        <Tooltip title="Xem chi tiết">
-                          <Visibility />
-                        </Tooltip>
-                      </IconButton>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Typography variant="subtitle1">Vấn đề đã được giúp đỡ xong : </Typography>
-                      <Typography>&nbsp;&nbsp;200</Typography>
-                    </Box>
-                  </Box>
                 </Card>
               </Grid>
               <Grid item xs={12} md={8} lg={8}>
@@ -171,35 +104,35 @@ const DialogDetailCTV = (props: any) => {
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={6} md={9} lg={9}>
-                      <Typography>&nbsp;Cao Đức Anh </Typography>
+                      <Typography>&nbsp;{collaboratorDetail?.name || "Chưa cập nhật"} </Typography>
                     </Grid>
                     <Grid item xs={6} md={3} lg={3} sx={{ display: "flex", justifyContent: "space-between" }}>
                       <Typography variant="subtitle1">Địa chỉ </Typography>
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={6} md={9} lg={9}>
-                      <Typography>&nbsp;29, Đội nhân, Ba đình, Hà nội </Typography>
+                      <Typography>&nbsp;{collaboratorDetail?.address || "Chưa cập nhật"} </Typography>
                     </Grid>
                     <Grid item xs={6} md={3} lg={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography variant="subtitle1">Phone</Typography>
+                      <Typography variant="subtitle1">Số điện thoại</Typography>
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={6} md={9} lg={9}>
-                      <Typography>&nbsp;09999999999 , 0988888888 </Typography>
+                      <Typography>&nbsp;{collaboratorDetail?.phone || "Chưa cập nhật"} </Typography>
                     </Grid>
                     <Grid item xs={6} md={3} lg={3} sx={{ display: "flex", justifyContent: "space-between" }}>
                       <Typography variant="subtitle1">Hòm thư</Typography>
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={6} md={9} lg={9}>
-                      <Typography>&nbsp;anhcd@gmail.com </Typography>
+                      <Typography>&nbsp;{collaboratorDetail?.email || "Chưa cập nhật"} </Typography>
                     </Grid>
                     <Grid item xs={6} md={3} lg={3} sx={{ display: "flex", justifyContent: "space-between" }}>
                       <Typography variant="subtitle1">Facebook</Typography>
                       <Typography variant="subtitle1">:</Typography>
                     </Grid>
                     <Grid item xs={6} md={9} lg={9}>
-                      <Typography>&nbsp;facebook.com/anhcd4</Typography>
+                      <Typography>&nbsp;{collaboratorDetail?.facebook || "Chưa cập nhật"}</Typography>
                     </Grid>
                   </Grid>
                 </Card>
@@ -209,11 +142,13 @@ const DialogDetailCTV = (props: any) => {
 
                   <Grid container sx={{ p: 2 }}>
                     <Grid item xs={6} md={4} lg={4}>
-                      <Typography variant="subtitle1">2021-Hiện tại</Typography>
+                      <Typography variant="subtitle1">
+                        {moment(collaboratorDetail?.createdAt).format("DD/MM/YYYY")} - Hiện tại
+                      </Typography>
                       <Typography variant="body2">Cộng tác viên</Typography>
                     </Grid>
                     <Grid item xs={6} md={8} lg={8}>
-                      <Typography>&nbsp;Nguyễn Trung Hải đã thêm làm cộng tác viên</Typography>
+                      <Typography>&nbsp;{collaboratorDetail?.adminAddedName} đã thêm làm cộng tác viên</Typography>
                     </Grid>
                   </Grid>
                 </Card>

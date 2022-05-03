@@ -140,6 +140,14 @@ export default function AppRoutes() {
             }
           />
           <Route
+            path={"/test"}
+            element={
+              <RequireAuth>
+                <Feedback open={true} />
+              </RequireAuth>
+            }
+          />
+          <Route
             path={"/fap-tool"}
             element={
               <RequireAuth>

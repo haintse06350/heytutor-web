@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 export const ListData = () => {
   // const classes = useStyles();
   const navigate = useNavigate();
+
   const urlParams = new URLSearchParams(window.location.search);
   const pathname = window.location.pathname;
   const detail = urlParams.get("detail");

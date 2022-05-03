@@ -13,6 +13,8 @@ import {
   DialogContent,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
+import { Manager } from "../../models/manager";
+import { NotificationCtx } from "../../context/notification/state";
 const Feedback = (props: any) => {
   const classes = useStyles();
   const { open, handleClose } = props;
@@ -35,9 +37,26 @@ const Feedback = (props: any) => {
   const [valueFeedback, setValueFeedback] = React.useState<number | null>(2);
   const [hover, setHover] = React.useState(-1);
   const [contentFeedback, setContentFeedback] = React.useState("");
+  const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
 
   const handleChangeContentFeedback = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContentFeedback(event.target.value);
+  };
+
+  const onFeedback = async () => {
+    const res = await Manager.createFeedback({
+      postId: "1",
+      type: "1",
+      score: "4.5",
+      reason: "",
+      content: "Đánh giá tốt",
+      receiverId: "5",
+    });
+    if (res) {
+      setNotificationSuccess("Gửi đánh giá thành công");
+    } else {
+      setNotificationError("Gửi đánh giá thất bại");
+    }
   };
   return (
     <Dialog open={open} onClose={handleClose} className={classes.feedback}>
@@ -88,7 +107,9 @@ const Feedback = (props: any) => {
         <Button variant="text" sx={{ color: "#94a4c4" }} onClick={handleClose}>
           Hủy
         </Button>
-        <Button variant="contained">Đánh giá</Button>
+        <Button onClick={onFeedback} variant="contained">
+          Đánh giá
+        </Button>
       </DialogActions>
     </Dialog>
   );
