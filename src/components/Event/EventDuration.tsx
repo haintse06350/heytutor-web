@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Grid, Typography, Divider, Button, Tooltip } from "@mui/material";
 
 //
@@ -12,7 +12,6 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import moment from "moment";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
-import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import JoinEvent from "./JoinEvent";
 import PersonIcon from "@mui/icons-material/Person";
 import GppGoodIcon from "@mui/icons-material/GppGood";
@@ -26,15 +25,10 @@ const EventDuration = (data: any) => {
   const navigate = useNavigate();
   const classes = useStyles();
 
-  const [showListEvent, setShowListEvent] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [eventSelected, setEventSelected] = useState(null);
   const handleViewDetail = (eventId: any) => {
     navigate(`/event-detail?eventid=${eventId}`);
-  };
-
-  const handleEventList = () => {
-    navigate(`/event-list`);
   };
 
   const handleClickOpenDialog = (data: any) => {
@@ -51,16 +45,10 @@ const EventDuration = (data: any) => {
     }
   };
 
-  useEffect(() => {
-    if (data) {
-      data.data?.length > 3 ? setShowListEvent(true) : setShowListEvent(false);
-    }
-  }, [data]);
-
   return (
     <>
-      {data?.data?.slice(0, 3).map((item: any, index: number) => (
-        <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4, mb: 3 }}>
+      {data?.data?.map((item: any, index: number) => (
+        <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mb: 3 }}>
           <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
             <img src={eventImage(item?.eventDetail?.image)} alt="" />
             <Typography
@@ -69,7 +57,7 @@ const EventDuration = (data: any) => {
               onClick={() => handleViewDetail(item?.eventDetail?.id)}>
               {item?.eventDetail?.title}
             </Typography>
-            <Typography variant="caption" sx={{ ml: 2 }}>
+            <Typography variant="caption" sx={{ py: 1 }}>
               {item?.eventDetail?.description}
             </Typography>
           </Grid>
@@ -140,19 +128,6 @@ const EventDuration = (data: any) => {
       ))}
 
       <JoinEvent open={openDialog} onClose={() => setOpenDialog(false)} data={eventSelected}></JoinEvent>
-      {showListEvent && (
-        <Box sx={{ p: 2, textAlign: "right" }}>
-          <Typography sx={{ mb: 1 }}>Đăng hiển thị: 3/{data?.data.length}</Typography>
-          <Button
-            variant="contained"
-            size="small"
-            color="inherit"
-            onClick={handleEventList}
-            endIcon={<ArrowForwardIosOutlinedIcon />}>
-            Xem chi tiết
-          </Button>
-        </Box>
-      )}
     </>
   );
 };

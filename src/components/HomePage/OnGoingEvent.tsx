@@ -58,6 +58,7 @@ const OnGoingEvent = () => {
       return demoImg6;
     }
   };
+
   const itemEvent = () => {
     if (!data) {
       return (
@@ -81,22 +82,22 @@ const OnGoingEvent = () => {
           {data.slice(0, 3).map((item: any, index: number) => (
             <Box key={index} sx={{ minWidth: "100%", height: "fit-content", mr: 4, mb: 3 }}>
               <Grid className={classes.headerEvent} sx={{ display: "flex", alignItems: "center" }} container>
-                <img src={eventImage(item?.eventContent?.image)} alt="" />
+                <img src={eventImage(item?.eventDetail?.image)} alt="" />
                 <Typography
                   sx={{ mt: 1, width: "100%" }}
                   className={classes.titleEvent}
                   variant="subtitle1"
-                  onClick={() => handleViewDetail(item?.eventContent?.id)}>
-                  {item?.eventContent?.title}
+                  onClick={() => handleViewDetail(item?.eventDetail?.id)}>
+                  {item?.eventDetail?.title}
                 </Typography>
-                <Typography variant="caption" sx={{ ml: 2, mb: 1, color: "#000" }}>
-                  {item?.eventContent?.description}
+                <Typography variant="caption" sx={{ py: 1, color: "#000" }}>
+                  {item?.eventDetail?.description}
                 </Typography>
               </Grid>
               <Box sx={{ display: "flex", background: "#d8dfe6", flexDirection: "column", p: 2, borderRadius: 1 }}>
                 <Tooltip title="Thời gian kết thúc sự kiện">
                   <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
-                    {checkDeadline(item?.eventContent?.endAt)}
+                    {checkDeadline(item?.eventDetail?.endAt)}
                   </Box>
                 </Tooltip>
                 <Box sx={{ display: "flex" }}>

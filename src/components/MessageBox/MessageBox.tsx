@@ -34,7 +34,7 @@ export const MessageBox = (props: any) => {
       senderName: user?.name,
       receiverId: userId,
       receiverName: userName,
-      postId,
+      postId: parseInt(postId),
       message: msg,
     };
     setMsg("");

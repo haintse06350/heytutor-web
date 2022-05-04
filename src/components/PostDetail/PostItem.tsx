@@ -62,6 +62,10 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
 import CancelPresentationRoundedIcon from "@mui/icons-material/CancelPresentationRounded";
 import { ReportDialog } from "../ListData/ListRequest/ReportDialog";
+import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
+import FeedbackRoundedIcon from "@mui/icons-material/FeedbackRounded";
+import Feedback from "../Feedback/Feedback";
 
 const Input = styled("input")({
   display: "none",
@@ -91,11 +95,13 @@ const PostItem = () => {
   const [loading, setLoading] = React.useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
   const [isOpenUnregister, setIsOpenUnregister] = useState(false);
+  const [openFeedback, setOpenFeedback] = useState(false);
 
   const [selectedSupporter, setSelectedSupporter]: any = React.useState(null);
 
   const [listRegister, setListRegister]: any = React.useState([]);
   const [listSupporter, setListSupporter]: any = React.useState([]);
+  const [postStatus, setPostStatus]: any = React.useState(null);
 
   const postImages = !isEmpty(post?.postDetails["Post.images"]) ? JSON.parse(post?.postDetails["Post.images"]) : null;
   // const [msg, setMsg] = useState("");
@@ -143,19 +149,37 @@ const PostItem = () => {
     onClosePopoverMenu();
   };
 
-  const onConfirmDone = () => {
-    console.log("onConfirmDone");
+  const onConfirmDone = async () => {
+    setLoading(true);
+    try {
+      const res = await UserPost.requestDone(postId);
+      if (res) {
+        onCloseConfirmDone();
+        setNotificationSuccess("Đã xác nhận hoàn thành!");
+        const post = await Post.getPostDetail(postId);
+        setPost(post);
+      }
+    } catch (error) {
+      setNotificationError("Đã xảy ra lỗi!");
+    }
+    setLoading(false);
   };
 
   const onCloseReportPost = () => {
     setRepostType("");
     onClosePopoverMenu();
   };
-  // const isNearDeadline = (deadline: string) => {
-  //   if (deadline.includes("giờ") || deadline.includes("phút")) {
-  //     return true;
-  //   }
-  // };
+
+  const onClickFeedback = () => {
+    setOpenFeedback(true);
+    onClosePopoverMenu();
+  };
+
+  const onCloseFeedback = () => {
+    setOpenFeedback(false);
+    onClosePopoverMenu();
+  };
+
   const getPostStatus = () => {
     switch (tab) {
       case "isActive": {
@@ -269,7 +293,7 @@ const PostItem = () => {
           horizontal: "left",
         }}>
         {isMyPost && (
-          <MenuItem key={"edit"} sx={{ typography: "body2", py: 1, px: 2.5 }}>
+          <MenuItem disabled={postStatus} key={"edit"} sx={{ typography: "body2", py: 1, px: 2.5 }}>
             <EditRoundedIcon
               sx={{
                 mr: 1,
@@ -281,7 +305,11 @@ const PostItem = () => {
           </MenuItem>
         )}
         {!isMyPost && (
-          <MenuItem key={"edit"} sx={{ typography: "body2", py: 1, px: 2.5 }} onClick={onReportPost}>
+          <MenuItem
+            disabled={postStatus}
+            key={"report"}
+            sx={{ typography: "body2", py: 1, px: 2.5 }}
+            onClick={onReportPost}>
             <ReportGmailerrorredRoundedIcon
               sx={{
                 mr: 1,
@@ -292,20 +320,28 @@ const PostItem = () => {
             <Typography variant="subtitle2">Báo cáo bài viết</Typography>
           </MenuItem>
         )}
-        <MenuItem key={"confirm"} sx={{ typography: "body2", py: 1, px: 2.5 }} onClick={onRequestDone}>
-          <DoneIcon
-            sx={{
-              mr: 1,
-              width: 20,
-              height: 20,
-            }}
-          />
-          <Typography variant="subtitle2">
-            {isMyPost ? "Xác nhận hoàn thành" : "Yêu cầu xác nhận đã hoàn thành"}
-          </Typography>
-        </MenuItem>
+        {(isMyPost || isSupportingThisPost) && (
+          <MenuItem
+            disabled={postStatus}
+            key={"confirm"}
+            sx={{ typography: "body2", py: 1, px: 2.5 }}
+            onClick={onRequestDone}>
+            <DoneIcon
+              sx={{
+                mr: 1,
+                width: 20,
+                height: 20,
+              }}
+            />
+            <Typography variant="subtitle2">Xác nhận hoàn thành</Typography>
+          </MenuItem>
+        )}
         {!isMyPost && (
-          <MenuItem key={"cancel"} sx={{ typography: "body2", py: 1, px: 2.5 }} onClick={onOpenCancelSupportDialog}>
+          <MenuItem
+            disabled={postStatus}
+            key={"cancel"}
+            sx={{ typography: "body2", py: 1, px: 2.5 }}
+            onClick={onOpenCancelSupportDialog}>
             <CancelPresentationRoundedIcon
               sx={{
                 mr: 1,
@@ -314,10 +350,24 @@ const PostItem = () => {
               }}
             />
             <Typography variant="subtitle2">
-              {isSupportingThisPost ? "Huỷ hỗ trọ vấn đề này" : "Huỷ đăng kí hỗ trợ"}
+              {isSupportingThisPost ? "Huỷ hỗ trợ vấn đề này" : "Huỷ đăng kí hỗ trợ"}
             </Typography>
           </MenuItem>
         )}
+        <MenuItem
+          disabled={!postStatus}
+          key={"feedback"}
+          sx={{ typography: "body2", py: 1, px: 2.5 }}
+          onClick={onClickFeedback}>
+          <FeedbackRoundedIcon
+            sx={{
+              mr: 1,
+              width: 20,
+              height: 20,
+            }}
+          />
+          <Typography variant="subtitle2">Đánh giá</Typography>
+        </MenuItem>
       </Popover>
     );
   };
@@ -395,7 +445,7 @@ const PostItem = () => {
                   </Typography>
 
                   <Typography display="flex" alignItems="center" variant="subtitle1">
-                    {sp.rankPoint} <StarRoundedIcon sx={{ color: !sp.rankPoint ? "gray" : "gold" }} />
+                    {parseInt(sp.rankPoint)} <StarRoundedIcon sx={{ color: !sp.rankPoint ? "gray" : "gold" }} />
                   </Typography>
                 </Box>
                 <Tooltip title="Trao đổi">
@@ -441,7 +491,7 @@ const PostItem = () => {
                     {register.name}
                   </Typography>
                   <Typography display="flex" alignItems="center" variant="subtitle1">
-                    {register.rankPoint}{" "}
+                    {parseInt(register.rankPoint)}{" "}
                     <StarRoundedIcon sx={{ width: 20, color: !register.rankPoint ? "gray" : "gold" }} />
                   </Typography>
                 </Box>
@@ -535,6 +585,18 @@ const PostItem = () => {
     }
   }, [isMyPost, from, listSupporter]);
 
+  useEffect(() => {
+    if (post) {
+      const requestDone = post?.postDetails?.requestDone;
+      if (requestDone?.length === 2 || requestDone?.includes(user?.id)) {
+        setPostStatus("done");
+      }
+      if (requestDone?.length === 1) {
+        setPostStatus("half-done");
+      }
+    }
+  }, [post]);
+
   if (!post) {
     return <LoadingState />;
   }
@@ -547,6 +609,14 @@ const PostItem = () => {
         itemClicked={post}
         confirmAction={() => {}}
         onCloseReportDialog={onCloseReportPost}
+      />
+      <Feedback
+        open={openFeedback}
+        onClose={onCloseFeedback}
+        userName={isMyPost ? post?.supporters[0].name : post?.postDetails.user.name}
+        postId={post?.postDetails["Post.id"]}
+        type={isMyPost ? 1 : 2}
+        receiverId={isMyPost ? post?.supporters[0].id : post?.postDetails.user.id}
       />
       <ConfirmDialog
         dialogTitle="Xác nhận huỷ hỗ trợ vấn đề này ?"
@@ -786,7 +856,7 @@ const PostItem = () => {
                   <PostOwner />
                 ) : (
                   <>
-                    <Typography>Đã đăng kí hỗ trợ vấn đề này</Typography>
+                    <Typography variant="subtitle1">Đã đăng kí hỗ trợ vấn đề này</Typography>
                   </>
                 )}
               </Card>
@@ -797,11 +867,32 @@ const PostItem = () => {
           )}
           <Grid item xs={12} md={isRegisterThisPost || isMyPost || isSupportingThisPost ? 5 : 8}>
             <Card sx={{ mt: 2, px: 4, pt: 2, pb: 4 }}>
-              <div className={clsx(classes.postStatus, `${tab}`)}>
-                <Typography variant="caption">
-                  {listSupporter?.length > 0 ? "Đang trong quá trình hỗ trợ" : getPostStatus()}
-                </Typography>
-              </div>
+              <Box display="flex" alignItems="center" justifyContent="flex-end">
+                {postStatus && (
+                  <Typography
+                    display="flex"
+                    alignItems="center"
+                    variant="caption"
+                    color="primary"
+                    sx={{ fontWeight: 500 }}>
+                    {postStatus === "half-done" ? (
+                      <DoneRoundedIcon color="primary" />
+                    ) : (
+                      <DoneAllRoundedIcon color="primary" />
+                    )}
+                    {postStatus === "half-done"
+                      ? `Đã xác nhận hoàn thành từ phía ${isMyPost ? "bạn" : `${post?.supporters[0].name}`}`
+                      : "Đã xác nhận hoàn thành hỗ trợ vấn đề"}
+                  </Typography>
+                )}
+                {!postStatus && (
+                  <div className={clsx(classes.postStatus, `${tab}`)}>
+                    <Typography variant="caption">
+                      {listSupporter?.length > 0 ? "Đang trong quá trình hỗ trợ" : getPostStatus()}
+                    </Typography>
+                  </div>
+                )}
+              </Box>
               <div className={classes.deadline}>
                 <div>
                   <AccessTimeOutlinedIcon color="secondary" />

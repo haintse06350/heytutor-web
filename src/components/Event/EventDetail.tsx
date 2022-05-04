@@ -5,7 +5,18 @@ import { useStyles } from "./EventDetail.style";
 import Page from "../../layout/Page";
 
 //component material
-import { Grid, Box, Typography, Button, Paper, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // icon
 import { Event } from "../../models/event";
@@ -14,12 +25,13 @@ import { useNavigate } from "react-router-dom";
 import img1 from "../../assets/home_event_images/14.png";
 import moment from "moment";
 import "moment/locale/vi";
-import FilterAndSearch from "../ListData/FilterAndSearch/FilterAndSearch";
 import { map } from "lodash";
 import { NotificationCtx } from "../../context/notification/state";
 import LoadingState from "../Common/LoadingState";
 import { getImageUrl } from "../../utils/imageUrl";
 import BreadcrumbsTab from "../Common/Breadcrumbs/Breadcrumbs";
+import SearchIcon from "@mui/icons-material/Search";
+import { isEmpty, compact } from "lodash";
 
 const EventDetail = () => {
   const classes = useStyles();
@@ -34,6 +46,30 @@ const EventDetail = () => {
   const eventIdParam = urlParams.get("eventid");
   const eventId = eventIdParam ? parseInt(eventIdParam) : "";
   const navigate = useNavigate();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchData, setSearchData] = useState<any>(null);
+
+  const onChangeSearch = (e: any) => {
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    if (isEmpty(searchQuery)) {
+      setSearchData(listPost);
+    } else {
+      const listPostSearch = listPost?.map((item: any) => {
+        if (item.postData.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+          return item;
+        }
+      });
+      setSearchData(compact(listPostSearch));
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setSearchData(listPost);
+  }, [listPost]);
 
   const getEventDetailByEventId = async (eventId: number | string) => {
     const data = await Event.getEventDetailByEventId(eventId);
@@ -133,14 +169,14 @@ const EventDetail = () => {
             <Box display="flex" alignItems="flex-start">
               <img
                 style={{ borderRadius: 8, height: 250, width: "100%" }}
-                src={eventImage(event?.eventContent.image)}
+                src={eventImage(event?.eventDetail.image)}
                 alt=""
               />
             </Box>
             <Paper sx={{ mt: 1, p: 2, width: "100%" }}>
               <Box display="flex" alignItems="center" justifyContent="space-between">
                 <Box width={"75%"}>
-                  <Typography variant="h6">{event?.eventContent.title}</Typography>
+                  <Typography variant="h6">{event?.eventDetail.title}</Typography>
                 </Box>
                 <Box width={"25%"} display="flex" justifyContent="flex-end">
                   {!isJoined ? (
@@ -191,7 +227,7 @@ const EventDetail = () => {
                   <Typography variant="subtitle2">
                     Thời gian kết thúc sự kiện:
                     <Typography component="span" variant="caption" sx={{ ml: 1 }}>
-                      {moment(event?.eventContent.endAt).fromNow()}
+                      {moment(event?.eventDetail.endAt).fromNow()}
                     </Typography>
                   </Typography>
                   {isJoined && (
@@ -223,22 +259,38 @@ const EventDetail = () => {
                   <Typography variant="subtitle1">Nội dung sự kiện</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography sx={{ mt: 2, mb: 2 }}>{event?.eventContent.description}</Typography>
-                  {beautifyContent(event?.eventContent.content)}
+                  <Typography sx={{ mt: 2, mb: 2 }}>{event?.eventDetail.description}</Typography>
+                  {beautifyContent(event?.eventDetail.content)}
                 </AccordionDetails>
               </Accordion>
             </Paper>
           </Box>
           <Paper sx={{ mt: 1, p: 2, width: "100%" }}>
             {listPost && (
-              <Box sx={{ mt: 1 }}>
-                <FilterAndSearch onListEvent={true} resetData={() => {}} />
+              <Box component="form" noValidate autoComplete="off" sx={{ mt: 1 }}>
+                <TextField
+                  autoFocus
+                  fullWidth
+                  classes={{ root: classes.textField }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  onChange={onChangeSearch}
+                  id="outlined-basic"
+                  placeholder="Tìm kiếm theo tiêu đề sự kiện..."
+                  variant="outlined"
+                />
               </Box>
             )}
             {isJoined && (
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <ListPost
-                  data={listPost}
+                  hideOption
+                  data={searchData}
                   onClickPostDetail={onClickPostDetail}
                   selectItem={{}}
                   onOpenMenu={() => {}}

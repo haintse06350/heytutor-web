@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Grid, Typography, Divider } from "@mui/material";
+import { Card, Grid, Typography, Divider, Box } from "@mui/material";
 import clsx from "classnames";
 import { map } from "lodash";
 import { useStyles } from "./ResultContent.style";
@@ -11,12 +11,21 @@ import "moment/locale/vi";
 import LoadingState from "../../Common/LoadingState";
 
 export const ListPost = (props: any) => {
-  const { data, onClickPostDetail, selectItem, onOpenMenu, renderRegisterAndSupporter } = props;
+  const { hideOption, data, onClickPostDetail, selectItem, onOpenMenu, renderRegisterAndSupporter } = props;
   const classes = useStyles();
 
   if (!data) {
     return <LoadingState />;
   }
+
+  if (data?.length === 0) {
+    return (
+      <Box sx={{ p: 2 }} display="flex" alignItems="center" justifyContent="center">
+        <Typography variant="subtitle1">Không có bài viết nào</Typography>
+      </Box>
+    );
+  }
+
   return (
     <>
       {map(data, (item: any, index: number) => (
@@ -56,9 +65,11 @@ export const ListPost = (props: any) => {
                   </div>
                 )}
               </div>
-              <div>
-                <MoreVertRoundedIcon onClick={(e: any) => onOpenMenu(e, item)} />
-              </div>
+              {!hideOption && (
+                <div>
+                  <MoreVertRoundedIcon onClick={(e: any) => onOpenMenu(e, item)} />
+                </div>
+              )}
             </div>
             {renderRegisterAndSupporter && (
               <div className={classes.cardContent}>

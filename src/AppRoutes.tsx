@@ -7,7 +7,6 @@ import CrawlTool from "./components/Dashboard/CrawlTool";
 import HomePage from "./components/HomePage/HomePage";
 import Loginv2 from "./components/Loginv2/Loginv2";
 import CreateEvent from "./components/Dashboard/ManagerEvent/CreateEvent";
-import Feedback from "./components/Feedback/Feedback";
 import UserProfile from "./components/UserProfile/UserProfile";
 import RequireAuth from "./RequireAuth";
 import RequireAuthAdmin from "./RequireAuthAdmin";
@@ -103,7 +102,6 @@ export default function AppRoutes() {
               </DashBoardLayout>
             }
           />
-          <Route path={"/feedback"} element={<Feedback />} />
           <Route
             path={"/chat"}
             element={
@@ -117,14 +115,6 @@ export default function AppRoutes() {
             element={
               <RequireAuth>
                 <ListMyPost />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path={"/test"}
-            element={
-              <RequireAuth>
-                <Feedback open={true} />
               </RequireAuth>
             }
           />

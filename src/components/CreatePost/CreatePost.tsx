@@ -29,15 +29,15 @@ import { s3Client } from "../../models/s3";
 import { dataURItoBlob } from "../../utils/convertDataUrlToFile";
 import { UserCtx } from "../../context/user/state";
 import { v4 as uuidv4 } from "uuid";
-// import { useNavigate } from "react-router-dom";
 
 const token = localStorage.getItem("heytutor-user");
 
 export const CreatePost = () => {
   const classes = useStyles();
+  const urlParams = new URLSearchParams(window.location.search);
+  const eventId = urlParams.get("eventid");
   const { discardCreatingPost, viewPost } = useContext(PostCtx);
   const { user } = useContext(UserCtx);
-  // const navigate = useNavigate();
 
   const [hashTag, setHashTag]: any = useState(null);
   const [eventJoint, setEventJoint]: any = useState(null);
@@ -61,10 +61,6 @@ export const CreatePost = () => {
     } else {
       setSelectedEvent(event.target.value);
     }
-  };
-
-  const onViewPost = () => {
-    // navigate(`/post-detail?postId=${postSuccess?.id}`);
   };
 
   const onCreatePost = async () => {
@@ -114,7 +110,7 @@ export const CreatePost = () => {
         hashtag: JSON.stringify(concatHashtag),
         content,
         images: JSON.stringify(imageLinks),
-        eventId: selectedEvent?.eventContent.id || null,
+        eventId: selectedEvent?.eventDetail.id || null,
         deadline: valueDate,
       };
 
@@ -141,6 +137,15 @@ export const CreatePost = () => {
       setEventJoint(res);
     });
   }, []);
+
+  useEffect(() => {
+    if (eventId && eventJoint) {
+      const inEvent = eventJoint.find((event: any) => event.eventDetail.id === parseInt(eventId));
+      setSelectedEvent(inEvent);
+    }
+  }, [eventId, eventJoint]);
+
+  console.log(selectedEvent);
 
   const Input = styled("input")({
     display: "none",
@@ -242,7 +247,7 @@ export const CreatePost = () => {
             labelId="event"
             id="simple-select-autowidth"
             defaultValue={"none"}
-            value={selectedEvent?.eventContent.title}
+            value={selectedEvent?.eventDetail.title}
             onChange={onChangeEvent}
             className={!selectedEvent ? classes.selectPlaceholder : classes.input}
             fullWidth
@@ -251,8 +256,8 @@ export const CreatePost = () => {
               Chọn đăng vào sự kiện bạn đang tham gia
             </MenuItem>
             {eventJoint?.map((option: any) => (
-              <MenuItem className={classes.input} key={option.eventContent.id} value={option}>
-                {option.eventContent.title.slice(0, 50)}...
+              <MenuItem className={classes.input} key={option.eventDetail.id} value={option}>
+                {option.eventDetail.title.slice(0, 50)}...
               </MenuItem>
             ))}
           </Select>
@@ -320,7 +325,11 @@ export const CreatePost = () => {
           Huỷ
         </Button>
         {postSuccess ? (
-          <Button variant="contained" sx={{ textTransform: "none" }} color="primary" onClick={onViewPost}>
+          <Button
+            variant="contained"
+            sx={{ textTransform: "none" }}
+            color="primary"
+            onClick={() => viewPost(postSuccess.id)}>
             Xem bài viết
           </Button>
         ) : (

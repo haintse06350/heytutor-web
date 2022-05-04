@@ -42,6 +42,8 @@ const translateDescription = (notification: any) => {
       return `đã huỷ yêu cầu hỗ trợ`;
     case "request_register":
       return `đã gửi yêu cầu hỗ trợ cho bạn`;
+    case "request_done":
+      return `đã xác nhận hoàn thành yêu cầu hỗ trợ`;
   }
 };
 

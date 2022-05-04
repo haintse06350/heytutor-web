@@ -152,7 +152,7 @@ const Search = (props: any) => {
     }
   };
 
-  const renderSearchResult = () => {
+  const renderPost = () => {
     return (
       <>
         <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mt: 1, width: 1 }}>
@@ -221,6 +221,34 @@ const Search = (props: any) => {
         </Box>
       </>
     );
+  };
+
+  const renderEvent = () => {
+    return (
+      <Box>
+        <Typography>No data</Typography>
+      </Box>
+    );
+  };
+
+  const renderUser = () => {
+    return (
+      <Box>
+        <Typography>No data</Typography>
+      </Box>
+    );
+  };
+
+  const renderSearchResult = () => {
+    if (activeTab === "Vấn đề") {
+      return renderPost();
+    }
+    if (activeTab === "Sự kiện") {
+      return renderEvent();
+    }
+    if (activeTab === "Người dùng") {
+      return renderUser();
+    }
   };
 
   return (

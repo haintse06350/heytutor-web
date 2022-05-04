@@ -2,10 +2,11 @@ import React from "react";
 import { Card } from "@mui/material";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import slImgHome1 from "../../assets/home_event_images/New folder/4.png";
-import slImgHome2 from "../../assets/home_event_images/New folder/2.png";
-import slImgHome3 from "../../assets/home_event_images/New folder/1.jpg";
+import slImgHome1 from "../../assets/home_event_images/events/4.png";
+import slImgHome2 from "../../assets/home_event_images/events/2.png";
+import slImgHome3 from "../../assets/home_event_images/events/1.png";
 import { useStyles } from "./SlideShowEventList.style";
+
 const SlideShowEventList = () => {
   const classes = useStyles();
   const imagesSlide = [{ url: slImgHome1 }, { url: slImgHome2 }, { url: slImgHome3 }];

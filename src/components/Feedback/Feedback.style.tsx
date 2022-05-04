@@ -1,22 +1,15 @@
 import { makeStyles } from "@mui/styles";
 
 export const useStyles: any = makeStyles(() => ({
-  feedback: {
-    fontFamily: "sans-serif",
-    background: "#f6f6f7",
-    width: "100vw",
-    height: "100vh",
-    justifyContent: "center",
-  },
   middleBox: {
     background: "#33ccff",
     paddingBottom: "10px",
-    height:"640px"
+    height: "640px",
   },
   bottomBox: {
     background: "#33ccff",
     paddingTop: "10px",
-    paddingBottom: "10px"
+    paddingBottom: "10px",
   },
   image: {
     borderRadius: 8,

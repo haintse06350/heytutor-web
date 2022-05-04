@@ -35,4 +35,10 @@ export class UserPost {
     await ErrorUtils.throwError(res);
     return res.json();
   }
+
+  static async requestDone(postId: any) {
+    const res = await FetchUtils.put(`/request-done?postId=${postId}`);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
 }

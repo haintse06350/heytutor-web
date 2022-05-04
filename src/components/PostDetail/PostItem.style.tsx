@@ -109,6 +109,7 @@ export const useStyles: any = makeStyles(() => ({
     float: "right",
     padding: "0px 4px",
     color: "#fff",
+    background: "#4D96FF",
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",

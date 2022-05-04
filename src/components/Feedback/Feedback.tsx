@@ -1,5 +1,4 @@
 import React from "react";
-import { useStyles } from "./Feedback.style";
 import {
   Dialog,
   DialogTitle,
@@ -15,26 +14,21 @@ import {
 import StarIcon from "@mui/icons-material/Star";
 import { Manager } from "../../models/manager";
 import { NotificationCtx } from "../../context/notification/state";
+
 const Feedback = (props: any) => {
-  const classes = useStyles();
-  const { open, handleClose } = props;
+  const { open, onClose, userName, postId, type, receiverId } = props;
   const labels: { [index: string]: string } = {
-    0.5: "Tồi tệ",
-    1: "Tồi tệ+",
-    1.5: "Kém",
-    2: "Kém+",
-    2.5: "Bình thường",
-    3: "Bình thường+",
-    3.5: "Tốt",
-    4: "Tốt+",
-    4.5: "Tuyệt vời",
-    5: "Tuyệt vời+",
+    1: "Tệ",
+    2: "Kém",
+    3: "Bình thường",
+    4: "Tốt",
+    5: "Tuyệt vời",
   };
   function getLabelText(value: number) {
     return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
   }
 
-  const [valueFeedback, setValueFeedback] = React.useState<number | null>(2);
+  const [valueFeedback, setValueFeedback] = React.useState<number | null>(5);
   const [hover, setHover] = React.useState(-1);
   const [contentFeedback, setContentFeedback] = React.useState("");
   const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
@@ -45,38 +39,40 @@ const Feedback = (props: any) => {
 
   const onFeedback = async () => {
     const res = await Manager.createFeedback({
-      postId: "1",
-      type: "1",
-      score: "4.5",
+      postId: postId,
+      type: type,
+      score: valueFeedback,
       reason: "",
-      content: "Đánh giá tốt",
-      receiverId: "5",
+      content: contentFeedback,
+      receiverId: receiverId,
     });
     if (res) {
       setNotificationSuccess("Gửi đánh giá thành công");
+      onClose();
     } else {
       setNotificationError("Gửi đánh giá thất bại");
     }
   };
+
   return (
-    <Dialog open={open} onClose={handleClose} className={classes.feedback}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>Đánh giá người dùng</DialogTitle>
       <DialogContent>
         <Grid container spacing={1}>
           <Grid item xs={4}>
-            <Typography>Tên </Typography>
+            <Typography variant="body1">Tên </Typography>
           </Grid>
           <Grid item xs={8}>
-            <Typography>Cao Đức Anh</Typography>
+            <Typography variant="subtitle1">{userName}</Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography>Mức độ hài lòng</Typography>
+            <Typography variant="body1">Mức độ hài lòng</Typography>
           </Grid>
           <Grid item xs={8} display="flex">
             <Rating
               name="hover-feedback"
               value={valueFeedback}
-              precision={0.5}
+              precision={1}
               getLabelText={getLabelText}
               onChange={(event, newValue) => {
                 setValueFeedback(newValue);
@@ -104,7 +100,7 @@ const Feedback = (props: any) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button variant="text" sx={{ color: "#94a4c4" }} onClick={handleClose}>
+        <Button variant="text" sx={{ color: "#94a4c4" }} onClick={onClose}>
           Hủy
         </Button>
         <Button onClick={onFeedback} variant="contained">

@@ -22,6 +22,7 @@ export const ConfirmRegister = (props: any) => {
       setNotificationError("Đăng ký thất bại!");
     }
     setIsOpen(false);
+    setLoading(false);
   };
 
   const onConfirmUnRegister = async () => {
@@ -38,6 +39,7 @@ export const ConfirmRegister = (props: any) => {
       setNotificationError("Huỷ đăng kí thất bại!");
     }
     setIsOpen(false);
+    setLoading(false);
   };
 
   const onClose = () => {
