@@ -19,6 +19,12 @@ export class Manager {
     return res.json();
   }
 
+  static async getListEventIsNotApproveOfCollaborator(params = {}) {
+    const res = await FetchUtils.get(`/get-event-not-approve-of-collaborator`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
   static async getListPostManage(params = {}) {
     const res = await FetchUtils.get(`/get-list-post-manage`, params);
     await ErrorUtils.throwError(res);
@@ -52,6 +58,18 @@ export class Manager {
 
   static async createFeedback(params: any = {}) {
     const res = await FetchUtils.post(`/add-new-feedback`, params);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async createBanCollaborator(collaboratorId: any) {
+    const res = await FetchUtils.put(`/ban-collaborator?collaboratorId=${collaboratorId}`);
+    await ErrorUtils.throwError(res);
+    return res.json();
+  }
+
+  static async approveEvent(eventId: any) {
+    const res = await FetchUtils.put(`/approve-event?eventId=${eventId}`);
     await ErrorUtils.throwError(res);
     return res.json();
   }

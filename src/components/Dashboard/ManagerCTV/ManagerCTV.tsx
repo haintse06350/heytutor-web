@@ -23,10 +23,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  // Container,
   DialogActions,
-  // Autocomplete,
-  Popover,
   Select,
   SelectChangeEvent,
   FormControl,
@@ -37,18 +34,12 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import moment from "moment";
 
 // component
 
 import DialogEditManageCTV from "./DialogEditManageCTV";
 import { NotificationCtx } from "../../../context/notification/state";
 import { useNavigate } from "react-router-dom";
-import { DateRange } from "@mui/lab/DateRangePicker";
-import DateRangePicker from "../../ListData/DateTimePicker/DateRangePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Manager } from "../../../models/manager";
 import { UserCtx } from "../../../context/user/state";
 
@@ -61,18 +52,9 @@ const ManagerCTV = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openDialog, setOpenDialog] = React.useState(false);
   const { setNotificationSuccess, setNotificationError } = React.useContext(NotificationCtx);
-  const [openDatePicker, setOpenDatePicker] = useState(false);
-  // const [filters, setFilters]: any = useState({ status: "joined" });
-  const [visible, setVisible] = useState("isActive");
-  const [valueFilterStartDate, setValueFilterStartDate] = useState<Date | null>(moment().subtract(7, "days").toDate());
-  const [valueFilterEndDate, setValueFilterEndDate] = useState<Date | null>(moment().startOf("day").toDate());
   const [searchBy, setSearchBy] = React.useState("nameOfUser");
-
-  const [sortBy, setSortBy]: any = useState("desc");
-  const [dateData, setDateData] = useState<DateRange<Date>>([null, null]);
-  // const [filter, setFilter] = useState<string>("");
-  // const [query, setQuery] = useState<string>("");
-  // const [dataPick, setDataPick] = useState(null);
+  const [searchValue, setSearchValue] = React.useState("");
+  const [managerName, setManagerName] = React.useState("");
   const [createAdmin, setCreateAdmin] = useState({
     name: "",
     phone: "",
@@ -123,9 +105,10 @@ const ManagerCTV = () => {
   const [userSelected, setUserSelected] = useState();
   const [openDialogEdit, setOpenDialogEdit] = React.useState(false);
 
-  const handleOpenEdit = (userInfo: any) => {
+  const handleOpenEdit = (userInfo: any, managerName: any) => {
     setUserSelected(userInfo);
     setOpenDialogEdit(true);
+    setManagerName(managerName);
   };
   const closeDialogEdit = () => {
     setOpenDialogEdit(false);
@@ -138,46 +121,9 @@ const ManagerCTV = () => {
   const handleChangeTab = (path: string, id: number) => {
     navigate(`/dashboard/manage-ctv/${path}?id=${id}`);
   };
-  const onChangeFilter = (event: any, type: string) => {
-    if (type === "time") {
-      if (event.target.value === "currentWeek") {
-        setValueFilterStartDate(moment().subtract(7, "days").toDate());
-        setValueFilterEndDate(moment().startOf("day").toDate());
-      } else if (event.target.value === "currentMonth") {
-        setValueFilterStartDate(moment().subtract(1, "months").toDate());
-        setValueFilterEndDate(moment().startOf("day").toDate());
-      }
-    }
-  };
-  const [
-    data = {
-      selected: [],
-      open: false,
-      sortByOpts: [
-        { value: "asc", label: "Số lượng tăng dần" },
-        { value: "desc", label: "Số lượng giảm dần" },
-        { value: "isActive", label: "Hoạt động" },
-        { value: "isBlock", label: "Bị khóa" },
-      ],
-      sortOpts: [
-        { value: "isActive", label: "Đang quản lí" },
-        { value: "isPending", label: "Đang chờ phê duyệt" },
-        { value: "status", label: "Trạng thái hoạt động" },
-      ],
-      timeOpts: [
-        { value: "currentWeek", label: "Tuần này" },
-        { value: "currentMonth", label: "Tháng này" },
-      ],
-    },
-  ]: // setData,
-  any = useState();
+
   const onChangeSearchBy = (e: SelectChangeEvent) => {
     setSearchBy(e.target.value);
-  };
-
-  const onCloseDatePicker = () => {
-    setOpenDatePicker(false);
-    // setFinishPickDate(true);
   };
 
   const onCreateCollaborator = async () => {
@@ -278,95 +224,42 @@ const ManagerCTV = () => {
     );
   };
 
-  const handleVisible = (event: any) => {
-    setVisible(event.target.value);
-    event.target.value === "status" ? setSortBy("isActive") : setSortBy("desc");
-  };
   const [dataUser, setDataUser] = useState([]);
+  const [dataForSearch, setDataForSearch] = useState([]);
   const getListCollaborator = async () => {
-    const rows = await Manager.getListCollaborator();
-    setDataUser(rows);
+    const res = await Manager.getListCollaborator();
+    setDataUser(res);
+    setDataForSearch(res);
   };
   useEffect(() => {
     getListCollaborator();
   }, []);
 
-  // useEffect(() => {
-  //   if (query === "") {
-  //     //resest data
-  //   } else {
-  //     //search
-  //     let filterData;
-  //     if (searchBy === "nameOfUser") {
-  //       filterData = data.data.filter((item: any) => item.name.includes(query));
-  //     } else if (searchBy === "nameOfEvent") {
-  //       filterData = data.data.filter((item: any) => item.name.includes(query));
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (searchValue === null || searchValue === undefined || searchValue === "") {
+      setDataForSearch(dataUser);
+    } else {
+      let filterData: any;
+      if (searchBy === "nameOfUser") {
+        filterData = dataUser?.filter((item: any) => {
+          return item?.userInfo?.name?.toLowerCase().includes(searchValue.toLowerCase());
+        });
+      } else if (searchBy === "nameOfManager") {
+        filterData = dataUser?.filter((item: any) => {
+          return item?.updateName.toLowerCase().includes(searchValue.toLowerCase());
+        });
+      }
+      setDataForSearch(filterData);
+    }
+  }, [searchBy, searchValue]);
 
   return (
     <div className={classes.root}>
       {renderDialog()}
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            startIcon={<AddCircleOutlineRoundedIcon />}
-            variant="contained"
-            color="primary"
-            onClick={() => setOpenDialog(true)}>
-            Thêm cộng tác viên
-          </Button>
-        </Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Grid container item xs={12} spacing={1} sx={{ mt: 1, width: "100%" }}>
-            <Grid item xs={12} lg={4} md={4}>
-              <Box component="form" noValidate autoComplete="off">
-                <TextField
-                  fullWidth
-                  classes={{ root: classes.textField }}
-                  id="outlined-select-currency"
-                  select
-                  label="Thời gian"
-                  defaultValue="currentWeek"
-                  // value={filters.time}
-                  onChange={(e: any) => onChangeFilter(e, "time")}>
-                  {data.timeOpts.map((option: any) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Box>
-            </Grid>
-            <Grid item xs={12} lg={4} md={4}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="Ngày bắt đầu"
-                  inputFormat="dd/MM/yyyy"
-                  value={valueFilterStartDate}
-                  onChange={(newValue) => {
-                    setValueFilterStartDate(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
-                />
-              </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} lg={4} md={4}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="Ngày kết thúc"
-                  inputFormat="dd/MM/yyyy"
-                  value={valueFilterEndDate}
-                  onChange={(newValue) => {
-                    setValueFilterEndDate(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} sx={{ background: "#fff", width: "100%" }} />}
-                />
-              </LocalizationProvider>
-            </Grid>
-
-            <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
+          <Grid container item xs={12} spacing={1} sx={{ width: "100%" }}>
+            <Grid item xs={8} md={8} sx={{ minWidth: "20%" }}>
               <Box component="form" noValidate autoComplete="off">
                 <TextField
                   autoFocus
@@ -389,67 +282,28 @@ const ManagerCTV = () => {
                           id: "departmentValue",
                         }}>
                         <MenuItem value="nameOfUser">Tên người dùng</MenuItem>
-                        <MenuItem value="nameOfEvent">Tiêu đề sự kiện</MenuItem>
+                        <MenuItem value="nameOfManager">Tên người quản lí</MenuItem>
                       </Select>
                     ),
                   }}
                   id="outlined-basic"
                   placeholder="Tìm kiếm ..."
                   variant="outlined"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
                 />
               </Box>
             </Grid>
-            <Grid item xs={6} md={4} sx={{ minWidth: "20%" }}>
-              <Box component="form" noValidate autoComplete="off">
-                <TextField
-                  fullWidth
-                  classes={{ root: classes.textField }}
-                  id="outlined-select-currency"
-                  select
-                  label="Hiển thị theo"
-                  defaultValue="isNotResolve"
-                  value={visible}
-                  onChange={(event) => handleVisible(event)}>
-                  {data.sortOpts.map((option: any) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+            <Grid item xs={4} md={4}>
+              <Box display="flex" sx={{ justifyContent: "flex-end" }}>
+                <Button
+                  startIcon={<AddCircleOutlineRoundedIcon />}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setOpenDialog(true)}>
+                  Thêm cộng tác viên
+                </Button>
               </Box>
-            </Grid>
-            <Grid item xs={4} md={4} sx={{ minWidth: "20%" }}>
-              <Box component="form" noValidate autoComplete="off">
-                <TextField
-                  fullWidth
-                  classes={{ root: classes.textField }}
-                  id="outlined-select-currency"
-                  select
-                  label="Sắp xếp"
-                  defaultValue="asc"
-                  value={sortBy}
-                  onChange={(e: any) => setSortBy(e.target.value)}>
-                  {visible !== "status" &&
-                    data?.sortByOpts.slice(0, 2).map((option: any) => (
-                      <MenuItem key={option.value} value={option.value} defaultValue="desc">
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  {visible === "status" &&
-                    data?.sortByOpts.slice(2, 4).map((option: any) => (
-                      <MenuItem key={option.value} value={option.value} defaultValue="isActive">
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                </TextField>
-              </Box>
-              <Popover
-                open={openDatePicker}
-                onClose={onCloseDatePicker}
-                anchorOrigin={{ vertical: "center", horizontal: "center" }}
-                transformOrigin={{ vertical: "center", horizontal: "center" }}>
-                <DateRangePicker setValue={setDateData} value={dateData} />
-              </Popover>
             </Grid>
           </Grid>
         </Box>
@@ -469,7 +323,7 @@ const ManagerCTV = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataUser
+                {dataForSearch
                   ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row: any, index: number) => (
                     <TableRow key={index}>
@@ -514,7 +368,9 @@ const ManagerCTV = () => {
                       </TableCell>
                       <TableCell>
                         {/* Ban cộng tác viên */}
-                        <IconButton aria-label="Quản lí cộng tác viên" onClick={() => handleOpenEdit(row?.userInfo)}>
+                        <IconButton
+                          aria-label="Quản lí cộng tác viên"
+                          onClick={() => handleOpenEdit(row?.userInfo, row?.updateName)}>
                           <Tooltip title="Quản lí cộng tác viên">
                             <EditIcon color="error" />
                           </Tooltip>
@@ -523,7 +379,13 @@ const ManagerCTV = () => {
                     </TableRow>
                   ))}
               </TableBody>
-              <DialogEditManageCTV open={openDialogEdit} onClose={closeDialogEdit} data={userSelected} />
+              <DialogEditManageCTV
+                open={openDialogEdit}
+                onClose={closeDialogEdit}
+                data={userSelected}
+                managerName={managerName}
+                getListCollaborator={getListCollaborator}
+              />
             </Table>
           </TableContainer>
           <TablePagination

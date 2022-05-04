@@ -21,7 +21,7 @@ export class User {
   };
 
   static getUserProfile = async (userId: string | number) => {
-    const res = await FetchUtils.get(`/user/${userId}`);
+    const res = await FetchUtils.get(`/user-info?userId=${userId}`);
     await ErrorUtils.throwError(res);
     return res.json();
   };
